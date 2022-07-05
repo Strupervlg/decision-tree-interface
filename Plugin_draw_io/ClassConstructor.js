@@ -53,7 +53,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Настройки окна
     this.window = new mxWindow('Classes constructor', div, x, y, w, h, true, true);
-    this.window.destroyOnClose = false;
+    this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
     this.window.setClosable(true);

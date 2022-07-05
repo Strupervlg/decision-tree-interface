@@ -55,37 +55,19 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
-
-        //FIXME: сделать при каждом нажатии создание нового окна с обновленными характеристиками
-        if (this.classConstructorWindow == null) {
-            this.classConstructorWindow = new ClassConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
-            this.classConstructorWindow.window.setVisible(true);
-        } else {
-            this.classConstructorWindow.window.setVisible(!this.classConstructorWindow.window.isVisible());
-        }
+        this.classConstructorWindow = new ClassConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+        this.classConstructorWindow.window.setVisible(true);
     });
 
     // Действие на отоброжение конструктора блока со свойствами классов
     ui.actions.addAction('classPropertiesConstructor', function () {
-
-        //FIXME: сделать при каждом нажатии создание нового окна с обновленными характеристиками
-        if (this.classPropertiesConstructorWindow == null) {
-            this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
-            this.classPropertiesConstructorWindow.window.setVisible(true);
-        } else {
-            this.classPropertiesConstructorWindow.window.setVisible(!this.classPropertiesConstructorWindow.window.isVisible());
-        }
+        this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+        this.classPropertiesConstructorWindow.window.setVisible(true);
     });
 
     // Действие на отоброжение конструктора блока с отношениями для классов
     ui.actions.addAction('relationshipsConstructor', function () {
-
-        //FIXME: сделать при каждом нажатии создание нового окна с обновленными характеристиками
-        if (this.relationshipsConstructorWindow == null) {
-            this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
-            this.relationshipsConstructorWindow.window.setVisible(true);
-        } else {
-            this.relationshipsConstructorWindow.window.setVisible(!this.relationshipsConstructorWindow.window.isVisible());
-        }
+        this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
+        this.relationshipsConstructorWindow.window.setVisible(true);
     });
 });
