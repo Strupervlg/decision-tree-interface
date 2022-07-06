@@ -9,6 +9,8 @@ Draw.loadPlugin(function (ui) {
     ui.sidebar.addPalette('customElements', 'Custom elements', true, function (content) {
         content.appendChild(ui.sidebar.createVertexTemplate('rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;', 66, 30, "", "True"));
         content.appendChild(ui.sidebar.createVertexTemplate('rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;', 66, 30, "", "False"));
+        content.appendChild(ui.sidebar.createVertexTemplate('shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;', 120, 80, "AND", "AND"));
+        content.appendChild(ui.sidebar.createVertexTemplate('shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;', 120, 80, "OR", "OR"));
     });
 
 
