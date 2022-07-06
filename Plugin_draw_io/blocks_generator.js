@@ -30,26 +30,26 @@ Blockly.JavaScript['operator'] = function(block) {
 
 //Свойства классов
 Blockly.JavaScript['count_of_tokens'] = function(block) {
-  var code = "count of tokens";
+  var code = "<font color=\"#ff9933\">count of tokens</font>";
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['need_left_operand'] = function(block) {
   var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE);
-  var code = value_name + " need a left operand";
+  var code = value_name + " <font color=\"#ff9933\">need a left operand</font>";
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['precedence'] = function(block) {
-  var code = "precedence";
+  var code = "<font color=\"#ff9933\">precedence</font>";
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['associativity'] = function(block) {
-  var code = "associativity";
+  var code = "<font color=\"#ff9933\">associativity</font>";
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
