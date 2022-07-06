@@ -29,6 +29,11 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'relationshipsConstructor');
     });
 
+    ui.menubar.addMenu('Node constructors', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'actionNodeConstructor');
+        ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
+    });
+
 
     // Привязывание действий к разделам меню
     mxResources.parse('actionElement=Add action element');
@@ -38,6 +43,10 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('classPropertiesConstructor=Class properties constructor');
 
     mxResources.parse('relationshipsConstructor=Relationships constructor');
+
+    mxResources.parse('actionNodeConstructor=Action Node Constructor');
+
+    mxResources.parse('conditionNodeConstructor=Condition Node Constructor');
 
 
     // Создание действий для меню
@@ -69,5 +78,17 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('relationshipsConstructor', function () {
         this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
         this.relationshipsConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на отоброжение конструктора узлов действия
+    ui.actions.addAction('actionNodeConstructor', function () {
+        this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        this.actionNodeConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на отоброжение конструктора узлов условия
+    ui.actions.addAction('conditionNodeConstructor', function () {
+        this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        this.conditionNodeConstructorWindow.window.setVisible(true);
     });
 });
