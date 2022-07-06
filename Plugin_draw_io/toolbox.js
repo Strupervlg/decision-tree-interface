@@ -129,6 +129,18 @@ var actionToolbox = {
                     "kind": "block",
                     "type": "object"
                 },
+                {
+                    "kind": "block",
+                    "type": "and"
+                },
+                {
+                    "kind": "block",
+                    "type": "for_all"
+                },
+                {
+                    "kind": "block",
+                    "type": "there_exists"
+                },
             ]
         },
     ]
@@ -280,6 +292,18 @@ var conditionToolbox = {
                 {
                     "kind": "block",
                     "type": "object"
+                },
+                {
+                    "kind": "block",
+                    "type": "and"
+                },
+                {
+                    "kind": "block",
+                    "type": "for_all"
+                },
+                {
+                    "kind": "block",
+                    "type": "there_exists"
                 },
             ]
         },

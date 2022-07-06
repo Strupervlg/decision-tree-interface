@@ -222,7 +222,7 @@ Blockly.Blocks['is_closest'] = {
       .setCheck(null);
     this.appendValueInput("token2")
       .setCheck(null)
-      .appendField("is cloesest");
+      .appendField("is closest");
     this.setInputsInline(true);
     this.setOutput(true, null);
     this.setColour(195);
@@ -370,5 +370,44 @@ Blockly.Blocks['associativity'] = {
     this.setColour(60);
     this.setTooltip("");
     this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['and'] = {
+  init: function() {
+    this.appendValueInput("operand1")
+        .setCheck(null);
+    this.appendValueInput("operand2")
+        .setCheck(null)
+        .appendField("and");
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(75);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['for_all'] = {
+  init: function() {
+    this.appendValueInput("restrictions")
+        .setCheck(null)
+        .appendField("∀");
+    this.setOutput(true, null);
+    this.setColour(75);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['there_exists'] = {
+  init: function() {
+    this.appendValueInput("restrictions")
+        .setCheck(null)
+        .appendField("∃");
+    this.setOutput(true, null);
+    this.setColour(75);
+ this.setTooltip("");
+ this.setHelpUrl("");
   }
 };

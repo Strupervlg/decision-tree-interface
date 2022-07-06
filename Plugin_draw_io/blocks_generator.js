@@ -207,3 +207,26 @@ Blockly.JavaScript['object'] = function(block) {
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
+
+Blockly.JavaScript['and'] = function(block) {
+  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_NONE);
+  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_NONE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = value_operand1 + " and " + value_operand2;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['for_all'] = function(block) {
+  var value_restrictions = Blockly.JavaScript.valueToCode(block, 'restrictions', Blockly.JavaScript.ORDER_NONE);
+  var code = "∀ " + value_restrictions;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['there_exists'] = function(block) {
+  var value_restrictions = Blockly.JavaScript.valueToCode(block, 'restrictions', Blockly.JavaScript.ORDER_NONE);
+  var code = "∃ " + value_restrictions;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
