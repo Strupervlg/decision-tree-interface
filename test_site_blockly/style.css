@@ -1,0 +1,23 @@
+#blocklyDiv {
+    width: 1300px;
+    height: 600px;
+}
+
+button {
+    width: 200px;
+    height: 50px;
+    margin: 0 auto;
+    display: block;
+}
+
+#output_xml {
+    margin: 10px;
+    width: 1300px;
+    height: 600px;   
+}
+
+#output_code {
+    margin: 10px;
+    width: 600px;
+    height: 200px;   
+}
