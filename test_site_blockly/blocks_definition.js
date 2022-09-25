@@ -212,7 +212,7 @@ Blockly.Blocks['assign_value_to_variable_decision_tree'] = {
     this.appendDummyInput()
         .appendField("Assign a value to a variable decision tree");
     this.appendValueInput("ref_to_object")
-        .setCheck("Object")
+        .setCheck("VarObject")
         .appendField("reference to object");
     this.appendValueInput("new_object")
         .setCheck("Object")
@@ -525,7 +525,7 @@ Blockly.Blocks['ref_to_decision_tree_var'] = {
   init: function() {
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("var"), "var_name");
-    this.setOutput(true, "Object");
+    this.setOutput(true, ["Object", "VarObject"]);
     this.setColour(60);
  this.setTooltip("");
  this.setHelpUrl("");
