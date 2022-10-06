@@ -89,7 +89,7 @@ Blockly.Blocks['double'] = {
 Blockly.Blocks['comparison_result'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["greater","greater"], ["less","less"], ["equal","equal"], ["undetermined","undetermined"]]), "value");
+        .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["undetermined","UNDETERMINED"]]), "value");
     this.setOutput(true, "ComparisonResult");
     this.setColour(0);
  this.setTooltip("");
@@ -451,7 +451,7 @@ Blockly.Blocks['comparison'] = {
         .setCheck(["String", "Integer", "Double"])
         .appendField("operand1");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["greater",">"], ["less","<"], ["equal","=="], ["greater or equal",">="], ["less or equal","<="]]), "operator");
+        .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["greater or equal","GE"], ["less or equal","LE"]]), "operator");
     this.appendValueInput("operand2")
         .setCheck(["String", "Integer", "Double"])
         .appendField("operand1");
