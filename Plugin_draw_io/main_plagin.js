@@ -36,6 +36,10 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
     });
 
+    ui.menubar.addMenu('Custom1', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'Test');
+    });
+
 
     // Привязывание действий к разделам меню
     mxResources.parse('actionElement=Add action element');
@@ -92,5 +96,18 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('conditionNodeConstructor', function () {
         this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
         this.conditionNodeConstructorWindow.window.setVisible(true);
+    });
+
+    ui.actions.addAction('Test', function () {
+        let text = JSON.stringify({hello:'example'});
+        downloadAsFile(text);
+
+        function downloadAsFile(data) {
+            let a = document.createElement("a");
+            let file = new Blob([data], {type: 'application/json'});
+            a.href = URL.createObjectURL(file);
+            a.download = "example.txt";
+            a.click();
+        }
     });
 });
