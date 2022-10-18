@@ -1,10 +1,14 @@
+var LASTID = 0;
+
 function ProgramNode(statement) {
     this.stmt = statement;
+    this.id = LASTID++;
 }
 
 function StatementNode(firstExpression, secondExpression) {
     this.firstExpr = firstExpression;
     this.secondExpr = secondExpression;
+    this.id = LASTID++;
 }
 
 const ExprType = { 
@@ -35,8 +39,9 @@ const ExprType = {
 };
 
 function ExpressionNode() {
+    this.id = LASTID++;
     this.type = null;
-    this.id = null;
+    this.ident = null;
     this.string = null;
     this.int = null;
     this.double = null;
@@ -53,7 +58,7 @@ function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
     newNode.type = typeNode;
     newNode.firstOperand = firstExprOperand;
     if(typeNode == ExprType.RELATIONSHIP || typeNode == ExprType.PROPERTY) {
-        newNode.id = secondExprOperand;
+        newNode.ident = secondExprOperand;
     } else {
         newNode.secondOperand = secondExprOperand;
     }
@@ -71,8 +76,8 @@ function createUnaryExprNode(typeNode, operand) {
 function createLiteral(typeNode, literal) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
-    if(typeNode == ExprType.ID) {
-        newNode.id = literal;
+    if(typeNode == ExprType.ID || typeNode == ExprType.TREE_VAR) {
+        newNode.ident = literal;
     } else if(typeNode == ExprType.STRING) {
         newNode.string = literal;
     } else if(typeNode == ExprType.INT) {
@@ -81,9 +86,7 @@ function createLiteral(typeNode, literal) {
         newNode.double = literal;
     } else if(typeNode == ExprType.BOOLEAN) {
         newNode.boolean = literal;
-    } else if(typeNode == ExprType.TREE_VAR) {
-        newNode.id = literal;
-    }
+    } 
     return newNode;
 }
 
@@ -99,7 +102,7 @@ function createGetExprNode(typeNode, id, expression) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = expression;
-    newNode.id = id;
+    newNode.ident = id;
     return newNode;
 }
 
@@ -108,12 +111,13 @@ function createForAllExprNode(id, expression1, expression2) {
     newNode.type = ExprType.FORALL;
     newNode.firstOperand = expression1;
     newNode.secondOperand = expression2;
-    newNode.id = id;
+    newNode.ident = id;
     return newNode;
 }
 
 function ObjectNode(id) {
-    this.id = id;
+    this.id = LASTID++;
+    this.ident = id;
     this.next = null;
 }
 

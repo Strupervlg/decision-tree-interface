@@ -109,7 +109,7 @@ exp
     | exp ">=" exp { $$ = createBinExprNode(ExprType.GE, $1, $3); }
     | exp "<=" exp { $$ = createBinExprNode(ExprType.LE, $1, $3); }
     | exp "." COMPARE "(" exp ")" { $$ = createBinExprNode(ExprType.COMPARE, $1, $5); }
-    | "(" exp ")" { $$ = $1; }
+    | "(" exp ")" { $$ = $2; }
     | exp AND exp { $$ = createBinExprNode(ExprType.AND, $1, $3); }
     | exp OR exp { $$ = createBinExprNode(ExprType.OR, $1, $3); }
     | NOT exp { $$ = createUnaryExprNode(ExprType.NOT, $2); }

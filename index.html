@@ -9,10 +9,13 @@
 <body>
     <textarea cols="70" rows="5" id="tst"></textarea>
     <button onclick="exec();">Action</button>
+    <div id="dot-text"></div>
+    <script src="print_tree.js"></script>
     <script>
         function exec() {
             parser.parse(document.getElementById("tst").value)
             console.log(root);
+            document.getElementById("dot-text").innerText = printProgram(root);
         }
     </script>
     <script src="create_nodes.js"></script>

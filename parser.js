@@ -141,7 +141,7 @@ case 19:
  this.$ = createBinExprNode(ExprType.COMPARE, $$[$0-5], $$[$0-1]); 
 break;
 case 20:
- this.$ = $$[$0-2]; 
+ this.$ = $$[$0-1]; 
 break;
 case 21:
  this.$ = createBinExprNode(ExprType.AND, $$[$0-2], $$[$0]); 
