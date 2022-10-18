@@ -52,7 +52,12 @@ function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = firstExprOperand;
-    newNode.secondOperand = secondExprOperand;
+    if(typeNode == ExprType.RELATIONSHIP || typeNode == ExprType.PROPERTY) {
+        newNode.id = secondExprOperand;
+    } else {
+        newNode.secondOperand = secondExprOperand;
+    }
+    
     return newNode;
 }
 
