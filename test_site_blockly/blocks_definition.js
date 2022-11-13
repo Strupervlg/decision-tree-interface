@@ -136,6 +136,12 @@ Blockly.Blocks['get_relationship_object'] = {
     this.appendValueInput("relationship")
         .setCheck("Relationship")
         .appendField("relationship");
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("var"), "name_var");
+    this.appendValueInput("boolean")
+        .setCheck("Boolean")
+        .appendField("boolean");
+    this.setInputsInline(false);
     this.setOutput(true, ["Object", "Boolean"]);
     this.setColour(240);
  this.setTooltip("");
@@ -160,26 +166,20 @@ Blockly.Blocks['get_condition_object'] = {
   }
 };
 
-Blockly.Blocks['get_extr_object_condition_and_relation'] = {
+Blockly.Blocks['get_extr_object'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("get extreme object by condition and relation");
-    this.appendValueInput("relationship")
-        .setCheck("Relationship")
-        .appendField("relationship");
-    this.appendValueInput("object1")
-        .setCheck("Object")
-        .appendField("object1");
-    this.appendValueInput("object2")
-        .setCheck("Object")
-        .appendField("object2");
-    this.appendValueInput("condition")
+        .appendField("get extreme object");
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("var1"), "name_var1");
+    this.appendValueInput("extreme_condition")
         .setCheck("Boolean")
-        .appendField("condition");
+        .appendField("extreme condition");
     this.appendDummyInput()
-        .appendField("name variable");
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var"), "name_var");
+        .appendField(new Blockly.FieldTextInput("var2"), "name_var2");
+    this.appendValueInput("general_condition")
+        .setCheck("Boolean")
+        .appendField("general condition");
     this.setInputsInline(false);
     this.setOutput(true, ["Object", "Boolean"]);
     this.setColour(240);
@@ -271,6 +271,9 @@ Blockly.Blocks['check_relationship'] = {
     this.appendValueInput("relationship")
         .setCheck("Relationship")
         .appendField("relationship");
+    this.appendValueInput("specific_relationship")
+        .setCheck("Relationship")
+        .appendField("specific relationship");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setMutator(new Blockly.Mutator(['check_relationship_item']));
@@ -488,8 +491,6 @@ Blockly.Blocks['quantifier_of_existence'] = {
         .setCheck("Boolean")
         .appendField("condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["object","object"], ["relationship","relationship"], ["property","property"]]), "type");
-    this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("var"), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
@@ -509,8 +510,6 @@ Blockly.Blocks['quantifier_of_generality'] = {
     this.appendValueInput("verification_condition")
         .setCheck("Boolean")
         .appendField("verification condition");
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["object","object"], ["relationship","relationship"], ["property","property"]]), "type");
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("var"), "name_var");
     this.setInputsInline(false);

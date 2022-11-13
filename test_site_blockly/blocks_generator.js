@@ -68,26 +68,27 @@ Blockly.JavaScript['get_property_value'] = function(block) {
 Blockly.JavaScript['get_relationship_object'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + "->" + value_relationship;
+  var text_name_var = block.getFieldValue('name_var');
+  var value_boolean = Blockly.JavaScript.valueToCode(block, 'boolean', Blockly.JavaScript.ORDER_NONE);
+  var code = value_object + "->" + value_relationship + " " + text_name_var + " { " + value_boolean + " } ";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['get_condition_object'] = function(block) {
   var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
   var text_name_var = block.getFieldValue('name_var');
-  var code = "get " + text_name_var + " { " + value_condition + " } ";
+  var code = "find " + text_name_var + " { " + value_condition + " } ";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['get_extr_object_condition_and_relation'] = function(block) {
-  var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
-  var value_object1 = Blockly.JavaScript.valueToCode(block, 'object1', Blockly.JavaScript.ORDER_NONE);
-  var value_object2 = Blockly.JavaScript.valueToCode(block, 'object2', Blockly.JavaScript.ORDER_NONE);
-  var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
-  var text_name_var = block.getFieldValue('name_var');
-  // TODO: Исправить когда решится
-  var code = "getExtrem " + text_name_var + " { ";
-  return [code, Blockly.JavaScript.ORDER_NONE];
+Blockly.JavaScript['get_extr_object'] = function(block) {
+
+  var text_name_var1 = block.getFieldValue('name_var1');
+  var value_extreme_condition = Blockly.JavaScript.valueToCode(block, 'extreme_condition', Blockly.JavaScript.ORDER_NONE);
+  var text_name_var2 = block.getFieldValue('name_var2');
+  var value_general_condition = Blockly.JavaScript.valueToCode(block, 'general_condition', Blockly.JavaScript.ORDER_NONE);
+  var code = "findExtreme " + text_name_var1 + " [ " + value_extreme_condition + " ] " + " where " + text_name_var2 + " { " + value_general_condition + " } ";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['assign_value_to_property'] = function(block) {
@@ -116,14 +117,19 @@ Blockly.JavaScript['check_value_of_property'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_NONE);
   var value_property_value = Blockly.JavaScript.valueToCode(block, 'property_value', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + "." + value_property + ".checkVal(" + value_property_value + ")";
+  var code = value_object + "." + value_property + "(" + value_property_value + ")";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['check_relationship'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + "." + value_relationship + ".checkRel("; 
+  var value_specific_relationship = Blockly.JavaScript.valueToCode(block, 'specific_relationship', Blockly.JavaScript.ORDER_NONE);
+
+  var code = value_object + "->" + value_relationship + "("; 
+  if(value_specific_relationship) {
+    code += value_specific_relationship + ", ";
+  }
   let values = [];
   for (var i = 0; i < block.itemCount_; i++) {
     let valueCode = Blockly.JavaScript.valueToCode(block, 'object' + i, Blockly.JavaScript.ORDER_NONE);
@@ -183,10 +189,8 @@ Blockly.JavaScript['quantifier_of_existence'] = function(block) {
 Blockly.JavaScript['quantifier_of_generality'] = function(block) {
   var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
   var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
-  var dropdown_type = block.getFieldValue('type');
   var text_name_var = block.getFieldValue('name_var');
-  // TODO: Как тут указать тип переменной??
-  var code = "forall " + text_name_var + " { " + value_definition_area + " } { " + value_verification_condition + " }";
+  var code = "forall " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " } ";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

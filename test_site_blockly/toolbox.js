@@ -71,7 +71,7 @@ var toolbox = {
                 },
                 {
                     "kind": "block",
-                    "type": "get_extr_object_condition_and_relation"
+                    "type": "get_extr_object"
                 },
                 
             ]
