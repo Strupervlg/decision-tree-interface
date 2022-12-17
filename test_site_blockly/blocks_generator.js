@@ -54,7 +54,7 @@ Blockly.JavaScript['comparison_result'] = function(block) {
 
 Blockly.JavaScript['get_class'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + ".getClass()";
+  var code = value_object + ".class";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
