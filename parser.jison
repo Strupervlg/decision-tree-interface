@@ -4,30 +4,31 @@
 %%
 
 
-true         return 'TRUE';
-false        return 'FALSE';
-greater      return 'GREATER';
-less         return 'LESS';
-equal        return 'EQUAL';
-getClass     return 'GET_CLASS';
-undetermined return 'UNDETERMINED';
-get          return 'GET';
-getExtrem    return 'GET_EXTREM';
-is           return 'IS';
-checkVal     return 'CHECK_VAL';
-checkRel     return 'CHECK_REL';
-and          return 'AND';
-or           return 'OR';
-not          return 'NOT';
-compare      return 'COMPARE';
-exist        return 'EXIST';
-forall       return 'FORALL';
+true            return 'TRUE';
+false           return 'FALSE';
+greater         return 'GREATER';
+less            return 'LESS';
+equal           return 'EQUAL';
+class           return 'CLASS';
+undetermined    return 'UNDETERMINED';
+find            return 'FIND';
+findExtreme     return 'FIND_EXTREM';
+is              return 'IS';
+and             return 'AND';
+or              return 'OR';
+not             return 'NOT';
+compare         return 'COMPARE';
+exist           return 'EXIST';
+forall          return 'FORALL';
+where           return 'WHERE';
 
 
 "."          return '.';
 "->"         return '->';
 "{"          return '{';
 "}"          return '}';
+"["          return '[';
+"]"          return ']';
 "="          return '=';
 "("          return '(';
 ")"          return ')';
@@ -35,6 +36,7 @@ forall       return 'FORALL';
 ">"          return '>';
 "<"          return '<';
 "=="         return '==';
+"!="         return '!=';
 ">="         return '>=';
 "<="         return '<=';
 
@@ -74,10 +76,10 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 %left 'OR'
 %left 'AND'
 %left 'IS'
-%left '>' '<' '==' '<=' '>='
+%left '>' '<' '==' '<=' '>=' '!='
 %right 'NOT'
-%nonassoc ')'
 %left '.' '->'
+%nonassoc ')'
 
 %start program
 
@@ -100,12 +102,13 @@ exp
     | TRUE { $$ = createLiteral(ExprType.BOOLEAN, true); }
     | FALSE { $$ = createLiteral(ExprType.BOOLEAN, false); }
     | TREE_VAR { $$ = createLiteral(ExprType.TREE_VAR, $1); }
-    | exp "->" ID { $$ = createBinExprNode(ExprType.RELATIONSHIP, $1, $3); }
+    | exp "->" ID ID "{" exp "}" { $$ = createBinExprNode(ExprType.RELATIONSHIP, $1, $3); }
     | exp "." ID { $$ = createBinExprNode(ExprType.PROPERTY, $1, $3); }
     | exp IS exp { $$ = createBinExprNode(ExprType.IS, $1, $3); }
     | exp ">" exp { $$ = createBinExprNode(ExprType.GREATER, $1, $3); }
     | exp "<" exp { $$ = createBinExprNode(ExprType.LESS, $1, $3); }
     | exp "==" exp { $$ = createBinExprNode(ExprType.EQUAL, $1, $3); }
+    | exp "!=" exp {  }
     | exp ">=" exp { $$ = createBinExprNode(ExprType.GE, $1, $3); }
     | exp "<=" exp { $$ = createBinExprNode(ExprType.LE, $1, $3); }
     | exp "." COMPARE "(" exp ")" { $$ = createBinExprNode(ExprType.COMPARE, $1, $5); }
@@ -113,20 +116,16 @@ exp
     | exp AND exp { $$ = createBinExprNode(ExprType.AND, $1, $3); }
     | exp OR exp { $$ = createBinExprNode(ExprType.OR, $1, $3); }
     | NOT exp { $$ = createUnaryExprNode(ExprType.NOT, $2); }
-    | exp "." CHECK_REL "(" object_seq_e ")" { $$ = createCheckRelExprNode($1, $5); }
-    | exp "." CHECK_VAL "(" exp ")" { $$ = createBinExprNode(ExprType.CHECK_VAL, $1, $5); }
-    | exp "." GET_CLASS "(" ")" { $$ = createUnaryExprNode(ExprType.GET_CLASS, $1); }
-    | GET ID "{" exp "}" { $$ = createGetExprNode(ExprType.GET, $2, $4); }
+    | exp "(" object_seq ")" { $$ = createCheckRelExprNode($1, $5); }
+    | exp "(" exp ")" { $$ = createBinExprNode(ExprType.CHECK_VAL, $1, $5); }
+    | exp "." CLASS { $$ = createUnaryExprNode(ExprType.GET_CLASS, $1); }
+    | FIND ID "{" exp "}" { $$ = createGetExprNode(ExprType.FIND, $2, $4); }
+    | FIND_EXTREM ID "[" exp "]" WHERE ID "{" exp "}" {  }
     | EXIST ID "{" exp "}" { $$ = createGetExprNode(ExprType.EXIST, $2, $4); }
-    | FORALL ID "{" exp "}" "{" exp "}" { $$ = createForAllExprNode($2, $4, $7); }
+    | FORALL ID "[" exp "]" "{" exp "}" { $$ = createForAllExprNode($2, $4, $7); }
     ;
 
 object_seq
-    : ID { $$ = createObjectSeqNode($1); }
-    | object_seq "," ID { $$ = addObjectToObjectSeqNode($1, $3); }
-    ;
-
-object_seq_e
-    : object_seq { $$ = $1; }
-    | /*empty*/ { $$ = null; }
+    : exp { $$ = createObjectSeqNode($1); }
+    | object_seq "," exp { $$ = addObjectToObjectSeqNode($1, $3); }
     ;
