@@ -40,11 +40,19 @@ var toolbox = {
                 },
                 {
                     "kind": "block",
+                    "type": "enum"
+                },
+                {
+                    "kind": "block",
                     "type": "comparison_result"
                 },
                 {
                     "kind": "block",
                     "type": "ref_to_decision_tree_var"
+                },
+                {
+                    "kind": "block",
+                    "type": "variable"
                 },
             ]
         },

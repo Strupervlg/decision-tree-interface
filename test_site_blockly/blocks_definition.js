@@ -119,7 +119,7 @@ Blockly.Blocks['get_property_value'] = {
     this.appendValueInput("property")
         .setCheck("Property")
         .appendField("property");
-    this.setOutput(true, ["Boolean", "String", "Integer", "Double"]);
+    this.setOutput(true, ["Boolean", "String", "Integer", "Double", "Enum"]);
     this.setColour(240);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -199,7 +199,7 @@ Blockly.Blocks['assign_value_to_property'] = {
         .setCheck("Property")
         .appendField("property");
     this.appendValueInput("new_value")
-        .setCheck(["Boolean", "String", "Integer", "Double"])
+        .setCheck(["Boolean", "String", "Integer", "Double", "Enum"])
         .appendField("new value");
     this.setColour(240);
  this.setTooltip("");
@@ -251,7 +251,7 @@ Blockly.Blocks['check_value_of_property'] = {
         .setCheck("Property")
         .appendField("property");
     this.appendValueInput("property_value")
-        .setCheck(["Boolean", "String", "Integer", "Double"])
+        .setCheck(["Boolean", "String", "Integer", "Double", "Enum"])
         .appendField("property value");
     this.setOutput(true, "Boolean");
     this.setColour(240);
@@ -451,12 +451,12 @@ Blockly.Blocks['comparison'] = {
     this.appendDummyInput()
         .appendField("comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double"])
+        .setCheck(["String", "Integer", "Double", "Enum"])
         .appendField("operand1");
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["greater or equal","GE"], ["less or equal","LE"]]), "operator");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double"])
+        .setCheck(["String", "Integer", "Double", "Enum"])
         .appendField("operand1");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
@@ -471,10 +471,10 @@ Blockly.Blocks['three_digit_comparison'] = {
     this.appendDummyInput()
         .appendField("three-digit comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double"])
+        .setCheck(["String", "Integer", "Double", "Enum"])
         .appendField("operand1");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double"])
+        .setCheck(["String", "Integer", "Double", "Enum"])
         .appendField("operand2");
     this.setOutput(true, "ComparisonResult");
     this.setColour(240);
@@ -523,9 +523,33 @@ Blockly.Blocks['quantifier_of_generality'] = {
 Blockly.Blocks['ref_to_decision_tree_var'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var"), "var_name");
+        .appendField(new Blockly.FieldTextInput("decision_tree_var"), "var_name");
     this.setOutput(true, ["Object", "VarObject"]);
     this.setColour(60);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['variable'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("variable"), "var_name");
+    this.setOutput(true, "Object");
+    this.setColour(45);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['enum'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("owner"), "owner_name");
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("value"), "value");
+    this.setOutput(true, "Enum");
+    this.setColour(0);
  this.setTooltip("");
  this.setHelpUrl("");
   }

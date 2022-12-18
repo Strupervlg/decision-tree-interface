@@ -199,3 +199,16 @@ Blockly.JavaScript['ref_to_decision_tree_var'] = function(block) {
   var code = 'var:' + text_var_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
+
+Blockly.JavaScript['variable'] = function(block) {
+  var text_name_variable = block.getFieldValue('name_variable');
+  var code = text_name_variable;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['enum'] = function(block) {
+  var text_owner_name = block.getFieldValue('owner_name');
+  var text_value = block.getFieldValue('value');
+  var code = text_owner_name + "::" + text_value;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
