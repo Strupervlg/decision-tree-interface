@@ -23,7 +23,7 @@ forall          return 'FORALL';
 where           return 'WHERE';
 
 
-"."          return '.';
+
 "->"         return '->';
 "{"          return '{';
 "}"          return '}';
@@ -62,8 +62,10 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 <STRING><<EOF>>                   { this.begin('INITIAL'); console.log('Error: expected \".\n'); }
             
 
+([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)    return 'DOUBLE';
 [0-9]+                               return 'INT';
-([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+)    return 'DOUBLE';
+
+"."          return '.';
 
 
 \s+                                /* skip whitespace */

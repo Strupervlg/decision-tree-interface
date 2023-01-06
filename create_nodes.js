@@ -98,9 +98,9 @@ function createLiteral(typeNode, literal) {
     } else if(typeNode == ExprType.STRING) {
         newNode.string = literal;
     } else if(typeNode == ExprType.INT) {
-        newNode.int = literal;
+        newNode.int = Number(literal);
     } else if(typeNode == ExprType.DOUBLE) {
-        newNode.double = literal;
+        newNode.double = Number(literal);
     } else if(typeNode == ExprType.BOOLEAN) {
         newNode.boolean = literal;
     } 
