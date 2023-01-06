@@ -29,16 +29,16 @@ where           return 'WHERE';
 "}"          return '}';
 "["          return '[';
 "]"          return ']';
+"=="         return '==';
+"!="         return '!=';
+">="         return '>=';
+"<="         return '<=';
 "="          return '=';
 "("          return '(';
 ")"          return ')';
 ","          return ',';
 ">"          return '>';
 "<"          return '<';
-"=="         return '==';
-"!="         return '!=';
-">="         return '>=';
-"<="         return '<=';
 
 
 var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
@@ -78,7 +78,7 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 %left 'IS'
 %left '>' '<' '==' '<=' '>=' '!='
 %right 'NOT'
-%left '.' '->'
+%left '.' '->' '('
 %nonassoc ')'
 
 %start program
@@ -102,13 +102,13 @@ exp
     | TRUE { $$ = createLiteral(ExprType.BOOLEAN, true); }
     | FALSE { $$ = createLiteral(ExprType.BOOLEAN, false); }
     | TREE_VAR { $$ = createLiteral(ExprType.TREE_VAR, $1); }
-    | exp "->" ID ID "{" exp "}" { $$ = createBinExprNode(ExprType.RELATIONSHIP, $1, $3); }
+    | exp "->" ID ID "{" exp "}" { $$ = createGetObjectByRel($1, $3, $4, $6); }
     | exp "." ID { $$ = createBinExprNode(ExprType.PROPERTY, $1, $3); }
     | exp IS exp { $$ = createBinExprNode(ExprType.IS, $1, $3); }
     | exp ">" exp { $$ = createBinExprNode(ExprType.GREATER, $1, $3); }
     | exp "<" exp { $$ = createBinExprNode(ExprType.LESS, $1, $3); }
     | exp "==" exp { $$ = createBinExprNode(ExprType.EQUAL, $1, $3); }
-    | exp "!=" exp {  }
+    | exp "!=" exp { $$ = createBinExprNode(ExprType.NOT_EQUAL, $1, $3); }
     | exp ">=" exp { $$ = createBinExprNode(ExprType.GE, $1, $3); }
     | exp "<=" exp { $$ = createBinExprNode(ExprType.LE, $1, $3); }
     | exp "." COMPARE "(" exp ")" { $$ = createBinExprNode(ExprType.COMPARE, $1, $5); }
@@ -116,11 +116,11 @@ exp
     | exp AND exp { $$ = createBinExprNode(ExprType.AND, $1, $3); }
     | exp OR exp { $$ = createBinExprNode(ExprType.OR, $1, $3); }
     | NOT exp { $$ = createUnaryExprNode(ExprType.NOT, $2); }
-    | exp "(" object_seq ")" { $$ = createCheckRelExprNode($1, $5); }
-    | exp "(" exp ")" { $$ = createBinExprNode(ExprType.CHECK_VAL, $1, $5); }
+    | exp "->" ID "(" object_seq ")" { $$ = createCheckRelExprNode($1, $3, $5); }
+    | exp "(" exp ")" { $$ = createBinExprNode(ExprType.CHECK_VAL, $1, $3); }
     | exp "." CLASS { $$ = createUnaryExprNode(ExprType.GET_CLASS, $1); }
     | FIND ID "{" exp "}" { $$ = createGetExprNode(ExprType.FIND, $2, $4); }
-    | FIND_EXTREM ID "[" exp "]" WHERE ID "{" exp "}" {  }
+    | FIND_EXTREM ID "[" exp "]" WHERE ID "{" exp "}" { $$ = createFindExtremeExprNode($2, $4, $7, $9); }
     | EXIST ID "{" exp "}" { $$ = createGetExprNode(ExprType.EXIST, $2, $4); }
     | FORALL ID "[" exp "]" "{" exp "}" { $$ = createForAllExprNode($2, $4, $7); }
     ;

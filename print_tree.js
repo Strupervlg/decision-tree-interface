@@ -40,10 +40,12 @@ function printExprNode(exprNode) {
             return "ID" + exprNode.id + " [label=\"Boolean " + exprNode.boolean + "\"]\n";
         case ExprType.TREE_VAR:
             return "ID" + exprNode.id + " [label=\"Tree var " + exprNode.ident + "\"]\n";
-        case ExprType.RELATIONSHIP:
-            result = "ID" + exprNode.id + " [label=\"Relationship: " + exprNode.ident + "\"]\n";
+        case ExprType.GET_BY_RELATIONSHIP:
+            result = "ID" + exprNode.id + " [label=\"Relationship: " + exprNode.rel + " Var: " + exprNode.ident + "\"]\n";
             result += printExprNode(exprNode.firstOperand);
             result += "ID"+ exprNode.id +"->ID"+ exprNode.firstOperand.id +"\n";
+            result += printExprNode(exprNode.secondOperand);
+            result += "ID"+ exprNode.id +"->ID"+ exprNode.secondOperand.id +"\n";
             return result;
         case ExprType.PROPERTY:
             result = "ID" + exprNode.id + " [label=\"Property: " + exprNode.ident + "\"]\n";
@@ -73,6 +75,13 @@ function printExprNode(exprNode) {
             return result;
         case ExprType.EQUAL:
             result = "ID" + exprNode.id + " [label=\"Equal\"]\n";
+            result += printExprNode(exprNode.firstOperand);
+            result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"[label=\"FIRST\"]\n";
+            result += printExprNode(exprNode.secondOperand);
+            result += "ID" + exprNode.id +"->ID"+ exprNode.secondOperand.id +"[label=\"SECOND\"]\n";
+            return result;
+        case ExprType.NOT_EQUAL:
+            result = "ID" + exprNode.id + " [label=\"Not equal\"]\n";
             result += printExprNode(exprNode.firstOperand);
             result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"[label=\"FIRST\"]\n";
             result += printExprNode(exprNode.secondOperand);
@@ -119,7 +128,7 @@ function printExprNode(exprNode) {
             result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"\n";
             return result;
         case ExprType.CHECK_REL:
-            result = "ID" + exprNode.id + " [label=\"Check Relationship\"]\n";
+            result = "ID" + exprNode.id + " [label=\"Check Relationship Relationship: " + exprNode.rel + "\"]\n";
             result += printExprNode(exprNode.firstOperand);
             result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"[label=\"Relationship\"]\n";
             result += printObjectSeq(exprNode.objectSeq, exprNode);
@@ -136,10 +145,17 @@ function printExprNode(exprNode) {
             result += printExprNode(exprNode.firstOperand);
             result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"\n";
             return result;
-        case ExprType.GET:
-            result = "ID" + exprNode.id + " [label=\"Get newVar: " + exprNode.ident + "\"]\n";
+        case ExprType.FIND:
+            result = "ID" + exprNode.id + " [label=\"Find newVar: " + exprNode.ident + "\"]\n";
             result += printExprNode(exprNode.firstOperand);
             result += "ID"+ exprNode.id +"->ID"+ exprNode.firstOperand.id +"\n";
+            return result;
+        case ExprType.FIND_EXTREM:
+            result = "ID" + exprNode.id + " [label=\"Find extremeVar: " + exprNode.extremeIdent + " varName: " + exprNode.ident + "\"]\n";
+            result += printExprNode(exprNode.firstOperand);
+            result += "ID"+ exprNode.id +"->ID"+ exprNode.firstOperand.id +"\n";
+            result += printExprNode(exprNode.secondOperand);
+            result += "ID"+ exprNode.id +"->ID"+ exprNode.secondOperand.id +"\n";
             return result;
         case ExprType.EXIST:
             result = "ID" + exprNode.id + " [label=\"Exist newVar: " + exprNode.ident + "\"]\n";
@@ -166,7 +182,7 @@ function printObjectSeq(objectSeqNode, parent) {
     
     result = "";
 	while (current != null) {
-		result += printObjectNode(current);
+		result += printExprNode(current);
         result += "ID"+ parent.id +"->ID"+ current.id +"\n";
 		current = current.next;
 	}
