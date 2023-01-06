@@ -18,6 +18,7 @@ const ExprType = {
     DOUBLE: 'double',
     BOOLEAN: 'boolean',
     TREE_VAR: 'tree_var',
+    ENUM: 'enum',
     GET_BY_RELATIONSHIP: 'get by relationship',
     PROPERTY: 'property',
     IS: 'is',
@@ -50,6 +51,8 @@ function ExpressionNode() {
     this.int = null;
     this.double = null;
     this.boolean = null;
+
+    this.identValue = null;
 
     this.firstOperand = null;
     this.secondOperand = null;
@@ -104,6 +107,14 @@ function createLiteral(typeNode, literal) {
     } else if(typeNode == ExprType.BOOLEAN) {
         newNode.boolean = literal;
     } 
+    return newNode;
+}
+
+function createEnum(idOwner, idValue) {
+    newNode = new ExpressionNode();
+    newNode.type = ExprType.ENUM;
+    newNode.ident = idOwner;
+    newNode.identValue = idValue;
     return newNode;
 }
 

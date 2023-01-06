@@ -39,6 +39,7 @@ where           return 'WHERE';
 ","          return ',';
 ">"          return '>';
 "<"          return '<';
+"::"          return '::';
 
 
 var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
@@ -104,6 +105,7 @@ exp
     | TRUE { $$ = createLiteral(ExprType.BOOLEAN, true); }
     | FALSE { $$ = createLiteral(ExprType.BOOLEAN, false); }
     | TREE_VAR { $$ = createLiteral(ExprType.TREE_VAR, $1); }
+    | ID "::" ID { $$ = createEnum($1, $3); }
     | exp "->" ID ID "{" exp "}" { $$ = createGetObjectByRel($1, $3, $4, $6); }
     | exp "." ID { $$ = createBinExprNode(ExprType.PROPERTY, $1, $3); }
     | exp IS exp { $$ = createBinExprNode(ExprType.IS, $1, $3); }
