@@ -454,7 +454,7 @@ Blockly.Blocks['comparison'] = {
         .setCheck(["String", "Integer", "Double", "Enum"])
         .appendField("operand1");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["greater or equal","GE"], ["less or equal","LE"]]), "operator");
+        .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["not equal","NOT_EQUAL"], ["greater or equal","GE"], ["less or equal","LE"]]), "operator");
     this.appendValueInput("operand2")
         .setCheck(["String", "Integer", "Double", "Enum"])
         .appendField("operand1");
