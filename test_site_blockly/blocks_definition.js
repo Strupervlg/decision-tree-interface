@@ -271,9 +271,6 @@ Blockly.Blocks['check_relationship'] = {
     this.appendValueInput("relationship")
         .setCheck("Relationship")
         .appendField("relationship");
-    this.appendValueInput("specific_relationship")
-        .setCheck("Relationship")
-        .appendField("specific relationship");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setMutator(new Blockly.Mutator(['check_relationship_item']));

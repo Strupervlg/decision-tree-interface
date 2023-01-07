@@ -124,12 +124,8 @@ Blockly.JavaScript['check_value_of_property'] = function(block) {
 Blockly.JavaScript['check_relationship'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
-  var value_specific_relationship = Blockly.JavaScript.valueToCode(block, 'specific_relationship', Blockly.JavaScript.ORDER_NONE);
 
   var code = value_object + "->" + value_relationship + "("; 
-  if(value_specific_relationship) {
-    code += value_specific_relationship + ", ";
-  }
   let values = [];
   for (var i = 0; i < block.itemCount_; i++) {
     let valueCode = Blockly.JavaScript.valueToCode(block, 'object' + i, Blockly.JavaScript.ORDER_NONE);
