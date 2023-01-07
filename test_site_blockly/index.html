@@ -23,11 +23,24 @@
 <textarea id="output_code">
     
 </textarea>
+<button onclick="exec();">Перевод в Blockly</button>
 
     <script src="blockly.min.js"></script>
     <script src="blocks_definition.js"></script>
     <script src="blocks_generator.js"></script>
     <script src="toolbox.js"></script>
     <script src="script.js"></script>
+    <script src="create_nodes.js"></script>
+    <script src="parser.js"></script>
+    <script src="code_to_block.js"></script>
+    <script>
+        function exec() {
+            workspace.clear()
+            parser.parse(document.getElementById("output_code").value)
+            console.log(root);
+            toBlock(root);
+            createXML();
+        }
+    </script>
 </body>
 </html>
