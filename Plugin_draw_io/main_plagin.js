@@ -29,6 +29,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'classesConstructor');
         ui.menus.addMenuItem(menu, 'classPropertiesConstructor');
         ui.menus.addMenuItem(menu, 'relationshipsConstructor');
+        ui.menus.addMenuItem(menu, 'enumConstructor');
     });
 
     ui.menubar.addMenu('Node constructors', function (menu, parent) {
@@ -36,8 +37,8 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
     });
 
-    ui.menubar.addMenu('Custom1', function (menu, parent) {
-        ui.menus.addMenuItem(menu, 'Test');
+    ui.menubar.addMenu('Exporting dictionaries', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'exportEnum');
     });
 
 
@@ -50,9 +51,13 @@ Draw.loadPlugin(function (ui) {
 
     mxResources.parse('relationshipsConstructor=Relationships constructor');
 
+    mxResources.parse('enumConstructor=Enum constructor');
+
     mxResources.parse('actionNodeConstructor=Action Node Constructor');
 
     mxResources.parse('conditionNodeConstructor=Condition Node Constructor');
+
+    mxResources.parse('exportEnum=Export enum');
 
 
     // Создание действий для меню
@@ -80,6 +85,12 @@ Draw.loadPlugin(function (ui) {
         this.classPropertiesConstructorWindow.window.setVisible(true);
     });
 
+    // Действие на отоброжение конструктора enum
+    ui.actions.addAction('enumConstructor', function () {
+        this.enumConstructorWindow = new EnumConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+        this.enumConstructorWindow.window.setVisible(true);
+    });
+
     // Действие на отоброжение конструктора блока с отношениями для классов
     ui.actions.addAction('relationshipsConstructor', function () {
         this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
@@ -98,8 +109,8 @@ Draw.loadPlugin(function (ui) {
         this.conditionNodeConstructorWindow.window.setVisible(true);
     });
 
-    ui.actions.addAction('Test', function () {
-        let text = JSON.stringify({hello:'example'});
+    ui.actions.addAction('exportEnum', function () {
+        let text = exportEnums(getEnums(ui));
         downloadAsFile(text);
 
         function downloadAsFile(data) {
