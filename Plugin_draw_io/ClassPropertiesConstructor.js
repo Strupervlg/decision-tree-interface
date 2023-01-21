@@ -90,29 +90,6 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
-function getClasses(editorUi) {
-
-    var graph = editorUi.editor.graph;
-    var cells = graph.getModel().cells;
-    let classes = new Array();
-
-    Object.keys(cells).forEach(function (key) {
-
-        var cellValue = cells[key].value;
-
-        if (typeof cellValue == "string" && cellValue.startsWith('<font color="#000000"><b>Classes</b></font>')) {
-            cellValue = cellValue.replace('<font color="#000000"><b>Classes</b></font><br>', '');
-            var values = cellValue.split('<br>');
-
-            values.forEach(element => {
-                var str = element.replace('<font color="#ff66b3">', '').replace('</font>', '');
-                classes.push(str);
-            });
-        }
-    });
-    return classes;
-}
-
 function generateStrValueForProperties(table) {
     strValue = '<b><font color="#000000">Class properties</font></b>';
 

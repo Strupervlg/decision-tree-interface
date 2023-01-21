@@ -8,7 +8,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     table.style.height = '100%';
     var tbody = document.createElement('tbody');
     
-    var row = addRow(tbody)
+    var row = addRowEnum();
     tbody.appendChild(row);
 
     table.appendChild(tbody);
@@ -22,7 +22,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#6666FF;align=center;");
 
-            strValue = generateStrValueForClasses(tbody);
+            strValue = generateStrValueForEnums(tbody);
 
             newElement.value = strValue;
 
@@ -33,7 +33,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка добавления полей для нового класса
     var addEnum = mxUtils.button('Add Enum', function () {
-        var newRow = addRow(tbody);
+        var newRow = addRowEnum();
         var tdDelRow = document.createElement('td');
         var btnDelRow = mxUtils.button('Delete', function (evt) {
             evt.target.parentElement.parentElement.remove();
@@ -56,7 +56,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
-function addRow(bodyTable) {
+function addRowEnum() {
     var tr1 = document.createElement('tr');
     var td1 = document.createElement('td');
     var text = document.createElement('input');
@@ -121,7 +121,7 @@ function addRow(bodyTable) {
     return tr1;
 }
 
-function generateStrValueForClasses(table) {
+function generateStrValueForEnums(table) {
     strValue = '<font color="#000000"><b>Enum</b></font>';
 
     for (var i = 0; i < table.rows.length; i++) {

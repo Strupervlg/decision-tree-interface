@@ -38,6 +38,7 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.menubar.addMenu('Exporting dictionaries', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'exportClass');
         ui.menus.addMenuItem(menu, 'exportEnum');
     });
 
@@ -59,6 +60,7 @@ Draw.loadPlugin(function (ui) {
 
     mxResources.parse('exportEnum=Export enum');
 
+    mxResources.parse('exportClass=Export class');
 
     // Создание действий для меню
     // Тестовое дейтсвие
@@ -117,7 +119,20 @@ Draw.loadPlugin(function (ui) {
             let a = document.createElement("a");
             let file = new Blob([data], {type: 'application/json'});
             a.href = URL.createObjectURL(file);
-            a.download = "example.txt";
+            a.download = "enums.txt";
+            a.click();
+        }
+    });
+
+    ui.actions.addAction('exportClass', function () {
+        let text = exportClasses(getClasses(ui));
+        downloadAsFile(text);
+
+        function downloadAsFile(data) {
+            let a = document.createElement("a");
+            let file = new Blob([data], {type: 'application/json'});
+            a.href = URL.createObjectURL(file);
+            a.download = "classes.txt";
             a.click();
         }
     });

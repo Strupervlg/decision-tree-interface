@@ -7,14 +7,9 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     table.style.width = '100%';
     table.style.height = '100%';
     var tbody = document.createElement('tbody');
-    var tr1 = document.createElement('tr');
-    var td1 = document.createElement('td');
-    var text = document.createElement('input');
-    text.type = "text";
-    text.style.width = '100%';
-    td1.appendChild(text);
-    tr1.appendChild(td1);
-    tbody.appendChild(tr1);
+    
+    var row = addRowClass();
+    tbody.appendChild(row);
     table.appendChild(tbody);
     div.appendChild(table);
 
@@ -32,19 +27,24 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            for (var i = 0; i < table.rows.length; i++) {
+                var expression = table.rows.item(i).getElementsByTagName("td")
+                    .item(2).getElementsByTagName("textarea").item(0).value;
+                theGraph.setAttributeForCell(newElement, 'expression_' + i, expression);
+            }
         }
     });
 
     // Кнопка добавления полей для нового класса
     var addClass = mxUtils.button('Add Class', function () {
-        var trAdd = document.createElement('tr');
-        var tdAdd = document.createElement('td');
-        var text = document.createElement('input');
-        text.type = "text";
-        text.style.width = '100%';
-        tdAdd.appendChild(text);
-        trAdd.appendChild(tdAdd);
-        table.appendChild(trAdd);
+        var newRow = addRowClass();
+        var tdDelRow = document.createElement('td');
+        var btnDelRow = mxUtils.button('Delete', function (evt) {
+            evt.target.parentElement.parentElement.remove();
+        });
+        tdDelRow.appendChild(btnDelRow);
+        newRow.appendChild(tdDelRow);
+        table.appendChild(newRow);
     });
 
     // Добавление кнопок в окно
@@ -60,14 +60,45 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+function addRowClass() {
+    var tr1 = document.createElement('tr');
+    var td1 = document.createElement('td');
+    var name = document.createElement('input');
+    name.type = "text";
+    name.style.width = '100%';
+    name.placeholder = "Class name";
+    td1.appendChild(name);
+    var td2 = document.createElement('td');
+    var extend = document.createElement('input');
+    extend.type = "text";
+    extend.style.width = '100%';
+    extend.placeholder = "Extend";
+    td2.appendChild(extend);
+    var td3 = document.createElement('td');
+    var expression = document.createElement('textarea');
+    expression.style.width = '250px';
+    expression.style.maxWidth = '250px';
+    expression.placeholder = "Expression";
+    td3.appendChild(expression);
+    tr1.appendChild(td1);
+    tr1.appendChild(td2);
+    tr1.appendChild(td3);
+    return tr1;
+}
+
 function generateStrValueForClasses(table) {
     strValue = '<font color="#000000"><b>Classes</b></font>';
 
     for (var i = 0; i < table.rows.length; i++) {
-        var element = table.rows.item(i).getElementsByTagName("td")
+        var nameClass = table.rows.item(i).getElementsByTagName("td")
             .item(0).getElementsByTagName("input").item(0).value;
+        var classExtend = table.rows.item(i).getElementsByTagName("td")
+            .item(1).getElementsByTagName("input").item(0).value;
         
-        strValue += '<br><font color="#ff66b3">' + element + '</font>';
+        strValue += '<br><font color="#ff66b3">' + nameClass + '</font>';
+        if(classExtend != "") {
+            strValue += ' (<font color="#ff66b3">' + classExtend + '</font>)';
+        }
     }
 
     return strValue;

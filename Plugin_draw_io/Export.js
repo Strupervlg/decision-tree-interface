@@ -14,3 +14,11 @@ function exportEnums(jsonEnums) {
     });
     return result;
 }
+
+function exportClasses(jsonClasses) {
+    var result = "";
+    jsonClasses.forEach(classItem => {
+        result += classItem.name + "|" + classItem.extend + "|" + classItem.expression + "\n";
+    });
+    return result;
+}

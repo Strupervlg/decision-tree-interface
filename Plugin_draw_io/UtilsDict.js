@@ -40,3 +40,42 @@ function getEnums(editorUi) {
     });
     return enums;
 }
+
+function getClasses(editorUi) {
+    var graph = editorUi.editor.graph;
+    var cells = graph.getModel().cells;
+
+    let classes = [];
+
+    Object.keys(cells).forEach(function (key) {
+
+        var cellValue = cells[key].value;
+
+        if (typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) {
+            var cellLabel = cellValue.getAttribute('label');
+            cellLabel = cellLabel.replace('<font color="#000000"><b>Classes</b></font><br>', '');
+            var values = cellLabel.split('<br>');
+        
+            values.forEach((element, index) => {
+                var nameClass = element.slice(element.indexOf('<font color="#ff66b3">')+22, element.indexOf('</font>'));
+                element = element.slice(element.indexOf('</font>')+7);
+
+                var classExtend = ""
+                if(element.indexOf('(<font color="#ff66b3">') != -1) {
+                    classExtend = element.slice(element.indexOf('(<font color="#ff66b3">')+23, element.indexOf('</font>)'));
+                    element = element.slice(element.indexOf('</font>)')+8);
+                }
+
+                var expression = cellValue.getAttribute('expression_'+index)
+                
+                var ItemClass = {
+                    "name": nameClass,
+                    "extend": classExtend,
+                    "expression": expression,
+                };
+                classes.push(ItemClass);
+            });
+        }
+    });
+    return classes;
+}
