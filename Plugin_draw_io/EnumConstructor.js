@@ -8,7 +8,8 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     table.style.height = '100%';
     var tbody = document.createElement('tbody');
     
-    addRow(tbody)
+    var row = addRow(tbody)
+    tbody.appendChild(row);
 
     table.appendChild(tbody);
     div.appendChild(table);
@@ -32,7 +33,14 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка добавления полей для нового класса
     var addEnum = mxUtils.button('Add Enum', function () {
-        addRow(tbody)
+        var newRow = addRow(tbody);
+        var tdDelRow = document.createElement('td');
+        var btnDelRow = mxUtils.button('Delete', function (evt) {
+            evt.target.parentElement.parentElement.remove();
+        });
+        tdDelRow.appendChild(btnDelRow);
+        newRow.appendChild(tdDelRow);
+        tbody.appendChild(newRow);
     });
 
     // Добавление кнопок в окно
@@ -54,6 +62,7 @@ function addRow(bodyTable) {
     var text = document.createElement('input');
     text.type = "text";
     text.style.width = '100%';
+    text.placeholder = "Name enum";
     td1.appendChild(text);
     tr1.appendChild(td1);
 
@@ -61,6 +70,7 @@ function addRow(bodyTable) {
     var text2 = document.createElement('input');
     text2.type = "text";
     text2.style.width = '100%';
+    text2.placeholder = "Value";
     td2.appendChild(text2);
     tr1.appendChild(td2);
 
@@ -71,6 +81,7 @@ function addRow(bodyTable) {
         newInput.type = "text";
         newInput.style.width = '85%';
         newInput.style.float = 'left';
+        newInput.placeholder = "Value";
         var btnDel = mxUtils.button('-', function (evt) {
             evt.target.parentElement.remove();
         });
@@ -96,18 +107,18 @@ function addRow(bodyTable) {
             var inputNameRDF = document.createElement('input');
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';
+            inputNameRDF.placeholder = "Name in RDF";
             tdNameRDF.appendChild(inputNameRDF);
-            event.currentTarget.parentElement.parentElement.appendChild(tdNameRDF);
+            event.currentTarget.parentElement.parentElement.insertBefore(tdNameRDF, event.currentTarget.parentElement.nextElementSibling);
         } else {
-            event.currentTarget.parentElement.parentElement.lastElementChild.remove();
+            event.currentTarget.parentElement.nextElementSibling.remove();
         }
       })
     
     td3.appendChild(span);
     td3.appendChild(checkbox);
     tr1.appendChild(td3);
-
-    bodyTable.appendChild(tr1);
+    return tr1;
 }
 
 function generateStrValueForClasses(table) {
