@@ -42,7 +42,8 @@ function blockToXML(workspace) {
     d_.importStylesheet(xls)
     let lastXML = d_.transformToFragment(xmlOutput, document);
     var s = new XMLSerializer();
-    return s.serializeToString(lastXML)
+    var strXML = s.serializeToString(lastXML);
+    return strXML.replace(/(?<=>)[\s]+(?=<)/g, '');
 }
 
 function loadXML(string) {
