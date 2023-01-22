@@ -51,12 +51,6 @@ function loadXML(string) {
     return oParser.parseFromString(string, "application/xml");
 }
 
-function createCode() {
-    let code = Blockly.JavaScript.workspaceToCode(workspace);
-    let output = document.getElementById('output_code');
-    output.value = code;
-}
-
 const xslTxt = `<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 

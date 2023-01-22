@@ -55,9 +55,44 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         table.appendChild(newRow);
     });
 
+    // Кнопка открытия окна с блокли для выражений
+    var openBlockly = mxUtils.button('Open blockly', function () {
+        var mainDivBlockly = document.createElement('div');
+        var divBlockly = document.createElement('div');
+        divBlockly.id = 'blocklyDiv'
+        divBlockly.style.width = '850px';
+        divBlockly.style.height = '500px';
+        mainDivBlockly.appendChild(divBlockly);
+        
+        var divInput = document.createElement('div');
+        divInput.style.width = '850px';
+        var codeInput = document.createElement('input');
+        codeInput.style.width = '100%';
+        codeInput.id = 'outputCode';
+
+        divInput.appendChild(codeInput);
+        mainDivBlockly.appendChild(divInput);
+
+        var toCodeBtn = mxUtils.button('to code', function () {
+            let code = Blockly.JavaScript.workspaceToCode(workspaceInWindow);
+            codeInput.value = code;
+        });
+
+        mainDivBlockly.appendChild(toCodeBtn);  
+
+        this.window2 = new mxWindow('Blockly', mainDivBlockly, (document.body.offsetWidth - 880) / 2, 120, 900, 580, true, true);
+        this.window2.destroyOnClose = true;
+        this.window2.setMaximizable(false);
+        this.window2.setResizable(false);
+        this.window2.setClosable(true);
+        this.window2.setVisible(true);
+        var workspaceInWindow = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+    });
+
     // Добавление кнопок в окно
     div.appendChild(addClass);
     div.appendChild(applyBtn);
+    div.appendChild(openBlockly);
 
     // Настройки окна
     this.window = new mxWindow('Classes constructor', div, x, y, w, h, true, true);
