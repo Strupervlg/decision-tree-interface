@@ -8,6 +8,7 @@ function createXML() {
     let output = document.getElementById('output_xml');
     var s = new XMLSerializer();
     var str = s.serializeToString(lastXML)
+    str = str.replace(/(?<=>)[\s]+(?=<)/g, '');
     output.value = str; 
 }
 
