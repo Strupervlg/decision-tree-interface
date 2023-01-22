@@ -1,62 +1,4 @@
-function exportEnums(jsonEnums) {
-    var result = "";
-    jsonEnums.forEach(enumItem => {
-        result += enumItem.nameEnum + "|" + enumItem.values[0];
-        for(var i = 1; i < enumItem.values.length; i++) {
-            result += ";" + enumItem.values[i];
-        }
-        
-        if(enumItem.isLinear == 'trueq') {
-            result += "|TRUE|" + enumItem.nameRDF + "\n";
-        } else {
-            result += "||" + enumItem.nameRDF + "\n";
-        }
-    });
-    return result;
-}
-
-function exportClasses(jsonClasses, workspace) {
-    var result = "";
-    jsonClasses.forEach(classItem => {
-        result += classItem.name + "|" + classItem.extend + "|";
-        if(classItem.expression) {
-            result += codeToXML(workspace, classItem.expression);
-        }
-        result += "\n";
-    });
-    return result;
-}
-
-function codeToXML(workspace, code) {
-    workspace.clear()
-    root = null
-    parser.parse(code)
-    toBlock(root, workspace);
-    return blockToXML(workspace);
-}
-
-function blockToXML(workspace) {
-    let xmlOutput = Blockly.Xml.workspaceToDom(workspace);
-    let xls = loadXML(xslTxt)
-    let d_ = new XSLTProcessor();
-    d_.importStylesheet(xls)
-    let lastXML = d_.transformToFragment(xmlOutput, document);
-    var s = new XMLSerializer();
-    return s.serializeToString(lastXML)
-}
-
-function loadXML(string) {
-    var oParser = new DOMParser();
-    return oParser.parseFromString(string, "application/xml");
-}
-
-function createCode() {
-    let code = Blockly.JavaScript.workspaceToCode(workspace);
-    let output = document.getElementById('output_code');
-    output.value = code;
-}
-
-const xslTxt = `<?xml version="1.0"?>
+<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
     <xsl:output method="xml" indent="yes"/>
@@ -290,4 +232,4 @@ const xslTxt = `<?xml version="1.0"?>
         </ForAllQuantifier>
     </xsl:template>
 
-</xsl:stylesheet>`
+</xsl:stylesheet>

@@ -1,232 +1,210 @@
-//Классы
-Blockly.JavaScript['token'] = function(block) {
-  var text_number = block.getFieldValue('number');
-  var code = "<font color=\"#ff66b3\">"+ text_number +"</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['element'] = function(block) {
-  var text_number = block.getFieldValue('number');
-  var code = "<font color=\"#ff66b3\">"+ text_number +"</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['operand'] = function(block) {
-  var text_number = block.getFieldValue('number');
-  var code = "<font color=\"#ff66b3\">"+ text_number +"</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['operator'] = function(block) {
-  var text_number = block.getFieldValue('number');
-  var code = "<font color=\"#ff66b3\">"+ text_number +"</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-
-//Свойства классов
-Blockly.JavaScript['count_of_tokens'] = function(block) {
-  var code = "<font color=\"#ff9933\">count of tokens</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['need_left_operand'] = function(block) {
-  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE);
-  var code = value_name + " <font color=\"#ff9933\">need a left operand</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['precedence'] = function(block) {
-  var code = "<font color=\"#ff9933\">precedence</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['associativity'] = function(block) {
-  var code = "<font color=\"#ff9933\">associativity</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-
-//Свойства объектов
-Blockly.JavaScript['unevulated'] = function(block) {
-  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE);
-  var code = "<font color=\"#00cc00\">unevulated</font> " + value_name;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['unused'] = function(block) {
-  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE);
-  var code = "<font color=\"#00cc00\">unused</font> " + value_name;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-
-//Отношения
-Blockly.JavaScript['is_between'] = function(block) {
-  var value_token1 = Blockly.JavaScript.valueToCode(block, 'token1', Blockly.JavaScript.ORDER_NONE);
-  var value_token2 = Blockly.JavaScript.valueToCode(block, 'token2', Blockly.JavaScript.ORDER_NONE);
-  var value_token3 = Blockly.JavaScript.valueToCode(block, 'token3', Blockly.JavaScript.ORDER_NONE);
-  var code = value_token1 + " <font color=\"#00cccc\">is between</font> " + value_token2 + " and " + value_token3;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['to_the_right'] = function(block) {
-  var value_token1 = Blockly.JavaScript.valueToCode(block, 'token1', Blockly.JavaScript.ORDER_NONE);
-  var value_token2 = Blockly.JavaScript.valueToCode(block, 'token2', Blockly.JavaScript.ORDER_NONE);
-  var code = value_token1 + " <font color=\"#00cccc\">is to the right</font> " + value_token2;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['left_closest'] = function(block) {
-  var value_token1 = Blockly.JavaScript.valueToCode(block, 'token1', Blockly.JavaScript.ORDER_NONE);
-  var value_token2 = Blockly.JavaScript.valueToCode(block, 'token2', Blockly.JavaScript.ORDER_NONE);
-  var code = value_token1 + " <font color=\"#00cccc\">left closest</font> " + value_token2;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['has'] = function(block) {
-  var value_element = Blockly.JavaScript.valueToCode(block, 'element', Blockly.JavaScript.ORDER_NONE);
-  var value_token = Blockly.JavaScript.valueToCode(block, 'token', Blockly.JavaScript.ORDER_NONE);
-  var code = value_element + " <font color=\"#00cccc\">has</font> " + value_token;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['to_the_left'] = function(block) {
-  var value_token1 = Blockly.JavaScript.valueToCode(block, 'token1', Blockly.JavaScript.ORDER_NONE);
-  var value_token2 = Blockly.JavaScript.valueToCode(block, 'token2', Blockly.JavaScript.ORDER_NONE);
-  var code = value_token1 + " <font color=\"#00cccc\">is to the left</font> " + value_token2;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['right_closest'] = function(block) {
-  var value_token1 = Blockly.JavaScript.valueToCode(block, 'token1', Blockly.JavaScript.ORDER_NONE);
-  var value_token2 = Blockly.JavaScript.valueToCode(block, 'token2', Blockly.JavaScript.ORDER_NONE);
-  var code = value_token1 + " <font color=\"#00cccc\">right closest</font> " + value_token2;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['is_closer_to'] = function(block) {
-  var value_token1 = Blockly.JavaScript.valueToCode(block, 'token1', Blockly.JavaScript.ORDER_NONE);
-  var value_token2 = Blockly.JavaScript.valueToCode(block, 'token2', Blockly.JavaScript.ORDER_NONE);
-  var value_token3 = Blockly.JavaScript.valueToCode(block, 'token3', Blockly.JavaScript.ORDER_NONE);
-  var code = value_token1 + " <font color=\"#00cccc\">is closer to</font> " + value_token2 + " <font color=\"#00cccc\">than</font> " + value_token3;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['is_closest'] = function(block) {
-  var value_token1 = Blockly.JavaScript.valueToCode(block, 'token1', Blockly.JavaScript.ORDER_NONE);
-  var value_token2 = Blockly.JavaScript.valueToCode(block, 'token2', Blockly.JavaScript.ORDER_NONE);
-  var code = value_token1 + " <font color=\"#00cccc\">is closest</font> " + value_token2;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['in_parenthesis'] = function(block) {
-  var value_token1 = Blockly.JavaScript.valueToCode(block, 'token1', Blockly.JavaScript.ORDER_NONE);
-  var value_element = Blockly.JavaScript.valueToCode(block, 'element', Blockly.JavaScript.ORDER_NONE);
-  var code = value_token1 + " <font color=\"#00cccc\">in parenthesis</font> " + value_element;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['is_operand'] = function(block) {
-  var value_element = Blockly.JavaScript.valueToCode(block, 'element', Blockly.JavaScript.ORDER_NONE);
-  var value_operator = Blockly.JavaScript.valueToCode(block, 'operator', Blockly.JavaScript.ORDER_NONE);
-  var code = value_element + " <font color=\"#00cccc\">is</font> " + value_operator + "'s <font color=\"#00cccc\">operand</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-
-//Действия
-Blockly.JavaScript['find'] = function(block) {
-  var value_restrictions = Blockly.JavaScript.valueToCode(block, 'restrictions', Blockly.JavaScript.ORDER_NONE);
-  var value_token = Blockly.JavaScript.valueToCode(block, 'token', Blockly.JavaScript.ORDER_NONE);
-  var code = "<font color=\"#6666ff\">Find</font> " + value_restrictions + "<br>" + value_token;
-  return code;
-};
-
-
-//Вопросы
-Blockly.JavaScript['is_question'] = function(block) {
-  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE);
-  var code = "Is " + value_name + "?";
-  return code;
-};
-
-Blockly.JavaScript['how_many'] = function(block) {
-  var value_property_name = Blockly.JavaScript.valueToCode(block, 'property_name', Blockly.JavaScript.ORDER_NONE);
-  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
-  var code = "How many " + value_property_name + " " + value_object + " has?";
-  return code;
-};
-
-Blockly.JavaScript['does'] = function(block) {
-  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE);
-  var code = "Does " + value_name + "?";
-  return code;
-};
-
-Blockly.JavaScript['compare'] = function(block) {
-  var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_NONE);
-  var value_object1 = Blockly.JavaScript.valueToCode(block, 'object1', Blockly.JavaScript.ORDER_NONE);
-  var value_object2 = Blockly.JavaScript.valueToCode(block, 'object2', Blockly.JavaScript.ORDER_NONE);
-  var code = "Compare " + value_property + " of " + value_object1 + " and " + value_object2 + "?";
-  return code;
-};
-
-Blockly.JavaScript['what_is'] = function(block) {
-  var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_NONE);
-  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
-  var code = "What is " + value_property + " of " + value_object + "?";
-  return code;
-};
-
-
-//Общее
 Blockly.JavaScript['object'] = function(block) {
-  var text_nameobject = block.getFieldValue('nameObject');
-  var code = "<font color=\"#cccc00\">"+ text_nameobject +"</font>";
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  var text_object_name = block.getFieldValue('object_name');
+  var code = text_object_name;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['class'] = function(block) {
+  var text_class_name = block.getFieldValue('class_name');
+  var code = text_class_name;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['property'] = function(block) {
+  var text_property_name = block.getFieldValue('property_name');
+  var code = text_property_name;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['relationship'] = function(block) {
+  var text_relationship_name = block.getFieldValue('relationship_name');
+  var code = text_relationship_name;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['string'] = function(block) {
+  var text_value = block.getFieldValue('value');
+  var code = "\"" + text_value + "\"";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['boolean'] = function(block) {
+  var checkbox_value = block.getFieldValue('value') === 'TRUE';
+  var code = checkbox_value;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['integer'] = function(block) {
+  var number_value = block.getFieldValue('value');
+  var code = number_value;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['double'] = function(block) {
+  var number_value = block.getFieldValue('value');
+  var code = number_value;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['comparison_result'] = function(block) {
+  var dropdown_value = block.getFieldValue('value');
+  var code = dropdown_value;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['get_class'] = function(block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
+  var code = value_object + ".class";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['get_property_value'] = function(block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
+  var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_NONE);
+  var code = value_object + "." + value_property;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['get_relationship_object'] = function(block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
+  var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
+  var text_name_var = block.getFieldValue('name_var');
+  var value_boolean = Blockly.JavaScript.valueToCode(block, 'boolean', Blockly.JavaScript.ORDER_NONE);
+  var code = value_object + "->" + value_relationship + " " + text_name_var + " { " + value_boolean + " } ";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['get_condition_object'] = function(block) {
+  var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
+  var text_name_var = block.getFieldValue('name_var');
+  var code = "find " + text_name_var + " { " + value_condition + " } ";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['get_extr_object'] = function(block) {
+
+  var text_name_var1 = block.getFieldValue('name_var1');
+  var value_extreme_condition = Blockly.JavaScript.valueToCode(block, 'extreme_condition', Blockly.JavaScript.ORDER_NONE);
+  var text_name_var2 = block.getFieldValue('name_var2');
+  var value_general_condition = Blockly.JavaScript.valueToCode(block, 'general_condition', Blockly.JavaScript.ORDER_NONE);
+  var code = "findExtreme " + text_name_var1 + " [ " + value_extreme_condition + " ] " + " where " + text_name_var2 + " { " + value_general_condition + " } ";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['assign_value_to_property'] = function(block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_ASSIGNMENT);
+  var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_ASSIGNMENT);
+  var value_new_value = Blockly.JavaScript.valueToCode(block, 'new_value', Blockly.JavaScript.ORDER_ASSIGNMENT);
+  var code = value_object + "." + value_property + " = " + value_new_value;
+  return code;
+};
+
+Blockly.JavaScript['assign_value_to_variable_decision_tree'] = function(block) {
+  var value_ref_to_object = Blockly.JavaScript.valueToCode(block, 'ref_to_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
+  var value_new_object = Blockly.JavaScript.valueToCode(block, 'new_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
+  var code = value_ref_to_object + " = " + value_new_object;
+  return code;
+};
+
+Blockly.JavaScript['check_object_class'] = function(block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_INSTANCEOF);
+  var value_class = Blockly.JavaScript.valueToCode(block, 'class', Blockly.JavaScript.ORDER_INSTANCEOF);
+  var code = value_object + " is " + value_class;
+  return [code, Blockly.JavaScript.ORDER_INSTANCEOF];
+};
+
+Blockly.JavaScript['check_value_of_property'] = function(block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
+  var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_NONE);
+  var value_property_value = Blockly.JavaScript.valueToCode(block, 'property_value', Blockly.JavaScript.ORDER_NONE);
+  var code = value_object + "." + value_property + "(" + value_property_value + ")";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['check_relationship'] = function(block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
+  var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
+
+  var code = value_object + "->" + value_relationship + "("; 
+  let values = [];
+  for (var i = 0; i < block.itemCount_; i++) {
+    let valueCode = Blockly.JavaScript.valueToCode(block, 'object' + i, Blockly.JavaScript.ORDER_NONE);
+    if(valueCode) {
+      values.push(valueCode);
+    }
+  }
+  let valueString = values.join(", ");
+  code += valueString + ")";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['and'] = function(block) {
+  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_LOGICAL_AND);
+  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_LOGICAL_AND);
+  var code = value_operand1 + " and " + value_operand2;
+  return [code, Blockly.JavaScript.ORDER_LOGICAL_AND];
+};
+
+Blockly.JavaScript['or'] = function(block) {
+  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_LOGICAL_OR);
+  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_LOGICAL_OR);
+  var code = value_operand1 + " or " + value_operand2;
+  return [code, Blockly.JavaScript.ORDER_LOGICAL_OR];
+};
+
+Blockly.JavaScript['not'] = function(block) {
+  var value_operand = Blockly.JavaScript.valueToCode(block, 'operand', Blockly.JavaScript.ORDER_LOGICAL_NOT);
+  var code = "not " + value_operand;
+  return [code, Blockly.JavaScript.ORDER_LOGICAL_NOT];
+};
+
+Blockly.JavaScript['comparison'] = function(block) {
+  var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_RELATIONAL);
+  var dropdown_operator = block.getFieldValue('operator');
+  var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_RELATIONAL);
+  var code = value_operand1 + " " + dropdown_operator + " " + value_operand2;
+  return [code, Blockly.JavaScript.ORDER_RELATIONAL];
+};
+
+Blockly.JavaScript['three_digit_comparison'] = function(block) {
   var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_NONE);
   var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_NONE);
-  // TODO: Assemble JavaScript into code variable.
-  var code = value_operand1 + " and " + value_operand2;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  var code = value_operand1 + ".compare(" + value_operand2 + ")";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['for_all'] = function(block) {
-  var value_restrictions = Blockly.JavaScript.valueToCode(block, 'restrictions', Blockly.JavaScript.ORDER_NONE);
-  var code = "∀ " + value_restrictions;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
+Blockly.JavaScript['quantifier_of_existence'] = function(block) {
+  var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
+  var dropdown_type = block.getFieldValue('type');
+  var text_name_var = block.getFieldValue('name_var');
+  // TODO: Как тут указать тип переменной??
+  var code = "exist " + text_name_var + " { " + value_condition + " }";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['there_exists'] = function(block) {
-  var value_restrictions = Blockly.JavaScript.valueToCode(block, 'restrictions', Blockly.JavaScript.ORDER_NONE);
-  var code = "∃ " + value_restrictions;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
+Blockly.JavaScript['quantifier_of_generality'] = function(block) {
+  var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
+  var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
+  var text_name_var = block.getFieldValue('name_var');
+  var code = "forall " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " } ";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['ref_to_decision_tree_var'] = function(block) {
+  var text_var_name = block.getFieldValue('var_name');
+  var code = 'var:' + text_var_name;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['variable'] = function(block) {
+  var text_name_variable = block.getFieldValue('name_variable');
+  var code = text_name_variable;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['enum'] = function(block) {
+  var text_owner_name = block.getFieldValue('owner_name');
+  var text_value = block.getFieldValue('value');
+  var code = text_owner_name + "::" + text_value;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };

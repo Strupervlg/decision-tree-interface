@@ -124,8 +124,14 @@ Draw.loadPlugin(function (ui) {
         }
     });
 
+    var divForGlobalWS = document.createElement('div');
+    divForGlobalWS.id = "globalWS";
+    document.body.appendChild(divForGlobalWS);
+    var globalWS = Blockly.inject('globalWS', { toolbox: toolbox });
+
     ui.actions.addAction('exportClass', function () {
-        let text = exportClasses(getClasses(ui));
+        
+        let text = exportClasses(getClasses(ui), globalWS);
         downloadAsFile(text);
 
         function downloadAsFile(data) {

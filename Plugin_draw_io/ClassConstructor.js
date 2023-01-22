@@ -16,6 +16,14 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка создания блока
     var applyBtn = mxUtils.button('Apply', function () {
 
+        for (var i = 0; i < table.rows.length; i++) {
+            var expression = table.rows.item(i).getElementsByTagName("td")
+                .item(2).getElementsByTagName("textarea").item(0).value;
+            if(expression) {
+                parser.parse(expression)
+            }
+        }
+
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();

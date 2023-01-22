@@ -1,309 +1,163 @@
-var actionToolbox = {
+var toolbox = {
     "kind": "categoryToolbox",
     "contents": [
         {
             "kind": "category",
-            "name": "Classes",
+            "name": "Types",
             "colour": "300",
             "contents": [
                 {
                     "kind": "block",
-                    "type": "token"
+                    "type": "object"
                 },
                 {
                     "kind": "block",
-                    "type": "element"
+                    "type": "class"
                 },
                 {
                     "kind": "block",
-                    "type": "operand"
+                    "type": "property"
                 },
                 {
                     "kind": "block",
-                    "type": "operator"
+                    "type": "relationship"
+                },
+                {
+                    "kind": "block",
+                    "type": "string"
+                },
+                {
+                    "kind": "block",
+                    "type": "boolean"
+                },
+                {
+                    "kind": "block",
+                    "type": "integer"
+                },
+                {
+                    "kind": "block",
+                    "type": "double"
+                },
+                {
+                    "kind": "block",
+                    "type": "enum"
+                },
+                {
+                    "kind": "block",
+                    "type": "comparison_result"
+                },
+                {
+                    "kind": "block",
+                    "type": "ref_to_decision_tree_var"
+                },
+                {
+                    "kind": "block",
+                    "type": "variable"
                 },
             ]
         },
         {
             "kind": "category",
-            "name": "Class properties",
+            "name": "Operators 'get'",
             "colour": "60",
             "contents": [
                 {
                     "kind": "block",
-                    "type": "count_of_tokens"
+                    "type": "get_class"
                 },
                 {
                     "kind": "block",
-                    "type": "need_left_operand"
+                    "type": "get_property_value"
                 },
                 {
                     "kind": "block",
-                    "type": "precedence"
+                    "type": "get_relationship_object"
                 },
                 {
                     "kind": "block",
-                    "type": "associativity"
+                    "type": "get_condition_object"
                 },
+                {
+                    "kind": "block",
+                    "type": "get_extr_object"
+                },
+                
             ]
         },
         {
             "kind": "category",
-            "name": "Object properties",
+            "name": "Operators 'set'",
             "colour": "120",
             "contents": [
                 {
                     "kind": "block",
-                    "type": "unevulated"
+                    "type": "assign_value_to_property"
                 },
                 {
                     "kind": "block",
-                    "type": "unused"
+                    "type": "assign_value_to_variable_decision_tree"
                 },
             ]
         },
         {
             "kind": "category",
-            "name": "Relationships",
+            "name": "Operators 'check'",
             "colour": "195",
             "contents": [
                 {
                     "kind": "block",
-                    "type": "is_between"
+                    "type": "check_object_class"
                 },
                 {
                     "kind": "block",
-                    "type": "to_the_right"
+                    "type": "check_value_of_property"
                 },
                 {
                     "kind": "block",
-                    "type": "left_closest"
-                },
-                {
-                    "kind": "block",
-                    "type": "has"
-                },
-                {
-                    "kind": "block",
-                    "type": "to_the_left"
-                },
-                {
-                    "kind": "block",
-                    "type": "right_closest"
-                },
-                {
-                    "kind": "block",
-                    "type": "is_closer_to"
-                },
-                {
-                    "kind": "block",
-                    "type": "is_closest"
-                },
-                {
-                    "kind": "block",
-                    "type": "in_parenthesis"
-                },
-                {
-                    "kind": "block",
-                    "type": "is_operand"
+                    "type": "check_relationship"
                 },
             ]
         },
         {
             "kind": "category",
-            "name": "Actions",
+            "name": "Logical operators",
             "colour": "230",
             "contents": [
                 {
                     "kind": "block",
-                    "type": "find"
+                    "type": "and"
+                },
+
+                {
+                    "kind": "block",
+                    "type": "or"
+                },
+                {
+                    "kind": "block",
+                    "type": "not"
+                },
+                {
+                    "kind": "block",
+                    "type": "comparison"
+                },
+                {
+                    "kind": "block",
+                    "type": "three_digit_comparison"
                 },
             ]
         },
         {
             "kind": "category",
-            "name": "General elements",
+            "name": "Quantifiers",
             "colour": "75",
             "contents": [
                 {
                     "kind": "block",
-                    "type": "object"
+                    "type": "quantifier_of_existence"
                 },
                 {
                     "kind": "block",
-                    "type": "and"
-                },
-                {
-                    "kind": "block",
-                    "type": "for_all"
-                },
-                {
-                    "kind": "block",
-                    "type": "there_exists"
-                },
-            ]
-        },
-    ]
-}
-
-
-var conditionToolbox = {
-    "kind": "categoryToolbox",
-    "contents": [
-        {
-            "kind": "category",
-            "name": "Classes",
-            "colour": "300",
-            "contents": [
-                {
-                    "kind": "block",
-                    "type": "token"
-                },
-                {
-                    "kind": "block",
-                    "type": "element"
-                },
-                {
-                    "kind": "block",
-                    "type": "operand"
-                },
-                {
-                    "kind": "block",
-                    "type": "operator"
-                },
-            ]
-        },
-        {
-            "kind": "category",
-            "name": "Class properties",
-            "colour": "60",
-            "contents": [
-                {
-                    "kind": "block",
-                    "type": "count_of_tokens"
-                },
-                {
-                    "kind": "block",
-                    "type": "need_left_operand"
-                },
-                {
-                    "kind": "block",
-                    "type": "precedence"
-                },
-                {
-                    "kind": "block",
-                    "type": "associativity"
-                },
-            ]
-        },
-        {
-            "kind": "category",
-            "name": "Object properties",
-            "colour": "120",
-            "contents": [
-                {
-                    "kind": "block",
-                    "type": "unevulated"
-                },
-                {
-                    "kind": "block",
-                    "type": "unused"
-                },
-            ]
-        },
-        {
-            "kind": "category",
-            "name": "Relationships",
-            "colour": "195",
-            "contents": [
-                {
-                    "kind": "block",
-                    "type": "is_between"
-                },
-                {
-                    "kind": "block",
-                    "type": "to_the_right"
-                },
-                {
-                    "kind": "block",
-                    "type": "left_closest"
-                },
-                {
-                    "kind": "block",
-                    "type": "has"
-                },
-                {
-                    "kind": "block",
-                    "type": "to_the_left"
-                },
-                {
-                    "kind": "block",
-                    "type": "right_closest"
-                },
-                {
-                    "kind": "block",
-                    "type": "is_closer_to"
-                },
-                {
-                    "kind": "block",
-                    "type": "is_closest"
-                },
-                {
-                    "kind": "block",
-                    "type": "in_parenthesis"
-                },
-                {
-                    "kind": "block",
-                    "type": "is_operand"
-                },
-            ]
-        },
-        {
-            "kind": "category",
-            "name": "Questions",
-            "contents": [
-                {
-                    "kind": "block",
-                    "type": "is_question"
-                },
-                {
-                    "kind": "block",
-                    "type": "how_many"
-                },
-                {
-                    "kind": "block",
-                    "type": "does"
-                },
-                {
-                    "kind": "block",
-                    "type": "compare"
-                },
-                {
-                    "kind": "block",
-                    "type": "what_is"
-                },
-            ]
-        },
-        {
-            "kind": "category",
-            "name": "General elements",
-            "colour": "75",
-            "contents": [
-                {
-                    "kind": "block",
-                    "type": "object"
-                },
-                {
-                    "kind": "block",
-                    "type": "and"
-                },
-                {
-                    "kind": "block",
-                    "type": "for_all"
-                },
-                {
-                    "kind": "block",
-                    "type": "there_exists"
+                    "type": "quantifier_of_generality"
                 },
             ]
         },

@@ -34,5 +34,5 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setResizable(true);
     this.window.setClosable(true);
     this.window.setVisible(true);
-    var workspace = Blockly.inject('blocklyDiv', { toolbox: actionToolbox });
+    var workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
 };
