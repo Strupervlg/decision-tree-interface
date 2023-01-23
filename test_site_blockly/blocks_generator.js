@@ -197,7 +197,7 @@ Blockly.JavaScript['ref_to_decision_tree_var'] = function(block) {
 };
 
 Blockly.JavaScript['variable'] = function(block) {
-  var text_name_variable = block.getFieldValue('name_variable');
+  var text_name_variable = block.getFieldValue('var_name');
   var code = text_name_variable;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
