@@ -154,10 +154,10 @@ const xslTxt = `<?xml version="1.0"?>
 
     <xsl:template match="block[@type='get_extr_object']">
         <GetExtreme>
-            <xsl:attribute name="varName">
+            <xsl:attribute name="extremeVarName">
                 <xsl:value-of select="field[@name='name_var1']" />
             </xsl:attribute>
-            <xsl:attribute name="extremeVarName">
+            <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var2']" />
             </xsl:attribute>
             <xsl:apply-templates select="value[@name='extreme_condition']" />
