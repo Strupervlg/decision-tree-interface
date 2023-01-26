@@ -6,7 +6,7 @@ function exportEnums(jsonEnums) {
             result += ";" + enumItem.values[i];
         }
         
-        if(enumItem.isLinear == 'trueq') {
+        if(enumItem.isLinear == 'true') {
             result += "|TRUE|" + enumItem.nameRDF + "\n";
         } else {
             result += "||" + enumItem.nameRDF + "\n";
@@ -23,6 +23,33 @@ function exportClasses(jsonClasses, workspace) {
             result += codeToXML(workspace, classItem.expression);
         }
         result += "\n";
+    });
+    return result;
+}
+
+function exportProperties(jsonProperties) {
+    var result = "";
+    jsonProperties.forEach(propertyItem => {
+        result += propertyItem.name + "|";
+
+        if(propertyItem.type != "Integer" && propertyItem.type != "Double" 
+        && propertyItem.type != "Boolean" && propertyItem.type != "String") {
+            result += "ENUM" + "|" + propertyItem.type.slice(6) + "|";
+        } else {
+            result += propertyItem.type.toUpperCase() + "||";
+        }
+
+        if(propertyItem.isStatic == 'true') {
+            result += "TRUE|" + propertyItem.classes[0];
+            for(var i = 1; i < propertyItem.classes.length; i++) {
+                result += ";" + propertyItem.classes[i];
+            }
+            result += "|";
+        } else {
+            result += "||";
+        }
+
+        result += propertyItem.range + "\n";
     });
     return result;
 }

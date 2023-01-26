@@ -79,3 +79,55 @@ function getClasses(editorUi) {
     });
     return classes;
 }
+
+function getProperties(editorUi) {
+
+    var graph = editorUi.editor.graph;
+    var cells = graph.getModel().cells;
+
+    let properties = [];
+
+    Object.keys(cells).forEach(function (key) {
+
+        var cellValue = cells[key].value;
+
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class properties</font></b>')) {
+            cellValue = cellValue.replace('<b><font color="#000000">Class properties</font></b><br>', '');
+            var values = cellValue.split('<br>');
+
+            values.forEach(element => {
+                var nameProperty = element.slice(element.indexOf('<font color="#ffb366">')+22, element.indexOf('</font>'));
+                element = element.slice(element.indexOf('</font>,')+8);
+
+                var type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
+                element = element.slice(element.indexOf('</font>')+7);
+
+                var range = "";
+                if(type == "Integer" || type == "Double") {
+                    range = element.slice(element.indexOf('<font color="#000000">: ')+24, element.indexOf('</font>'));
+                    element = element.slice(element.indexOf('</font>')+7);
+                }
+                element = element.slice(element.indexOf('<font color="#19c3c0">isStatic:</font>')+38);
+                
+                isStatic = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
+                element = element.slice(element.indexOf('</font>')+7);
+
+                classes = [];
+                if(isStatic) {
+                    var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
+                    classes = valuesStr.split(', ');
+                }
+                
+                var ItemProperty = {
+                    "name": nameProperty,
+                    "type": type,
+                    "range": range,
+                    "isStatic": isStatic,
+                    "classes": classes,
+                };
+                properties.push(ItemProperty);
+            });
+        }
+    });
+    return properties;
+}
