@@ -54,6 +54,25 @@ function exportProperties(jsonProperties) {
     return result;
 }
 
+function exportRelastionships(jsonRelationships) {
+    var result = "";
+    jsonRelationships.forEach(relationshipItem => {
+        result += relationshipItem.name + "|" + relationshipItem.extend + "|" 
+            + relationshipItem.classes[0];
+        for(var i = 1; i < relationshipItem.classes.length; i++) {
+            result += ";" + relationshipItem.classes[i];
+        }
+
+        result += "|" + relationshipItem.scale + "|";
+        if(relationshipItem.isBetween == "true") {
+            result += "TRUE" + "|" + relationshipItem.type + "\n";
+        } else {
+            result += "|\n";
+        }
+    });
+    return result;
+}
+
 function codeToXML(workspace, code) {
     workspace.clear()
     root = null

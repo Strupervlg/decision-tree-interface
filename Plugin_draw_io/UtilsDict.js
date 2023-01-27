@@ -131,3 +131,66 @@ function getProperties(editorUi) {
     });
     return properties;
 }
+
+function getRelationships(editorUi) {
+
+    var graph = editorUi.editor.graph;
+    var cells = graph.getModel().cells;
+
+    let relationships = [];
+
+    Object.keys(cells).forEach(function (key) {
+
+        var cellValue = cells[key].value;
+
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
+            cellValue = cellValue.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
+            var values = cellValue.split('<br>');
+
+            values.forEach(element => {
+                var nameRelationship = element.slice(element.indexOf('<font color="#00cccc">')+22, element.indexOf('</font>'));
+                element = element.slice(element.indexOf('</font>')+7);
+
+                var extendRelationship = ""
+                if(element.indexOf(' (<font color="#00cccc">') != -1) {
+                    extendRelationship = element.slice(element.indexOf('(<font color="#00cccc">')+23, element.indexOf('</font>)'));
+                    element = element.slice(element.indexOf('</font>)')+8);
+                }
+
+                element = element.slice(element.indexOf('classes:</font>')+15);
+                var valuesStr = element.slice(element.indexOf('<font color="#ff66b3">')+22, element.indexOf('</font>'));
+                var classes = valuesStr.split(', ');
+                element = element.slice(element.indexOf('</font>')+7);
+
+                var scale = "";
+                if(element.indexOf('<font color="#6666FF">scale:</font>') != -1) {
+                    element = element.slice(element.indexOf('scale:</font>')+13);
+                    scale = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
+                    scale = scale.toUpperCase();
+                    element = element.slice(element.indexOf('</font>')+7);
+                }
+
+                element = element.slice(element.indexOf('classes:</font>')+15);
+                isBetween = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
+                element = element.slice(element.indexOf('</font>')+7);
+                var type = "";
+                if(isBetween == "true") {
+                    element = element.slice(element.indexOf('type:</font>')+12);
+                    type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
+                    type = type.toUpperCase().replaceAll(" ", "_");
+                }
+                
+                var ItemRelationship = {
+                    "name": nameRelationship,
+                    "extend": extendRelationship,
+                    "classes": classes,
+                    "scale": scale,
+                    "isBetween": isBetween,
+                    "type": type
+                };
+                relationships.push(ItemRelationship);
+            });
+        }
+    });
+    return relationships;
+}

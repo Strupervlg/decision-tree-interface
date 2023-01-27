@@ -7,41 +7,9 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     table.style.width = '100%';
     table.style.height = '100%';
     var tbody = document.createElement('tbody');
-    var tr1 = document.createElement('tr');
-    var td1 = document.createElement('td');
+    var rowRelationship = addRowRelationship(editorUi);
 
-    // Создание выпадающего списка с классами
-    var select = document.createElement('select');
-    select.style.width = '25%';
-    var classes_array = getClasses(editorUi);
-    classes_array.forEach(element => {
-        var newOption = new Option(element, element);
-        select.options[select.options.length] = newOption;
-    });
-    td1.appendChild(select);
-
-    //Создание поля для названия отношения
-    var text = document.createElement('input');
-    text.type = "text";
-    text.style.width = '25%';
-    td1.appendChild(text);
-
-    // Создание выпадающего списка с классами
-    var select2 = document.createElement('select');
-    select2.style.width = '25%';
-    classes_array.forEach(element => {
-        var newOption = new Option(element, element);
-        select2.options[select2.options.length] = newOption;
-    });
-    td1.appendChild(select2);
-
-    // Создания поля для кода джены
-    var textArea = document.createElement('textarea');
-    textArea.style.width = '23%';
-    td1.appendChild(textArea);
-
-    tr1.appendChild(td1);
-    tbody.appendChild(tr1);
+    tbody.appendChild(rowRelationship);
     table.appendChild(tbody);
     div.appendChild(table);
 
@@ -50,7 +18,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#00CCCC;align=center;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#000000;align=center;");
 
             strValue = generateStrValueForRelationships(table);
 
@@ -58,54 +26,24 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
-            for (var i = 0; i < table.rows.length; i++) {
-                var jenaCode = table.rows.item(i).getElementsByTagName("td")
-                    .item(0).getElementsByTagName("textarea").item(0).value;
-                theGraph.setAttributeForCell(newElement, 'jena_code_' + i, jenaCode);
-            }
         }
     });
 
-    // Кнопка добавления полей для нового свойства класса
-    var addClass = mxUtils.button('Add relationship', function () {
-        var trAdd = document.createElement('tr');
-        var tdAdd = document.createElement('td');
-
-        // Создание выпадающего списка с классами        
-        var select = document.createElement('select');
-        select.style.width = '25%';
-        classes_array.forEach(element => {
-            var newOption = new Option(element, element);
-            select.options[select.options.length] = newOption;
+    // Кнопка добавления полей для нового отношения между классами
+    var addRelationship = mxUtils.button('Add relationship', function () {
+        var newRowRelationship = addRowRelationship(editorUi);
+        var tdDelRow = document.createElement('td');
+        tdDelRow.classList = 'delete';
+        var btnDelRow = mxUtils.button('Delete', function (evt) {
+            evt.target.parentElement.parentElement.remove();
         });
-        tdAdd.appendChild(select);
-
-        //Создание поля для названия отношения
-        var text = document.createElement('input');
-        text.type = "text";
-        text.style.width = '25%';
-        tdAdd.appendChild(text);
-
-        // Создание выпадающего списка с классами
-        var select2 = document.createElement('select');
-        select2.style.width = '25%';
-        classes_array.forEach(element => {
-            var newOption = new Option(element, element);
-            select2.options[select2.options.length] = newOption;
-        });
-        tdAdd.appendChild(select2);
-
-        // Создания поля для кода джены
-        var textArea = document.createElement('textarea');
-        textArea.style.width = '24%';
-        tdAdd.appendChild(textArea);
-
-        trAdd.appendChild(tdAdd);
-        table.appendChild(trAdd);
+        tdDelRow.appendChild(btnDelRow);
+        newRowRelationship.appendChild(tdDelRow);
+        table.appendChild(newRowRelationship);
     });
 
     // Добавление кнопок в окно
-    div.appendChild(addClass);
+    div.appendChild(addRelationship);
     div.appendChild(applyBtn);
 
     // Настройки окна
@@ -117,6 +55,103 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+function addRowRelationship(editorUi) {
+    var tr1 = document.createElement('tr');
+
+    var td1 = document.createElement('td');
+    var text = document.createElement('input');
+    text.type = "text";
+    text.placeholder = "Relationship name";
+    text.style.width = '100%';
+    td1.appendChild(text);
+    tr1.appendChild(td1);
+
+    var td2 = document.createElement('td');
+    var extend = document.createElement('input');
+    extend.type = "text";
+    extend.style.width = '100%';
+    extend.placeholder = "Extend";
+    td2.appendChild(extend);
+    tr1.appendChild(td2);
+
+    //Добавление классов
+    var td3 = document.createElement('td');
+    var selectClass = document.createElement('select');
+    selectClass.style.width = '100%';
+    var jsonClasses = getClasses(editorUi);
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClass.options[selectClass.options.length] = newOption;
+    });
+    td3.appendChild(selectClass);
+
+    var tdAddClass = document.createElement('td');
+    var btnAddClass = mxUtils.button('+', function (evt) {
+        let newTdClass = document.createElement('td');
+        var newSelectClass = document.createElement('select');
+        newSelectClass.style.width = '85%';
+        newSelectClass.style.float = 'left';
+        var jsonClasses = getClasses(editorUi);
+        jsonClasses.forEach(classItem => {
+            var newOption = new Option(classItem.name, classItem.name);
+            newSelectClass.options[newSelectClass.options.length] = newOption;
+        });
+        var btnDelClass = mxUtils.button('-', function (evt) {
+            evt.target.parentElement.remove();
+        });
+        btnDelClass.style.float = 'left';
+        btnDelClass.style.width = '10%';
+        newTdClass.appendChild(newSelectClass);
+        newTdClass.appendChild(btnDelClass);
+        evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
+    });
+
+    tdAddClass.appendChild(btnAddClass);
+    tr1.appendChild(td3);
+    tr1.appendChild(tdAddClass);
+
+    //Селектор с scale
+    var td5 = document.createElement('td');
+    var selectScale = document.createElement('select');
+    selectScale.style.width = '100%';
+    var scales = ["None", "Linear", "Partially linear"]; //"NONE" "LINEAR" "PARTIALLY_LINEAR"
+    scales.forEach(element => {
+        var newOption = new Option(element, element);
+        selectScale.options[selectScale.options.length] = newOption;
+    });
+    td5.appendChild(selectScale);
+    tr1.appendChild(td5);
+
+    var td6 = document.createElement('td');
+    var span = document.createElement('span');
+    span.innerText = "is relationship between classes";
+    var checkbox = document.createElement('input');
+    checkbox.type = "checkbox";
+    checkbox.addEventListener('change', (event) => {
+        if (event.currentTarget.checked) {
+            //Добавление поля с типом
+            var tdType = document.createElement('td');
+            var selectType = document.createElement('select');
+            selectType.style.width = '100%';
+            var scales = ["One to one", "One to many"]; // "ONE_TO_ONE", "ONE_TO_MANY"
+            scales.forEach(element => {
+                var newOption = new Option(element, element);
+                selectType.options[selectType.options.length] = newOption;
+            });
+            tdType.appendChild(selectType);
+            event.currentTarget.parentElement.parentElement.insertBefore(tdType, event.currentTarget.parentElement.nextElementSibling);
+        } else {
+            //Удаление поля с типом
+            event.currentTarget.parentElement.nextElementSibling.remove();
+        }
+      })
+    td6.appendChild(span);
+    td6.appendChild(checkbox);
+    tr1.appendChild(td6);
+
+    return tr1;
+}
+
 function generateStrValueForRelationships(table) {
     strValue = '<b><font color="#000000">Relationships between objects</font></b>';
 
@@ -124,17 +159,59 @@ function generateStrValueForRelationships(table) {
         var relationship = table.rows.item(i).getElementsByTagName("td")
             .item(0).getElementsByTagName("input").item(0).value;
 
-        var selectClass1 = table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("select").item(0);
-        var selectedIndex1 = selectClass1.options.selectedIndex;
-        var selectedClass1 = selectClass1.options[selectedIndex1].value;
+        var extendRelationship = table.rows.item(i).getElementsByTagName("td")
+            .item(1).getElementsByTagName("input").item(0).value;
+        
+        var classList = [];
 
-        var selectClass2 = table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("select").item(1);
-        var selectedIndex2 = selectClass2.options.selectedIndex;
-        var selectedClass2 = selectClass2.options[selectedIndex2].value;
+        var classSelect = table.rows.item(i).getElementsByTagName("td")
+            .item(2).getElementsByTagName("select").item(0);
+        classList[0] = classSelect.options[classSelect.options.selectedIndex].value;
+        lastIndex = 3;
+        let currentSelect = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("select").item(0);
+        while(currentSelect != null) {
+            classList.push(currentSelect.options[currentSelect.options.selectedIndex].value);
+            lastIndex++;
+            currentSelect = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("select").item(0);
+        }
+        lastIndex++;
 
-        strValue += '<br>' + '<font color="#000000">&lt;</font>' + '<font color="#ff66b3">' + selectedClass1 + '</font>' + '<font color="#000000">&gt;</font>' + '<font color="#00cccc"> ' + relationship + ' </font>' + '<font color="#000000">&lt;</font>' + '<font color="#ff66b3">' + selectedClass2 + '</font>' + '<font color="#000000">&gt;</font>';
+        var scaleSelect = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("select").item(0);
+        var scale = scaleSelect.options[scaleSelect.options.selectedIndex].value;
+        lastIndex++;
+
+        var isBetween = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("input").item(0).checked;
+        var type = "";
+        if(isBetween) {
+            lastIndex++;
+            var typeSelect = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("select").item(0);
+            type = typeSelect.options[typeSelect.options.selectedIndex].value;
+        }
+
+        strValue += '<br>' + '<font color="#00cccc">' + relationship + '</font>';
+        if(extendRelationship != "") {
+            strValue += ' (<font color="#00cccc">' + extendRelationship + '</font>)'
+        }
+        strValue += ' <font color="#6666FF">classes:</font> <font color="#ff66b3">' + classList[0];
+        for(let i = 1; i < classList.length; i++) {
+            strValue += ', ' + classList[i];
+        }
+        strValue += '</font>';
+
+        if(scale != "None") {
+            strValue += ' <font color="#6666FF">scale:</font> <font color="#000000">' + scale + '</font>';
+        }
+
+        strValue += ' <font color="#6666FF">is relationship between classes:</font> <font color="#000000">' 
+            + isBetween + '</font>';
+        if(isBetween) {
+            strValue += ' <font color="#6666FF">type:</font> <font color="#000000">' + type + '</font>';
+        }
     }
 
     return strValue;

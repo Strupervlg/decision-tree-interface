@@ -40,6 +40,7 @@ Draw.loadPlugin(function (ui) {
     ui.menubar.addMenu('Exporting dictionaries', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'exportClass');
         ui.menus.addMenuItem(menu, 'exportProperty');
+        ui.menus.addMenuItem(menu, 'exportRelationship');
         ui.menus.addMenuItem(menu, 'exportEnum');
     });
 
@@ -64,6 +65,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('exportClass=Export class');
 
     mxResources.parse('exportProperty=Export property');
+
+    mxResources.parse('exportRelationship=Export relationship');
 
     // Создание действий для меню
     // Тестовое дейтсвие
@@ -156,6 +159,20 @@ Draw.loadPlugin(function (ui) {
             let file = new Blob([data], {type: 'application/json'});
             a.href = URL.createObjectURL(file);
             a.download = "properties.txt";
+            a.click();
+        }
+    });
+
+    ui.actions.addAction('exportRelationship', function () {
+        
+        let text = exportRelastionships(getRelationships(ui));
+        downloadAsFile(text);
+
+        function downloadAsFile(data) {
+            let a = document.createElement("a");
+            let file = new Blob([data], {type: 'application/json'});
+            a.href = URL.createObjectURL(file);
+            a.download = "relationships.txt";
             a.click();
         }
     });
