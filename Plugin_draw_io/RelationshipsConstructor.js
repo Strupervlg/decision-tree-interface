@@ -15,6 +15,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка создания блока
     var applyBtn = mxUtils.button('Apply', function () {
+        checkAllInputsRelationship(table);
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
@@ -150,6 +151,32 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td6);
 
     return tr1;
+}
+
+function checkAllInputsRelationship(table) {
+    errors = "";
+    for (var i = 0; i < table.rows.length; i++) {
+        if(table.rows.item(i).getElementsByTagName("td")
+            .item(0).getElementsByTagName("input").item(0).value == "") {
+            errors += "В строке №" + (i+1) + " отсутствует название; ";
+        }
+
+        let lastIndex = 2;
+        let currentSelect = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("select").item(0);
+        while(currentSelect != null) {
+            if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
+                errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+                break;
+            }
+            lastIndex++;
+            currentSelect = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("select").item(0);
+        }
+    }
+    if(errors != "") {
+        throw new Error(errors);
+    }
 }
 
 function generateStrValueForRelationships(table) {
