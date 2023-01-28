@@ -16,10 +16,13 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка создания блока
     var applyBtn = mxUtils.button('Apply', function () {
 
+        checkAllInputsClass(table);
+
         for (var i = 0; i < table.rows.length; i++) {
             var expression = table.rows.item(i).getElementsByTagName("td")
                 .item(2).getElementsByTagName("textarea").item(0).value;
             if(expression) {
+                //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
                 parser.parse(expression)
             }
         }
@@ -127,6 +130,19 @@ function addRowClass() {
     tr1.appendChild(td2);
     tr1.appendChild(td3);
     return tr1;
+}
+
+function checkAllInputsClass(table) {
+    errors = "";
+    for (var i = 0; i < table.rows.length; i++) {
+        if(table.rows.item(i).getElementsByTagName("td")
+            .item(0).getElementsByTagName("input").item(0).value == "") {
+            errors += "В строке №" + (i+1) + " отсутствует название; ";
+        }
+    }
+    if(errors != "") {
+        throw new Error(errors);
+    }
 }
 
 function generateStrValueForClasses(table) {

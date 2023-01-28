@@ -17,7 +17,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка создания блока
     var applyBtn = mxUtils.button('Apply', function () {
         
-        checkAllInputs(tbody);
+        checkAllInputsEnum(tbody);
 
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
@@ -123,7 +123,7 @@ function addRowEnum() {
     return tr1;
 }
 
-function checkAllInputs(table) {
+function checkAllInputsEnum(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
         if(table.rows.item(i).getElementsByTagName("td")
