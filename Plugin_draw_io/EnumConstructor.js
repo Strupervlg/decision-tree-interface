@@ -16,6 +16,8 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка создания блока
     var applyBtn = mxUtils.button('Apply', function () {
+        
+        checkAllInputs(tbody);
 
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
@@ -119,6 +121,41 @@ function addRowEnum() {
     td3.appendChild(checkbox);
     tr1.appendChild(td3);
     return tr1;
+}
+
+function checkAllInputs(table) {
+    errors = "";
+    for (var i = 0; i < table.rows.length; i++) {
+        if(table.rows.item(i).getElementsByTagName("td")
+            .item(0).getElementsByTagName("input").item(0).value == "") {
+                errors += "В строке №" + (i+1) + " отсутствует название; ";
+            }
+
+        let lastIndex = 1;
+        let currentInput = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("input").item(0);
+        let isErrorValue = false;
+        while(currentInput != null) {
+            if(currentInput.value == "" && !isErrorValue) {
+                errors += "В строке №" + (i+1) + " отсутствует значение; ";
+                isErrorValue = true;
+            }
+            lastIndex++;
+            currentInput = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("input").item(0);
+        }
+        lastIndex++;
+
+        var Islinear = table.rows.item(i).getElementsByTagName("td")
+        .item(lastIndex).getElementsByTagName("input").item(0).checked;
+        if(Islinear && table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex+1).getElementsByTagName("input").item(0).value == "") {
+                errors += "В строке №" + (i+1) + " отсутствует название в RDF; ";
+        }
+    }
+    if(errors != "") {
+        throw new Error(errors);
+    }
 }
 
 function generateStrValueForEnums(table) {
