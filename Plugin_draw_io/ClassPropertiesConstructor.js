@@ -15,6 +15,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка создания блока
     var applyBtn = mxUtils.button('Apply', function () {
+        checkAllInputsProperty(table);
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
@@ -191,6 +192,53 @@ function addRowProperty(editorUi) {
     tr1.appendChild(td3);
 
     return tr1;
+}
+
+function checkAllInputsProperty(table) {
+    errors = "";
+    for (var i = 0; i < table.rows.length; i++) {
+        if(table.rows.item(i).getElementsByTagName("td")
+            .item(0).getElementsByTagName("input").item(0).value == "") {
+            errors += "В строке №" + (i+1) + " отсутствует название; ";
+        }
+
+        var typeSelect = table.rows.item(i).getElementsByTagName("td")
+            .item(1).getElementsByTagName("select").item(0);
+        var type = typeSelect.options[typeSelect.options.selectedIndex].value;
+
+        let lastIndex = 2;
+        if(type == "Integer" || type == "Double") {
+            if(table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("input").item(0).value == "") {
+                errors += "В строке №" + (i+1) + " отсутствует начальное значение; ";
+            }
+            if(table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("input").item(1).value == "") {
+                errors += "В строке №" + (i+1) + " отсутствует конечное значение; ";
+            }
+            lastIndex++;
+        }
+
+        var isStatic = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("input").item(0).checked;
+        if(isStatic) {
+            lastIndex++;
+            let currentSelect = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("select").item(0);
+            while(currentSelect != null) {
+                if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
+                    errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+                    break;
+                }
+                lastIndex++;
+                currentSelect = table.rows.item(i).getElementsByTagName("td")
+                    .item(lastIndex).getElementsByTagName("select").item(0);
+            }
+        }
+    }
+    if(errors != "") {
+        throw new Error(errors);
+    }
 }
 
 function generateStrValueForProperties(table) {
