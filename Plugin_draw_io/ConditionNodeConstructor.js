@@ -34,5 +34,5 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setResizable(true);
     this.window.setClosable(true);
     this.window.setVisible(true);
-    var workspace = Blockly.inject('blocklyDiv', { toolbox: conditionToolbox });
+    var workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
 };
