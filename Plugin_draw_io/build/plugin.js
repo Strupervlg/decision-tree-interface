@@ -6593,6 +6593,8 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.menubar.addMenu('Node constructors', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'TrueNodeCreate');
+        ui.menus.addMenuItem(menu, 'FalseNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
     });
@@ -6627,6 +6629,10 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('exportProperty=Export property');
 
     mxResources.parse('exportRelationship=Export relationship');
+
+    mxResources.parse('TrueNodeCreate=Create true node');
+
+    mxResources.parse('FalseNodeCreate=Create false node');
 
     // Создание действий для меню
     // Тестовое дейтсвие
@@ -6663,6 +6669,28 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('relationshipsConstructor', function () {
         this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
         this.relationshipsConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на создание узла ИСТИНА
+    ui.actions.addAction('TrueNodeCreate', function () {
+        var theGraph = ui.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;");
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+        }
+    });
+
+    // Действие на создание узла ЛОЖЬ
+    ui.actions.addAction('FalseNodeCreate', function () {
+        var theGraph = ui.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;");
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+        }
     });
 
     // Действие на отоброжение конструктора узлов действия
