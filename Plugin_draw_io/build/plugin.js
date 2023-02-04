@@ -6687,6 +6687,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
         ui.menus.addMenuItem(menu, 'LogicNodeCreate');
         ui.menus.addMenuItem(menu, 'DecidingFactorNodeCreate');
+        ui.menus.addMenuItem(menu, 'UncertaintyNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
     });
@@ -6729,6 +6730,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('LogicNodeCreate=Create logic node');
 
     mxResources.parse('DecidingFactorNodeCreate=Create deciding factor node');
+
+    mxResources.parse('UncertaintyNodeCreate=Create node uncertainty');
 
     // Создание действий для меню
     // Тестовое дейтсвие
@@ -6795,10 +6798,21 @@ Draw.loadPlugin(function (ui) {
         this.logicNodeConstructorWindow.window.setVisible(true);
     });
 
-    // Действие на создание логического узла 
+    // Действие на создание узла "Предрешающий фактор"
     ui.actions.addAction('DecidingFactorNodeCreate', function () {
         this.decidingFactorNodeConstructorWindow = new DecidingFactorNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
         this.decidingFactorNodeConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на создание узла неопределеноость предрешающего фактора
+    ui.actions.addAction('UncertaintyNodeCreate', function () {
+        var theGraph = ui.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;");
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+        }
     });
 
     // Действие на отоброжение конструктора узлов действия
