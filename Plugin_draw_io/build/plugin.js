@@ -6601,6 +6601,53 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
+// Окно создание узлов "Предрешающие факторы"
+var DecidingFactorNodeConstructorWindow = function (editorUi, x, y, w, h) {
+
+    // Верстка окнаx
+    var div = document.createElement('div');
+    var table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.height = '100%';
+    var tbody = document.createElement('tbody');
+    
+    var row = document.createElement('tr');
+    var tdName = document.createElement('td');
+    var name = document.createElement('input');
+    name.type = "text";
+    name.style.width = '100%';
+    name.placeholder = "Value";
+    tdName.appendChild(name);
+    row.appendChild(tdName);
+    tbody.appendChild(row);
+    table.appendChild(tbody);
+    div.appendChild(table);
+
+    // Кнопка создания узла
+    var btnCreateNode = mxUtils.button('Create', function () {
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;");
+            newElement.value = table.rows.item(0).getElementsByTagName("td")
+            .item(0).getElementsByTagName("input").item(0).value;
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+            table.rows.item(0).getElementsByTagName("td")
+            .item(0).getElementsByTagName("input").item(0).value = "";
+        }
+    });
+
+    div.appendChild(btnCreateNode);
+
+    // Настройки окна
+    this.window = new mxWindow('Deciding factor node constructor', div, x, y, w, h, true, true);
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(true);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
 // Плагин
 Draw.loadPlugin(function (ui) {
 
@@ -6639,6 +6686,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'TrueNodeCreate');
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
         ui.menus.addMenuItem(menu, 'LogicNodeCreate');
+        ui.menus.addMenuItem(menu, 'DecidingFactorNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
     });
@@ -6679,6 +6727,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('FalseNodeCreate=Create false node');
 
     mxResources.parse('LogicNodeCreate=Create logic node');
+
+    mxResources.parse('DecidingFactorNodeCreate=Create deciding factor node');
 
     // Создание действий для меню
     // Тестовое дейтсвие
@@ -6743,6 +6793,12 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('LogicNodeCreate', function () {
         this.logicNodeConstructorWindow = new LogicNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
         this.logicNodeConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на создание логического узла 
+    ui.actions.addAction('DecidingFactorNodeCreate', function () {
+        this.decidingFactorNodeConstructorWindow = new DecidingFactorNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
+        this.decidingFactorNodeConstructorWindow.window.setVisible(true);
     });
 
     // Действие на отоброжение конструктора узлов действия

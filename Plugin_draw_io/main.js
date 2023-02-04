@@ -36,6 +36,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'TrueNodeCreate');
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
         ui.menus.addMenuItem(menu, 'LogicNodeCreate');
+        ui.menus.addMenuItem(menu, 'DecidingFactorNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
     });
@@ -76,6 +77,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('FalseNodeCreate=Create false node');
 
     mxResources.parse('LogicNodeCreate=Create logic node');
+
+    mxResources.parse('DecidingFactorNodeCreate=Create deciding factor node');
 
     // Создание действий для меню
     // Тестовое дейтсвие
@@ -140,6 +143,12 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('LogicNodeCreate', function () {
         this.logicNodeConstructorWindow = new LogicNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
         this.logicNodeConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на создание логического узла 
+    ui.actions.addAction('DecidingFactorNodeCreate', function () {
+        this.decidingFactorNodeConstructorWindow = new DecidingFactorNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
+        this.decidingFactorNodeConstructorWindow.window.setVisible(true);
     });
 
     // Действие на отоброжение конструктора узлов действия
