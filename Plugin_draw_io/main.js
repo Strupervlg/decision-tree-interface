@@ -35,6 +35,7 @@ Draw.loadPlugin(function (ui) {
     ui.menubar.addMenu('Node constructors', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'TrueNodeCreate');
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
+        ui.menus.addMenuItem(menu, 'LogicNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
     });
@@ -73,6 +74,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('TrueNodeCreate=Create true node');
 
     mxResources.parse('FalseNodeCreate=Create false node');
+
+    mxResources.parse('LogicNodeCreate=Create logic node');
 
     // Создание действий для меню
     // Тестовое дейтсвие
@@ -131,6 +134,12 @@ Draw.loadPlugin(function (ui) {
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
+    });
+
+    // Действие на создание логического узла 
+    ui.actions.addAction('LogicNodeCreate', function () {
+        this.logicNodeConstructorWindow = new LogicNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
+        this.logicNodeConstructorWindow.window.setVisible(true);
     });
 
     // Действие на отоброжение конструктора узлов действия

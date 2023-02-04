@@ -6558,6 +6558,49 @@ Blockly.JavaScript['enum'] = function(block) {
   var code = text_owner_name + "::" + text_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
+// Окно создание логических узлов
+var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
+
+    // Верстка окнаx
+    var div = document.createElement('div');
+    div.style.width = '300px';
+    div.style.height = '150px';
+
+    // Кнопка создания узла "AND"
+    var btnCreateANDNode = mxUtils.button('And', function () {
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
+            newElement.value = "AND";
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+        }
+    });
+
+    // Кнопка создания узла "OR"
+    var btnCreateORNode = mxUtils.button('Or', function () {
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
+            newElement.value = "OR";
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+        }
+    });
+
+    div.appendChild(btnCreateANDNode);
+    div.appendChild(btnCreateORNode);
+
+    // Настройки окна
+    this.window = new mxWindow('Logic node constructor', div, x, y, w, h, true, true);
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(true);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
 // Плагин
 Draw.loadPlugin(function (ui) {
 
@@ -6595,6 +6638,7 @@ Draw.loadPlugin(function (ui) {
     ui.menubar.addMenu('Node constructors', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'TrueNodeCreate');
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
+        ui.menus.addMenuItem(menu, 'LogicNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
     });
@@ -6633,6 +6677,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('TrueNodeCreate=Create true node');
 
     mxResources.parse('FalseNodeCreate=Create false node');
+
+    mxResources.parse('LogicNodeCreate=Create logic node');
 
     // Создание действий для меню
     // Тестовое дейтсвие
@@ -6691,6 +6737,12 @@ Draw.loadPlugin(function (ui) {
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
+    });
+
+    // Действие на создание логического узла 
+    ui.actions.addAction('LogicNodeCreate', function () {
+        this.logicNodeConstructorWindow = new LogicNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
+        this.logicNodeConstructorWindow.window.setVisible(true);
     });
 
     // Действие на отоброжение конструктора узлов действия
