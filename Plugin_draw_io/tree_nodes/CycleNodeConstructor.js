@@ -1,5 +1,5 @@
 // Окно коструктора узлов действия
-var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
+var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -8,6 +8,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divBlockly.style.display = "none";
 
+    var operators = [ "And", "Or" ];
 
     //Экран с текстом
     var text = document.createElement('textarea');
@@ -22,14 +23,17 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         }
+
+        var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
+
         
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression + "\n" + nameVarInText.value;
+            newElement.value = expression + "\n" + selectedOperatorInText + "\n" + nameVarInText.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
@@ -51,6 +55,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             toBlock(root, workspace);
         }
         nameVarInBlockly.value = nameVarInText.value;
+        selectOperatorInBlockly.options.selectedIndex = selectOperatorInText.options.selectedIndex;
     });
 
     var nameVarInText = document.createElement('input');
@@ -58,8 +63,17 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nameVarInText.style.width = '100%';
     nameVarInText.placeholder = "New variable";
 
+    var selectOperatorInText = document.createElement('select');
+    selectOperatorInText.style.width = '30%';
+    selectOperatorInText.style.display = 'block';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
+    });
+
     divText.appendChild(text);
     divText.appendChild(nameVarInText);
+    divText.appendChild(selectOperatorInText);
     divText.appendChild(btnCreateNodeInText);
     divText.appendChild(btnSwitchToBlockly);
     div.appendChild(divText);
@@ -74,13 +88,15 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
+
+        var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
         
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
             
-            newElement.value = code + "\n" + nameVarInBlockly.value;
+            newElement.value = code + "\n" + selectedOperatorInBlockly + "\n" + nameVarInBlockly.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
@@ -94,6 +110,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         divText.style.display = "block";
         divText.getElementsByTagName("textarea").item(0).value = code;
         nameVarInText.value = nameVarInBlockly.value;
+        selectOperatorInText.options.selectedIndex = selectOperatorInBlockly.options.selectedIndex;
     });
 
     var nameVarInBlockly = document.createElement('input');
@@ -101,15 +118,24 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nameVarInBlockly.style.width = '100%';
     nameVarInBlockly.placeholder = "New variable";
 
+    var selectOperatorInBlockly = document.createElement('select');
+    selectOperatorInBlockly.style.width = '30%';
+    selectOperatorInBlockly.style.display = 'block';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
+    });
+
     divBlockly.appendChild(nestedDiv);
     divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectOperatorInBlockly);
     divBlockly.appendChild(btnCreateNodeInBlockly);
     divBlockly.appendChild(btnSwitchToText);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
-    this.window = new mxWindow('Action node constructor', div, x, y, w, h, true, true);
+    this.window = new mxWindow('Cycle node constructor', div, x, y, w, h, true, true);
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);

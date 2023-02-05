@@ -26,6 +26,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'DecidingFactorNodeCreate');
         ui.menus.addMenuItem(menu, 'UncertaintyNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
+        ui.menus.addMenuItem(menu, 'cycleNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
         ui.menus.addMenuItem(menu, 'switchCaseNodeConstructor');
     });
@@ -48,6 +49,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('enumConstructor=Enum constructor');
 
     mxResources.parse('actionNodeConstructor=Action Node Constructor');
+
+    mxResources.parse('cycleNodeConstructor=Cycle Node Constructor');
 
     mxResources.parse('conditionNodeConstructor=Condition Node Constructor');
 
@@ -145,6 +148,12 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('actionNodeConstructor', function () {
         this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
         this.actionNodeConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на отоброжение конструктора узлов цикла
+    ui.actions.addAction('cycleNodeConstructor', function () {
+        this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
+        this.cycleNodeConstructorWindow.window.setVisible(true);
     });
 
     // Действие на отоброжение конструктора узлов условия
