@@ -27,6 +27,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'UncertaintyNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
+        ui.menus.addMenuItem(menu, 'switchCaseNodeConstructor');
     });
 
     ui.menubar.addMenu('Exporting dictionaries', function (menu, parent) {
@@ -49,6 +50,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('actionNodeConstructor=Action Node Constructor');
 
     mxResources.parse('conditionNodeConstructor=Condition Node Constructor');
+
+    mxResources.parse('switchCaseNodeConstructor=Switch case Node Constructor');
 
     mxResources.parse('exportEnum=Export enum');
 
@@ -148,6 +151,12 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('conditionNodeConstructor', function () {
         this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
         this.conditionNodeConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на отоброжение конструктора узлов "switch case"
+    ui.actions.addAction('switchCaseNodeConstructor', function () {
+        this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        this.switchCaseNodeConstructorWindow.window.setVisible(true);
     });
 
     ui.actions.addAction('exportEnum', function () {
