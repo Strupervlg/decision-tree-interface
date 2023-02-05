@@ -143,7 +143,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора узлов действия
     ui.actions.addAction('actionNodeConstructor', function () {
-        this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
         this.actionNodeConstructorWindow.window.setVisible(true);
     });
 
