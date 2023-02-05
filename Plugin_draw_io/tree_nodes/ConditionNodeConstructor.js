@@ -1,4 +1,4 @@
-// Окно коструктора узлов действия
+// Окно коструктора узлов условий
 var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
