@@ -20,6 +20,7 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.menubar.addMenu('Node constructors', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'startNodeConstructor');
         ui.menus.addMenuItem(menu, 'TrueNodeCreate');
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
         ui.menus.addMenuItem(menu, 'LogicNodeCreate');
@@ -74,6 +75,8 @@ Draw.loadPlugin(function (ui) {
 
     mxResources.parse('UncertaintyNodeCreate=Create node uncertainty');
 
+    mxResources.parse('startNodeConstructor=Create start node');
+
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
@@ -97,6 +100,12 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('relationshipsConstructor', function () {
         this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
         this.relationshipsConstructorWindow.window.setVisible(true);
+    });
+
+    // Действие на отоброжение конструктора начального узла
+    ui.actions.addAction('startNodeConstructor', function () {
+        this.startConstructorWindow = new StartConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        this.startConstructorWindow.window.setVisible(true);
     });
 
     // Действие на создание узла ИСТИНА
