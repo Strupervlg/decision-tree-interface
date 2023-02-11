@@ -33,7 +33,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression + "\n" + selectedOperatorInText + "\n" + nameVarInText.value;
+            newElement.value = expression + "<br>" + selectedOperatorInText + "<br>" + nameVarInText.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));

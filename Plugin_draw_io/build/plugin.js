@@ -2417,7 +2417,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression + "\n" + nameVarInText.value;
+            newElement.value = expression + "<br>" + nameVarInText.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
@@ -6933,7 +6933,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression + "\n" + selectedOperatorInText + "\n" + nameVarInText.value;
+            newElement.value = expression + "<br>" + selectedOperatorInText + "<br>" + nameVarInText.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
@@ -7159,7 +7159,167 @@ function generateStrValueForStartNode(table) {
 
     return strValue.slice(0, -1);
 }
-// Плагин
+function treeToXml(editorUi)
+{
+    let result = '<?xml version="1.0"?>\n';
+
+    var graph = editorUi.editor.graph;
+    var cells = graph.getModel().cells;
+
+    Object.keys(cells).forEach(function (key) {
+
+        var node = cells[key];
+
+        if (node.style == "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;") {
+            result += startNodeToXml(node);
+            return;
+        }
+    });
+    return result;
+}
+
+function startNodeToXml(startNode)
+{
+    let result = "<StartNode>\n<InputVariables>\n";
+    result += getVariables(startNode.value);
+    result += "</InputVariables>\n<ThoughtBranch>\n";
+    if(startNode.edges) {
+        for(let i = 0; i < startNode.edges.length; i++) {
+            if(startNode.edges[i].target != startNode) {
+                result += switchCaseNodes(startNode.edges[i].target);
+            }
+        }
+    }
+    result += "</ThoughtBranch>\n</StartNode>\n";
+    return result;
+}
+
+function getVariables(nodeValue)
+{
+    let variables = "";
+    let vars = nodeValue.split("\n");
+    vars.forEach(element => {
+        let varWithClass = element.split(" - ");
+        variables += '<DecisionTreeVarDecl name"'+varWithClass[0]+'" type="'+varWithClass[1]+'"/>\n';
+    });
+    return variables;
+}
+
+function switchCaseNodes(node)
+{
+    let result = "";
+    //Узел истина
+    if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;") {
+        result = '<BranchResultNode value="true"/>\n';
+    }
+    //Узел ложь
+    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;") {
+        result = '<BranchResultNode value="false"/>\n';
+    }
+    //Узел вопрос
+    else if(node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;") {
+        result = questionNodeToXml(node, false);
+    }
+    //Узел свитч кейс
+    else if(node.style == "rhombus;whiteSpace=wrap;html=1;") {
+        result = questionNodeToXml(node, true);
+    }
+    //Узел действия
+    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;") {
+        result = actionNodeToXml(node);
+    }
+    //Узел логическая агрегация
+    else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;" 
+    && (node.value == "AND" || node.value == "OR")) {
+        result = logicNodeToXml(node);
+    }
+    //Узел предрешающий фактор
+    else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;") {
+
+    }
+    //Узел цикла
+    else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;") {
+        result = cycleNodeToXml(node);
+    }
+    //Узел неопределенность предрешающего фактора
+    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;") {
+        result = '<UndeterminedNode/>\n';
+    }
+    return result;
+}
+
+function questionNodeToXml(node, isSwitch)
+{
+    let result = '<QuestionNode type="" isSwitch="'+isSwitch+'">\n';
+
+    result += "<Expression>\n" + codeToXML(globalWS, node.value) + "\n</Expression>\n";
+
+    //Следующие ветки
+    result += outcomeToXml(node);
+
+    result += '</QuestionNode>\n';
+    return result;
+}
+
+function actionNodeToXml(node)
+{
+    let values = node.value.split('<br>');
+    let result = '<FindActionNode varName="'+values[1]+'">\n';
+
+    result += "<Expression>\n" + codeToXML(globalWS, values[0]) + "\n</Expression>\n";
+
+    //Следующие ветки
+    result += outcomeToXml(node)
+
+
+    result += '</FindActionNode>\n';
+    return result;
+}
+
+function cycleNodeToXml(node)
+{
+    let values = node.value.split('<br>');
+    let result = '<CycleAggregationNode operator="'+values[1]+'" varName="'+values[2]+'">\n';
+
+    result += "<SelectorExpression>\n" + codeToXML(globalWS, values[0]) + "\n</SelectorExpression>\n";
+
+    //Следующие ветки
+    result += outcomeToXml(node)
+
+
+    result += '</CycleAggregationNode>\n';
+    return result;
+}
+
+function logicNodeToXml(node)
+{
+    let result = '<LogicAggregationNode operator="'+node.value.toLowerCase()+'">\n';
+
+    //Следующие ветки
+    result += outcomeToXml(node)
+
+    result += '</LogicAggregationNode>\n';
+    return result;
+}
+
+function outcomeToXml(node)
+{
+    let result = "";
+    if(node.edges) {
+        for(let i = 0; i < node.edges.length; i++) {
+            if(node.edges[i].target != node) {
+                let valueEdge = "";
+                if(node.edges[i].children) {
+                    valueEdge = node.edges[i].children[0].value;
+                }
+                result += '<Outcome value="'+valueEdge+'">\n';
+                result += switchCaseNodes(node.edges[i].target);
+                result += "</Outcome>\n";
+            }
+        }
+    }
+    return result;
+}// Плагин
 Draw.loadPlugin(function (ui) {
 
     var graph = ui.editor.graph;
@@ -7200,6 +7360,10 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'exportEnum');
     });
 
+    ui.menubar.addMenu('Export tree', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'exportTree');
+    });
+
 
     // Привязывание действий к разделам меню
     mxResources.parse('classesConstructor=Classes constructor');
@@ -7237,6 +7401,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('UncertaintyNodeCreate=Create node uncertainty');
 
     mxResources.parse('startNodeConstructor=Create start node');
+
+    mxResources.parse('exportTree=Export');
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -7351,11 +7517,6 @@ Draw.loadPlugin(function (ui) {
         }
     });
 
-    var divForGlobalWS = document.createElement('div');
-    divForGlobalWS.id = "globalWS";
-    document.body.appendChild(divForGlobalWS);
-    var globalWS = Blockly.inject('globalWS', { toolbox: toolbox });
-
     ui.actions.addAction('exportClass', function () {
         
         let text = exportClasses(getClasses(ui), globalWS);
@@ -7397,4 +7558,23 @@ Draw.loadPlugin(function (ui) {
             a.click();
         }
     });
+
+    ui.actions.addAction('exportTree', function () {
+        
+        let text = treeToXml(ui);
+        downloadAsFile(text);
+
+        function downloadAsFile(data) {
+            let a = document.createElement("a");
+            let file = new Blob([data], {type: 'application/xml'});
+            a.href = URL.createObjectURL(file);
+            a.download = "tree.xml";
+            a.click();
+        }
+    });
 });
+
+var divForGlobalWS = document.createElement('div');
+divForGlobalWS.id = "globalWS";
+document.body.appendChild(divForGlobalWS);
+var globalWS = Blockly.inject('globalWS', { toolbox: toolbox });

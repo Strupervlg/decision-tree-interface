@@ -29,7 +29,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression + "\n" + nameVarInText.value;
+            newElement.value = expression + "<br>" + nameVarInText.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));

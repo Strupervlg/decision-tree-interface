@@ -39,6 +39,10 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'exportEnum');
     });
 
+    ui.menubar.addMenu('Export tree', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'exportTree');
+    });
+
 
     // Привязывание действий к разделам меню
     mxResources.parse('classesConstructor=Classes constructor');
@@ -76,6 +80,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('UncertaintyNodeCreate=Create node uncertainty');
 
     mxResources.parse('startNodeConstructor=Create start node');
+
+    mxResources.parse('exportTree=Export');
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -190,11 +196,6 @@ Draw.loadPlugin(function (ui) {
         }
     });
 
-    var divForGlobalWS = document.createElement('div');
-    divForGlobalWS.id = "globalWS";
-    document.body.appendChild(divForGlobalWS);
-    var globalWS = Blockly.inject('globalWS', { toolbox: toolbox });
-
     ui.actions.addAction('exportClass', function () {
         
         let text = exportClasses(getClasses(ui), globalWS);
@@ -236,4 +237,23 @@ Draw.loadPlugin(function (ui) {
             a.click();
         }
     });
+
+    ui.actions.addAction('exportTree', function () {
+        
+        let text = treeToXml(ui);
+        downloadAsFile(text);
+
+        function downloadAsFile(data) {
+            let a = document.createElement("a");
+            let file = new Blob([data], {type: 'application/xml'});
+            a.href = URL.createObjectURL(file);
+            a.download = "tree.xml";
+            a.click();
+        }
+    });
 });
+
+var divForGlobalWS = document.createElement('div');
+divForGlobalWS.id = "globalWS";
+document.body.appendChild(divForGlobalWS);
+var globalWS = Blockly.inject('globalWS', { toolbox: toolbox });
