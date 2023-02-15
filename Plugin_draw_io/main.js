@@ -24,7 +24,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'TrueNodeCreate');
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
         ui.menus.addMenuItem(menu, 'LogicNodeCreate');
-        ui.menus.addMenuItem(menu, 'DecidingFactorNodeCreate');
+        ui.menus.addMenuItem(menu, 'PredeterminingFactorsNodeCreate');
         ui.menus.addMenuItem(menu, 'UncertaintyNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'cycleNodeConstructor');
@@ -75,7 +75,7 @@ Draw.loadPlugin(function (ui) {
 
     mxResources.parse('LogicNodeCreate=Create logic node');
 
-    mxResources.parse('DecidingFactorNodeCreate=Create deciding factor node');
+    mxResources.parse('PredeterminingFactorsNodeCreate=Create predetermining factors node');
 
     mxResources.parse('UncertaintyNodeCreate=Create node uncertainty');
 
@@ -143,9 +143,9 @@ Draw.loadPlugin(function (ui) {
     });
 
     // Действие на создание узла "Предрешающий фактор"
-    ui.actions.addAction('DecidingFactorNodeCreate', function () {
-        this.decidingFactorNodeConstructorWindow = new DecidingFactorNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
-        this.decidingFactorNodeConstructorWindow.window.setVisible(true);
+    ui.actions.addAction('PredeterminingFactorsNodeCreate', function () {
+        this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
+        this.predeterminingFactorsNodeConstructorWindow.window.setVisible(true);
     });
 
     // Действие на создание узла неопределеноость предрешающего фактора

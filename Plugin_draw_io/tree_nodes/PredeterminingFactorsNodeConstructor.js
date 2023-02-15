@@ -1,5 +1,5 @@
 // Окно создание узлов "Предрешающие факторы"
-var DecidingFactorNodeConstructorWindow = function (editorUi, x, y, w, h) {
+var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окнаx
     var div = document.createElement('div');
@@ -38,7 +38,7 @@ var DecidingFactorNodeConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnCreateNode);
 
     // Настройки окна
-    this.window = new mxWindow('Deciding factor node constructor', div, x, y, w, h, true, true);
+    this.window = new mxWindow('Predetermining factors node constructor', div, x, y, w, h, true, true);
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
