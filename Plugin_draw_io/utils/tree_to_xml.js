@@ -102,10 +102,14 @@ function questionNodeToXml(node, isSwitch)
 
 function actionNodeToXml(node)
 {
-    let values = node.value.split('<br>');
-    let result = '<FindActionNode varName="'+values[1]+'">\n';
+    let values = node.value.getAttribute("label").split('<br>');
+    let result = '<FindActionNode>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, values[0]) + "\n</Expression>\n";
+
+    let typeVar = node.value.getAttribute("typeVar");
+
+    result += '<DecisionTreeVarDecl name"'+values[1]+'" type="'+typeVar+'"/>\n';
 
     //Следующие ветки
     result += outcomeToXml(node)

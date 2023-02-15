@@ -2421,6 +2421,8 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'typeVar', typeInText);
         }
     });
 
@@ -2439,6 +2441,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             toBlock(root, workspace);
         }
         nameVarInBlockly.value = nameVarInText.value;
+        selectClassInBlockly.options.selectedIndex = selectClassInText.options.selectedIndex;
     });
 
     var nameVarInText = document.createElement('input');
@@ -2446,8 +2449,18 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nameVarInText.style.width = '100%';
     nameVarInText.placeholder = "New variable";
 
+    var jsonClasses = getClasses(editorUi);
+
+    var selectClassInText = document.createElement('select');
+    selectClassInText.style.width = '100%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInText.options[selectClassInText.options.length] = newOption;
+    });
+
     divText.appendChild(text);
     divText.appendChild(nameVarInText);
+    divText.appendChild(selectClassInText);
     divText.appendChild(btnCreateNodeInText);
     divText.appendChild(btnSwitchToBlockly);
     div.appendChild(divText);
@@ -2472,6 +2485,8 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'typeVar', typeInBlockly);
         }
     });
 
@@ -2482,6 +2497,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         divText.style.display = "block";
         divText.getElementsByTagName("textarea").item(0).value = code;
         nameVarInText.value = nameVarInBlockly.value;
+        selectClassInText.options.selectedIndex = selectClassInBlockly.options.selectedIndex;
     });
 
     var nameVarInBlockly = document.createElement('input');
@@ -2489,8 +2505,16 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nameVarInBlockly.style.width = '100%';
     nameVarInBlockly.placeholder = "New variable";
 
+    var selectClassInBlockly = document.createElement('select');
+    selectClassInBlockly.style.width = '100%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
+    });
+
     divBlockly.appendChild(nestedDiv);
     divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectClassInBlockly);
     divBlockly.appendChild(btnCreateNodeInBlockly);
     divBlockly.appendChild(btnSwitchToText);
     div.appendChild(divBlockly);
@@ -7235,7 +7259,7 @@ function switchCaseNodes(node)
     }
     //Узел предрешающий фактор
     else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;") {
-
+        result = predeterminingNodeToXml(node);
     }
     //Узел цикла
     else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;") {
@@ -7263,10 +7287,14 @@ function questionNodeToXml(node, isSwitch)
 
 function actionNodeToXml(node)
 {
-    let values = node.value.split('<br>');
-    let result = '<FindActionNode varName="'+values[1]+'">\n';
+    let values = node.value.getAttribute("label").split('<br>');
+    let result = '<FindActionNode>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, values[0]) + "\n</Expression>\n";
+
+    let typeVar = node.value.getAttribute("typeVar");
+
+    result += '<DecisionTreeVarDecl name"'+values[1]+'" type="'+typeVar+'"/>\n';
 
     //Следующие ветки
     result += outcomeToXml(node)
@@ -7299,6 +7327,34 @@ function logicNodeToXml(node)
     result += outcomeToXml(node)
 
     result += '</LogicAggregationNode>\n';
+    return result;
+}
+
+function predeterminingNodeToXml(node)
+{
+    let result = '<PredeterminingFactorsNode>\n<Predetermining>\n';
+
+    //Следующие ветки
+    if(node.edges) {
+        for(let i = 0; i < node.edges.length; i++) {
+            if(node.edges[i].target != node && !node.edges[i].children) {
+                result += switchCaseNodes(node.edges[i].target);
+            }
+        }
+    }
+    result += '</Predetermining>\n';
+
+    if(node.edges) {
+        for(let i = 0; i < node.edges.length; i++) {
+            if(node.edges[i].target != node && node.edges[i].children && node.edges[i].children[0].value == "undetermined") {
+                result += '<Outcome value="undetermined">\n';
+                result += switchCaseNodes(node.edges[i].target);
+                result += "</Outcome>\n";
+            }
+        }
+    }
+
+    result += '</PredeterminingFactorsNode>\n';
     return result;
 }
 
