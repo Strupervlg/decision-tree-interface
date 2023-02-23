@@ -7248,7 +7248,7 @@ function getVariables(nodeValue)
     let vars = nodeValue.split("\n");
     vars.forEach(element => {
         let varWithClass = element.split(" - ");
-        variables += '<DecisionTreeVarDecl name"'+varWithClass[0]+'" type="'+varWithClass[1]+'"/>\n';
+        variables += '<DecisionTreeVarDecl name="'+varWithClass[0]+'" type="'+varWithClass[1]+'"/>\n';
     });
     return variables;
 }
@@ -7318,7 +7318,7 @@ function actionNodeToXml(node)
 
     let typeVar = node.value.getAttribute("typeVar");
 
-    result += '<DecisionTreeVarDecl name"'+values[1]+'" type="'+typeVar+'"/>\n';
+    result += '<DecisionTreeVarDecl name="'+values[1]+'" type="'+typeVar+'"/>\n';
 
     //Следующие ветки
     result += outcomeToXml(node)
@@ -7336,7 +7336,7 @@ function cycleNodeToXml(node)
     result += "<SelectorExpression>\n" + codeToXML(globalWS, values[0]) + "\n</SelectorExpression>\n";
 
     let typeVar = node.value.getAttribute("typeVar");
-    result += '<DecisionTreeVarDecl name"'+values[2]+'" type="'+typeVar+'"/>\n';
+    result += '<DecisionTreeVarDecl name="'+values[2]+'" type="'+typeVar+'"/>\n';
 
     //Следующие ветки TODO: Thoughtbranch должен быть c именем переменной
     result += outcomeToXml(node)
