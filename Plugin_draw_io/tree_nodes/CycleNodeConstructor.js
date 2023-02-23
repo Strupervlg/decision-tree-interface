@@ -37,6 +37,8 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'typeVar', typeInText);
         }
     });
 
@@ -56,12 +58,22 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         }
         nameVarInBlockly.value = nameVarInText.value;
         selectOperatorInBlockly.options.selectedIndex = selectOperatorInText.options.selectedIndex;
+        selectClassInBlockly.options.selectedIndex = selectClassInText.options.selectedIndex;
     });
 
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
     nameVarInText.style.width = '100%';
     nameVarInText.placeholder = "New variable";
+
+    var jsonClasses = getClasses(editorUi);
+
+    var selectClassInText = document.createElement('select');
+    selectClassInText.style.width = '100%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInText.options[selectClassInText.options.length] = newOption;
+    });
 
     var selectOperatorInText = document.createElement('select');
     selectOperatorInText.style.width = '30%';
@@ -73,6 +85,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divText.appendChild(text);
     divText.appendChild(nameVarInText);
+    divText.appendChild(selectClassInText);
     divText.appendChild(selectOperatorInText);
     divText.appendChild(btnCreateNodeInText);
     divText.appendChild(btnSwitchToBlockly);
@@ -100,6 +113,8 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'typeVar', typeInBlockly);
         }
     });
 
@@ -111,12 +126,20 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         divText.getElementsByTagName("textarea").item(0).value = code;
         nameVarInText.value = nameVarInBlockly.value;
         selectOperatorInText.options.selectedIndex = selectOperatorInBlockly.options.selectedIndex;
+        selectClassInText.options.selectedIndex = selectClassInBlockly.options.selectedIndex;
     });
 
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
     nameVarInBlockly.style.width = '100%';
     nameVarInBlockly.placeholder = "New variable";
+
+    var selectClassInBlockly = document.createElement('select');
+    selectClassInBlockly.style.width = '100%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
+    });
 
     var selectOperatorInBlockly = document.createElement('select');
     selectOperatorInBlockly.style.width = '30%';
@@ -128,6 +151,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divBlockly.appendChild(nestedDiv);
     divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectClassInBlockly);
     divBlockly.appendChild(selectOperatorInBlockly);
     divBlockly.appendChild(btnCreateNodeInBlockly);
     divBlockly.appendChild(btnSwitchToText);

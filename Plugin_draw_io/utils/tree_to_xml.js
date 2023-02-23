@@ -121,12 +121,15 @@ function actionNodeToXml(node)
 
 function cycleNodeToXml(node)
 {
-    let values = node.value.split('<br>');
-    let result = '<CycleAggregationNode operator="'+values[1]+'" varName="'+values[2]+'">\n';
+    let values = node.value.getAttribute("label").split('<br>');
+    let result = '<CycleAggregationNode operator="'+values[1]+'">\n';
 
     result += "<SelectorExpression>\n" + codeToXML(globalWS, values[0]) + "\n</SelectorExpression>\n";
 
-    //Следующие ветки
+    let typeVar = node.value.getAttribute("typeVar");
+    result += '<DecisionTreeVarDecl name"'+values[2]+'" type="'+typeVar+'"/>\n';
+
+    //Следующие ветки TODO: Thoughtbranch должен быть c именем переменной
     result += outcomeToXml(node)
 
 
@@ -138,7 +141,7 @@ function logicNodeToXml(node)
 {
     let result = '<LogicAggregationNode operator="'+node.value.toLowerCase()+'">\n';
 
-    //Следующие ветки
+    //Следующие ветки TODO: Thoughtbranch должен быть
     result += outcomeToXml(node)
 
     result += '</LogicAggregationNode>\n';
