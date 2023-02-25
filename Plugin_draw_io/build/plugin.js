@@ -7230,7 +7230,7 @@ function startNodeToXml(startNode)
 {
     let result = "<StartNode>\n<InputVariables>\n";
     result += getVariables(startNode.value);
-    result += "</InputVariables>\n<ThoughtBranch>\n";
+    result += "</InputVariables>\n<ThoughtBranch>\n"; //TODO: ThoughtBranch всегда имеет тип bool??
     if(startNode.edges) {
         for(let i = 0; i < startNode.edges.length; i++) {
             if(startNode.edges[i].target != startNode) {
@@ -7298,7 +7298,7 @@ function switchCaseNodes(node)
 
 function questionNodeToXml(node, isSwitch)
 {
-    let result = '<QuestionNode type="" isSwitch="'+isSwitch+'">\n';
+    let result = '<QuestionNode type="" isSwitch="'+isSwitch+'">\n'; //TODO: Тип определять либо по выражениям либо по выбору типа вопроса для человеческого вида
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value) + "\n</Expression>\n";
 
@@ -7338,8 +7338,25 @@ function cycleNodeToXml(node)
     let typeVar = node.value.getAttribute("typeVar");
     result += '<DecisionTreeVarDecl name="'+values[2]+'" type="'+typeVar+'"/>\n';
 
-    //Следующие ветки TODO: Thoughtbranch должен быть c именем переменной
-    result += outcomeToXml(node)
+    if(node.edges) {
+        for(let i = 0; i < node.edges.length; i++) {
+            if(node.edges[i].target != node) {
+                let valueEdge = "";
+                if(node.edges[i].children) {
+                    valueEdge = node.edges[i].children[0].value;
+                }
+                if(valueEdge) {
+                    result += '<Outcome value="'+valueEdge+'">\n';
+                    result += switchCaseNodes(node.edges[i].target);
+                    result += "</Outcome>\n";
+                } else {
+                    result += '<ThoughtBranch type="bool" paramName="'+values[2]+'">\n'; //TODO: От чего здесь зависит тип?
+                    result += switchCaseNodes(node.edges[i].target);
+                    result += "</ThoughtBranch>\n";
+                }
+            }
+        }
+    }
 
 
     result += '</CycleAggregationNode>\n';
@@ -7350,8 +7367,25 @@ function logicNodeToXml(node)
 {
     let result = '<LogicAggregationNode operator="'+node.value.toLowerCase()+'">\n';
 
-    //Следующие ветки TODO: Thoughtbranch должен быть
-    result += outcomeToXml(node)
+    if(node.edges) {
+        for(let i = 0; i < node.edges.length; i++) {
+            if(node.edges[i].target != node) {
+                let valueEdge = "";
+                if(node.edges[i].children) {
+                    valueEdge = node.edges[i].children[0].value;
+                }
+                if(valueEdge) {
+                    result += '<Outcome value="'+valueEdge+'">\n';
+                    result += switchCaseNodes(node.edges[i].target);
+                    result += "</Outcome>\n";
+                } else {
+                    result += '<ThoughtBranch type="bool">\n';
+                    result += switchCaseNodes(node.edges[i].target);
+                    result += "</ThoughtBranch>\n";
+                }
+            }
+        }
+    }
 
     result += '</LogicAggregationNode>\n';
     return result;
