@@ -48,6 +48,7 @@ Blockly.JavaScript['double'] = function(block) {
 
 Blockly.JavaScript['comparison_result'] = function(block) {
   var dropdown_value = block.getFieldValue('value');
+  // var comparisonResult = {GREATER: "1", LESS: "-1", EQUAL: "0", UNDETERMINED: "undetermined"};
   var code = dropdown_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
@@ -153,8 +154,9 @@ Blockly.JavaScript['not'] = function(block) {
 Blockly.JavaScript['comparison'] = function(block) {
   var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_RELATIONAL);
   var dropdown_operator = block.getFieldValue('operator');
+  var operators = {GREATER: ">", LESS: "<", EQUAL: "==", NOT_EQUAL: "!=", GE: ">=", LE: "<="};
   var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_RELATIONAL);
-  var code = value_operand1 + " " + dropdown_operator + " " + value_operand2;
+  var code = value_operand1 + " " + operators[dropdown_operator] + " " + value_operand2;
   return [code, Blockly.JavaScript.ORDER_RELATIONAL];
 };
 
