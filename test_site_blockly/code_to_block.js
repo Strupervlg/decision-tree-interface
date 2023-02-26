@@ -40,7 +40,6 @@ function stmtNodeToBlock(stmtNode) {
 function printExprNode(exprNode) {
     switch(exprNode.type) {
         case ExprType.ID:
-            //TODO: определение переменной и объекта
             var resBlock = new Blockly.BlockSvg(workspace, "object");
             resBlock.initSvg();
             resBlock.render();
@@ -74,7 +73,13 @@ function printExprNode(exprNode) {
             var resBlock = new Blockly.BlockSvg(workspace, "ref_to_decision_tree_var");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[0].fieldRow[0].setValue(exprNode.ident.substring(4)); //FIXME: добавить это в парсер
+            resBlock.inputList[0].fieldRow[0].setValue(exprNode.ident);
+            return resBlock
+        case ExprType.VAR:
+            var resBlock = new Blockly.BlockSvg(workspace, "variable");
+            resBlock.initSvg();
+            resBlock.render();
+            resBlock.inputList[0].fieldRow[0].setValue(exprNode.ident);
             return resBlock
         case ExprType.ENUM:
             var resBlock = new Blockly.BlockSvg(workspace, "enum");
@@ -284,23 +289,6 @@ function printExprNode(exprNode) {
             }
 
             return resBlock
-        case ExprType.CHECK_VAL:
-            // var resBlock = new Blockly.BlockSvg(workspace, "check_value_of_property");
-            // resBlock.initSvg();
-            // resBlock.render();
-            
-            // objBlock = printExprNode(exprNode.firstOperand);
-            // resBlock.getInput("object").connection.connect(objBlock.outputConnection);
-
-            // return resBlock
-
-
-            // result = "ID" + exprNode.id + " [label=\"Check value\"]\n";
-            // result += printExprNode(exprNode.firstOperand);
-            // result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"[label=\"Property\"]\n";
-            // result += printExprNode(exprNode.secondOperand);
-            // result += "ID" + exprNode.id +"->ID"+ exprNode.secondOperand.id +"[label=\"Value\"]\n";
-            // return result;
         case ExprType.GET_CLASS:
             var resBlock = new Blockly.BlockSvg(workspace, "get_class");
             resBlock.initSvg();
