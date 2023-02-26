@@ -110,10 +110,6 @@ var toolbox = {
                 },
                 {
                     "kind": "block",
-                    "type": "check_value_of_property"
-                },
-                {
-                    "kind": "block",
                     "type": "check_relationship"
                 },
             ]

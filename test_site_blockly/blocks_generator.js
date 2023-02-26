@@ -54,7 +54,7 @@ Blockly.JavaScript['comparison_result'] = function(block) {
 
 Blockly.JavaScript['get_class'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + ".class";
+  var code = value_object + ".getClass()";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -111,14 +111,6 @@ Blockly.JavaScript['check_object_class'] = function(block) {
   var value_class = Blockly.JavaScript.valueToCode(block, 'class', Blockly.JavaScript.ORDER_INSTANCEOF);
   var code = value_object + " is " + value_class;
   return [code, Blockly.JavaScript.ORDER_INSTANCEOF];
-};
-
-Blockly.JavaScript['check_value_of_property'] = function(block) {
-  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
-  var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_NONE);
-  var value_property_value = Blockly.JavaScript.valueToCode(block, 'property_value', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + "." + value_property + "(" + value_property_value + ")";
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['check_relationship'] = function(block) {

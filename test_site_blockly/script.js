@@ -187,14 +187,6 @@ const xslTxt = `<?xml version="1.0"?>
         </CheckClass>
     </xsl:template>
 
-    <xsl:template match="block[@type='check_value_of_property']">
-        <CheckPropertyValue>
-            <xsl:apply-templates select="value[@name='object']" />
-            <xsl:apply-templates select="value[@name='property']" />
-            <xsl:apply-templates select="value[@name='property_value']" />
-        </CheckPropertyValue>
-    </xsl:template>
-
     <xsl:template match="block[@type='check_relationship']">
         <CheckRelationship>
             <xsl:apply-templates select="value" />
