@@ -14,6 +14,9 @@ function createXML() {
 
 function createCode() {
     let code = Blockly.JavaScript.workspaceToCode(workspace);
+    if(code.slice(-1) == "\n") {
+        code = code.slice(0, -2);
+    }
     let output = document.getElementById('output_code');
     output.value = code;
 }
