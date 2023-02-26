@@ -13,6 +13,10 @@ function createXML() {
 }
 
 function createCode() {
+    if(workspace.getTopBlocks().length > 1) {
+        console.log("Error")
+        return;
+    }
     let code = Blockly.JavaScript.workspaceToCode(workspace);
     if(code.slice(-1) == "\n") {
         code = code.slice(0, -2);
