@@ -40,6 +40,8 @@ function printExprNode(exprNode) {
             return "ID" + exprNode.id + " [label=\"Boolean " + exprNode.boolean + "\"]\n";
         case ExprType.TREE_VAR:
             return "ID" + exprNode.id + " [label=\"Tree var " + exprNode.ident + "\"]\n";
+        case ExprType.VAR:
+            return "ID" + exprNode.id + " [label=\"Var " + exprNode.ident + "\"]\n";
         case ExprType.ENUM:
             return "ID" + exprNode.id + " [label=\"Enum " + exprNode.ident + "::" + exprNode.identValue + "\"]\n";
         case ExprType.GET_BY_RELATIONSHIP:

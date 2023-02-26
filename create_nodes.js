@@ -18,6 +18,7 @@ const ExprType = {
     DOUBLE: 'double',
     BOOLEAN: 'boolean',
     TREE_VAR: 'tree_var',
+    VAR: 'var',
     ENUM: 'enum',
     GET_BY_RELATIONSHIP: 'get by relationship',
     PROPERTY: 'property',
@@ -95,7 +96,7 @@ function createUnaryExprNode(typeNode, operand) {
 function createLiteral(typeNode, literal) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
-    if(typeNode == ExprType.ID || typeNode == ExprType.TREE_VAR) {
+    if(typeNode == ExprType.ID || typeNode == ExprType.TREE_VAR || typeNode == ExprType.VAR) {
         newNode.ident = literal;
     } else if(typeNode == ExprType.STRING) {
         newNode.string = literal;

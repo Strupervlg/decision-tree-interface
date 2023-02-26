@@ -44,6 +44,7 @@ where           return 'WHERE';
 
 var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 [a-zA-Z_][A-Za-z0-9_]*               return 'ID'; 
+\$[a-zA-Z_][A-Za-z0-9_]*           return 'VAR';
 
 
 \"                                { string = ''; this.begin('STRING'); }
@@ -105,6 +106,7 @@ exp
     | TRUE { $$ = createLiteral(ExprType.BOOLEAN, true); }
     | FALSE { $$ = createLiteral(ExprType.BOOLEAN, false); }
     | TREE_VAR { $$ = createLiteral(ExprType.TREE_VAR, $1); }
+    | VAR { $$ = createLiteral(ExprType.VAR, $1); }
     | ID "::" ID { $$ = createEnum($1, $3); }
     | exp "->" ID ID "{" exp "}" { $$ = createGetObjectByRel($1, $3, $4, $6); }
     | exp "." ID { $$ = createBinExprNode(ExprType.PROPERTY, $1, $3); }
