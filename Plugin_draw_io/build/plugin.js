@@ -903,7 +903,7 @@ function getClasses(editorUi) {
 
         var cellValue = cells[key].value;
 
-        if (typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) {
+        if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) { //TODO: Возможно это кал способ надо протестировать
             var cellLabel = cellValue.getAttribute('label');
             cellLabel = cellLabel.replace('<font color="#000000"><b>Classes</b></font><br>', '');
             var values = cellLabel.split('<br>');
