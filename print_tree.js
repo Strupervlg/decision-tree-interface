@@ -135,13 +135,6 @@ function printExprNode(exprNode) {
             result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"[label=\"Relationship\"]\n";
             result += printObjectSeq(exprNode.objectSeq, exprNode);
             return result;
-        case ExprType.CHECK_VAL:
-            result = "ID" + exprNode.id + " [label=\"Check value\"]\n";
-            result += printExprNode(exprNode.firstOperand);
-            result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"[label=\"Property\"]\n";
-            result += printExprNode(exprNode.secondOperand);
-            result += "ID" + exprNode.id +"->ID"+ exprNode.secondOperand.id +"[label=\"Value\"]\n";
-            return result;
         case ExprType.GET_CLASS:
             result = "ID" + exprNode.id + " [label=\"Get class\"]\n";
             result += printExprNode(exprNode.firstOperand);

@@ -9,7 +9,7 @@ false           return 'FALSE';
 greater         return 'GREATER';
 less            return 'LESS';
 equal           return 'EQUAL';
-class           return 'CLASS';
+getClass           return 'CLASS';
 undetermined    return 'UNDETERMINED';
 find            return 'FIND';
 findExtreme     return 'FIND_EXTREM';
@@ -121,8 +121,7 @@ exp
     | exp OR exp { $$ = createBinExprNode(ExprType.OR, $1, $3); }
     | NOT exp { $$ = createUnaryExprNode(ExprType.NOT, $2); }
     | exp "->" ID "(" object_seq ")" { $$ = createCheckRelExprNode($1, $3, $5); }
-    | exp "(" exp ")" { $$ = createBinExprNode(ExprType.CHECK_VAL, $1, $3); }
-    | exp "." CLASS { $$ = createUnaryExprNode(ExprType.GET_CLASS, $1); }
+    | exp "." CLASS "(" ")" { $$ = createUnaryExprNode(ExprType.GET_CLASS, $1); }
     | FIND ID "{" exp "}" { $$ = createGetExprNode(ExprType.FIND, $2, $4); }
     | FIND_EXTREM ID "[" exp "]" WHERE ID "{" exp "}" { $$ = createFindExtremeExprNode($2, $4, $7, $9); }
     | EXIST ID "{" exp "}" { $$ = createGetExprNode(ExprType.EXIST, $2, $4); }
