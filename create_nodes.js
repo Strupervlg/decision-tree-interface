@@ -96,8 +96,12 @@ function createUnaryExprNode(typeNode, operand) {
 function createLiteral(typeNode, literal) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
-    if(typeNode == ExprType.ID || typeNode == ExprType.TREE_VAR || typeNode == ExprType.VAR) {
+    if(typeNode == ExprType.ID) {
         newNode.ident = literal;
+    } else if(typeNode == ExprType.TREE_VAR) {
+        newNode.ident = literal.substring(4);
+    } else if(typeNode == ExprType.VAR) {
+        newNode.ident = literal.substring(1);
     } else if(typeNode == ExprType.STRING) {
         newNode.string = literal;
     } else if(typeNode == ExprType.INT) {
