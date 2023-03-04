@@ -43,6 +43,10 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'exportTree');
     });
 
+    ui.menubar.addMenu('Edit', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'editNode');
+    });
+
 
     // Привязывание действий к разделам меню
     mxResources.parse('classesConstructor=Classes constructor');
@@ -82,6 +86,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('startNodeConstructor=Create start node');
 
     mxResources.parse('exportTree=Export');
+
+    mxResources.parse('editNode=Edit node');
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -249,6 +255,14 @@ Draw.loadPlugin(function (ui) {
             a.href = URL.createObjectURL(file);
             a.download = "tree.xml";
             a.click();
+        }
+    });
+
+    ui.actions.addAction('editNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            var defaultstyle = selectedcell.value;
+            alert(defaultstyle);
         }
     });
 });

@@ -141,7 +141,7 @@ function cycleNodeToXml(node)
                     result += switchCaseNodes(node.edges[i].target);
                     result += "</Outcome>\n";
                 } else {
-                    result += '<ThoughtBranch type="bool" paramName="'+values[2]+'">\n'; //TODO: От чего здесь зависит тип?
+                    result += '<ThoughtBranch type="bool" paramName="'+values[2]+'">\n';
                     result += switchCaseNodes(node.edges[i].target);
                     result += "</ThoughtBranch>\n";
                 }
