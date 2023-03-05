@@ -10,14 +10,14 @@ function treeToXml(editorUi)
         var node = cells[key];
 
         if (node.style == "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;") {
-            result += startNodeToXml(node);
+            result += startNodeToXml(node, editorUi);
             return;
         }
     });
     return result;
 }
 
-function startNodeToXml(startNode)
+function startNodeToXml(startNode, editorUi)
 {
     let result = "<StartNode>\n<InputVariables>\n";
     result += getVariables(startNode.value);
@@ -25,7 +25,7 @@ function startNodeToXml(startNode)
     if(startNode.edges) {
         for(let i = 0; i < startNode.edges.length; i++) {
             if(startNode.edges[i].target != startNode) {
-                result += switchCaseNodes(startNode.edges[i].target);
+                result += switchCaseNodes(startNode.edges[i].target, editorUi);
             }
         }
     }
@@ -44,7 +44,7 @@ function getVariables(nodeValue)
     return variables;
 }
 
-function switchCaseNodes(node)
+function switchCaseNodes(node, editorUi)
 {
     let result = "";
     //Узел истина
@@ -57,28 +57,28 @@ function switchCaseNodes(node)
     }
     //Узел вопрос
     else if(node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;") {
-        result = questionNodeToXml(node, false);
+        result = questionNodeToXml(node, false, editorUi);
     }
     //Узел свитч кейс
     else if(node.style == "rhombus;whiteSpace=wrap;html=1;") {
-        result = questionNodeToXml(node, true);
+        result = questionNodeToXml(node, true, editorUi);
     }
     //Узел действия
     else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;") {
-        result = actionNodeToXml(node);
+        result = actionNodeToXml(node, editorUi);
     }
     //Узел логическая агрегация
     else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;" 
     && (node.value == "AND" || node.value == "OR")) {
-        result = logicNodeToXml(node);
+        result = logicNodeToXml(node, editorUi);
     }
     //Узел предрешающий фактор
     else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;") {
-        result = predeterminingNodeToXml(node);
+        result = predeterminingNodeToXml(node, editorUi);
     }
     //Узел цикла
     else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;") {
-        result = cycleNodeToXml(node);
+        result = cycleNodeToXml(node, editorUi);
     }
     //Узел неопределенность предрешающего фактора
     else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;") {
@@ -87,20 +87,20 @@ function switchCaseNodes(node)
     return result;
 }
 
-function questionNodeToXml(node, isSwitch)
+function questionNodeToXml(node, isSwitch, editorUi)
 {
-    let result = '<QuestionNode type="" isSwitch="'+isSwitch+'">\n'; //TODO: Тип определять либо по выражениям либо по выбору типа вопроса для человеческого вида
+    let result = '<QuestionNode type="'+getTypeFromCode(node.value, editorUi)+'" isSwitch="'+isSwitch+'">\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value) + "\n</Expression>\n";
 
     //Следующие ветки
-    result += outcomeToXml(node);
+    result += outcomeToXml(node, editorUi);
 
     result += '</QuestionNode>\n';
     return result;
 }
 
-function actionNodeToXml(node)
+function actionNodeToXml(node, editorUi)
 {
     let values = node.value.getAttribute("label").split('<br>');
     let result = '<FindActionNode>\n';
@@ -112,14 +112,14 @@ function actionNodeToXml(node)
     result += '<DecisionTreeVarDecl name="'+values[1]+'" type="'+typeVar+'"/>\n';
 
     //Следующие ветки
-    result += outcomeToXml(node)
+    result += outcomeToXml(node, editorUi)
 
 
     result += '</FindActionNode>\n';
     return result;
 }
 
-function cycleNodeToXml(node)
+function cycleNodeToXml(node, editorUi)
 {
     let values = node.value.getAttribute("label").split('<br>');
     let result = '<CycleAggregationNode operator="'+values[1]+'">\n';
@@ -138,11 +138,11 @@ function cycleNodeToXml(node)
                 }
                 if(valueEdge) {
                     result += '<Outcome value="'+valueEdge+'">\n';
-                    result += switchCaseNodes(node.edges[i].target);
+                    result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
                 } else {
                     result += '<ThoughtBranch type="bool" paramName="'+values[2]+'">\n';
-                    result += switchCaseNodes(node.edges[i].target);
+                    result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
             }
@@ -154,7 +154,7 @@ function cycleNodeToXml(node)
     return result;
 }
 
-function logicNodeToXml(node)
+function logicNodeToXml(node, editorUi)
 {
     let result = '<LogicAggregationNode operator="'+node.value.toLowerCase()+'">\n';
 
@@ -167,11 +167,11 @@ function logicNodeToXml(node)
                 }
                 if(valueEdge) {
                     result += '<Outcome value="'+valueEdge+'">\n';
-                    result += switchCaseNodes(node.edges[i].target);
+                    result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
                 } else {
                     result += '<ThoughtBranch type="bool">\n';
-                    result += switchCaseNodes(node.edges[i].target);
+                    result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
             }
@@ -182,7 +182,7 @@ function logicNodeToXml(node)
     return result;
 }
 
-function predeterminingNodeToXml(node)
+function predeterminingNodeToXml(node, editorUi)
 {
     let result = '<PredeterminingFactorsNode>\n<Predetermining>\n';
 
@@ -190,7 +190,7 @@ function predeterminingNodeToXml(node)
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node && !node.edges[i].children) {
-                result += switchCaseNodes(node.edges[i].target);
+                result += switchCaseNodes(node.edges[i].target, editorUi);
             }
         }
     }
@@ -200,7 +200,7 @@ function predeterminingNodeToXml(node)
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node && node.edges[i].children && node.edges[i].children[0].value == "undetermined") {
                 result += '<Outcome value="undetermined">\n';
-                result += switchCaseNodes(node.edges[i].target);
+                result += switchCaseNodes(node.edges[i].target, editorUi);
                 result += "</Outcome>\n";
             }
         }
@@ -210,7 +210,7 @@ function predeterminingNodeToXml(node)
     return result;
 }
 
-function outcomeToXml(node)
+function outcomeToXml(node, editorUi)
 {
     let result = "";
     if(node.edges) {
@@ -221,7 +221,7 @@ function outcomeToXml(node)
                     valueEdge = node.edges[i].children[0].value;
                 }
                 result += '<Outcome value="'+valueEdge+'">\n';
-                result += switchCaseNodes(node.edges[i].target);
+                result += switchCaseNodes(node.edges[i].target, editorUi);
                 result += "</Outcome>\n";
             }
         }

@@ -2,10 +2,10 @@ const SemanticType = {
     OBJECT: 'object',
     CLASS: 'class',
     STRING: 'string', 
-    BOOLEAN: 'boolean',
+    BOOLEAN: 'bool',
     INT: 'int',
     DOUBLE: 'double',
-    COMPARISON_RESULT: 'comparisonResult',
+    COMPARISON_RESULT: 'comparison',
     ENUM: 'enum',
     ASSIGN: 'assign',
     PROPERTY_VALUE: 'propertyValue'
@@ -69,4 +69,32 @@ function generateCode(workspace) {
         code = code.slice(0, -2);
     }
     return code;
+}
+
+function getTypeFromCode(code, editorUi) {
+    root = null
+    parser.parse(code)
+    let type = getType(root)
+    if(type == SemanticType.PROPERTY_VALUE) {
+        let propertyName = root.stmt.firstExpr.ident;
+        let properties = getProperties(editorUi);
+        let foundProp = properties.filter(el => el.name == propertyName);
+        if(typeof foundProp[0] == "undefined") {
+            throw new Error('Error: property "'+propertyName+'" does not exist in the dictionary')
+        }
+        let propType = foundProp[0].type;
+
+        if(propType != "Integer" && propType != "Double" 
+        && propType != "Boolean" && propType != "String") {
+            propType = propType.slice(0,4)
+        }
+        if(propType == "Integer") {
+            propType = "int"
+        }
+        if(propType == "Boolean") {
+            propType = "bool"
+        }
+        return propType.toLowerCase();
+    }
+    return type;
 }
