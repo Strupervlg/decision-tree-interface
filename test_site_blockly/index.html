@@ -33,10 +33,12 @@
     <script src="create_nodes.js"></script>
     <script src="parser.js"></script>
     <script src="code_to_block.js"></script>
+    <script src="semantic.js"></script>
     <script>
         function exec() {
             workspace.clear()
             parser.parse(document.getElementById("output_code").value)
+            console.log(getType(root));
             console.log(root);
             toBlock(root);
             createXML();
