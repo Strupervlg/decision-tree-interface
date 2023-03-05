@@ -12,10 +12,12 @@ function stmtNodeToBlock(stmtNode, workspace) {
         assignment.initSvg();
         assignment.render();
 
-        var block1 = printExprNode(stmtNode.firstExpr);
+        var block1 = printExprNode(stmtNode.firstExpr, workspace);
+        checkTypeBlocks(assignment, block1, "ref_to_object");
         assignment.getInput("ref_to_object").connection.connect(block1.outputConnection);
 
-        var block2 = printExprNode(stmtNode.secondExpr);
+        var block2 = printExprNode(stmtNode.secondExpr, workspace);
+        checkTypeBlocks(assignment, block2, "new_object");
         assignment.getInput("new_object").connection.connect(block2.outputConnection);
 
     } else if(stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.PROPERTY) {
@@ -23,24 +25,29 @@ function stmtNodeToBlock(stmtNode, workspace) {
         assignment.initSvg();
         assignment.render();
 
-        var objBlock = printExprNode(stmtNode.firstExpr.firstOperand);
+        var objBlock = printExprNode(stmtNode.firstExpr.firstOperand, workspace);
+        checkTypeBlocks(assignment, objBlock, "object");
         assignment.getInput("object").connection.connect(objBlock.outputConnection);
 
         var propBlock = new Blockly.BlockSvg(workspace, "property");
         propBlock.initSvg();
         propBlock.render();
         propBlock.inputList[0].fieldRow[0].setValue(stmtNode.firstExpr.ident);
+        checkTypeBlocks(assignment, propBlock, "property");
         assignment.getInput("property").connection.connect(propBlock.outputConnection);
 
         var valueBlock = printExprNode(stmtNode.secondExpr, workspace);
+        checkTypeBlocks(assignment, valueBlock, "new_value");
         assignment.getInput("new_value").connection.connect(valueBlock.outputConnection);
-    }
+    } else if(stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY 
+        && stmtNode.firstExpr.type != ExprType.TREE_VAR) {
+            throw new Error('Invalid type in ASSIGN: to the left of "=" is expected TREE VAR or GET PROPERTY');
+        }
 }
 
 function printExprNode(exprNode, workspace) {
     switch(exprNode.type) {
         case ExprType.ID:
-            //TODO: определение переменной и объекта
             var resBlock = new Blockly.BlockSvg(workspace, "object");
             resBlock.initSvg();
             resBlock.render();
@@ -74,7 +81,13 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "ref_to_decision_tree_var");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[0].fieldRow[0].setValue(exprNode.ident.substring(4)); //FIXME: добавить это в парсер
+            resBlock.inputList[0].fieldRow[0].setValue(exprNode.ident);
+            return resBlock
+        case ExprType.VAR:
+            var resBlock = new Blockly.BlockSvg(workspace, "variable");
+            resBlock.initSvg();
+            resBlock.render();
+            resBlock.inputList[0].fieldRow[0].setValue(exprNode.ident);
             return resBlock
         case ExprType.ENUM:
             var resBlock = new Blockly.BlockSvg(workspace, "enum");
@@ -93,12 +106,15 @@ function printExprNode(exprNode, workspace) {
             relBlock.initSvg();
             relBlock.render();
             relBlock.inputList[0].fieldRow[0].setValue(exprNode.rel);
+            checkTypeBlocks(resBlock, relBlock, "relationship");
             resBlock.getInput("relationship").connection.connect(relBlock.outputConnection);
             
             objBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
 
             boolBlock = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, boolBlock, "boolean");
             resBlock.getInput("boolean").connection.connect(boolBlock.outputConnection);
 
             return resBlock
@@ -111,9 +127,11 @@ function printExprNode(exprNode, workspace) {
             propBlock.initSvg();
             propBlock.render();
             propBlock.inputList[0].fieldRow[0].setValue(exprNode.ident);
+            checkTypeBlocks(resBlock, propBlock, "property");
             resBlock.getInput("property").connection.connect(propBlock.outputConnection);
             
             objBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
 
             return resBlock
@@ -123,6 +141,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.render();
             
             objBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
 
             if(exprNode.secondOperand.type == ExprType.ID) {
@@ -134,6 +153,7 @@ function printExprNode(exprNode, workspace) {
             else {
                 var classBlock = printExprNode(exprNode.secondOperand, workspace);
             }
+            checkTypeBlocks(resBlock, classBlock, "class");
             resBlock.getInput("class").connection.connect(classBlock.outputConnection);
             return resBlock
         case ExprType.GREATER:
@@ -143,9 +163,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[2].fieldRow[0].setValue("GREATER");
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -156,9 +178,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[2].fieldRow[0].setValue("LESS");
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -169,9 +193,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[2].fieldRow[0].setValue("EQUAL");
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -182,9 +208,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[2].fieldRow[0].setValue("NOT_EQUAL");
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -195,9 +223,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[2].fieldRow[0].setValue("GE");
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -208,9 +238,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[2].fieldRow[0].setValue("LE");
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -220,9 +252,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.render();
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -232,9 +266,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.render();
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -244,9 +280,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.render();
             
             op1Block = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
 
             op2Block = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, op2Block, "operand2");
             resBlock.getInput("operand2").connection.connect(op2Block.outputConnection);
 
             return resBlock
@@ -256,6 +294,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.render();
             
             opBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, opBlock, "operand");
             resBlock.getInput("operand").connection.connect(opBlock.outputConnection);
 
             return resBlock
@@ -269,9 +308,11 @@ function printExprNode(exprNode, workspace) {
             relBlock.initSvg();
             relBlock.render();
             relBlock.inputList[0].fieldRow[0].setValue(exprNode.rel);
+            checkTypeBlocks(resBlock, relBlock, "relationship");
             resBlock.getInput("relationship").connection.connect(relBlock.outputConnection);
             
             objBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
 
             var current = exprNode.objectSeq.first;
@@ -279,34 +320,19 @@ function printExprNode(exprNode, workspace) {
                 resBlock.itemCount_++;
                 resBlock.updateShape_();
                 objOpBlock = printExprNode(current, workspace);
+                checkTypeBlocks(resBlock, objOpBlock, "object" + (resBlock.itemCount_-1));
                 resBlock.getInput("object" + (resBlock.itemCount_-1)).connection.connect(objOpBlock.outputConnection);
                 current = current.next;
             }
 
             return resBlock
-        case ExprType.CHECK_VAL:
-            // var resBlock = new Blockly.BlockSvg(workspace, "check_value_of_property");
-            // resBlock.initSvg();
-            // resBlock.render();
-            
-            // objBlock = printExprNode(exprNode.firstOperand);
-            // resBlock.getInput("object").connection.connect(objBlock.outputConnection);
-
-            // return resBlock
-
-
-            // result = "ID" + exprNode.id + " [label=\"Check value\"]\n";
-            // result += printExprNode(exprNode.firstOperand);
-            // result += "ID" + exprNode.id +"->ID"+ exprNode.firstOperand.id +"[label=\"Property\"]\n";
-            // result += printExprNode(exprNode.secondOperand);
-            // result += "ID" + exprNode.id +"->ID"+ exprNode.secondOperand.id +"[label=\"Value\"]\n";
-            // return result;
         case ExprType.GET_CLASS:
             var resBlock = new Blockly.BlockSvg(workspace, "get_class");
             resBlock.initSvg();
             resBlock.render();
             
             objBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
 
             return resBlock
@@ -317,6 +343,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[2].fieldRow[0].setValue(exprNode.ident);
             
             condBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, condBlock, "condition");
             resBlock.getInput("condition").connection.connect(condBlock.outputConnection);
 
             return resBlock
@@ -328,9 +355,11 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
             
             extrCondBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, extrCondBlock, "extreme_condition");
             resBlock.getInput("extreme_condition").connection.connect(extrCondBlock.outputConnection);
 
             condBlock = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, condBlock, "general_condition");
             resBlock.getInput("general_condition").connection.connect(condBlock.outputConnection);
 
             return resBlock
@@ -341,6 +370,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[2].fieldRow[0].setValue(exprNode.ident);
             
             condBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, condBlock, "condition");
             resBlock.getInput("condition").connection.connect(condBlock.outputConnection);
 
             return resBlock
@@ -351,11 +381,21 @@ function printExprNode(exprNode, workspace) {
             resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
             
             defBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, defBlock, "definition_area");
             resBlock.getInput("definition_area").connection.connect(defBlock.outputConnection);
 
             verBlock = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, verBlock, "verification_condition");
             resBlock.getInput("verification_condition").connection.connect(verBlock.outputConnection);
 
             return resBlock
+    }
+}
+
+function checkTypeBlocks(blockInput, blockOutput, input) {
+    let outputCheck = blockOutput.outputConnection.check_;
+    let inputCheck = blockInput.getInput(input).connection.check_;
+    if(outputCheck.filter(x => inputCheck.includes(x)).length == 0) {
+        throw new Error("Invalid type in " + blockInput.type + ": expected " + inputCheck +"; actual " + outputCheck)
     }
 }

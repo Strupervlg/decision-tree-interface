@@ -240,26 +240,6 @@ Blockly.Blocks['check_object_class'] = {
   }
 };
 
-Blockly.Blocks['check_value_of_property'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Check the value of an object property");
-    this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("object");
-    this.appendValueInput("property")
-        .setCheck("Property")
-        .appendField("property");
-    this.appendValueInput("property_value")
-        .setCheck(["Boolean", "String", "Integer", "Double", "Enum"])
-        .appendField("property value");
-    this.setOutput(true, "Boolean");
-    this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
-};
-
 Blockly.Blocks['check_relationship'] = {
   init: function() {
     this.itemCount_ = 2;

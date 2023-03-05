@@ -48,13 +48,14 @@ Blockly.JavaScript['double'] = function(block) {
 
 Blockly.JavaScript['comparison_result'] = function(block) {
   var dropdown_value = block.getFieldValue('value');
+  // var comparisonResult = {GREATER: "1", LESS: "-1", EQUAL: "0", UNDETERMINED: "undetermined"};
   var code = dropdown_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['get_class'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + ".class";
+  var code = value_object + ".getClass()";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -113,14 +114,6 @@ Blockly.JavaScript['check_object_class'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_INSTANCEOF];
 };
 
-Blockly.JavaScript['check_value_of_property'] = function(block) {
-  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
-  var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_NONE);
-  var value_property_value = Blockly.JavaScript.valueToCode(block, 'property_value', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + "." + value_property + "(" + value_property_value + ")";
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};
-
 Blockly.JavaScript['check_relationship'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
@@ -161,8 +154,9 @@ Blockly.JavaScript['not'] = function(block) {
 Blockly.JavaScript['comparison'] = function(block) {
   var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_RELATIONAL);
   var dropdown_operator = block.getFieldValue('operator');
+  var operators = {GREATER: ">", LESS: "<", EQUAL: "==", NOT_EQUAL: "!=", GE: ">=", LE: "<="};
   var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_RELATIONAL);
-  var code = value_operand1 + " " + dropdown_operator + " " + value_operand2;
+  var code = value_operand1 + " " + operators[dropdown_operator] + " " + value_operand2;
   return [code, Blockly.JavaScript.ORDER_RELATIONAL];
 };
 
@@ -197,8 +191,8 @@ Blockly.JavaScript['ref_to_decision_tree_var'] = function(block) {
 };
 
 Blockly.JavaScript['variable'] = function(block) {
-  var text_name_variable = block.getFieldValue('name_variable');
-  var code = text_name_variable;
+  var text_name_variable = block.getFieldValue('var_name');
+  var code = "$"+text_name_variable;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

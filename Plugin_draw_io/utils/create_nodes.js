@@ -18,6 +18,7 @@ const ExprType = {
     DOUBLE: 'double',
     BOOLEAN: 'boolean',
     TREE_VAR: 'tree_var',
+    VAR: 'var',
     ENUM: 'enum',
     GET_BY_RELATIONSHIP: 'get by relationship',
     PROPERTY: 'property',
@@ -32,8 +33,7 @@ const ExprType = {
     AND: 'and', 
     OR: 'or', 
     NOT: 'not', 
-    CHECK_REL: 'check_rel', 
-    CHECK_VAL: 'check_val', 
+    CHECK_REL: 'check_rel',
     GET_CLASS: 'get_class', 
     FIND: 'find',
     FIND_EXTREM: 'find extreme', 
@@ -96,8 +96,12 @@ function createUnaryExprNode(typeNode, operand) {
 function createLiteral(typeNode, literal) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
-    if(typeNode == ExprType.ID || typeNode == ExprType.TREE_VAR) {
+    if(typeNode == ExprType.ID) {
         newNode.ident = literal;
+    } else if(typeNode == ExprType.TREE_VAR) {
+        newNode.ident = literal.substring(4);
+    } else if(typeNode == ExprType.VAR) {
+        newNode.ident = literal.substring(1);
     } else if(typeNode == ExprType.STRING) {
         newNode.string = literal;
     } else if(typeNode == ExprType.INT) {

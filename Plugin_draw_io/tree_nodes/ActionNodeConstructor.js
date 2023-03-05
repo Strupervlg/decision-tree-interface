@@ -86,7 +86,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
-        var code = Blockly.JavaScript.workspaceToCode(workspace);
+        var code = generateCode(workspace);
         
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
@@ -104,7 +104,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     //кнопка переключения на текстовый вариант
     var btnSwitchToText = mxUtils.button('Switch to text', function () {
-        var code = Blockly.JavaScript.workspaceToCode(workspace);
+        var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
         divText.getElementsByTagName("textarea").item(0).value = code;
