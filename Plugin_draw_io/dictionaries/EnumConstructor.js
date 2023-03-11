@@ -3,10 +3,14 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var table = document.createElement('table');
     table.style.width = '100%';
-    table.style.height = '100%';
+    table.style.height = '80%';
+    table.style.overflow = "scroll";
+    table.style.display = "block";
     var tbody = document.createElement('tbody');
+    tbody.style.height = "100%";
     
     var row = addRowEnum();
     tbody.appendChild(row);
@@ -46,8 +50,13 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Добавление кнопок в окно
-    div.appendChild(addEnum);
-    div.appendChild(applyBtn);
+    var btnDiv = document.createElement('div');
+    btnDiv.style.display = "flex";
+    btnDiv.style.height = "20%";
+    btnDiv.style.alignItems = "center";
+    btnDiv.appendChild(addEnum);
+    btnDiv.appendChild(applyBtn);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     this.window = new mxWindow('Enum constructor', div, x, y, w, h, true, true);

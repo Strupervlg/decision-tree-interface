@@ -3,12 +3,16 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var table = document.createElement('table');
     table.style.width = '100%';
-    table.style.height = '100%';
+    table.style.height = '80%';
+    table.style.overflow = "scroll";
+    table.style.display = "block";
     var tbody = document.createElement('tbody');
-    var rowRelationship = addRowRelationship(editorUi);
+    tbody.style.height = "100%";
 
+    var rowRelationship = addRowRelationship(editorUi);
     tbody.appendChild(rowRelationship);
     table.appendChild(tbody);
     div.appendChild(table);
@@ -40,12 +44,17 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
         });
         tdDelRow.appendChild(btnDelRow);
         newRowRelationship.appendChild(tdDelRow);
-        table.appendChild(newRowRelationship);
+        tbody.appendChild(newRowRelationship);
     });
 
     // Добавление кнопок в окно
-    div.appendChild(addRelationship);
-    div.appendChild(applyBtn);
+    var btnDiv = document.createElement('div');
+    btnDiv.style.display = "flex";
+    btnDiv.style.height = "20%";
+    btnDiv.style.alignItems = "center";
+    btnDiv.appendChild(addRelationship);
+    btnDiv.appendChild(applyBtn);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     this.window = new mxWindow('Relationships constructor', div, x, y, w, h, true, true);

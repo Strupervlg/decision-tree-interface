@@ -3,10 +3,14 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var table = document.createElement('table');
     table.style.width = '100%';
-    table.style.height = '100%';
+    table.style.height = '80%';
+    table.style.overflow = "scroll";
+    table.style.display = "block";
     var tbody = document.createElement('tbody');
+    tbody.style.height = "100%";
     
     var row = addRowClass();
     tbody.appendChild(row);
@@ -55,7 +59,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         });
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
-        table.appendChild(newRow);
+        tbody.appendChild(newRow);
     });
 
     // Кнопка открытия окна с блокли для выражений
@@ -93,9 +97,14 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Добавление кнопок в окно
-    div.appendChild(addClass);
-    div.appendChild(applyBtn);
-    div.appendChild(openBlockly);
+    var btnDiv = document.createElement('div');
+    btnDiv.style.display = "flex";
+    btnDiv.style.height = "20%";
+    btnDiv.style.alignItems = "center";
+    btnDiv.appendChild(addClass);
+    btnDiv.appendChild(applyBtn);
+    btnDiv.appendChild(openBlockly);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     this.window = new mxWindow('Classes constructor', div, x, y, w, h, true, true);
