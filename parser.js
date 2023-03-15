@@ -805,3 +805,10 @@ if (typeof module !== 'undefined' && require.main === module) {
   exports.main(process.argv.slice(1));
 }
 }
+
+// Для тестов
+const { createBinExprNode, createGetObjectByRel, createUnaryExprNode,
+    createLiteral, createEnum, createCheckRelExprNode, createGetExprNode, createFindExtremeExprNode,
+    createForAllExprNode, createObjectSeqNode, addObjectToObjectSeqNode, ObjectSeq,
+    ProgramNode, StatementNode, ExpressionNode, ExprType } = require('./create_nodes');
+var { root, string } = require('./create_nodes');

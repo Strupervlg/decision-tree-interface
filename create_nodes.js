@@ -176,3 +176,9 @@ function addObjectToObjectSeqNode(seq, expr) {
 var root;
 
 var string;
+
+// Для экспорта
+module.exports = { createBinExprNode, createGetObjectByRel, createUnaryExprNode,
+    createLiteral, createEnum, createCheckRelExprNode, createGetExprNode, createFindExtremeExprNode,
+    createForAllExprNode, createObjectSeqNode, addObjectToObjectSeqNode, root, string, ObjectSeq,
+    ProgramNode, StatementNode, ExpressionNode, ExprType }
