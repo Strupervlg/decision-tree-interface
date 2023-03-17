@@ -547,13 +547,13 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "ellipse;whiteSpace=wrap;html=1;rounded=0;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'expression', expression);
         }
     });
 
@@ -7251,7 +7251,50 @@ function generateStrValueForStartNode(table) {
 
     return strValue.slice(0, -1);
 }
-function treeToXml(editorUi)
+// Окно редактирования человекочитаемого текста узлов
+var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
+
+    var graph = editorUi.editor.graph;
+
+    // Верстка окна
+    var div = document.createElement('div');
+    var divText = document.createElement('div');
+    var text = document.createElement('textarea');
+    text.style.width = "100%";
+    text.style.height = "480px";
+    if(typeof cell.value == "object") {
+        text.value = cell.value.getAttribute("label");
+    } else {
+        text.value = cell.value;
+    }
+
+    // Кнопка создания узла
+    var btnSaveTextInNode = mxUtils.button('Save', function () {
+        var textInNode = divText.getElementsByTagName("textarea").item(0).value;
+        graph.getModel().beginUpdate();
+        if(typeof cell.value == "object") {
+            cell.value.setAttribute("label", textInNode);
+        } else {
+            cell.setValue(textInNode);
+        }
+        graph.getModel().endUpdate();
+        graph.refresh(); // update the graph
+        win.setVisible(false);
+    });
+
+    divText.appendChild(text);
+    divText.appendChild(btnSaveTextInNode);
+    div.appendChild(divText);
+
+    // Настройки окна
+    var win = new mxWindow('Edit text in node', div, x, y, w, h, true, true);
+    this.window = win
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};function treeToXml(editorUi)
 {
     let result = '<?xml version="1.0"?>\n';
 
@@ -7628,6 +7671,7 @@ Draw.loadPlugin(function (ui) {
 
     ui.menubar.addMenu('Edit', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'editNode');
+        ui.menus.addMenuItem(menu, 'editTextInNode');
     });
 
 
@@ -7672,6 +7716,8 @@ Draw.loadPlugin(function (ui) {
 
     mxResources.parse('editNode=Edit node');
 
+    mxResources.parse('editTextInNode=Edit text in node');
+
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
@@ -7708,7 +7754,7 @@ Draw.loadPlugin(function (ui) {
         var theGraph = ui.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;");
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
@@ -7719,7 +7765,7 @@ Draw.loadPlugin(function (ui) {
         var theGraph = ui.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;");
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
@@ -7742,7 +7788,7 @@ Draw.loadPlugin(function (ui) {
         var theGraph = ui.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
@@ -7846,6 +7892,16 @@ Draw.loadPlugin(function (ui) {
             var selectedcell = graph.getSelectionCell();
             var defaultstyle = selectedcell.value;
             alert(defaultstyle);
+        }
+    });
+
+    ui.actions.addAction('editTextInNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.editTextInNodeWindow.window.setVisible(true);
+            // var defaultstyle = selectedcell.value;
+            // alert(defaultstyle);
         }
     });
 });

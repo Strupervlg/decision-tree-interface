@@ -26,13 +26,13 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "ellipse;whiteSpace=wrap;html=1;rounded=0;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'expression', expression);
         }
     });
 

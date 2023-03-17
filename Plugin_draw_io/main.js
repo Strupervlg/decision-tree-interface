@@ -45,6 +45,7 @@ Draw.loadPlugin(function (ui) {
 
     ui.menubar.addMenu('Edit', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'editNode');
+        ui.menus.addMenuItem(menu, 'editTextInNode');
     });
 
 
@@ -89,6 +90,8 @@ Draw.loadPlugin(function (ui) {
 
     mxResources.parse('editNode=Edit node');
 
+    mxResources.parse('editTextInNode=Edit text in node');
+
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
@@ -125,7 +128,7 @@ Draw.loadPlugin(function (ui) {
         var theGraph = ui.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;");
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
@@ -136,7 +139,7 @@ Draw.loadPlugin(function (ui) {
         var theGraph = ui.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;");
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
@@ -159,7 +162,7 @@ Draw.loadPlugin(function (ui) {
         var theGraph = ui.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
@@ -263,6 +266,16 @@ Draw.loadPlugin(function (ui) {
             var selectedcell = graph.getSelectionCell();
             var defaultstyle = selectedcell.value;
             alert(defaultstyle);
+        }
+    });
+
+    ui.actions.addAction('editTextInNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.editTextInNodeWindow.window.setVisible(true);
+            // var defaultstyle = selectedcell.value;
+            // alert(defaultstyle);
         }
     });
 });
