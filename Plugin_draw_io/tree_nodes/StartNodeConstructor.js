@@ -21,7 +21,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 165, 60), "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 165, 60), "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;editable=0;");
 
             strValue = generateStrValueForStartNode(table);
 
@@ -29,6 +29,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'type', "START");
         }
     });
 

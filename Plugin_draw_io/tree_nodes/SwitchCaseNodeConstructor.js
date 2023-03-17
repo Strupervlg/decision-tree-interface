@@ -26,13 +26,13 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;editable=0;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'expression', expression);
         }
     });
 
@@ -71,12 +71,12 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;editable=0;");
             
-            newElement.value = code;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'expression', code);
         }
     });
 

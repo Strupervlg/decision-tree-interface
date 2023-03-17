@@ -2487,15 +2487,16 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression + "<br>" + nameVarInText.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'expression', expression);
             theGraph.setAttributeForCell(newElement, 'typeVar', typeInText);
+            theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInText.value);
         }
     });
 
@@ -2552,14 +2553,15 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;");
             
-            newElement.value = code + "\n" + nameVarInBlockly.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'expression', code);
             theGraph.setAttributeForCell(newElement, 'typeVar', typeInBlockly);
+            theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInBlockly.value);
         }
     });
 
@@ -6785,10 +6787,11 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
             newElement.value = "AND";
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'type', "AND");
         }
     });
 
@@ -6797,10 +6800,11 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
             newElement.value = "OR";
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'type', "OR");
         }
     });
 
@@ -6842,13 +6846,14 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;editable=0;");
             newElement.value = table.rows.item(0).getElementsByTagName("td")
             .item(0).getElementsByTagName("input").item(0).value;
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             table.rows.item(0).getElementsByTagName("td")
             .item(0).getElementsByTagName("input").item(0).value = "";
+            theGraph.setAttributeForCell(newElement, 'type', "predetermining");
         }
     });
 
@@ -6890,13 +6895,13 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;editable=0;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'expression', expression);
         }
     });
 
@@ -6935,12 +6940,12 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;editable=0;");
             
-            newElement.value = code;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'expression', code);
         }
     });
 
@@ -6998,15 +7003,17 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
             
             //TODO: Возможно сделать подсветку в самом узле 
-            newElement.value = expression + "<br>" + selectedOperatorInText + "<br>" + nameVarInText.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'expression', expression);
             theGraph.setAttributeForCell(newElement, 'typeVar', typeInText);
+            theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInText.value);
+            theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInText);
         }
     });
 
@@ -7075,14 +7082,16 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
             
-            newElement.value = code + "\n" + selectedOperatorInBlockly + "\n" + nameVarInBlockly.value;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'expression', code);
             theGraph.setAttributeForCell(newElement, 'typeVar', typeInBlockly);
+            theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInBlockly.value);
+            theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInBlockly);
         }
     });
 
@@ -7157,7 +7166,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 165, 60), "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 165, 60), "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;editable=0;");
 
             strValue = generateStrValueForStartNode(table);
 
@@ -7165,6 +7174,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'type', "START");
         }
     });
 
@@ -7896,12 +7906,14 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('editTextInNode', function () {
+        //FIXME проверка на стрелки еще надо добавить
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
-            this.editTextInNodeWindow.window.setVisible(true);
-            // var defaultstyle = selectedcell.value;
-            // alert(defaultstyle);
+            if(typeof selectedcell.value != "object" || 
+            typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START") {
+                this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editTextInNodeWindow.window.setVisible(true);
+            }
         }
     });
 });

@@ -270,12 +270,14 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('editTextInNode', function () {
+        //FIXME проверка на стрелки еще надо добавить
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
-            this.editTextInNodeWindow.window.setVisible(true);
-            // var defaultstyle = selectedcell.value;
-            // alert(defaultstyle);
+            if(typeof selectedcell.value != "object" || 
+            typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START") {
+                this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editTextInNodeWindow.window.setVisible(true);
+            }
         }
     });
 });
