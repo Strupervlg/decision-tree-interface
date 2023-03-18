@@ -44,6 +44,7 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.menubar.addMenu('Edit', function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'editDictionary');
         ui.menus.addMenuItem(menu, 'editNode');
         ui.menus.addMenuItem(menu, 'editTextInNode');
     });
@@ -89,6 +90,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('exportTree=Export');
 
     mxResources.parse('editNode=Edit node');
+
+    mxResources.parse('editDictionary=Edit dictionary');
 
     mxResources.parse('editTextInNode=Edit text in node');
 
@@ -270,13 +273,24 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('editTextInNode', function () {
-        //FIXME проверка на стрелки еще надо добавить
+        //FIXME: проверка на стрелки еще надо добавить
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
             if(typeof selectedcell.value != "object" || 
             typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START") {
                 this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editTextInNodeWindow.window.setVisible(true);
+            }
+        }
+    });
+
+    ui.actions.addAction('editDictionary', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            if(typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) {
+                this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.classEditorWindow.window.setVisible(true);
             }
         }
     });
