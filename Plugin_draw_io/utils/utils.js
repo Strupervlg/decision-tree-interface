@@ -98,3 +98,20 @@ function getTypeFromCode(code, editorUi) {
     }
     return type;
 }
+
+function getTextFromCode(code, editorUi) {
+    if(code == "") {
+        return "";
+    }
+    let type = getTypeFromCode(code, editorUi);
+    if(type == "int" || type == "double") {
+        return "How many ";
+    } else if(type == "bool") {
+        return "Is ";
+    } else if(type == "enum") {
+        return "What is ";
+    } else if(type == "comparison") {
+        return "Compare ";
+    }
+    return "";
+}

@@ -29,8 +29,21 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
         win.setVisible(false);
     });
 
+    // Кнопка генерации человекочитаемого текста
+    var btnGenerateTextInNode = mxUtils.button('Generate', function () {
+        let code = "";
+        if(typeof cell.value == "object") {
+            code = cell.value.getAttribute("expression");
+        }
+        let textInNode = getTextFromCode(code, editorUi)
+        if(textInNode != "") {
+            text.value = textInNode;
+        }
+    });
+
     divText.appendChild(text);
     divText.appendChild(btnSaveTextInNode);
+    divText.appendChild(btnGenerateTextInNode);
     div.appendChild(divText);
 
     // Настройки окна

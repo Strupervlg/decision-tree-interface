@@ -7292,8 +7292,21 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
         win.setVisible(false);
     });
 
+    // Кнопка генерации человекочитаемого текста
+    var btnGenerateTextInNode = mxUtils.button('Generate', function () {
+        let code = "";
+        if(typeof cell.value == "object") {
+            code = cell.value.getAttribute("expression");
+        }
+        let textInNode = getTextFromCode(code, editorUi)
+        if(textInNode != "") {
+            text.value = textInNode;
+        }
+    });
+
     divText.appendChild(text);
     divText.appendChild(btnSaveTextInNode);
+    divText.appendChild(btnGenerateTextInNode);
     div.appendChild(divText);
 
     // Настройки окна
@@ -7633,6 +7646,23 @@ function getTypeFromCode(code, editorUi) {
         return propType.toLowerCase();
     }
     return type;
+}
+
+function getTextFromCode(code, editorUi) {
+    if(code == "") {
+        return "";
+    }
+    let type = getTypeFromCode(code, editorUi);
+    if(type == "int" || type == "double") {
+        return "How many ";
+    } else if(type == "bool") {
+        return "Is ";
+    } else if(type == "enum") {
+        return "What is ";
+    } else if(type == "comparison") {
+        return "Compare ";
+    }
+    return "";
 }
 // Плагин
 Draw.loadPlugin(function (ui) {
