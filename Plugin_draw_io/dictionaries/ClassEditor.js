@@ -12,7 +12,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
-    fillData(tbody, cell);
+    fillDataClass(tbody, cell);
     table.appendChild(tbody);
     div.appendChild(table);
 
@@ -104,7 +104,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Classes constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Classes editor', div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -113,7 +113,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
-function fillData(tbody, cell) {
+function fillDataClass(tbody, cell) {
     let cellValue = cell.value;
     var cellLabel = cellValue.getAttribute('label');
     cellLabel = cellLabel.replace('<font color="#000000"><b>Classes</b></font><br>', '');
