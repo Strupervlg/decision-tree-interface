@@ -106,10 +106,7 @@ function fillDataEnum(tbody, cell) {
                 newTd.appendChild(newInput);
                 newTd.appendChild(btnDel);
                 row.insertBefore(newTd, row.getElementsByTagName("td").item(lastIndex));
-                console.log(row);
             }
-            console.log(row.getElementsByTagName("td").item(lastIndex)
-            .getElementsByTagName("input").item(0));
             row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("input").item(0).value = element;
             lastIndex++;

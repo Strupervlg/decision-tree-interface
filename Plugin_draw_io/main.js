@@ -295,6 +295,10 @@ Draw.loadPlugin(function (ui) {
             && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')) {
                 this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.enumEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "string"
+            && selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')) {
+                this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.classPropertiesEditorWindow.window.setVisible(true);
             }
         }
     });

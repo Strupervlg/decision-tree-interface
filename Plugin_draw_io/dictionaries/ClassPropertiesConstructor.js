@@ -24,7 +24,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             //TODO Поменять ширину объекта
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#00CCCC;align=center;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#00CCCC;align=center;editable=0;");
 
             strValue = generateStrValueForProperties(table);
             
