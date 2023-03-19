@@ -299,6 +299,10 @@ Draw.loadPlugin(function (ui) {
             && selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classPropertiesEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "string"
+            && selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
+                this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.relationshipsEditorWindow.window.setVisible(true);
             }
         }
     });
