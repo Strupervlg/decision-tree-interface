@@ -267,8 +267,35 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editNode', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            var defaultstyle = selectedcell.value;
-            alert(defaultstyle);
+            if(typeof selectedcell.value == "object" 
+            && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
+                this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.conditionNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
+                this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
+                this.actionNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('operator')) {
+                this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
+                this.cycleNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
+                this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.switchCaseNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('type') == "START") {
+                this.startEditorWindow = new StartEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.startEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('type') == "predetermining") {
+                this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.predeterminingFactorsNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")) {
+                this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.logicNodeEditorWindow.window.setVisible(true);
+            }
         }
     });
 

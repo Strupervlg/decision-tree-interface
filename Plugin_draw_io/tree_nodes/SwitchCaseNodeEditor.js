@@ -1,5 +1,5 @@
-// Окно коструктора узлов условий
-var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
+// Окно редактирования узлов условий
+var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -13,9 +13,10 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var text = document.createElement('textarea');
     text.style.width = "100%";
     text.style.height = "480px";
+    text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Create', function () {
+    var btnCreateNodeInText = mxUtils.button('Apply', function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
@@ -24,16 +25,13 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         }
         
         var theGraph = editorUi.editor.graph;
-        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
-            var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;");
-            
-            //TODO: Возможно сделать подсветку в самом узле 
 
-            newElement.vertex = !0;
-            theGraph.setSelectionCell(theGraph.addCell(newElement));
-            theGraph.setAttributeForCell(newElement, 'expression', expression);
-        }
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", expression);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
     });
 
     var workspace;
@@ -65,19 +63,17 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
+    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
         var code = generateCode(workspace);
         
         var theGraph = editorUi.editor.graph;
-        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
-            var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;");
-            
 
-            newElement.vertex = !0;
-            theGraph.setSelectionCell(theGraph.addCell(newElement));
-            theGraph.setAttributeForCell(newElement, 'expression', code);
-        }
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", code);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -95,7 +91,8 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    this.window = new mxWindow('Condition node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Switch case node editor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);

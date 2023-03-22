@@ -592,12 +592,12 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "ellipse;whiteSpace=wrap;html=1;rounded=0;");
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;");
             
-            newElement.value = code;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'expression', code);
         }
     });
 
@@ -8006,7 +8006,720 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setResizable(false);
     this.window.setClosable(true);
     this.window.setVisible(true);
-};function treeToXml(editorUi)
+};
+// Окно редактирования узлов условий
+var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    var divText = document.createElement('div');
+    var divBlockly = document.createElement('div');
+
+    divBlockly.style.display = "none";
+
+    //Экран с текстом
+    var text = document.createElement('textarea');
+    text.style.width = "100%";
+    text.style.height = "480px";
+    text.value = cell.value.getAttribute('expression');
+
+    // Кнопка создания узла
+    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
+            parser.parse(expression)
+        }
+        
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", expression);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    var workspace;
+
+    // Кнопка переключение на Blockly
+    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        divText.style.display = "none";
+        divBlockly.style.display = "block";
+        nestedDiv.innerHTML = "";
+        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace.clear();
+        if(expression) {
+            parser.parse(expression)
+            toBlock(root, workspace);
+        }
+    });
+
+    divText.appendChild(text);
+    divText.appendChild(btnCreateNodeInText);
+    divText.appendChild(btnSwitchToBlockly);
+    div.appendChild(divText);
+
+
+    //Экран с blockly
+    var nestedDiv = document.createElement('div');
+    nestedDiv.id = "blocklyDiv";
+    nestedDiv.style.width = '890px';
+    nestedDiv.style.height = '500px';
+
+    // Кнопка создания узла
+    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+        var code = generateCode(workspace);
+        
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", code);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    //кнопка переключения на текстовый вариант
+    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+        var code = generateCode(workspace);
+        divBlockly.style.display = "none";
+        divText.style.display = "block";
+        divText.getElementsByTagName("textarea").item(0).value = code;
+    });
+
+    divBlockly.appendChild(nestedDiv);
+    divBlockly.appendChild(btnCreateNodeInBlockly);
+    divBlockly.appendChild(btnSwitchToText);
+    div.appendChild(divBlockly);
+
+
+    // Настройки окна
+    var win = new mxWindow('Condition node editor', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+// Окно редактирования узлов действия
+var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    var divText = document.createElement('div');
+    var divBlockly = document.createElement('div');
+
+    divBlockly.style.display = "none";
+
+    //Экран с текстом
+    var text = document.createElement('textarea');
+    text.style.width = "100%";
+    text.style.height = "480px";
+    text.value = cell.value.getAttribute('expression');
+
+    // Кнопка создания узла
+    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
+            parser.parse(expression)
+        }
+
+        var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+        
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", expression);
+        cell.value.setAttribute("typeVar", typeInText);
+        cell.value.setAttribute("nameVar", nameVarInText.value);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    var workspace;
+
+    // Кнопка переключение на Blockly
+    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        divText.style.display = "none";
+        divBlockly.style.display = "block";
+        nestedDiv.innerHTML = "";
+        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace.clear();
+        if(expression) {
+            parser.parse(expression)
+            toBlock(root, workspace);
+        }
+        nameVarInBlockly.value = nameVarInText.value;
+        selectClassInBlockly.options.selectedIndex = selectClassInText.options.selectedIndex;
+    });
+
+    var nameVarInText = document.createElement('input');
+    nameVarInText.type = "text";
+    nameVarInText.style.width = '100%';
+    nameVarInText.placeholder = "New variable";
+    nameVarInText.value = cell.value.getAttribute('nameVar');
+
+    var jsonClasses = getClasses(editorUi);
+
+    var selectClassInText = document.createElement('select');
+    selectClassInText.style.width = '100%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInText.options[selectClassInText.options.length] = newOption;
+    });
+    let type = cell.value.getAttribute('typeVar');
+    for(let index = 0; index < selectClassInText.options.length; ++index) {
+        if(selectClassInText.options[index].value == type) {
+            selectClassInText.options[index].selected = true;
+        }
+    }
+
+    divText.appendChild(text);
+    divText.appendChild(nameVarInText);
+    divText.appendChild(selectClassInText);
+    divText.appendChild(btnCreateNodeInText);
+    divText.appendChild(btnSwitchToBlockly);
+    div.appendChild(divText);
+
+
+    //Экран с blockly
+    var nestedDiv = document.createElement('div');
+    nestedDiv.id = "blocklyDiv";
+    nestedDiv.style.width = '890px';
+    nestedDiv.style.height = '500px';
+
+    // Кнопка создания узла
+    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+        var code = generateCode(workspace);
+        var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", code);
+        cell.value.setAttribute("typeVar", typeInBlockly);
+        cell.value.setAttribute("nameVar", nameVarInBlockly.value);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    //кнопка переключения на текстовый вариант
+    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+        var code = generateCode(workspace);
+        divBlockly.style.display = "none";
+        divText.style.display = "block";
+        divText.getElementsByTagName("textarea").item(0).value = code;
+        nameVarInText.value = nameVarInBlockly.value;
+        selectClassInText.options.selectedIndex = selectClassInBlockly.options.selectedIndex;
+    });
+
+    var nameVarInBlockly = document.createElement('input');
+    nameVarInBlockly.type = "text";
+    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly.placeholder = "New variable";
+
+    var selectClassInBlockly = document.createElement('select');
+    selectClassInBlockly.style.width = '100%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
+    });
+
+    divBlockly.appendChild(nestedDiv);
+    divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectClassInBlockly);
+    divBlockly.appendChild(btnCreateNodeInBlockly);
+    divBlockly.appendChild(btnSwitchToText);
+    div.appendChild(divBlockly);
+
+
+    // Настройки окна
+    var win = new mxWindow('Action node editor', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+// Окно редактирования узлов действия
+var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    var divText = document.createElement('div');
+    var divBlockly = document.createElement('div');
+
+    divBlockly.style.display = "none";
+
+    var operators = [ "And", "Or" ];
+
+    //Экран с текстом
+    var text = document.createElement('textarea');
+    text.style.width = "100%";
+    text.style.height = "480px";
+    text.value = cell.value.getAttribute('expression');
+
+    // Кнопка создания узла
+    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
+            parser.parse(expression)
+        }
+
+        var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
+        var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+
+        
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", expression);
+        cell.value.setAttribute("typeVar", typeInText);
+        cell.value.setAttribute("nameVar", nameVarInText.value);
+        cell.value.setAttribute("operator", selectedOperatorInText);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    var workspace;
+
+    // Кнопка переключение на Blockly
+    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        divText.style.display = "none";
+        divBlockly.style.display = "block";
+        nestedDiv.innerHTML = "";
+        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace.clear();
+        if(expression) {
+            parser.parse(expression)
+            toBlock(root, workspace);
+        }
+        nameVarInBlockly.value = nameVarInText.value;
+        selectOperatorInBlockly.options.selectedIndex = selectOperatorInText.options.selectedIndex;
+        selectClassInBlockly.options.selectedIndex = selectClassInText.options.selectedIndex;
+    });
+
+    var nameVarInText = document.createElement('input');
+    nameVarInText.type = "text";
+    nameVarInText.style.width = '100%';
+    nameVarInText.placeholder = "New variable";
+    nameVarInText.value = cell.value.getAttribute('nameVar');
+
+    var jsonClasses = getClasses(editorUi);
+
+    var selectClassInText = document.createElement('select');
+    selectClassInText.style.width = '100%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInText.options[selectClassInText.options.length] = newOption;
+    });
+    let type = cell.value.getAttribute('typeVar');
+    for(let index = 0; index < selectClassInText.options.length; ++index) {
+        if(selectClassInText.options[index].value == type) {
+            selectClassInText.options[index].selected = true;
+        }
+    }
+
+    var selectOperatorInText = document.createElement('select');
+    selectOperatorInText.style.width = '30%';
+    selectOperatorInText.style.display = 'block';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
+    });
+    let operator = cell.value.getAttribute('operator');
+    for(let index = 0; index < selectOperatorInText.options.length; ++index) {
+        if(selectOperatorInText.options[index].value == operator) {
+            selectOperatorInText.options[index].selected = true;
+        }
+    }
+
+    divText.appendChild(text);
+    divText.appendChild(nameVarInText);
+    divText.appendChild(selectClassInText);
+    divText.appendChild(selectOperatorInText);
+    divText.appendChild(btnCreateNodeInText);
+    divText.appendChild(btnSwitchToBlockly);
+    div.appendChild(divText);
+
+
+    //Экран с blockly
+    var nestedDiv = document.createElement('div');
+    nestedDiv.id = "blocklyDiv";
+    nestedDiv.style.width = '890px';
+    nestedDiv.style.height = '500px';
+
+    // Кнопка создания узла
+    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+        var code = generateCode(workspace);
+
+        var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
+        var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+        
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", code);
+        cell.value.setAttribute("typeVar", typeInBlockly);
+        cell.value.setAttribute("nameVar", nameVarInBlockly.value);
+        cell.value.setAttribute("operator", selectedOperatorInBlockly);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    //кнопка переключения на текстовый вариант
+    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+        var code = generateCode(workspace);
+        divBlockly.style.display = "none";
+        divText.style.display = "block";
+        divText.getElementsByTagName("textarea").item(0).value = code;
+        nameVarInText.value = nameVarInBlockly.value;
+        selectOperatorInText.options.selectedIndex = selectOperatorInBlockly.options.selectedIndex;
+        selectClassInText.options.selectedIndex = selectClassInBlockly.options.selectedIndex;
+    });
+
+    var nameVarInBlockly = document.createElement('input');
+    nameVarInBlockly.type = "text";
+    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly.placeholder = "New variable";
+
+    var selectClassInBlockly = document.createElement('select');
+    selectClassInBlockly.style.width = '100%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
+    });
+
+    var selectOperatorInBlockly = document.createElement('select');
+    selectOperatorInBlockly.style.width = '30%';
+    selectOperatorInBlockly.style.display = 'block';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
+    });
+
+    divBlockly.appendChild(nestedDiv);
+    divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectClassInBlockly);
+    divBlockly.appendChild(selectOperatorInBlockly);
+    divBlockly.appendChild(btnCreateNodeInBlockly);
+    divBlockly.appendChild(btnSwitchToText);
+    div.appendChild(divBlockly);
+
+
+    // Настройки окна
+    var win = new mxWindow('Cycle node editor', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+// Окно редактирования узлов условий
+var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    var divText = document.createElement('div');
+    var divBlockly = document.createElement('div');
+
+    divBlockly.style.display = "none";
+
+
+    //Экран с текстом
+    var text = document.createElement('textarea');
+    text.style.width = "100%";
+    text.style.height = "480px";
+    text.value = cell.value.getAttribute('expression');
+
+    // Кнопка создания узла
+    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
+            parser.parse(expression)
+        }
+        
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", expression);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    var workspace;
+
+    // Кнопка переключение на Blockly
+    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        divText.style.display = "none";
+        divBlockly.style.display = "block";
+        nestedDiv.innerHTML = "";
+        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace.clear();
+        if(expression) {
+            parser.parse(expression)
+            toBlock(root, workspace);
+        }
+    });
+
+    divText.appendChild(text);
+    divText.appendChild(btnCreateNodeInText);
+    divText.appendChild(btnSwitchToBlockly);
+    div.appendChild(divText);
+
+
+    //Экран с blockly
+    var nestedDiv = document.createElement('div');
+    nestedDiv.id = "blocklyDiv";
+    nestedDiv.style.width = '890px';
+    nestedDiv.style.height = '500px';
+
+    // Кнопка создания узла
+    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+        var code = generateCode(workspace);
+        
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", code);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    //кнопка переключения на текстовый вариант
+    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+        var code = generateCode(workspace);
+        divBlockly.style.display = "none";
+        divText.style.display = "block";
+        divText.getElementsByTagName("textarea").item(0).value = code;
+    });
+
+    divBlockly.appendChild(nestedDiv);
+    divBlockly.appendChild(btnCreateNodeInBlockly);
+    divBlockly.appendChild(btnSwitchToText);
+    div.appendChild(divBlockly);
+
+
+    // Настройки окна
+    var win = new mxWindow('Switch case node editor', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+// Окно редактирования начального узла
+var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    var table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.height = '100%';
+    var tbody = document.createElement('tbody');
+    
+    fillDataClass(tbody, cell, editorUi);
+    table.appendChild(tbody);
+    div.appendChild(table);
+
+    // Кнопка создания блока
+    var applyBtn = mxUtils.button('Apply', function () {
+
+        checkAllInputsStartNode(table);
+
+        strValue = generateStrValueForStartNode(table);
+
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("label", strValue);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    // Кнопка добавления полей для нового класса
+    var addClass = mxUtils.button('Add Variable', function () {
+        var newRow = addRowStartNode(editorUi);
+        var tdDelRow = document.createElement('td');
+        var btnDelRow = mxUtils.button('Delete', function (evt) {
+            evt.target.parentElement.parentElement.remove();
+        });
+        tdDelRow.appendChild(btnDelRow);
+        newRow.appendChild(tdDelRow);
+        table.appendChild(newRow);
+    });
+
+
+    // Добавление кнопок в окно
+    div.appendChild(addClass);
+    div.appendChild(applyBtn);
+
+    // Настройки окна
+    var win = new mxWindow('Start node editor', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(true);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+
+function fillDataClass(tbody, cell, editorUi) {
+    let cellValue = cell.value;
+    var cellLabel = cellValue.getAttribute('label');
+    var values = cellLabel.split('\n');
+        
+    values.forEach((element, index) => {
+        let varWithClass = element.split(" - ");
+
+        var row = addRowStartNode(editorUi);
+
+        row.getElementsByTagName("td").item(0)
+            .getElementsByTagName("input").item(0).value = varWithClass[0];
+
+        var typeSelect = row.getElementsByTagName("td").item(1)
+            .getElementsByTagName("select").item(0);
+        for(let index = 0; index < typeSelect.options.length; ++index) {
+            if(typeSelect.options[index].value == varWithClass[1]) {
+                typeSelect.options[index].selected = true;
+            }
+        }
+        
+        if(index != 0) {
+            var tdDelRow = document.createElement('td');
+            var btnDelRow = mxUtils.button('Delete', function (evt) {
+                evt.target.parentElement.parentElement.remove();
+            });
+            tdDelRow.appendChild(btnDelRow);
+            row.appendChild(tdDelRow);
+        }
+
+        tbody.appendChild(row);
+    });
+}
+// Окно редактирования узлов "Предрешающие факторы"
+var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окнаx
+    var div = document.createElement('div');
+    var table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.height = '100%';
+    var tbody = document.createElement('tbody');
+    
+    var row = document.createElement('tr');
+    var tdName = document.createElement('td');
+    var name = document.createElement('input');
+    name.type = "text";
+    name.style.width = '100%';
+    name.placeholder = "Value";
+    name.value = cell.value.getAttribute('label');
+    tdName.appendChild(name);
+    row.appendChild(tdName);
+    tbody.appendChild(row);
+    table.appendChild(tbody);
+    div.appendChild(table);
+
+    // Кнопка создания узла
+    var btnCreateNode = mxUtils.button('Apply', function () {
+        var theGraph = editorUi.editor.graph;
+        var strValue = table.rows.item(0).getElementsByTagName("td")
+        .item(0).getElementsByTagName("input").item(0).value;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute('label', strValue);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    div.appendChild(btnCreateNode);
+
+    // Настройки окна
+    var win = new mxWindow('Predetermining factors node editor', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(true);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+// Окно редактирования логических узлов
+var LogicNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окнаx
+    var div = document.createElement('div');
+    div.style.width = '300px';
+    div.style.height = '150px';
+
+    // Кнопка создания узла "AND"
+    var btnCreateANDNode = mxUtils.button('And', function () {
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("label", "AND");
+        cell.value.setAttribute("type", "AND");
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    // Кнопка создания узла "OR"
+    var btnCreateORNode = mxUtils.button('Or', function () {
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("label", "OR");
+        cell.value.setAttribute("type", "OR");
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    div.appendChild(btnCreateANDNode);
+    div.appendChild(btnCreateORNode);
+
+    // Настройки окна
+    var win = new mxWindow('Logic node editor', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(true);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+function treeToXml(editorUi)
 {
     let result = '<?xml version="1.0"?>\n';
 
@@ -8622,8 +9335,35 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editNode', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            var defaultstyle = selectedcell.value;
-            alert(defaultstyle);
+            if(typeof selectedcell.value == "object" 
+            && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
+                this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.conditionNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
+                this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
+                this.actionNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('operator')) {
+                this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
+                this.cycleNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
+                this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.switchCaseNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('type') == "START") {
+                this.startEditorWindow = new StartEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.startEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('type') == "predetermining") {
+                this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.predeterminingFactorsNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")) {
+                this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.logicNodeEditorWindow.window.setVisible(true);
+            }
         }
     });
 
