@@ -21,6 +21,9 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     var applyBtn = mxUtils.button('Apply', function () {
         checkAllInputsRelationship(table);
         var theGraph = editorUi.editor.graph;
+
+        checkExistRelationshipsDictionary(theGraph);
+
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#000000;align=center;editable=0;");
@@ -251,4 +254,14 @@ function generateStrValueForRelationships(table) {
     }
 
     return strValue;
+}
+
+function checkExistRelationshipsDictionary(graph) {
+    var cells = graph.getModel().cells;
+    Object.keys(cells).forEach(function (key) {
+        var cellValue = cells[key].value;
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
+            throw new Error("Relationships dictionary already exists");
+        }
+    });
 }

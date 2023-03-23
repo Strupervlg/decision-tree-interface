@@ -21,6 +21,9 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     var applyBtn = mxUtils.button('Apply', function () {
         checkAllInputsProperty(table);
         var theGraph = editorUi.editor.graph;
+
+        checkExistClassPropertiesDictionary(theGraph);
+
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             //TODO Поменять ширину объекта
@@ -310,6 +313,16 @@ function generateStrValueForProperties(table) {
 
     return strValue;
 }
+
+function checkExistClassPropertiesDictionary(graph) {
+    var cells = graph.getModel().cells;
+    Object.keys(cells).forEach(function (key) {
+        var cellValue = cells[key].value;
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class properties</font></b>')) {
+            throw new Error("Class properties dictionary already exists");
+        }
+    });
+}
 // Окно коструктора блока с enum
 var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
@@ -336,6 +349,9 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
         checkAllInputsEnum(tbody);
 
         var theGraph = editorUi.editor.graph;
+
+        checkExistEnumDictionary(theGraph);
+
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#6666FF;align=center;editable=0;");
@@ -519,6 +535,16 @@ function generateStrValueForEnums(table) {
 
     return strValue;
 }
+
+function checkExistEnumDictionary(graph) {
+    var cells = graph.getModel().cells;
+    Object.keys(cells).forEach(function (key) {
+        var cellValue = cells[key].value;
+        if (typeof cellValue == "string" && cellValue.startsWith('<font color="#000000"><b>Enum</b></font>')) {
+            throw new Error("Enum dictionary already exists");
+        }
+    });
+}
 // Окно коструктора узлов условий
 var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
@@ -646,6 +672,9 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     var applyBtn = mxUtils.button('Apply', function () {
         checkAllInputsRelationship(table);
         var theGraph = editorUi.editor.graph;
+
+        checkExistRelationshipsDictionary(theGraph);
+
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#000000;align=center;editable=0;");
@@ -876,6 +905,16 @@ function generateStrValueForRelationships(table) {
     }
 
     return strValue;
+}
+
+function checkExistRelationshipsDictionary(graph) {
+    var cells = graph.getModel().cells;
+    Object.keys(cells).forEach(function (key) {
+        var cellValue = cells[key].value;
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
+            throw new Error("Relationships dictionary already exists");
+        }
+    });
 }
 function getEnums(editorUi) {
 
@@ -2637,6 +2676,9 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         }
 
         var theGraph = editorUi.editor.graph;
+
+        checkExistClassDictionary(theGraph);
+        
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#6666FF;align=center;editable=0;");
@@ -2775,6 +2817,16 @@ function generateStrValueForClasses(table) {
     }
 
     return strValue;
+}
+
+function checkExistClassDictionary(graph) {
+    var cells = graph.getModel().cells;
+    Object.keys(cells).forEach(function (key) {
+        var cellValue = cells[key].value;
+        if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) { //TODO: Возможно это кал способ надо протестировать
+            throw new Error("Class dictionary already exists");
+        }
+    });
 }
 // Окно редактирования блока с классами
 var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {

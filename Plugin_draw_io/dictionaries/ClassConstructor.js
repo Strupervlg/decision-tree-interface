@@ -32,6 +32,9 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         }
 
         var theGraph = editorUi.editor.graph;
+
+        checkExistClassDictionary(theGraph);
+        
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#6666FF;align=center;editable=0;");
@@ -170,4 +173,14 @@ function generateStrValueForClasses(table) {
     }
 
     return strValue;
+}
+
+function checkExistClassDictionary(graph) {
+    var cells = graph.getModel().cells;
+    Object.keys(cells).forEach(function (key) {
+        var cellValue = cells[key].value;
+        if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) { //TODO: Возможно это кал способ надо протестировать
+            throw new Error("Class dictionary already exists");
+        }
+    });
 }

@@ -21,6 +21,9 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     var applyBtn = mxUtils.button('Apply', function () {
         checkAllInputsProperty(table);
         var theGraph = editorUi.editor.graph;
+
+        checkExistClassPropertiesDictionary(theGraph);
+
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             //TODO Поменять ширину объекта
@@ -309,4 +312,14 @@ function generateStrValueForProperties(table) {
     }
 
     return strValue;
+}
+
+function checkExistClassPropertiesDictionary(graph) {
+    var cells = graph.getModel().cells;
+    Object.keys(cells).forEach(function (key) {
+        var cellValue = cells[key].value;
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class properties</font></b>')) {
+            throw new Error("Class properties dictionary already exists");
+        }
+    });
 }

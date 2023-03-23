@@ -24,6 +24,9 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
         checkAllInputsEnum(tbody);
 
         var theGraph = editorUi.editor.graph;
+
+        checkExistEnumDictionary(theGraph);
+
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#6666FF;align=center;editable=0;");
@@ -206,4 +209,14 @@ function generateStrValueForEnums(table) {
     }
 
     return strValue;
+}
+
+function checkExistEnumDictionary(graph) {
+    var cells = graph.getModel().cells;
+    Object.keys(cells).forEach(function (key) {
+        var cellValue = cells[key].value;
+        if (typeof cellValue == "string" && cellValue.startsWith('<font color="#000000"><b>Enum</b></font>')) {
+            throw new Error("Enum dictionary already exists");
+        }
+    });
 }
