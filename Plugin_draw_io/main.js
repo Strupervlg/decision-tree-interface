@@ -223,9 +223,9 @@ Draw.loadPlugin(function (ui) {
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'application/json'});
+            let file = new Blob([data], {type: 'text/csv'});
             a.href = URL.createObjectURL(file);
-            a.download = "enums.txt";
+            a.download = "enums.csv";
             a.click();
         }
     });
@@ -237,9 +237,9 @@ Draw.loadPlugin(function (ui) {
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'application/json'});
+            let file = new Blob([data], {type: 'text/csv'});
             a.href = URL.createObjectURL(file);
-            a.download = "classes.txt";
+            a.download = "classes.csv";
             a.click();
         }
     });
@@ -251,9 +251,9 @@ Draw.loadPlugin(function (ui) {
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'application/json'});
+            let file = new Blob([data], {type: 'text/csv'});
             a.href = URL.createObjectURL(file);
-            a.download = "properties.txt";
+            a.download = "properties.csv";
             a.click();
         }
     });
@@ -265,9 +265,9 @@ Draw.loadPlugin(function (ui) {
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'application/json'});
+            let file = new Blob([data], {type: 'text/csv'});
             a.href = URL.createObjectURL(file);
-            a.download = "relationships.txt";
+            a.download = "relationships.csv";
             a.click();
         }
     });
