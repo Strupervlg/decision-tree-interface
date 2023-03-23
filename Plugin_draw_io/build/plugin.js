@@ -565,7 +565,7 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('conditionCreateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -581,7 +581,7 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "conditionCreateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
@@ -2508,7 +2508,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('actionCreateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -2542,7 +2542,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "actionCreateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
@@ -2671,7 +2671,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     var openBlockly = mxUtils.button('Open blockly', function () {
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
-        divBlockly.id = 'blocklyDiv'
+        divBlockly.id = 'classCreateBlocklyDiv'
         divBlockly.style.width = '850px';
         divBlockly.style.height = '500px';
         mainDivBlockly.appendChild(divBlockly);
@@ -2698,7 +2698,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         this.window2.setResizable(false);
         this.window2.setClosable(true);
         this.window2.setVisible(true);
-        var workspaceInWindow = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        var workspaceInWindow = Blockly.inject('classCreateBlocklyDiv', { toolbox: toolbox });
     });
 
     // Добавление кнопок в окно
@@ -2841,7 +2841,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     var openBlockly = mxUtils.button('Open blockly', function () {
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
-        divBlockly.id = 'blocklyDiv'
+        divBlockly.id = 'classUpdateBlocklyDiv'
         divBlockly.style.width = '850px';
         divBlockly.style.height = '500px';
         mainDivBlockly.appendChild(divBlockly);
@@ -2868,7 +2868,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
         this.window2.setResizable(false);
         this.window2.setClosable(true);
         this.window2.setVisible(true);
-        var workspaceInWindow = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        var workspaceInWindow = Blockly.inject('classUpdateBlocklyDiv', { toolbox: toolbox });
     });
 
     // Добавление кнопок в окно
@@ -7602,7 +7602,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('switchCaseCreateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -7618,7 +7618,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "switchCaseCreateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
@@ -7714,7 +7714,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('cycleCreateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -7758,7 +7758,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "cycleCreateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
@@ -8050,7 +8050,7 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('conditionUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -8066,7 +8066,7 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "conditionUpdateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
@@ -8154,7 +8154,7 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('actionUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -8195,7 +8195,7 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "actionUpdateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
@@ -8307,7 +8307,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('cycleUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -8364,7 +8364,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "cycleUpdateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
@@ -8481,7 +8481,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('switchCaseUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -8497,7 +8497,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "switchCaseUpdateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
@@ -8548,7 +8548,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     table.style.height = '100%';
     var tbody = document.createElement('tbody');
     
-    fillDataClass(tbody, cell, editorUi);
+    fillDataStart(tbody, cell, editorUi);
     table.appendChild(tbody);
     div.appendChild(table);
 
@@ -8595,7 +8595,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
-function fillDataClass(tbody, cell, editorUi) {
+function fillDataStart(tbody, cell, editorUi) {
     let cellValue = cell.value;
     var cellLabel = cellValue.getAttribute('label');
     var values = cellLabel.split('\n');
@@ -9166,32 +9166,42 @@ Draw.loadPlugin(function (ui) {
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
-        this.classConstructorWindow = new ClassConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
-        this.classConstructorWindow.window.setVisible(true);
+        if(!this.classConstructorWindow || !this.classConstructorWindow.window.content) {
+            this.classConstructorWindow = new ClassConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.classConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на отоброжение конструктора блока со свойствами классов
     ui.actions.addAction('classPropertiesConstructor', function () {
-        this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
-        this.classPropertiesConstructorWindow.window.setVisible(true);
+        if(!this.classPropertiesConstructorWindow || !this.classPropertiesConstructorWindow.window.content) {
+            this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.classPropertiesConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на отоброжение конструктора enum
     ui.actions.addAction('enumConstructor', function () {
-        this.enumConstructorWindow = new EnumConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
-        this.enumConstructorWindow.window.setVisible(true);
+        if(!this.enumConstructorWindow || !this.enumConstructorWindow.window.content) {
+            this.enumConstructorWindow = new EnumConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.enumConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на отоброжение конструктора блока с отношениями для классов
     ui.actions.addAction('relationshipsConstructor', function () {
-        this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
-        this.relationshipsConstructorWindow.window.setVisible(true);
+        if(!this.relationshipsConstructorWindow || !this.relationshipsConstructorWindow.window.content) {
+            this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
+            this.relationshipsConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на отоброжение конструктора начального узла
     ui.actions.addAction('startNodeConstructor', function () {
-        this.startConstructorWindow = new StartConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
-        this.startConstructorWindow.window.setVisible(true);
+        if(!this.startConstructorWindow || !this.startConstructorWindow.window.content) {
+            this.startConstructorWindow = new StartConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.startConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на создание узла ИСТИНА
@@ -9218,14 +9228,18 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание логического узла 
     ui.actions.addAction('LogicNodeCreate', function () {
-        this.logicNodeConstructorWindow = new LogicNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
-        this.logicNodeConstructorWindow.window.setVisible(true);
+        if(!this.logicNodeConstructorWindow || !this.logicNodeConstructorWindow.window.content) {
+            this.logicNodeConstructorWindow = new LogicNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
+            this.logicNodeConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на создание узла "Предрешающий фактор"
     ui.actions.addAction('PredeterminingFactorsNodeCreate', function () {
-        this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
-        this.predeterminingFactorsNodeConstructorWindow.window.setVisible(true);
+        if(!this.predeterminingFactorsNodeConstructorWindow || !this.predeterminingFactorsNodeConstructorWindow.window.content) {
+            this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
+            this.predeterminingFactorsNodeConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на создание узла неопределеноость предрешающего фактора
@@ -9241,26 +9255,34 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора узлов действия
     ui.actions.addAction('actionNodeConstructor', function () {
-        this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
-        this.actionNodeConstructorWindow.window.setVisible(true);
+        if(!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
+            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
+            this.actionNodeConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на отоброжение конструктора узлов цикла
     ui.actions.addAction('cycleNodeConstructor', function () {
-        this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
-        this.cycleNodeConstructorWindow.window.setVisible(true);
+        if(!this.cycleNodeConstructorWindow || !this.cycleNodeConstructorWindow.window.content) {
+            this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
+            this.cycleNodeConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на отоброжение конструктора узлов условия
     ui.actions.addAction('conditionNodeConstructor', function () {
-        this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
-        this.conditionNodeConstructorWindow.window.setVisible(true);
+        if(!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
+            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.conditionNodeConstructorWindow.window.setVisible(true);
+        }
     });
 
     // Действие на отоброжение конструктора узлов "switch case"
     ui.actions.addAction('switchCaseNodeConstructor', function () {
-        this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
-        this.switchCaseNodeConstructorWindow.window.setVisible(true);
+        if(!this.switchCaseNodeConstructorWindow || !this.switchCaseNodeConstructorWindow.window.content) {
+            this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.switchCaseNodeConstructorWindow.window.setVisible(true);
+        }
     });
 
     ui.actions.addAction('exportEnum', function () {
@@ -9336,31 +9358,38 @@ Draw.loadPlugin(function (ui) {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
             if(typeof selectedcell.value == "object" 
-            && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
+            && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
+            && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
                 this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.conditionNodeEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "object" 
-            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
+            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;"
+            && (!this.actionNodeEditorWindow || !this.actionNodeEditorWindow.window.content)) {
                 this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
                 this.actionNodeEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('operator')) {
+            && selectedcell.value.getAttribute('operator')
+            && (!this.cycleNodeEditorWindow || !this.cycleNodeEditorWindow.window.content)) {
                 this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
                 this.cycleNodeEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "object" 
-            && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
+            && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;"
+            && (!this.switchCaseNodeEditorWindow || !this.switchCaseNodeEditorWindow.window.content)) {
                 this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.switchCaseNodeEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('type') == "START") {
+            && selectedcell.value.getAttribute('type') == "START"
+            && (!this.startEditorWindow || !this.startEditorWindow.window.content)) {
                 this.startEditorWindow = new StartEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.startEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('type') == "predetermining") {
+            && selectedcell.value.getAttribute('type') == "predetermining"
+            && (!this.predeterminingFactorsNodeEditorWindow || !this.predeterminingFactorsNodeEditorWindow.window.content)) {
                 this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.predeterminingFactorsNodeEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "object" 
-            && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")) {
+            && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")
+            && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
                 this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.logicNodeEditorWindow.window.setVisible(true);
             }
@@ -9383,19 +9412,23 @@ Draw.loadPlugin(function (ui) {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
             if(typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) {
+            && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+            && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
                 this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')) {
+            && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+            && (!this.enumEditorWindow || !this.enumEditorWindow.window.content)) {
                 this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.enumEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')) {
+            && selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
+            && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classPropertiesEditorWindow.window.setVisible(true);
             } else if(typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
+            && selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+            && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
                 this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.relationshipsEditorWindow.window.setVisible(true);
             }

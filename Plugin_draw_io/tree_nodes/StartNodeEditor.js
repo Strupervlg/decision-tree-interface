@@ -8,7 +8,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     table.style.height = '100%';
     var tbody = document.createElement('tbody');
     
-    fillDataClass(tbody, cell, editorUi);
+    fillDataStart(tbody, cell, editorUi);
     table.appendChild(tbody);
     div.appendChild(table);
 
@@ -55,7 +55,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
-function fillDataClass(tbody, cell, editorUi) {
+function fillDataStart(tbody, cell, editorUi) {
     let cellValue = cell.value;
     var cellLabel = cellValue.getAttribute('label');
     var values = cellLabel.split('\n');

@@ -63,7 +63,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     var openBlockly = mxUtils.button('Open blockly', function () {
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
-        divBlockly.id = 'blocklyDiv'
+        divBlockly.id = 'classUpdateBlocklyDiv'
         divBlockly.style.width = '850px';
         divBlockly.style.height = '500px';
         mainDivBlockly.appendChild(divBlockly);
@@ -90,7 +90,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
         this.window2.setResizable(false);
         this.window2.setClosable(true);
         this.window2.setVisible(true);
-        var workspaceInWindow = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        var workspaceInWindow = Blockly.inject('classUpdateBlocklyDiv', { toolbox: toolbox });
     });
 
     // Добавление кнопок в окно

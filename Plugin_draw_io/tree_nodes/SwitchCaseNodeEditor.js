@@ -42,7 +42,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
-        workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+        workspace = Blockly.inject('switchCaseUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
         if(expression) {
             parser.parse(expression)
@@ -58,7 +58,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
-    nestedDiv.id = "blocklyDiv";
+    nestedDiv.id = "switchCaseUpdateBlocklyDiv";
     nestedDiv.style.width = '890px';
     nestedDiv.style.height = '500px';
 
