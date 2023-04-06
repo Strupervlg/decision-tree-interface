@@ -28,7 +28,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
         cell.value = strValue;
         theGraph.getModel().endUpdate();
         theGraph.refresh(); // update the graph
-        win.setVisible(false);
+        win.destroy();
     });
 
     // Кнопка добавления полей для нового отношения между классами

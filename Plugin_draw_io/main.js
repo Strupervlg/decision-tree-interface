@@ -47,6 +47,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'editDictionary');
         ui.menus.addMenuItem(menu, 'editNode');
         ui.menus.addMenuItem(menu, 'editTextInNode');
+        ui.menus.addMenuItem(menu, 'editValueInOutcome');
     });
 
 
@@ -94,6 +95,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('editDictionary=Edit dictionary');
 
     mxResources.parse('editTextInNode=Edit text in node');
+
+    mxResources.parse('editValueInOutcome=Edit value in outcome');
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -332,10 +335,20 @@ Draw.loadPlugin(function (ui) {
         //FIXME: проверка на стрелки еще надо добавить
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(typeof selectedcell.value != "object" || 
-            typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START") {
+            if(typeof selectedcell.value != "object" && !selectedcell.edge || 
+            typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editTextInNodeWindow.window.setVisible(true);
+            }
+        }
+    });
+
+    ui.actions.addAction('editValueInOutcome', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            if(selectedcell.edge) {
+                this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editValueInOutcomeWindow.window.setVisible(true);
             }
         }
     });

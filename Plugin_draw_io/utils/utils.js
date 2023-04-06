@@ -115,3 +115,19 @@ function getTextFromCode(code, editorUi) {
     }
     return "";
 }
+
+function getTextFromValueInOutcome(value) {
+    if(value == "") {
+        return "";
+    } else if(value == "true") {
+        return "Yes";
+    } else if(value == "false") {
+        return "No";
+    } 
+    // else if(value == "comparison_result") { //TODO: сделать генерацию для сравнительного результата
+    //     return "";
+    // } 
+    else {
+        return value;
+    }
+}
