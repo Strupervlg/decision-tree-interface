@@ -367,11 +367,15 @@ function printExprNode(exprNode) {
             var resBlock = new Blockly.BlockSvg(workspace, "quantifier_of_existence");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[2].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
             
-            condBlock = printExprNode(exprNode.firstOperand);
-            checkTypeBlocks(resBlock, condBlock, "condition");
-            resBlock.getInput("condition").connection.connect(condBlock.outputConnection);
+            defBlock = printExprNode(exprNode.firstOperand);
+            checkTypeBlocks(resBlock, defBlock, "definition_area");
+            resBlock.getInput("definition_area").connection.connect(defBlock.outputConnection);
+
+            verBlock = printExprNode(exprNode.secondOperand);
+            checkTypeBlocks(resBlock, verBlock, "verification_condition");
+            resBlock.getInput("verification_condition").connection.connect(verBlock.outputConnection);
 
             return resBlock
         case ExprType.FORALL:

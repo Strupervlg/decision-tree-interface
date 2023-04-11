@@ -149,9 +149,9 @@ function createFindExtremeExprNode(extremeVarName, extremeCondition, varName, co
     return newNode;
 }
 
-function createForAllExprNode(id, expression1, expression2) { 
+function createQuantifierExprNode(typeNode, id, expression1, expression2) { 
     newNode = new ExpressionNode();
-    newNode.type = ExprType.FORALL;
+    newNode.type = typeNode;
     newNode.firstOperand = expression1;
     newNode.secondOperand = expression2;
     newNode.ident = id;
