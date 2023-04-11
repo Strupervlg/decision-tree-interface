@@ -171,7 +171,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setClosable(true);
     this.window.setVisible(true);
 
-    if(typeof cell.value == "object") {
+    if(cell.value != null && typeof cell.value == "object") {
         text.value = cell.value.getAttribute("label");
         let vin = document.getElementById("value_input");
         if(vin != null && vin.tagName == "SELECT") {
