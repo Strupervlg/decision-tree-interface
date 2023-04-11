@@ -4,7 +4,7 @@ var {StatementNode, ExpressionNode, ExprType,
     createGetExprNode, createCheckRelExprNode,
     addObjectToObjectSeqNode, createObjectSeqNode,
     createUnaryExprNode, createFindExtremeExprNode,
-    createForAllExprNode} = require('./create_nodes');
+    createQuantifierExprNode} = require('./create_nodes');
 
 StatementNode.prototype.valueOf = function() {
     this.id = 0;
@@ -55,8 +55,9 @@ function testProperty() {
 
 function testExist() {
     console.log("Test exist:");
-    var expExpr = createGetExprNode(ExprType.EXIST, 
+    var expExpr = createQuantifierExprNode(ExprType.EXIST, 
         "X", 
+        createLiteral(ExprType.BOOLEAN, true),
         createBinExprNode(
             ExprType.AND, 
             createBinExprNode(
@@ -87,7 +88,9 @@ function testExist() {
         );
     
     var expStmt = new StatementNode(expExpr, null);
-    var string = `exist X {
+    var string = `exist X [ 
+        true
+     ] {
             X->isBetween(X1, X2) and
             X.state == unevaluated and
             X is operator
@@ -337,8 +340,9 @@ function testFindExtreme() {
     var expExpr = createFindExtremeExprNode(
         "A1", 
         createUnaryExprNode(ExprType.NOT, 
-            createGetExprNode(ExprType.EXIST, 
+            createQuantifierExprNode(ExprType.EXIST, 
                 "A", 
+                createLiteral(ExprType.BOOLEAN, true),
                 createCheckRelExprNode(
                     createLiteral(ExprType.ID, "A"), 
                     "isBetween", 
@@ -359,7 +363,9 @@ function testFindExtreme() {
     
     var expStmt = new StatementNode(expExpr, null);
     var string = `findExtreme A1 [
-        not exist A {
+        not exist A [
+            true
+        ] {
             A->isBetween(A1, X)
         }
         ] where  A { 
@@ -371,7 +377,7 @@ function testFindExtreme() {
 
 function testForAll() {
     console.log("Test for all:");
-    var expExpr = createForAllExprNode(
+    var expExpr = createQuantifierExprNode(ExprType.FORALL,
         "X", 
         createLiteral(ExprType.BOOLEAN, true), 
         createLiteral(ExprType.BOOLEAN, false)

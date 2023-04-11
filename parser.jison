@@ -126,8 +126,8 @@ exp
     | exp "." CLASS "(" ")" { $$ = createUnaryExprNode(ExprType.GET_CLASS, $1); }
     | FIND ID "{" exp "}" { $$ = createGetExprNode(ExprType.FIND, $2, $4); }
     | FIND_EXTREM ID "[" exp "]" WHERE ID "{" exp "}" { $$ = createFindExtremeExprNode($2, $4, $7, $9); }
-    | EXIST ID "{" exp "}" { $$ = createGetExprNode(ExprType.EXIST, $2, $4); }
-    | FORALL ID "[" exp "]" "{" exp "}" { $$ = createForAllExprNode($2, $4, $7); }
+    | EXIST ID "[" exp "]" "{" exp "}" { $$ = createQuantifierExprNode(ExprType.EXIST, $2, $4, $7); }
+    | FORALL ID "[" exp "]" "{" exp "}" { $$ = createQuantifierExprNode(ExprType.FORALL, $2, $4, $7); }
     ;
 
 object_seq

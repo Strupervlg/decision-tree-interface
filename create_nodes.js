@@ -149,9 +149,9 @@ function createFindExtremeExprNode(extremeVarName, extremeCondition, varName, co
     return newNode;
 }
 
-function createForAllExprNode(id, expression1, expression2) { 
+function createQuantifierExprNode(typeNode, id, expression1, expression2) { 
     newNode = new ExpressionNode();
-    newNode.type = ExprType.FORALL;
+    newNode.type = typeNode;
     newNode.firstOperand = expression1;
     newNode.secondOperand = expression2;
     newNode.ident = id;
@@ -180,5 +180,5 @@ var string;
 // Для экспорта
 module.exports = { createBinExprNode, createGetObjectByRel, createUnaryExprNode,
     createLiteral, createEnum, createCheckRelExprNode, createGetExprNode, createFindExtremeExprNode,
-    createForAllExprNode, createObjectSeqNode, addObjectToObjectSeqNode, root, string, ObjectSeq,
+    createQuantifierExprNode, createObjectSeqNode, addObjectToObjectSeqNode, root, string, ObjectSeq,
     ProgramNode, StatementNode, ExpressionNode, ExprType }
