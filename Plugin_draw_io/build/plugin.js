@@ -8781,33 +8781,28 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     var divText = document.createElement('div');
     var labelText = document.createElement('label');
     labelText.innerHTML = "Human-readable text";
-    var text = document.createElement('input'); //TODO: мб добавить лейбл обозначующий для чего этот инпут
+    var text = document.createElement('input');
     text.type = "text";
     text.style.width = '100%';
     text.placeholder = "Human-readable text";
     labelText.appendChild(text);
     divText.appendChild(labelText);
-    // if(typeof cell.value == "object") {
-    //     text.value = cell.value.getAttribute("label");
-    // } else {
-    //     text.value = cell.value;
-    // }
 
-    //TODO: Добавить поле с значением: значения определяются из узла из которого исходит стрелка
     let outNode = cell.source;
     let typeNode = getTypeFromCode(outNode.value.getAttribute('expression'), editorUi);
-    if(typeNode == "int") { //Нужно знать какое свойство
+    if(typeNode.type == "int") {
         var labelType = document.createElement('label');
         labelType.innerHTML = "value";
-        var numberInt = document.createElement('input'); //TODO: мб добавить лейбл обозначующий для чего этот инпут
+        var numberInt = document.createElement('input');
         numberInt.id = "value_input";
         numberInt.type = "number";
         numberInt.style.width = '100%';
-        // numberInt.min = ""; Добавить из словаря
-        // numberInt.max = "";
+        let ranges = typeNode.range.split('-')
+        numberInt.min = ranges[0];
+        numberInt.max = ranges[1];
         labelType.appendChild(numberInt);
         divText.appendChild(labelType);
-    } else if(typeNode == "bool") {
+    } else if(typeNode.type == "bool") {
         let labelValue = document.createElement('label');
         labelValue.innerHTML = "value";
         let selectValue = document.createElement('select');
@@ -8819,7 +8814,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         selectValue.options[selectValue.options.length] = optionFalse;
         labelValue.appendChild(selectValue);
         divText.appendChild(labelValue);
-    } else if(typeNode == "class") {
+    } else if(typeNode.type == "class") {
         let labelValue = document.createElement('label');
         labelValue.innerHTML = "value";
         let selectValue = document.createElement('select');
@@ -8832,19 +8827,20 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         });
         labelValue.appendChild(selectValue);
         divText.appendChild(labelValue);
-    } else if(typeNode == "double") { //Нужно знать какое свойство
+    } else if(typeNode.type == "double") {
         var labelType = document.createElement('label');
         labelType.innerHTML = "value";
         var numberInt = document.createElement('input');
         numberInt.id = "value_input";
         numberInt.type = "number";
         numberInt.step = "0.01";
-        // numberInt.min = ""; Добавить из словаря
-        // numberInt.max = "";
+        let ranges = typeNode.range.split('-')
+        numberInt.min = ranges[0];
+        numberInt.max = ranges[1];
         numberInt.style.width = '100%';
         labelType.appendChild(numberInt);
         divText.appendChild(labelType);
-    } else if(typeNode == "string") {
+    } else if(typeNode.type == "string") {
         var labelType = document.createElement('label');
         labelType.innerHTML = "value";
         var text = document.createElement('input');
@@ -8854,9 +8850,21 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         text.placeholder = "value string";
         labelType.appendChild(text);
         divText.appendChild(labelType);
-    } else if(typeNode == "enum") { //Нужно знать какой енам нужен
-        //значения enum
-    } else if(typeNode == "comparison") {
+    } else if(typeNode.type == "enum") {
+        let labelValue = document.createElement('label');
+        labelValue.innerHTML = "value";
+        let selectValue = document.createElement('select');
+        selectValue.id = "value_input";
+        selectValue.style.width = '100%';
+        let enumsList = getEnums(editorUi);
+        let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
+        findEnum[0].values.forEach(enumValue => {
+            var newOption = new Option(enumValue, enumValue);
+            selectValue.options[selectValue.options.length] = newOption;
+        });
+        labelValue.appendChild(selectValue);
+        divText.appendChild(labelValue);
+    } else if(typeNode.type == "comparison") {
         let labelValue = document.createElement('label');
         labelValue.innerHTML = "value";
         let selectValue = document.createElement('select');
@@ -8871,20 +8879,26 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         divText.appendChild(labelValue);
     }
 
-    // Добавить поле с типом (но наверно только для стрелок которые исходят из определенных узлов) (у логических узлов и циклов (и мб еще где-то) надо выбрать что ветка является резалтом тип)
+    // Добавить поле с типом (но наверно только для стрелок которые исходят из определенных узлов) 
+    //(у логических узлов и циклов (и мб еще где-то) надо выбрать что ветка является резалтом тип)
 
     // Где-то добавить выбор, что стрелка является undertermined если она исходит их предрешающего узла
 
-
-    //TODO: делать удаление всего ненужного, что находятся в стрелке (ВОЗМОЖНО ЭТО НЕ НУЖНО)
-
     // Кнопка сохранения значений в ветке
     var btnSaveValueInOutcome = mxUtils.button('Save', function () {
+        checkAllInputsOutcome(divText);
         var textInOutcome = text.value;
         //TODO: Проверка на поля значений (Если возвращается объект или assign то value может быть пустым)
         graph.getModel().beginUpdate();
         graph.setAttributeForCell(cell, 'label', textInOutcome);
-        // graph.setAttributeForCell(cell, 'label', textInOutcome);
+        let vin = document.getElementById("value_input");
+        let valInOutcome = "";
+        if(vin != null && vin.tagName == "SELECT") {
+            valInOutcome = vin.options[vin.options.selectedIndex].value;
+        } else if(vin != null && vin.tagName == "INPUT") {
+            valInOutcome = vin.value;
+        }
+        graph.setAttributeForCell(cell, 'value', valInOutcome);
 
         // graph.setAttributeForCell(cell, 'label', textInOutcome);
         // graph.setAttributeForCell(cell, 'label', textInOutcome);
@@ -8908,21 +8922,14 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка генерации человекочитаемого текста
     var btnGenerateTextInOutcome = mxUtils.button('Generate', function () {
         let vin = document.getElementById("value_input");
-        if(vin.tagName == "SELECT") {
-            alert(123)
-        } else if(vin.tagName == "INPUT") {
-            var humanStr = getTextFromValueInOutcome(vin.value);
-            alert(humanStr);
+        var humanStr = ""
+        if(vin != null && vin.tagName == "SELECT") {
+            var valSelect = vin.options[vin.options.selectedIndex].value;
+            humanStr = getTextFromValueInOutcome(valSelect);
+        } else if(vin != null && vin.tagName == "INPUT") {
+            humanStr = getTextFromValueInOutcome(vin.value);
         }
-        // alert(vin.tagName);
-        // let code = "";
-        // if(typeof cell.value == "object") {
-        //     code = cell.value.getAttribute("expression");
-        // }
-        // let textInNode = getTextFromCode(code, editorUi)
-        // if(textInNode != "") {
-        //     text.value = textInNode;
-        // }
+        text.value = humanStr;
     });
 
     divText.appendChild(btnSaveValueInOutcome);
@@ -8937,7 +8944,37 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setResizable(false);
     this.window.setClosable(true);
     this.window.setVisible(true);
+
+    if(typeof cell.value == "object") {
+        text.value = cell.value.getAttribute("label");
+        let vin = document.getElementById("value_input");
+        if(vin != null && vin.tagName == "SELECT") {
+            let valInCell = cell.value.getAttribute("value");
+            for(let index = 0; index < vin.options.length; ++index) {
+                if(vin.options[index].value == valInCell) {
+                    vin.options[index].selected = true;
+                }
+            }
+        } else if(vin != null && vin.tagName == "INPUT") {
+            vin.value = cell.value.getAttribute("value");
+        }
+    }
 };
+
+function checkAllInputsOutcome(div) {
+    errors = "";
+    console.log(div.getElementsByTagName("input"));
+    if(div.getElementsByTagName("input").item(0).value == "") {
+        errors += "Отсутствует человеко-читаемый текст \n";
+    }
+    if(document.getElementById("value_input") != null 
+    && document.getElementById("value_input").value == "") {
+        errors += "Отсутствует значение для ветки \n";
+    }
+    if(errors != "") {
+        throw new Error(errors);
+    }
+}
 function treeToXml(editorUi)
 {
     let result = '<?xml version="1.0"?>\n';
@@ -9029,7 +9066,7 @@ function switchCaseNodes(node, editorUi)
 
 function questionNodeToXml(node, isSwitch, editorUi)
 {
-    let result = '<QuestionNode type="'+getTypeFromCode(node.value, editorUi)+'" isSwitch="'+isSwitch+'">\n';
+    let result = '<QuestionNode type="'+getTypeFromCode(node.value, editorUi).type+'" isSwitch="'+isSwitch+'">\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value) + "\n</Expression>\n";
 
@@ -9244,18 +9281,20 @@ function generateCode(workspace) {
 function getTypeFromCode(code, editorUi) {
     root = null
     parser.parse(code)
-    let type = getType(root)
-    if(type == SemanticType.PROPERTY_VALUE) {
+    let obj = {type: getType(root)};
+    if(obj.type == SemanticType.PROPERTY_VALUE) {
         let propertyName = root.stmt.firstExpr.ident;
         let properties = getProperties(editorUi);
         let foundProp = properties.filter(el => el.name == propertyName);
         if(typeof foundProp[0] == "undefined") {
             throw new Error('Error: property "'+propertyName+'" does not exist in the dictionary')
         }
-        let propType = foundProp[0].type;
+        obj = foundProp[0];
+        let propType = obj.type;
 
         if(propType != "Integer" && propType != "Double" 
         && propType != "Boolean" && propType != "String") {
+            obj.enum = propType.slice(6);
             propType = propType.slice(0,4)
         }
         if(propType == "Integer") {
@@ -9264,16 +9303,17 @@ function getTypeFromCode(code, editorUi) {
         if(propType == "Boolean") {
             propType = "bool"
         }
-        return propType.toLowerCase();
+        obj.type = propType.toLowerCase();
+        // return obj;
     }
-    return type;
+    return obj;
 }
 
 function getTextFromCode(code, editorUi) {
     if(code == "") {
         return "";
     }
-    let type = getTypeFromCode(code, editorUi);
+    let type = getTypeFromCode(code, editorUi).type;
     if(type == "int" || type == "double") {
         return "How many ";
     } else if(type == "bool") {
@@ -9289,9 +9329,9 @@ function getTextFromCode(code, editorUi) {
 function getTextFromValueInOutcome(value) {
     if(value == "") {
         return "";
-    } else if(value == "true") {
+    } else if(value == "True") {
         return "Yes";
-    } else if(value == "false") {
+    } else if(value == "False") {
         return "No";
     } 
     // else if(value == "comparison_result") { //TODO: сделать генерацию для сравнительного результата

@@ -74,18 +74,20 @@ function generateCode(workspace) {
 function getTypeFromCode(code, editorUi) {
     root = null
     parser.parse(code)
-    let type = getType(root)
-    if(type == SemanticType.PROPERTY_VALUE) {
+    let obj = {type: getType(root)};
+    if(obj.type == SemanticType.PROPERTY_VALUE) {
         let propertyName = root.stmt.firstExpr.ident;
         let properties = getProperties(editorUi);
         let foundProp = properties.filter(el => el.name == propertyName);
         if(typeof foundProp[0] == "undefined") {
             throw new Error('Error: property "'+propertyName+'" does not exist in the dictionary')
         }
-        let propType = foundProp[0].type;
+        obj = foundProp[0];
+        let propType = obj.type;
 
         if(propType != "Integer" && propType != "Double" 
         && propType != "Boolean" && propType != "String") {
+            obj.enum = propType.slice(6);
             propType = propType.slice(0,4)
         }
         if(propType == "Integer") {
@@ -94,16 +96,16 @@ function getTypeFromCode(code, editorUi) {
         if(propType == "Boolean") {
             propType = "bool"
         }
-        return propType.toLowerCase();
+        obj.type = propType.toLowerCase();
     }
-    return type;
+    return obj;
 }
 
 function getTextFromCode(code, editorUi) {
     if(code == "") {
         return "";
     }
-    let type = getTypeFromCode(code, editorUi);
+    let type = getTypeFromCode(code, editorUi).type;
     if(type == "int" || type == "double") {
         return "How many ";
     } else if(type == "bool") {
@@ -119,14 +121,11 @@ function getTextFromCode(code, editorUi) {
 function getTextFromValueInOutcome(value) {
     if(value == "") {
         return "";
-    } else if(value == "true") {
+    } else if(value == "True") {
         return "Yes";
-    } else if(value == "false") {
+    } else if(value == "False") {
         return "No";
     } 
-    // else if(value == "comparison_result") { //TODO: сделать генерацию для сравнительного результата
-    //     return "";
-    // } 
     else {
         return value;
     }

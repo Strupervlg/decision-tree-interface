@@ -89,7 +89,7 @@ function switchCaseNodes(node, editorUi)
 
 function questionNodeToXml(node, isSwitch, editorUi)
 {
-    let result = '<QuestionNode type="'+getTypeFromCode(node.value, editorUi)+'" isSwitch="'+isSwitch+'">\n';
+    let result = '<QuestionNode type="'+getTypeFromCode(node.value, editorUi).type+'" isSwitch="'+isSwitch+'">\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value) + "\n</Expression>\n";
 
