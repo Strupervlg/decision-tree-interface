@@ -168,11 +168,12 @@ Blockly.JavaScript['three_digit_comparison'] = function(block) {
 };
 
 Blockly.JavaScript['quantifier_of_existence'] = function(block) {
-  var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
+  var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
+  var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
   var dropdown_type = block.getFieldValue('type');
   var text_name_var = block.getFieldValue('name_var');
   // TODO: Как тут указать тип переменной??
-  var code = "exist " + text_name_var + " { " + value_condition + " }";
+  var code = "exist " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " }";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

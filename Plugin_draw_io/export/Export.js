@@ -309,7 +309,8 @@ const xslTxt = `<?xml version="1.0"?>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>
-            <xsl:apply-templates select="value[@name='condition']" />
+            <xsl:apply-templates select="value[@name='definition_area']" />
+            <xsl:apply-templates select="value[@name='verification_condition']" />
         </ExistenceQuantifier>
     </xsl:template>
 

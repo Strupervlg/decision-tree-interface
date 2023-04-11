@@ -1481,11 +1481,15 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "quantifier_of_existence");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[2].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
             
-            condBlock = printExprNode(exprNode.firstOperand, workspace);
-            checkTypeBlocks(resBlock, condBlock, "condition");
-            resBlock.getInput("condition").connection.connect(condBlock.outputConnection);
+            defBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, defBlock, "definition_area");
+            resBlock.getInput("definition_area").connection.connect(defBlock.outputConnection);
+
+            verBlock = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, verBlock, "verification_condition");
+            resBlock.getInput("verification_condition").connection.connect(verBlock.outputConnection);
 
             return resBlock
         case ExprType.FORALL:
@@ -1664,9 +1668,9 @@ function createFindExtremeExprNode(extremeVarName, extremeCondition, varName, co
     return newNode;
 }
 
-function createForAllExprNode(id, expression1, expression2) { 
+function createQuantifierExprNode(typeNode, id, expression1, expression2) { 
     newNode = new ExpressionNode();
-    newNode.type = ExprType.FORALL;
+    newNode.type = typeNode;
     newNode.firstOperand = expression1;
     newNode.secondOperand = expression2;
     newNode.ident = id;
@@ -1770,7 +1774,7 @@ var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"program":3,"stmt":4,"exp":5,"=":6,"ID":7,"STRING":8,"INT":9,"DOUBLE":10,"TRUE":11,"FALSE":12,"TREE_VAR":13,"VAR":14,"::":15,"->":16,"{":17,"}":18,".":19,"IS":20,">":21,"<":22,"==":23,"!=":24,">=":25,"<=":26,"COMPARE":27,"(":28,")":29,"AND":30,"OR":31,"NOT":32,"object_seq":33,"CLASS":34,"FIND":35,"FIND_EXTREM":36,"[":37,"]":38,"WHERE":39,"EXIST":40,"FORALL":41,",":42,"$accept":0,"$end":1},
 terminals_: {2:"error",6:"=",7:"ID",8:"STRING",9:"INT",10:"DOUBLE",11:"TRUE",12:"FALSE",13:"TREE_VAR",14:"VAR",15:"::",16:"->",17:"{",18:"}",19:".",20:"IS",21:">",22:"<",23:"==",24:"!=",25:">=",26:"<=",27:"COMPARE",28:"(",29:")",30:"AND",31:"OR",32:"NOT",34:"CLASS",35:"FIND",36:"FIND_EXTREM",37:"[",38:"]",39:"WHERE",40:"EXIST",41:"FORALL",42:","},
-productions_: [0,[3,1],[4,1],[4,3],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,3],[5,7],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,6],[5,3],[5,3],[5,3],[5,2],[5,6],[5,5],[5,5],[5,10],[5,5],[5,8],[33,1],[33,3]],
+productions_: [0,[3,1],[4,1],[4,3],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,3],[5,7],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,6],[5,3],[5,3],[5,3],[5,2],[5,6],[5,5],[5,5],[5,10],[5,8],[5,8],[33,1],[33,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -1867,10 +1871,10 @@ case 30:
  this.$ = createFindExtremeExprNode($$[$0-8], $$[$0-6], $$[$0-3], $$[$0-1]); 
 break;
 case 31:
- this.$ = createGetExprNode(ExprType.EXIST, $$[$0-3], $$[$0-1]); 
+ this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0-6], $$[$0-4], $$[$0-1]); 
 break;
 case 32:
- this.$ = createForAllExprNode($$[$0-6], $$[$0-4], $$[$0-1]); 
+ this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0-6], $$[$0-4], $$[$0-1]); 
 break;
 case 33:
  this.$ = createObjectSeqNode($$[$0]); 
@@ -1880,7 +1884,7 @@ case 34:
 break;
 }
 },
-table: [{3:1,4:2,5:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{1:[3]},{1:[2,1]},{1:[2,2],6:[1,18],16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,4],{15:[1,30]}),o($Vp,[2,5]),o($Vp,[2,6]),o($Vp,[2,7]),o($Vp,[2,8]),o($Vp,[2,9]),o($Vp,[2,10]),o($Vp,[2,11]),{5:31,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:32,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,33]},{7:[1,34]},{7:[1,35]},{7:[1,36]},{5:37,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,38]},{7:[1,39],27:[1,40],34:[1,41]},{5:42,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:43,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:44,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:45,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:46,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:47,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:48,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:49,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:50,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,51]},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,29:[1,52],30:$Vn,31:$Vo},o($Vq,[2,26],{16:$Ve,19:$Vf}),{17:[1,53]},{37:[1,54]},{17:[1,55]},{37:[1,56]},{1:[2,3],16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{7:[1,57],28:[1,58]},o($Vp,[2,14]),{28:[1,59]},{28:[1,60]},o([1,6,18,20,29,30,31,38,42],[2,15],{16:$Ve,19:$Vf,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm}),o($Vq,[2,16],{16:$Ve,19:$Vf}),o($Vq,[2,17],{16:$Ve,19:$Vf}),o($Vq,[2,18],{16:$Ve,19:$Vf}),o($Vq,[2,19],{16:$Ve,19:$Vf}),o($Vq,[2,20],{16:$Ve,19:$Vf}),o($Vq,[2,21],{16:$Ve,19:$Vf}),o([1,6,18,29,30,31,38,42],[2,24],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm}),o([1,6,18,29,31,38,42],[2,25],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn}),o($Vp,[2,12]),o($Vp,[2,23]),{5:61,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:62,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:63,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:64,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{17:[1,65]},{5:67,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,33:66,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:68,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{29:[1,69]},{16:$Ve,18:[1,70],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo,38:[1,71]},{16:$Ve,18:[1,72],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo,38:[1,73]},{5:74,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{29:[1,75],42:[1,76]},o($Vr,[2,33],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo}),{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,29:[1,77],30:$Vn,31:$Vo},o($Vp,[2,28]),o($Vp,[2,29]),{39:[1,78]},o($Vp,[2,31]),{17:[1,79]},{16:$Ve,18:[1,80],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,27]),{5:81,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,22]),{7:[1,82]},{5:83,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,13]),o($Vr,[2,34],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo}),{17:[1,84]},{16:$Ve,18:[1,85],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{5:86,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,32]),{16:$Ve,18:[1,87],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,30])],
+table: [{3:1,4:2,5:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{1:[3]},{1:[2,1]},{1:[2,2],6:[1,18],16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,4],{15:[1,30]}),o($Vp,[2,5]),o($Vp,[2,6]),o($Vp,[2,7]),o($Vp,[2,8]),o($Vp,[2,9]),o($Vp,[2,10]),o($Vp,[2,11]),{5:31,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:32,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,33]},{7:[1,34]},{7:[1,35]},{7:[1,36]},{5:37,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,38]},{7:[1,39],27:[1,40],34:[1,41]},{5:42,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:43,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:44,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:45,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:46,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:47,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:48,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:49,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:50,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,51]},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,29:[1,52],30:$Vn,31:$Vo},o($Vq,[2,26],{16:$Ve,19:$Vf}),{17:[1,53]},{37:[1,54]},{37:[1,55]},{37:[1,56]},{1:[2,3],16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{7:[1,57],28:[1,58]},o($Vp,[2,14]),{28:[1,59]},{28:[1,60]},o([1,6,18,20,29,30,31,38,42],[2,15],{16:$Ve,19:$Vf,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm}),o($Vq,[2,16],{16:$Ve,19:$Vf}),o($Vq,[2,17],{16:$Ve,19:$Vf}),o($Vq,[2,18],{16:$Ve,19:$Vf}),o($Vq,[2,19],{16:$Ve,19:$Vf}),o($Vq,[2,20],{16:$Ve,19:$Vf}),o($Vq,[2,21],{16:$Ve,19:$Vf}),o([1,6,18,29,30,31,38,42],[2,24],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm}),o([1,6,18,29,31,38,42],[2,25],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn}),o($Vp,[2,12]),o($Vp,[2,23]),{5:61,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:62,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:63,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:64,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{17:[1,65]},{5:67,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,33:66,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:68,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{29:[1,69]},{16:$Ve,18:[1,70],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo,38:[1,71]},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo,38:[1,72]},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo,38:[1,73]},{5:74,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{29:[1,75],42:[1,76]},o($Vr,[2,33],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo}),{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,29:[1,77],30:$Vn,31:$Vo},o($Vp,[2,28]),o($Vp,[2,29]),{39:[1,78]},{17:[1,79]},{17:[1,80]},{16:$Ve,18:[1,81],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,27]),{5:82,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,22]),{7:[1,83]},{5:84,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:85,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,13]),o($Vr,[2,34],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo}),{17:[1,86]},{16:$Ve,18:[1,87],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{16:$Ve,18:[1,88],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{5:89,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,31]),o($Vp,[2,32]),{16:$Ve,18:[1,90],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,30])],
 defaultActions: {2:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -6763,7 +6767,8 @@ const xslTxt = `<?xml version="1.0"?>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>
-            <xsl:apply-templates select="value[@name='condition']" />
+            <xsl:apply-templates select="value[@name='definition_area']" />
+            <xsl:apply-templates select="value[@name='verification_condition']" />
         </ExistenceQuantifier>
     </xsl:template>
 
@@ -7025,12 +7030,12 @@ Blockly.Blocks['check_relationship'] = {
     this.itemCount_ = 2;
     this.appendDummyInput()
         .appendField("Check for a relationship");
-    this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("object");
     this.appendValueInput("relationship")
         .setCheck("Relationship")
         .appendField("relationship");
+    this.appendValueInput("object")
+        .setCheck("Object")
+        .appendField("object");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setMutator(new Blockly.Mutator(['check_relationship_item']));
@@ -7208,12 +7213,12 @@ Blockly.Blocks['comparison'] = {
     this.appendDummyInput()
         .appendField("comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double", "Enum"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand1");
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["not equal","NOT_EQUAL"], ["greater or equal","GE"], ["less or equal","LE"]]), "operator");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double", "Enum"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand1");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
@@ -7228,10 +7233,10 @@ Blockly.Blocks['three_digit_comparison'] = {
     this.appendDummyInput()
         .appendField("three-digit comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double", "Enum"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand1");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double", "Enum"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand2");
     this.setOutput(true, "ComparisonResult");
     this.setColour(240);
@@ -7244,9 +7249,12 @@ Blockly.Blocks['quantifier_of_existence'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("∃");
-    this.appendValueInput("condition")
+    this.appendValueInput("definition_area")
         .setCheck("Boolean")
-        .appendField("condition");
+        .appendField("definition area");
+    this.appendValueInput("verification_condition")
+        .setCheck("Boolean")
+        .appendField("verification condition");
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("var"), "name_var");
     this.setInputsInline(false);
@@ -7481,11 +7489,12 @@ Blockly.JavaScript['three_digit_comparison'] = function(block) {
 };
 
 Blockly.JavaScript['quantifier_of_existence'] = function(block) {
-  var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
+  var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
+  var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
   var dropdown_type = block.getFieldValue('type');
   var text_name_var = block.getFieldValue('name_var');
   // TODO: Как тут указать тип переменной??
-  var code = "exist " + text_name_var + " { " + value_condition + " }";
+  var code = "exist " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " }";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -8879,7 +8888,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         divText.appendChild(labelValue);
     }
 
-    // Добавить поле с типом (но наверно только для стрелок которые исходят из определенных узлов) 
+    //TODO: Добавить поле с типом (но наверно только для стрелок которые исходят из определенных узлов) 
     //(у логических узлов и циклов (и мб еще где-то) надо выбрать что ветка является резалтом тип)
 
     // Где-то добавить выбор, что стрелка является undertermined если она исходит их предрешающего узла
@@ -8888,7 +8897,6 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     var btnSaveValueInOutcome = mxUtils.button('Save', function () {
         checkAllInputsOutcome(divText);
         var textInOutcome = text.value;
-        //TODO: Проверка на поля значений (Если возвращается объект или assign то value может быть пустым)
         graph.getModel().beginUpdate();
         graph.setAttributeForCell(cell, 'label', textInOutcome);
         let vin = document.getElementById("value_input");
@@ -8922,7 +8930,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка генерации человекочитаемого текста
     var btnGenerateTextInOutcome = mxUtils.button('Generate', function () {
         let vin = document.getElementById("value_input");
-        var humanStr = ""
+        var humanStr = "";
         if(vin != null && vin.tagName == "SELECT") {
             var valSelect = vin.options[vin.options.selectedIndex].value;
             humanStr = getTextFromValueInOutcome(valSelect);
@@ -8963,7 +8971,6 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
 function checkAllInputsOutcome(div) {
     errors = "";
-    console.log(div.getElementsByTagName("input"));
     if(div.getElementsByTagName("input").item(0).value == "") {
         errors += "Отсутствует человеко-читаемый текст \n";
     }
@@ -9304,7 +9311,6 @@ function getTypeFromCode(code, editorUi) {
             propType = "bool"
         }
         obj.type = propType.toLowerCase();
-        // return obj;
     }
     return obj;
 }
@@ -9334,9 +9340,6 @@ function getTextFromValueInOutcome(value) {
     } else if(value == "False") {
         return "No";
     } 
-    // else if(value == "comparison_result") { //TODO: сделать генерацию для сравнительного результата
-    //     return "";
-    // } 
     else {
         return value;
     }

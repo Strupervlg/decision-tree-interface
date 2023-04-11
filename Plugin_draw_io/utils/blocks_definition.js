@@ -245,12 +245,12 @@ Blockly.Blocks['check_relationship'] = {
     this.itemCount_ = 2;
     this.appendDummyInput()
         .appendField("Check for a relationship");
-    this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("object");
     this.appendValueInput("relationship")
         .setCheck("Relationship")
         .appendField("relationship");
+    this.appendValueInput("object")
+        .setCheck("Object")
+        .appendField("object");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setMutator(new Blockly.Mutator(['check_relationship_item']));
@@ -428,12 +428,12 @@ Blockly.Blocks['comparison'] = {
     this.appendDummyInput()
         .appendField("comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double", "Enum"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand1");
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["not equal","NOT_EQUAL"], ["greater or equal","GE"], ["less or equal","LE"]]), "operator");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double", "Enum"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand1");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
@@ -448,10 +448,10 @@ Blockly.Blocks['three_digit_comparison'] = {
     this.appendDummyInput()
         .appendField("three-digit comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double", "Enum"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand1");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double", "Enum"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand2");
     this.setOutput(true, "ComparisonResult");
     this.setColour(240);
@@ -464,9 +464,12 @@ Blockly.Blocks['quantifier_of_existence'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("∃");
-    this.appendValueInput("condition")
+    this.appendValueInput("definition_area")
         .setCheck("Boolean")
-        .appendField("condition");
+        .appendField("definition area");
+    this.appendValueInput("verification_condition")
+        .setCheck("Boolean")
+        .appendField("verification condition");
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("var"), "name_var");
     this.setInputsInline(false);
