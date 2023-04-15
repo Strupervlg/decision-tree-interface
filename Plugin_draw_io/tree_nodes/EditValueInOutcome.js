@@ -16,100 +16,132 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     divText.appendChild(labelText);
 
     let outNode = cell.source;
-    let typeNode = getTypeFromCode(outNode.value.getAttribute('expression'), editorUi);
-    if(typeNode.type == "int") {
-        var labelType = document.createElement('label');
-        labelType.innerHTML = "value";
-        var numberInt = document.createElement('input');
-        numberInt.id = "value_input";
-        numberInt.type = "number";
-        numberInt.style.width = '100%';
-        let ranges = typeNode.range.split('-')
-        numberInt.min = ranges[0];
-        numberInt.max = ranges[1];
-        labelType.appendChild(numberInt);
-        divText.appendChild(labelType);
-    } else if(typeNode.type == "bool") {
-        let labelValue = document.createElement('label');
-        labelValue.innerHTML = "value";
-        let selectValue = document.createElement('select');
-        selectValue.id = "value_input";
-        selectValue.style.width = '100%';
-        let optionTrue = new Option("True", "True");
-        selectValue.options[selectValue.options.length] = optionTrue;
-        let optionFalse = new Option("False", "False");
-        selectValue.options[selectValue.options.length] = optionFalse;
-        labelValue.appendChild(selectValue);
-        divText.appendChild(labelValue);
-    } else if(typeNode.type == "class") {
-        let labelValue = document.createElement('label');
-        labelValue.innerHTML = "value";
-        let selectValue = document.createElement('select');
-        selectValue.id = "value_input";
-        selectValue.style.width = '100%';
-        let jsonClasses = getClasses(editorUi);
-        jsonClasses.forEach(classItem => {
-            var newOption = new Option(classItem.name, classItem.name);
-            selectValue.options[selectValue.options.length] = newOption;
-        });
-        labelValue.appendChild(selectValue);
-        divText.appendChild(labelValue);
-    } else if(typeNode.type == "double") {
-        var labelType = document.createElement('label');
-        labelType.innerHTML = "value";
-        var numberInt = document.createElement('input');
-        numberInt.id = "value_input";
-        numberInt.type = "number";
-        numberInt.step = "0.01";
-        let ranges = typeNode.range.split('-')
-        numberInt.min = ranges[0];
-        numberInt.max = ranges[1];
-        numberInt.style.width = '100%';
-        labelType.appendChild(numberInt);
-        divText.appendChild(labelType);
-    } else if(typeNode.type == "string") {
-        var labelType = document.createElement('label');
-        labelType.innerHTML = "value";
-        var text = document.createElement('input');
-        text.id = "value_input";
-        text.type = "text";
-        text.style.width = '100%';
-        text.placeholder = "value string";
-        labelType.appendChild(text);
-        divText.appendChild(labelType);
-    } else if(typeNode.type == "enum") {
-        let labelValue = document.createElement('label');
-        labelValue.innerHTML = "value";
-        let selectValue = document.createElement('select');
-        selectValue.id = "value_input";
-        selectValue.style.width = '100%';
-        let enumsList = getEnums(editorUi);
-        let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
-        findEnum[0].values.forEach(enumValue => {
-            var newOption = new Option(enumValue, enumValue);
-            selectValue.options[selectValue.options.length] = newOption;
-        });
-        labelValue.appendChild(selectValue);
-        divText.appendChild(labelValue);
-    } else if(typeNode.type == "comparison") {
-        let labelValue = document.createElement('label');
-        labelValue.innerHTML = "value";
-        let selectValue = document.createElement('select');
-        selectValue.id = "value_input";
-        selectValue.style.width = '100%';
-        let values = ["less", "equal", "greater"];
-        values.forEach(item => {
-            var newOption = new Option(item, item);
-            selectValue.options[selectValue.options.length] = newOption;
-        });
-        labelValue.appendChild(selectValue);
-        divText.appendChild(labelValue);
+    if(outNode == null) {
+        throw new Error("Error: Source node is missing!");
+    }
+    if(typeof outNode.value == "object" && outNode.value.getAttribute('expression')) {
+        let typeNode = getTypeFromCode(outNode.value.getAttribute('expression'), editorUi);
+        if(typeNode.type == "int") {
+            var labelType = document.createElement('label');
+            labelType.innerHTML = "value";
+            var numberInt = document.createElement('input');
+            numberInt.id = "value_input";
+            numberInt.type = "number";
+            numberInt.style.width = '100%';
+            let ranges = typeNode.range.split('-')
+            numberInt.min = ranges[0];
+            numberInt.max = ranges[1];
+            labelType.appendChild(numberInt);
+            divText.appendChild(labelType);
+        } else if(typeNode.type == "bool") {
+            let labelValue = document.createElement('label');
+            labelValue.innerHTML = "value";
+            let selectValue = document.createElement('select');
+            selectValue.id = "value_input";
+            selectValue.style.width = '100%';
+            let optionTrue = new Option("True", "True");
+            selectValue.options[selectValue.options.length] = optionTrue;
+            let optionFalse = new Option("False", "False");
+            selectValue.options[selectValue.options.length] = optionFalse;
+            labelValue.appendChild(selectValue);
+            divText.appendChild(labelValue);
+        } else if(typeNode.type == "class") {
+            let labelValue = document.createElement('label');
+            labelValue.innerHTML = "value";
+            let selectValue = document.createElement('select');
+            selectValue.id = "value_input";
+            selectValue.style.width = '100%';
+            let jsonClasses = getClasses(editorUi);
+            jsonClasses.forEach(classItem => {
+                var newOption = new Option(classItem.name, classItem.name);
+                selectValue.options[selectValue.options.length] = newOption;
+            });
+            labelValue.appendChild(selectValue);
+            divText.appendChild(labelValue);
+        } else if(typeNode.type == "double") {
+            var labelType = document.createElement('label');
+            labelType.innerHTML = "value";
+            var numberInt = document.createElement('input');
+            numberInt.id = "value_input";
+            numberInt.type = "number";
+            numberInt.step = "0.01";
+            let ranges = typeNode.range.split('-')
+            numberInt.min = ranges[0];
+            numberInt.max = ranges[1];
+            numberInt.style.width = '100%';
+            labelType.appendChild(numberInt);
+            divText.appendChild(labelType);
+        } else if(typeNode.type == "string") {
+            var labelType = document.createElement('label');
+            labelType.innerHTML = "value";
+            var text = document.createElement('input');
+            text.id = "value_input";
+            text.type = "text";
+            text.style.width = '100%';
+            text.placeholder = "value string";
+            labelType.appendChild(text);
+            divText.appendChild(labelType);
+        } else if(typeNode.type == "enum") {
+            let labelValue = document.createElement('label');
+            labelValue.innerHTML = "value";
+            let selectValue = document.createElement('select');
+            selectValue.id = "value_input";
+            selectValue.style.width = '100%';
+            let enumsList = getEnums(editorUi);
+            let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
+            findEnum[0].values.forEach(enumValue => {
+                var newOption = new Option(enumValue, enumValue);
+                selectValue.options[selectValue.options.length] = newOption;
+            });
+            labelValue.appendChild(selectValue);
+            divText.appendChild(labelValue);
+        } else if(typeNode.type == "comparison") {
+            let labelValue = document.createElement('label');
+            labelValue.innerHTML = "value";
+            let selectValue = document.createElement('select');
+            selectValue.id = "value_input";
+            selectValue.style.width = '100%';
+            let values = ["less", "equal", "greater"];
+            values.forEach(item => {
+                var newOption = new Option(item, item);
+                selectValue.options[selectValue.options.length] = newOption;
+            });
+            labelValue.appendChild(selectValue);
+            divText.appendChild(labelValue);
+        }
     }
 
     //TODO: Добавить поле с типом (но наверно только для стрелок которые исходят из определенных узлов) 
     //(у логических узлов и циклов (и мб еще где-то) надо выбрать что ветка является резалтом тип)
-
+    if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "START") {
+        let labelType = document.createElement('label');
+        labelType.innerHTML = "type";
+        let selectTypes = document.createElement('select');
+        selectTypes.id = "type_input";
+        selectTypes.style.width = '100%';
+        let types = ["int", "bool", "double", "object", "enum", "comparison"];
+        types.forEach(type => {
+            var newOption = new Option(type, type);
+            selectTypes.options[selectTypes.options.length] = newOption;
+        });
+        labelType.appendChild(selectTypes);
+        divText.appendChild(labelType);
+    }
     // Где-то добавить выбор, что стрелка является undertermined если она исходит их предрешающего узла
+    else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
+        let labelType = document.createElement('label');
+        labelType.innerHTML = "type";
+        let selectTypes = document.createElement('select');
+        selectTypes.id = "type_input";
+        selectTypes.style.width = '100%';
+        let types = ["predetermining", "undetermined"];
+        types.forEach(type => {
+            var newOption = new Option(type, type);
+            selectTypes.options[selectTypes.options.length] = newOption;
+        });
+        labelType.appendChild(selectTypes);
+        divText.appendChild(labelType);
+    }
 
     // Кнопка сохранения значений в ветке
     var btnSaveValueInOutcome = mxUtils.button('Save', function () {
