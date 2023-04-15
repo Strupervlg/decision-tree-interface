@@ -550,16 +550,21 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
+    divBlockly.style.height = "100%";
 
     divBlockly.style.display = "none";
 
 
     //Экран с текстом
     var text = document.createElement('textarea');
+    text.style.fontSize = "30px";
     text.style.width = "100%";
-    text.style.height = "480px";
+    text.style.resize = "none";
+    text.style.height = "90%";
 
     // Кнопка создания узла
     var btnCreateNodeInText = mxUtils.button('Create', function () {
@@ -600,16 +605,27 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     divText.appendChild(text);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv.style.display = "flex";
+    btnTextDiv.style.gap = "5px";
+    btnTextDiv.style.height = "10%";
+    btnTextDiv.style.alignItems = "center";
+    btnTextDiv.style.justifyContent = "center";
+    btnCreateNodeInText.style.height = "50%";
+    btnCreateNodeInText.style.width = "50px";
+    btnSwitchToBlockly.style.height = "50%";
+    btnSwitchToBlockly.style.width = "150px";
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "conditionCreateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv.style.width = w+'px';
+    nestedDiv.style.height = h*0.90+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
@@ -636,13 +652,25 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     divBlockly.appendChild(nestedDiv);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv.style.display = "flex";
+    btnBlockDiv.style.gap = "5px";
+    btnBlockDiv.style.height = "8%";
+    btnBlockDiv.style.alignItems = "center";
+    btnBlockDiv.style.justifyContent = "center";
+    btnCreateNodeInBlockly.style.height = "50%";
+    btnCreateNodeInBlockly.style.width = "50px";
+    btnSwitchToText.style.height = "50%";
+    btnSwitchToText.style.width = "150px";
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     this.window = new mxWindow('Condition node constructor', div, x, y, w, h, true, true);
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -2507,16 +2535,21 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
+    divBlockly.style.height = "100%";
 
     divBlockly.style.display = "none";
 
 
     //Экран с текстом
     var text = document.createElement('textarea');
+    text.style.fontSize = "30px";
     text.style.width = "100%";
-    text.style.height = "480px";
+    text.style.resize = "none";
+    text.style.height = "80%";
 
     // Кнопка создания узла
     var btnCreateNodeInText = mxUtils.button('Create', function () {
@@ -2564,30 +2597,45 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
     nameVarInText.style.width = '100%';
+    nameVarInText.style.height = '5%';
+    nameVarInText.style.fontSize = '20px';
     nameVarInText.placeholder = "New variable";
 
     var jsonClasses = getClasses(editorUi);
 
     var selectClassInText = document.createElement('select');
     selectClassInText.style.width = '100%';
+    selectClassInText.style.height = '5%';
+    selectClassInText.style.fontSize = '20px';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInText.options[selectClassInText.options.length] = newOption;
     });
 
     divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv.style.display = "flex";
+    btnTextDiv.style.gap = "5px";
+    btnTextDiv.style.height = "10%";
+    btnTextDiv.style.alignItems = "center";
+    btnTextDiv.style.justifyContent = "center";
+    btnCreateNodeInText.style.height = "50%";
+    btnCreateNodeInText.style.width = "50px";
+    btnSwitchToBlockly.style.height = "50%";
+    btnSwitchToBlockly.style.width = "150px";
     divText.appendChild(nameVarInText);
     divText.appendChild(selectClassInText);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "actionCreateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv.style.width = w+'px';
+    nestedDiv.style.height = h*0.80+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
@@ -2621,25 +2669,41 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
     nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly.style.height = '5%';
+    nameVarInBlockly.style.fontSize = '20px';
     nameVarInBlockly.placeholder = "New variable";
 
     var selectClassInBlockly = document.createElement('select');
     selectClassInBlockly.style.width = '100%';
+    selectClassInBlockly.style.height = '5%';
+    selectClassInBlockly.style.fontSize = '20px';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
     });
 
     divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv.style.display = "flex";
+    btnBlockDiv.style.gap = "5px";
+    btnBlockDiv.style.height = "8%";
+    btnBlockDiv.style.alignItems = "center";
+    btnBlockDiv.style.justifyContent = "center";
+    btnCreateNodeInBlockly.style.height = "50%";
+    btnCreateNodeInBlockly.style.width = "50px";
+    btnSwitchToText.style.height = "50%";
+    btnSwitchToText.style.width = "150px";
     divBlockly.appendChild(nameVarInBlockly);
     divBlockly.appendChild(selectClassInBlockly);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     this.window = new mxWindow('Action node constructor', div, x, y, w, h, true, true);
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -9569,7 +9633,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов действия
     ui.actions.addAction('actionNodeConstructor', function () {
         if(!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
-            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
+            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
             this.actionNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -9585,7 +9649,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов условия
     ui.actions.addAction('conditionNodeConstructor', function () {
         if(!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
-            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
             this.conditionNodeConstructorWindow.window.setVisible(true);
         }
     });

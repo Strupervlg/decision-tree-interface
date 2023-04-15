@@ -191,7 +191,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов действия
     ui.actions.addAction('actionNodeConstructor', function () {
         if(!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
-            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
+            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
             this.actionNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -207,7 +207,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов условия
     ui.actions.addAction('conditionNodeConstructor', function () {
         if(!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
-            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
             this.conditionNodeConstructorWindow.window.setVisible(true);
         }
     });
