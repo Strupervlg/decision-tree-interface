@@ -36,6 +36,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
+        win.destroy();
     });
 
     // Кнопка добавления полей для нового свойства класса
@@ -61,7 +62,8 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    this.window = new mxWindow('Class properties constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Class properties constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
@@ -363,6 +365,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
+        win.destroy();
     });
 
     // Кнопка добавления полей для нового класса
@@ -387,7 +390,8 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    this.window = new mxWindow('Enum constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Enum constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
@@ -586,6 +590,7 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', expression);
         }
+        win.destroy();
     });
 
     var workspace;
@@ -641,6 +646,7 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', code);
         }
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -669,7 +675,8 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    this.window = new mxWindow('Condition node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Condition node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -714,6 +721,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
+        win.destroy();
     });
 
     // Кнопка добавления полей для нового отношения между классами
@@ -739,7 +747,8 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    this.window = new mxWindow('Relationships constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Relationships constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
@@ -2574,6 +2583,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setAttributeForCell(newElement, 'typeVar', typeInText);
             theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInText.value);
         }
+        win.destroy();
     });
 
     var workspace;
@@ -2654,6 +2664,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setAttributeForCell(newElement, 'typeVar', typeInBlockly);
             theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInBlockly.value);
         }
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -2702,7 +2713,8 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    this.window = new mxWindow('Action node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Action node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -2763,6 +2775,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
                 theGraph.setAttributeForCell(newElement, 'expression_' + i, expression);
             }
         }
+        win.destroy();
     });
 
     // Кнопка добавления полей для нового класса
@@ -2822,7 +2835,8 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    this.window = new mxWindow('Classes constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Classes constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
@@ -7607,6 +7621,7 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'type', "AND");
         }
+        win.destroy();
     });
 
     // Кнопка создания узла "OR"
@@ -7620,13 +7635,15 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'type', "OR");
         }
+        win.destroy();
     });
 
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
 
     // Настройки окна
-    this.window = new mxWindow('Logic node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Logic node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
@@ -7669,12 +7686,14 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
             .item(0).getElementsByTagName("input").item(0).value = "";
             theGraph.setAttributeForCell(newElement, 'type', "predetermining");
         }
+        win.destroy();
     });
 
     div.appendChild(btnCreateNode);
 
     // Настройки окна
-    this.window = new mxWindow('Predetermining factors node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Predetermining factors node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
@@ -7717,6 +7736,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', expression);
         }
+        win.destroy();
     });
 
     var workspace;
@@ -7761,6 +7781,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', code);
         }
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -7778,7 +7799,8 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    this.window = new mxWindow('Switch case node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Switch case node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -7829,6 +7851,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInText.value);
             theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInText);
         }
+        win.destroy();
     });
 
     var workspace;
@@ -7907,6 +7930,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInBlockly.value);
             theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInBlockly);
         }
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -7950,7 +7974,8 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    this.window = new mxWindow('Cycle node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Cycle node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -7990,6 +8015,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'type', "START");
         }
+        win.destroy();
     });
 
     // Кнопка добавления полей для нового класса
@@ -8010,7 +8036,8 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(applyBtn);
 
     // Настройки окна
-    this.window = new mxWindow('Start node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Start node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
@@ -9164,6 +9191,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', expression);
         }
+        win.destroy();
     });
 
     var workspace;
@@ -9224,6 +9252,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', code);
         }
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -9252,7 +9281,8 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
 
     // Настройки окна
-    this.window = new mxWindow('Branch result node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Branch result node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

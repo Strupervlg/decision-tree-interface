@@ -42,6 +42,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setAttributeForCell(newElement, 'typeVar', typeInText);
             theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInText.value);
         }
+        win.destroy();
     });
 
     var workspace;
@@ -122,6 +123,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setAttributeForCell(newElement, 'typeVar', typeInBlockly);
             theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInBlockly.value);
         }
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -170,7 +172,8 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    this.window = new mxWindow('Action node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Action node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

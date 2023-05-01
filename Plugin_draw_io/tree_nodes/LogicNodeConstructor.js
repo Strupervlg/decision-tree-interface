@@ -17,6 +17,7 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'type', "AND");
         }
+        win.destroy();
     });
 
     // Кнопка создания узла "OR"
@@ -30,13 +31,15 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'type', "OR");
         }
+        win.destroy();
     });
 
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
 
     // Настройки окна
-    this.window = new mxWindow('Logic node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Logic node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);

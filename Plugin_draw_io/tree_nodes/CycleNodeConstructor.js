@@ -42,6 +42,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInText.value);
             theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInText);
         }
+        win.destroy();
     });
 
     var workspace;
@@ -120,6 +121,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInBlockly.value);
             theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInBlockly);
         }
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -163,7 +165,8 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    this.window = new mxWindow('Cycle node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Cycle node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);

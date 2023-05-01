@@ -35,6 +35,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
         }
+        win.destroy();
     });
 
     // Кнопка добавления полей для нового отношения между классами
@@ -60,7 +61,8 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    this.window = new mxWindow('Relationships constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Relationships constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);

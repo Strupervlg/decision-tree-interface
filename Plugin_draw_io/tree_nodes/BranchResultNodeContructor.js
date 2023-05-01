@@ -43,6 +43,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', expression);
         }
+        win.destroy();
     });
 
     var workspace;
@@ -103,6 +104,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', code);
         }
+        win.destroy();
     });
 
     //кнопка переключения на текстовый вариант
@@ -131,7 +133,8 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
 
     // Настройки окна
-    this.window = new mxWindow('Branch result node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Branch result node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

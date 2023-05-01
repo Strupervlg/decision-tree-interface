@@ -34,12 +34,14 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
             .item(0).getElementsByTagName("input").item(0).value = "";
             theGraph.setAttributeForCell(newElement, 'type', "predetermining");
         }
+        win.destroy();
     });
 
     div.appendChild(btnCreateNode);
 
     // Настройки окна
-    this.window = new mxWindow('Predetermining factors node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Predetermining factors node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);

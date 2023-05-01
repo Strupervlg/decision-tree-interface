@@ -31,6 +31,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'type', "START");
         }
+        win.destroy();
     });
 
     // Кнопка добавления полей для нового класса
@@ -51,7 +52,8 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(applyBtn);
 
     // Настройки окна
-    this.window = new mxWindow('Start node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Start node constructor', div, x, y, w, h, true, true);
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(true);
