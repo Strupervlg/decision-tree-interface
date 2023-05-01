@@ -141,23 +141,17 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание узла ИСТИНА
     ui.actions.addAction('TrueNodeCreate', function () {
-        var theGraph = ui.editor.graph;
-        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
-            var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;");
-            newElement.vertex = !0;
-            theGraph.setSelectionCell(theGraph.addCell(newElement));
+        if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
+            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, true, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
     });
 
     // Действие на создание узла ЛОЖЬ
     ui.actions.addAction('FalseNodeCreate', function () {
-        var theGraph = ui.editor.graph;
-        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
-            var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;");
-            newElement.vertex = !0;
-            theGraph.setSelectionCell(theGraph.addCell(newElement));
+        if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
+            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, false, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
     });
 
@@ -327,6 +321,16 @@ Draw.loadPlugin(function (ui) {
             && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
                 this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.logicNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
+            && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
+                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+                this.branchResultNodeEditorWindow.window.setVisible(true);
+            } else if(typeof selectedcell.value == "object" 
+            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+            && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
+                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+                this.branchResultNodeEditorWindow.window.setVisible(true);
             }
         }
     });
