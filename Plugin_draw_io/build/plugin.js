@@ -6991,7 +6991,7 @@ Blockly.Blocks['get_relationship_object'] = {
         .setCheck("Boolean")
         .appendField("boolean");
     this.setInputsInline(false);
-    this.setOutput(true, ["Object", "Boolean"]);
+    this.setOutput(true, ["Object"]);
     this.setColour(240);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -7008,7 +7008,7 @@ Blockly.Blocks['get_condition_object'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("var"), "name_var");
     this.setInputsInline(false);
-    this.setOutput(true, ["Object", "Boolean"]);
+    this.setOutput(true, ["Object"]);
     this.setColour(240);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -7030,7 +7030,7 @@ Blockly.Blocks['get_extr_object'] = {
         .setCheck("Boolean")
         .appendField("general condition");
     this.setInputsInline(false);
-    this.setOutput(true, ["Object", "Boolean"]);
+    this.setOutput(true, ["Object"]);
     this.setColour(240);
  this.setTooltip("");
  this.setHelpUrl("");
