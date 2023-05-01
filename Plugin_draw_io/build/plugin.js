@@ -9756,22 +9756,17 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'switchCaseNodeConstructor');
     });
 
-    ui.menubar.addMenu('Exporting dictionaries', function (menu, parent) {
+    ui.menubar.addMenu('Export', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'exportClass');
         ui.menus.addMenuItem(menu, 'exportProperty');
         ui.menus.addMenuItem(menu, 'exportRelationship');
         ui.menus.addMenuItem(menu, 'exportEnum');
-    });
-
-    ui.menubar.addMenu('Export tree', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'exportTree');
     });
 
     ui.menubar.addMenu('Edit', function (menu, parent) {
-        ui.menus.addMenuItem(menu, 'editDictionary');
-        ui.menus.addMenuItem(menu, 'editNode');
+        ui.menus.addMenuItem(menu, 'editValue');
         ui.menus.addMenuItem(menu, 'editTextInNode');
-        ui.menus.addMenuItem(menu, 'editValueInOutcome');
     });
 
 
@@ -9812,15 +9807,11 @@ Draw.loadPlugin(function (ui) {
 
     mxResources.parse('startNodeConstructor=Create start node');
 
-    mxResources.parse('exportTree=Export');
+    mxResources.parse('exportTree=Export tree');
 
-    mxResources.parse('editNode=Edit node');
-
-    mxResources.parse('editDictionary=Edit dictionary');
+    mxResources.parse('editValue=Edit value');
 
     mxResources.parse('editTextInNode=Edit text in node');
-
-    mxResources.parse('editValueInOutcome=Edit value in outcome');
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -10007,7 +9998,7 @@ Draw.loadPlugin(function (ui) {
         }
     });
 
-    ui.actions.addAction('editNode', function () {
+    ui.actions.addAction('editValue', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
             if(typeof selectedcell.value == "object" 
@@ -10055,36 +10046,7 @@ Draw.loadPlugin(function (ui) {
             && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                 this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
-            }
-        }
-    });
-
-    ui.actions.addAction('editTextInNode', function () {
-        //FIXME: проверка на стрелки еще надо добавить
-        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
-            var selectedcell = graph.getSelectionCell();
-            if(typeof selectedcell.value != "object" && !selectedcell.edge || 
-            typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
-                this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
-                this.editTextInNodeWindow.window.setVisible(true);
-            }
-        }
-    });
-
-    ui.actions.addAction('editValueInOutcome', function () {
-        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
-            var selectedcell = graph.getSelectionCell();
-            if(selectedcell.edge) {
-                this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
-                this.editValueInOutcomeWindow.window.setVisible(true);
-            }
-        }
-    });
-
-    ui.actions.addAction('editDictionary', function () {
-        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
-            var selectedcell = graph.getSelectionCell();
-            if(typeof selectedcell.value == "object" 
+            } else if(typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
             && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
                 this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
@@ -10104,6 +10066,20 @@ Draw.loadPlugin(function (ui) {
             && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
                 this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.relationshipsEditorWindow.window.setVisible(true);
+            } else if(selectedcell.edge) {
+                this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editValueInOutcomeWindow.window.setVisible(true);
+            }
+        }
+    });
+
+    ui.actions.addAction('editTextInNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            if(typeof selectedcell.value != "object" && !selectedcell.edge || 
+            typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+                this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editTextInNodeWindow.window.setVisible(true);
             }
         }
     });
