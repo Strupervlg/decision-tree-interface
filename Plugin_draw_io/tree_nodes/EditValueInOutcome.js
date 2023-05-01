@@ -33,7 +33,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.max = ranges[1];
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
-        } else if(typeNode.type == "bool") {
+        } else if(typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -108,11 +108,22 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             });
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
+        } else if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
+            let labelValue = document.createElement('label');
+            labelValue.innerHTML = "value";
+            let selectValue = document.createElement('select');
+            selectValue.id = "value_input";
+            selectValue.style.width = '100%';
+            let values = ["Found", "Not found"];
+            values.forEach(item => {
+                var newOption = new Option(item, item);
+                selectValue.options[selectValue.options.length] = newOption;
+            });
+            labelValue.appendChild(selectValue);
+            divText.appendChild(labelValue);
         }
     }
 
-    //TODO: Добавить поле с типом (но наверно только для стрелок которые исходят из определенных узлов) 
-    //(у логических узлов и циклов (и мб еще где-то) надо выбрать что ветка является резалтом тип)
     if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "START") {
         let labelType = document.createElement('label');
         labelType.innerHTML = "type";
@@ -141,11 +152,37 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
+    } else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR") {
+        let labelType = document.createElement('label');
+        labelType.innerHTML = "type";
+        let selectTypes = document.createElement('select');
+        selectTypes.id = "type_input";
+        selectTypes.style.width = '100%';
+        let types = ["Branch", "True", "False"];
+        types.forEach(type => {
+            var newOption = new Option(type, type);
+            selectTypes.options[selectTypes.options.length] = newOption;
+        });
+        labelType.appendChild(selectTypes);
+        divText.appendChild(labelType);
+    } else if(typeof outNode.value == "object" && outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR") {
+        let labelType = document.createElement('label');
+        labelType.innerHTML = "type";
+        let selectTypes = document.createElement('select');
+        selectTypes.id = "type_input";
+        selectTypes.style.width = '100%';
+        let types = ["Body", "True", "False"];
+        types.forEach(type => {
+            var newOption = new Option(type, type);
+            selectTypes.options[selectTypes.options.length] = newOption;
+        });
+        labelType.appendChild(selectTypes);
+        divText.appendChild(labelType);
     }
 
     // Кнопка сохранения значений в ветке
     var btnSaveValueInOutcome = mxUtils.button('Save', function () {
-        checkAllInputsOutcome(divText);
+        checkAllInputsOutcome(divText, cell.source.value);
         var textInOutcome = text.value;
         graph.getModel().beginUpdate();
         graph.setAttributeForCell(cell, 'label', textInOutcome);
@@ -158,20 +195,16 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         }
         graph.setAttributeForCell(cell, 'value', valInOutcome);
 
-        // graph.setAttributeForCell(cell, 'label', textInOutcome);
-        // graph.setAttributeForCell(cell, 'label', textInOutcome);
+        let typeOutcome = document.getElementById("type_input");
+        if(typeOutcome) {
+            let typeInOutcome = typeOutcome.options[typeOutcome.options.selectedIndex].value;
+            graph.setAttributeForCell(cell, 'type', typeInOutcome);
+        }
+
         if(!cell.style.includes("editable=0;")) {
             cell.style += "editable=0;";
         }
 
-        // textElement.value = "asd";
-        // textElement.vertex = !0;
-        // textElement.setParent(cell);
-        // if(typeof cell.value == "object") {
-        //     cell.value.setAttribute("label", textInNode);
-        // } else {
-        //     cell.setValue(textInNode);
-        // }
         graph.getModel().endUpdate();
         graph.refresh(); // update the graph
         win.destroy();
@@ -180,12 +213,15 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка генерации человекочитаемого текста
     var btnGenerateTextInOutcome = mxUtils.button('Generate', function () {
         let vin = document.getElementById("value_input");
+        let typeSelect = document.getElementById("type_input");
         var humanStr = "";
         if(vin != null && vin.tagName == "SELECT") {
             var valSelect = vin.options[vin.options.selectedIndex].value;
             humanStr = getTextFromValueInOutcome(valSelect);
         } else if(vin != null && vin.tagName == "INPUT") {
             humanStr = getTextFromValueInOutcome(vin.value);
+        } else if(vin == null && typeof cell.source.value == "object" && cell.source.value.getAttribute('type') != "START") {
+            humanStr = typeSelect.options[typeSelect.options.selectedIndex].value;
         }
         text.value = humanStr;
     });
@@ -219,9 +255,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     }
 };
 
-function checkAllInputsOutcome(div) {
+function checkAllInputsOutcome(div, outNodeValue) {
     errors = "";
-    if(div.getElementsByTagName("input").item(0).value == "") {
+    if(div.getElementsByTagName("input").item(0).value == "" && typeof outNodeValue == "object" && outNodeValue.getAttribute('type') != "START") {
         errors += "Отсутствует человеко-читаемый текст \n";
     }
     if(document.getElementById("value_input") != null 

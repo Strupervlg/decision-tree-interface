@@ -8,12 +8,13 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var divText = document.createElement('div');
     var text = document.createElement('textarea');
     text.style.width = "100%";
-    text.style.height = "480px";
+    text.style.height = "400px";
     if(typeof cell.value == "object") {
         text.value = cell.value.getAttribute("label");
     } else {
         text.value = cell.value;
     }
+    var expr = cell.value.getAttribute("expression");
 
     // Кнопка создания узла
     var btnSaveTextInNode = mxUtils.button('Save', function () {
@@ -41,6 +42,10 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
         }
     });
 
+    var divExprText = document.createElement('div');
+    divExprText.innerHTML = "Expression in node: " + expr;
+    divExprText.style.height = "50px";
+    divText.appendChild(divExprText);
     divText.appendChild(text);
     divText.appendChild(btnSaveTextInNode);
     divText.appendChild(btnGenerateTextInNode);
@@ -48,7 +53,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
 
     // Настройки окна
     var win = new mxWindow('Edit text in node', div, x, y, w, h, true, true);
-    this.window = win
+    this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
