@@ -10118,8 +10118,8 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editTextInNode', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(typeof selectedcell.value != "object" && !selectedcell.edge || 
-            typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+            if(selectedcell.value != null && typeof selectedcell.value != "object" && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge || 
+            selectedcell.value != null && typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editTextInNodeWindow.window.setVisible(true);
             }
