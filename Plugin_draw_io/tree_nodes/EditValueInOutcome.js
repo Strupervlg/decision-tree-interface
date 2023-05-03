@@ -137,15 +137,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    }
-    // Где-то добавить выбор, что стрелка является undertermined если она исходит их предрешающего узла
-    else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
+    } else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
         let labelType = document.createElement('label');
         labelType.innerHTML = "type";
         let selectTypes = document.createElement('select');
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["predetermining", "undetermined"];
+        let types = ["predeterminingBranch", "undetermined"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
@@ -251,6 +249,15 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             }
         } else if(vin != null && vin.tagName == "INPUT") {
             vin.value = cell.value.getAttribute("value");
+        }
+        let type = cell.value.getAttribute("type");
+        let typeInput = document.getElementById("type_input");
+        if(type && typeInput) {
+            for(let index = 0; index < typeInput.options.length; ++index) {
+                if(typeInput.options[index].value == type) {
+                    typeInput.options[index].selected = true;
+                }
+            }
         }
     }
 };

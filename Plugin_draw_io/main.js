@@ -277,7 +277,6 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editValue', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            console.log(selectedcell.value != null);
             if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
             && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {

@@ -9023,7 +9023,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         let selectTypes = document.createElement('select');
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["predetermining", "undetermined"];
+        let types = ["predeterminingBranch", "undetermined"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
@@ -9129,6 +9129,15 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             }
         } else if(vin != null && vin.tagName == "INPUT") {
             vin.value = cell.value.getAttribute("value");
+        }
+        let type = cell.value.getAttribute("type");
+        let typeInput = document.getElementById("type_input");
+        if(type && typeInput) {
+            for(let index = 0; index < typeInput.options.length; ++index) {
+                if(typeInput.options[index].value == type) {
+                    typeInput.options[index].selected = true;
+                }
+            }
         }
     }
 };
@@ -10042,7 +10051,6 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editValue', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            console.log(selectedcell.value != null);
             if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
             && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
