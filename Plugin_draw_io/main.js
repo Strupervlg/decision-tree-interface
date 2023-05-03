@@ -277,67 +277,68 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editValue', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(typeof selectedcell.value == "object" 
+            console.log(selectedcell.value != null);
+            if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
             && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
                 this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.conditionNodeEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;"
             && (!this.actionNodeEditorWindow || !this.actionNodeEditorWindow.window.content)) {
                 this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
                 this.actionNodeEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('operator')
             && (!this.cycleNodeEditorWindow || !this.cycleNodeEditorWindow.window.content)) {
                 this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
                 this.cycleNodeEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;"
             && (!this.switchCaseNodeEditorWindow || !this.switchCaseNodeEditorWindow.window.content)) {
                 this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.switchCaseNodeEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('type') == "START"
             && (!this.startEditorWindow || !this.startEditorWindow.window.content)) {
                 this.startEditorWindow = new StartEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.startEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('type') == "predetermining"
             && (!this.predeterminingFactorsNodeEditorWindow || !this.predeterminingFactorsNodeEditorWindow.window.content)) {
                 this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.predeterminingFactorsNodeEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")
             && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
                 this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.logicNodeEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
             && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                 this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
             && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                 this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "object" 
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
             && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
                 this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "string"
+            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
             && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
             && (!this.enumEditorWindow || !this.enumEditorWindow.window.content)) {
                 this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.enumEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "string"
+            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
             && selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
             && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classPropertiesEditorWindow.window.setVisible(true);
-            } else if(typeof selectedcell.value == "string"
+            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
             && selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
                 this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);

@@ -8,8 +8,8 @@ function treeToXml(editorUi)
     Object.keys(cells).forEach(function (key) {
 
         var node = cells[key];
-
-        if (node.style == "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;") {
+        
+        if (typeof node.value == "object" && node.value.getAttribute("type") == "START") {
             result += startNodeToXml(node, editorUi);
             return;
         }
@@ -20,16 +20,18 @@ function treeToXml(editorUi)
 function startNodeToXml(startNode, editorUi)
 {
     let result = "<StartNode>\n<InputVariables>\n";
-    result += getVariables(startNode.value);
-    result += "</InputVariables>\n<ThoughtBranch>\n"; //TODO: ThoughtBranch всегда имеет тип bool??
+    result += getVariables(startNode.value.getAttribute("label"));
+    result += '</InputVariables>\n';
     if(startNode.edges) {
         for(let i = 0; i < startNode.edges.length; i++) {
+            result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'">\n';
             if(startNode.edges[i].target != startNode) {
                 result += switchCaseNodes(startNode.edges[i].target, editorUi);
             }
+            result += '</ThoughtBranch>\n';
         }
     }
-    result += "</ThoughtBranch>\n</StartNode>\n";
+    result += "</StartNode>\n";
     return result;
 }
 
@@ -48,50 +50,61 @@ function switchCaseNodes(node, editorUi)
 {
     let result = "";
     //Узел истина
-    if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;") {
-        result = '<BranchResultNode value="true"/>\n';
+    if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;") {
+        result = branchResultNodeToXml(node, true);
     }
     //Узел ложь
-    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;") {
-        result = '<BranchResultNode value="false"/>\n';
+    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;") {
+        result = branchResultNodeToXml(node, false);
     }
     //Узел вопрос
-    else if(node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;") {
+    else if(node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
         result = questionNodeToXml(node, false, editorUi);
     }
     //Узел свитч кейс
-    else if(node.style == "rhombus;whiteSpace=wrap;html=1;") {
+    else if(node.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
         result = questionNodeToXml(node, true, editorUi);
     }
     //Узел действия
-    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;") {
+    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
         result = actionNodeToXml(node, editorUi);
     }
     //Узел логическая агрегация
-    else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;" 
-    && (node.value == "AND" || node.value == "OR")) {
+    else if(typeof node.value == "object" 
+    && (node.value.getAttribute("type") == "AND" || node.value.getAttribute("type") == "OR")) {
         result = logicNodeToXml(node, editorUi);
     }
     //Узел предрешающий фактор
-    else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;") {
+    else if(typeof node.value == "object" && node.value.getAttribute("type") == "predetermining") {
         result = predeterminingNodeToXml(node, editorUi);
     }
     //Узел цикла
-    else if(node.style == "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;") {
+    else if(typeof node.value == "object" 
+    && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")) {
         result = cycleNodeToXml(node, editorUi);
     }
     //Узел неопределенность предрешающего фактора
-    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;") {
+    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
         result = '<UndeterminedNode/>\n';
     }
     return result;
 }
 
+function branchResultNodeToXml(node, resultBranch) {
+    let result = '<BranchResultNode value="'+resultBranch+'">\n';
+
+    //Сделать проверку на пустой экспрешн
+    result += "<Expression>\n" + node.value.getAttribute("expression") != "" ? codeToXML(globalWS, node.value.getAttribute("expression")) : "" + "\n</Expression>\n";
+
+    result += '</BranchResultNode>\n';
+    return result;
+}
+
 function questionNodeToXml(node, isSwitch, editorUi)
 {
-    let result = '<QuestionNode type="'+getTypeFromCode(node.value, editorUi).type+'" isSwitch="'+isSwitch+'">\n';
+    let result = '<QuestionNode type="'+getTypeFromCode(node.value.getAttribute("expression"), editorUi).type+'" isSwitch="'+isSwitch+'">\n';
 
-    result += "<Expression>\n" + codeToXML(globalWS, node.value) + "\n</Expression>\n";
+    result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
     //Следующие ветки
     result += outcomeToXml(node, editorUi);
@@ -102,14 +115,13 @@ function questionNodeToXml(node, isSwitch, editorUi)
 
 function actionNodeToXml(node, editorUi)
 {
-    let values = node.value.getAttribute("label").split('<br>');
     let result = '<FindActionNode>\n';
 
-    result += "<Expression>\n" + codeToXML(globalWS, values[0]) + "\n</Expression>\n";
+    result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
     let typeVar = node.value.getAttribute("typeVar");
 
-    result += '<DecisionTreeVarDecl name="'+values[1]+'" type="'+typeVar+'"/>\n';
+    result += '<DecisionTreeVarDecl name="'+node.value.getAttribute("nameVar")+'" type="'+typeVar+'"/>\n';
 
     //Следующие ветки
     result += outcomeToXml(node, editorUi)
@@ -121,27 +133,26 @@ function actionNodeToXml(node, editorUi)
 
 function cycleNodeToXml(node, editorUi)
 {
-    let values = node.value.getAttribute("label").split('<br>');
-    let result = '<CycleAggregationNode operator="'+values[1]+'">\n';
+    let result = '<CycleAggregationNode operator="'+node.value.getAttribute("operator")+'">\n';
 
-    result += "<SelectorExpression>\n" + codeToXML(globalWS, values[0]) + "\n</SelectorExpression>\n";
+    result += "<SelectorExpression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</SelectorExpression>\n";
 
     let typeVar = node.value.getAttribute("typeVar");
-    result += '<DecisionTreeVarDecl name="'+values[2]+'" type="'+typeVar+'"/>\n';
+    result += '<DecisionTreeVarDecl name="'+node.value.getAttribute("nameVar")+'" type="'+typeVar+'"/>\n';
 
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
                 let valueEdge = "";
-                if(node.edges[i].children) {
-                    valueEdge = node.edges[i].children[0].value;
+                if(node.edges[i]) {
+                    valueEdge = node.edges[i].value;
                 }
-                if(valueEdge) {
-                    result += '<Outcome value="'+valueEdge+'">\n';
+                if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
-                } else {
-                    result += '<ThoughtBranch type="bool" paramName="'+values[2]+'">\n';
+                } else if(valueEdge.getAttribute("type") == "Body") {
+                    result += '<ThoughtBranch type="bool" paramName="'+node.value.getAttribute("nameVar")+'">\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
@@ -156,20 +167,20 @@ function cycleNodeToXml(node, editorUi)
 
 function logicNodeToXml(node, editorUi)
 {
-    let result = '<LogicAggregationNode operator="'+node.value.toLowerCase()+'">\n';
+    let result = '<LogicAggregationNode operator="'+node.value.getAttribute("type").toLowerCase()+'">\n';
 
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
                 let valueEdge = "";
-                if(node.edges[i].children) {
-                    valueEdge = node.edges[i].children[0].value;
+                if(node.edges[i]) {
+                    valueEdge = node.edges[i].value;
                 }
-                if(valueEdge) {
-                    result += '<Outcome value="'+valueEdge+'">\n';
+                if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
-                } else {
+                } else if(valueEdge.getAttribute("type") == "Branch") {
                     result += '<ThoughtBranch type="bool">\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
@@ -189,7 +200,7 @@ function predeterminingNodeToXml(node, editorUi)
     //Следующие ветки
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
-            if(node.edges[i].target != node && !node.edges[i].children) {
+            if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predetermining") {
                 result += switchCaseNodes(node.edges[i].target, editorUi);
             }
         }
@@ -198,7 +209,7 @@ function predeterminingNodeToXml(node, editorUi)
 
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
-            if(node.edges[i].target != node && node.edges[i].children && node.edges[i].children[0].value == "undetermined") {
+            if(node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
                 result += '<Outcome value="undetermined">\n';
                 result += switchCaseNodes(node.edges[i].target, editorUi);
                 result += "</Outcome>\n";
@@ -217,10 +228,10 @@ function outcomeToXml(node, editorUi)
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
                 let valueEdge = "";
-                if(node.edges[i].children) {
-                    valueEdge = node.edges[i].children[0].value;
+                if(node.edges[i]) {
+                    valueEdge = node.edges[i].value;
                 }
-                result += '<Outcome value="'+valueEdge+'">\n';
+                result += '<Outcome value="'+valueEdge.getAttribute("value")+'">\n';
                 result += switchCaseNodes(node.edges[i].target, editorUi);
                 result += "</Outcome>\n";
             }
