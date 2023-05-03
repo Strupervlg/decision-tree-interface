@@ -9015,9 +9015,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    }
-    // Где-то добавить выбор, что стрелка является undertermined если она исходит их предрешающего узла
-    else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
+    } else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
         let labelType = document.createElement('label');
         labelType.innerHTML = "type";
         let selectTypes = document.createElement('select');
@@ -10126,8 +10124,17 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editTextInNode', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && typeof selectedcell.value != "object" && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge || 
-            selectedcell.value != null && typeof selectedcell.value == "object" && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+            if(selectedcell.value != null && typeof selectedcell.value != "object" 
+            && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+            && !selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
+            && !selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
+            || selectedcell.value != null && typeof selectedcell.value == "object" 
+            && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+            && selectedcell.value.getAttribute('type') != "AND" 
+            && selectedcell.value.getAttribute('type') != "OR" 
+            && selectedcell.value.getAttribute('type') != "predetermining"
+            && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editTextInNodeWindow.window.setVisible(true);
             }
