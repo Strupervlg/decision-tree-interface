@@ -112,6 +112,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
         classes.forEach(element => {
             if(lastIndex != 2) {
                 let newTdClass = document.createElement('td');
+                newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
@@ -154,6 +155,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             .getElementsByTagName("input").item(0).checked = isBetween == 'true';
         if(isBetween == 'true') {
             var tdType = document.createElement('td');
+            tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
             selectType.style.width = '100%';
             var scales = ["One to one", "One to many"];

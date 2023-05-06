@@ -75,6 +75,7 @@ function addRowProperty(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
+    td1.style.minWidth = "150px";
     var text = document.createElement('input');
     text.type = "text";
     text.placeholder = "Name";
@@ -84,6 +85,7 @@ function addRowProperty(editorUi) {
 
     // Создание выпадающего списка с типами + enums
     var td2 = document.createElement('td');
+    td2.style.minWidth = "150px";
     var selectType = document.createElement('select');
     selectType.style.width = '100%';
     var types = ["Integer", "Double", "Boolean", "String"];
@@ -99,6 +101,7 @@ function addRowProperty(editorUi) {
         if(event.currentTarget.value == "Integer" || event.currentTarget.value == "Double") {
             if(event.currentTarget.parentElement.nextElementSibling.classList != 'range') {
                 var tdRange = document.createElement('td');
+                tdRange.style.minWidth = "200px";
                 tdRange.classList = 'range';
 
                 var startInput = document.createElement('input');
@@ -128,6 +131,7 @@ function addRowProperty(editorUi) {
       })
     td2.appendChild(selectType);
     var tdRange = document.createElement('td');
+    tdRange.style.minWidth = "200px";
     tdRange.classList = 'range';
 
     var startInput = document.createElement('input');
@@ -152,6 +156,7 @@ function addRowProperty(editorUi) {
 
     // Создание checkbox isStatic
     var td3 = document.createElement('td');
+    td3.style.minWidth = "150px";
     var span = document.createElement('span');
     span.innerText = "is static";
     var checkbox = document.createElement('input');
@@ -159,6 +164,7 @@ function addRowProperty(editorUi) {
     checkbox.addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
             var tdInputClass = document.createElement('td');
+            tdInputClass.style.minWidth = "150px";
             var selectClass = document.createElement('select');
             selectClass.style.width = '100%';
             var jsonClasses = getClasses(editorUi);
@@ -169,8 +175,10 @@ function addRowProperty(editorUi) {
             tdInputClass.appendChild(selectClass);
 
             var tdAddClass = document.createElement('td');
+            tdAddClass.style.minWidth = "50px";
             var btnAddClass = mxUtils.button('+', function (evt) {
                 let newTdClass = document.createElement('td');
+                newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';

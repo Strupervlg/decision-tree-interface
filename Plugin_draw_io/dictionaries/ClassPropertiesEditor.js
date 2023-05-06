@@ -121,6 +121,7 @@ function fillDataProperties(tbody, cell, editorUi) {
             .getElementsByTagName("input").item(0).checked = isStatic == 'true';
         if(isStatic == 'true') {
             var tdInputClass = document.createElement('td');
+            tdInputClass.style.minWidth = "150px";
             var selectClass = document.createElement('select');
             selectClass.style.width = '100%';
             var jsonClasses = getClasses(editorUi);
@@ -131,8 +132,10 @@ function fillDataProperties(tbody, cell, editorUi) {
             tdInputClass.appendChild(selectClass);
 
             var tdAddClass = document.createElement('td');
+            tdAddClass.style.minWidth = "50px";
             var btnAddClass = mxUtils.button('+', function (evt) {
                 let newTdClass = document.createElement('td');
+                newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
@@ -160,6 +163,7 @@ function fillDataProperties(tbody, cell, editorUi) {
             classes.forEach((element, index) => {
                 if(index != 0) {
                     let newTdClass = document.createElement('td');
+                    newTdClass.style.minWidth = "200px";
                     var newSelectClass = document.createElement('select');
                     newSelectClass.style.width = '85%';
                     newSelectClass.style.float = 'left';

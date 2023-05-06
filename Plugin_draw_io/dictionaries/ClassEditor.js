@@ -4,6 +4,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     div.style.height = "100%";
+    div.style.width = "100%";
     var table = document.createElement('table');
     table.style.width = '100%';
     table.style.height = '80%';

@@ -4,17 +4,19 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     div.style.height = "100%";
+    var divTable = document.createElement('div');
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    divTable.style.width = '100%';
+    divTable.style.height = '80%';
+    divTable.style.overflowX = "auto";
+    divTable.style.overflowY = "auto";
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
     fillDataEnum(tbody, cell)
     table.appendChild(tbody);
-    div.appendChild(table);
+    divTable.appendChild(table);
+    div.appendChild(divTable);
 
     // Кнопка сохранения блока
     var applyBtn = mxUtils.button('Apply', function () {
@@ -93,6 +95,7 @@ function fillDataEnum(tbody, cell) {
         valuesEnum.forEach(element => {
             if(lastIndex != 1) {
                 let newTd = document.createElement('td');
+                newTd.style.minWidth = "200px";
                 let newInput = document.createElement('input');
                 newInput.type = "text";
                 newInput.style.width = '85%';
@@ -117,6 +120,7 @@ function fillDataEnum(tbody, cell) {
             .getElementsByTagName("input").item(0).checked = Islinear == 'true';
         if(Islinear == 'true') {
             var tdNameRDF = document.createElement('td');
+            tdNameRDF.style.minWidth = "100px";
             var inputNameRDF = document.createElement('input');
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';

@@ -74,6 +74,7 @@ function addRowRelationship(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
+    td1.style.minWidth = "150px";
     var text = document.createElement('input');
     text.type = "text";
     text.placeholder = "Relationship name";
@@ -82,6 +83,7 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td1);
 
     var td2 = document.createElement('td');
+    td2.style.minWidth = "150px";
     var extend = document.createElement('input');
     extend.type = "text";
     extend.style.width = '100%';
@@ -91,6 +93,7 @@ function addRowRelationship(editorUi) {
 
     //Добавление классов
     var td3 = document.createElement('td');
+    td3.style.minWidth = "150px";
     var selectClass = document.createElement('select');
     selectClass.style.width = '100%';
     var jsonClasses = getClasses(editorUi);
@@ -101,8 +104,10 @@ function addRowRelationship(editorUi) {
     td3.appendChild(selectClass);
 
     var tdAddClass = document.createElement('td');
+    tdAddClass.style.minWidth = "50px";
     var btnAddClass = mxUtils.button('+', function (evt) {
         let newTdClass = document.createElement('td');
+        newTdClass.style.minWidth = "200px";
         var newSelectClass = document.createElement('select');
         newSelectClass.style.width = '85%';
         newSelectClass.style.float = 'left';
@@ -127,6 +132,7 @@ function addRowRelationship(editorUi) {
 
     //Селектор с scale
     var td5 = document.createElement('td');
+    td5.style.minWidth = "150px";
     var selectScale = document.createElement('select');
     selectScale.style.width = '100%';
     var scales = ["None", "Linear", "Partially linear"]; //"NONE" "LINEAR" "PARTIALLY_LINEAR"
@@ -138,6 +144,7 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td5);
 
     var td6 = document.createElement('td');
+    td6.style.minWidth = "200px";
     var span = document.createElement('span');
     span.innerText = "is relationship between classes";
     var checkbox = document.createElement('input');
@@ -146,6 +153,7 @@ function addRowRelationship(editorUi) {
         if (event.currentTarget.checked) {
             //Добавление поля с типом
             var tdType = document.createElement('td');
+            tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
             selectType.style.width = '100%';
             var scales = ["One to one", "One to many"]; // "ONE_TO_ONE", "ONE_TO_MANY"

@@ -75,6 +75,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 function addRowEnum() {
     var tr1 = document.createElement('tr');
     var td1 = document.createElement('td');
+    td1.style.minWidth = "150px";
     var text = document.createElement('input');
     text.type = "text";
     text.style.width = '100%';
@@ -83,6 +84,7 @@ function addRowEnum() {
     tr1.appendChild(td1);
 
     var td2 = document.createElement('td');
+    td2.style.minWidth = "150px";
     var text2 = document.createElement('input');
     text2.type = "text";
     text2.style.width = '100%';
@@ -91,8 +93,10 @@ function addRowEnum() {
     tr1.appendChild(td2);
 
     var tdAdd = document.createElement('td');
+    tdAdd.style.minWidth = "50px";
     var btnAdd = mxUtils.button('+', function (evt) {
         let newTd = document.createElement('td');
+        newTd.style.minWidth = "200px";
         let newInput = document.createElement('input');
         newInput.type = "text";
         newInput.style.width = '85%';
@@ -113,6 +117,7 @@ function addRowEnum() {
     tr1.appendChild(tdAdd);
 
     var td3 = document.createElement('td');
+    td3.style.minWidth = "100px";
     var span = document.createElement('span');
     span.innerText = "is linear";
     var checkbox = document.createElement('input');
@@ -120,6 +125,7 @@ function addRowEnum() {
     checkbox.addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
             var tdNameRDF = document.createElement('td');
+            tdNameRDF.style.minWidth = "100px";
             var inputNameRDF = document.createElement('input');
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';

@@ -75,6 +75,7 @@ function addRowProperty(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
+    td1.style.minWidth = "150px";
     var text = document.createElement('input');
     text.type = "text";
     text.placeholder = "Name";
@@ -84,6 +85,7 @@ function addRowProperty(editorUi) {
 
     // Создание выпадающего списка с типами + enums
     var td2 = document.createElement('td');
+    td2.style.minWidth = "150px";
     var selectType = document.createElement('select');
     selectType.style.width = '100%';
     var types = ["Integer", "Double", "Boolean", "String"];
@@ -99,6 +101,7 @@ function addRowProperty(editorUi) {
         if(event.currentTarget.value == "Integer" || event.currentTarget.value == "Double") {
             if(event.currentTarget.parentElement.nextElementSibling.classList != 'range') {
                 var tdRange = document.createElement('td');
+                tdRange.style.minWidth = "200px";
                 tdRange.classList = 'range';
 
                 var startInput = document.createElement('input');
@@ -128,6 +131,7 @@ function addRowProperty(editorUi) {
       })
     td2.appendChild(selectType);
     var tdRange = document.createElement('td');
+    tdRange.style.minWidth = "200px";
     tdRange.classList = 'range';
 
     var startInput = document.createElement('input');
@@ -152,6 +156,7 @@ function addRowProperty(editorUi) {
 
     // Создание checkbox isStatic
     var td3 = document.createElement('td');
+    td3.style.minWidth = "150px";
     var span = document.createElement('span');
     span.innerText = "is static";
     var checkbox = document.createElement('input');
@@ -159,6 +164,7 @@ function addRowProperty(editorUi) {
     checkbox.addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
             var tdInputClass = document.createElement('td');
+            tdInputClass.style.minWidth = "150px";
             var selectClass = document.createElement('select');
             selectClass.style.width = '100%';
             var jsonClasses = getClasses(editorUi);
@@ -169,8 +175,10 @@ function addRowProperty(editorUi) {
             tdInputClass.appendChild(selectClass);
 
             var tdAddClass = document.createElement('td');
+            tdAddClass.style.minWidth = "50px";
             var btnAddClass = mxUtils.button('+', function (evt) {
                 let newTdClass = document.createElement('td');
+                newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
@@ -402,6 +410,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 function addRowEnum() {
     var tr1 = document.createElement('tr');
     var td1 = document.createElement('td');
+    td1.style.minWidth = "150px";
     var text = document.createElement('input');
     text.type = "text";
     text.style.width = '100%';
@@ -410,6 +419,7 @@ function addRowEnum() {
     tr1.appendChild(td1);
 
     var td2 = document.createElement('td');
+    td2.style.minWidth = "150px";
     var text2 = document.createElement('input');
     text2.type = "text";
     text2.style.width = '100%';
@@ -418,8 +428,10 @@ function addRowEnum() {
     tr1.appendChild(td2);
 
     var tdAdd = document.createElement('td');
+    tdAdd.style.minWidth = "50px";
     var btnAdd = mxUtils.button('+', function (evt) {
         let newTd = document.createElement('td');
+        newTd.style.minWidth = "200px";
         let newInput = document.createElement('input');
         newInput.type = "text";
         newInput.style.width = '85%';
@@ -440,6 +452,7 @@ function addRowEnum() {
     tr1.appendChild(tdAdd);
 
     var td3 = document.createElement('td');
+    td3.style.minWidth = "100px";
     var span = document.createElement('span');
     span.innerText = "is linear";
     var checkbox = document.createElement('input');
@@ -447,6 +460,7 @@ function addRowEnum() {
     checkbox.addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
             var tdNameRDF = document.createElement('td');
+            tdNameRDF.style.minWidth = "100px";
             var inputNameRDF = document.createElement('input');
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';
@@ -760,6 +774,7 @@ function addRowRelationship(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
+    td1.style.minWidth = "150px";
     var text = document.createElement('input');
     text.type = "text";
     text.placeholder = "Relationship name";
@@ -768,6 +783,7 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td1);
 
     var td2 = document.createElement('td');
+    td2.style.minWidth = "150px";
     var extend = document.createElement('input');
     extend.type = "text";
     extend.style.width = '100%';
@@ -777,6 +793,7 @@ function addRowRelationship(editorUi) {
 
     //Добавление классов
     var td3 = document.createElement('td');
+    td3.style.minWidth = "150px";
     var selectClass = document.createElement('select');
     selectClass.style.width = '100%';
     var jsonClasses = getClasses(editorUi);
@@ -787,8 +804,10 @@ function addRowRelationship(editorUi) {
     td3.appendChild(selectClass);
 
     var tdAddClass = document.createElement('td');
+    tdAddClass.style.minWidth = "50px";
     var btnAddClass = mxUtils.button('+', function (evt) {
         let newTdClass = document.createElement('td');
+        newTdClass.style.minWidth = "200px";
         var newSelectClass = document.createElement('select');
         newSelectClass.style.width = '85%';
         newSelectClass.style.float = 'left';
@@ -813,6 +832,7 @@ function addRowRelationship(editorUi) {
 
     //Селектор с scale
     var td5 = document.createElement('td');
+    td5.style.minWidth = "150px";
     var selectScale = document.createElement('select');
     selectScale.style.width = '100%';
     var scales = ["None", "Linear", "Partially linear"]; //"NONE" "LINEAR" "PARTIALLY_LINEAR"
@@ -824,6 +844,7 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td5);
 
     var td6 = document.createElement('td');
+    td6.style.minWidth = "200px";
     var span = document.createElement('span');
     span.innerText = "is relationship between classes";
     var checkbox = document.createElement('input');
@@ -832,6 +853,7 @@ function addRowRelationship(editorUi) {
         if (event.currentTarget.checked) {
             //Добавление поля с типом
             var tdType = document.createElement('td');
+            tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
             selectType.style.width = '100%';
             var scales = ["One to one", "One to many"]; // "ONE_TO_ONE", "ONE_TO_MANY"
@@ -2728,6 +2750,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     div.style.height = "100%";
+    div.style.width = "100%";
     var table = document.createElement('table');
     table.style.width = '100%';
     table.style.height = '80%';
@@ -2846,22 +2869,26 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
 function addRowClass() {
     var tr1 = document.createElement('tr');
+    tr1.style.width = '100%';
     var td1 = document.createElement('td');
+    td1.style.width = '25%';
     var name = document.createElement('input');
     name.type = "text";
     name.style.width = '100%';
     name.placeholder = "Class name";
     td1.appendChild(name);
     var td2 = document.createElement('td');
+    td2.style.width = '25%';
     var extend = document.createElement('input');
     extend.type = "text";
     extend.style.width = '100%';
     extend.placeholder = "Extend";
     td2.appendChild(extend);
     var td3 = document.createElement('td');
+    td3.style.width = '25%';
     var expression = document.createElement('textarea');
-    expression.style.width = '250px';
-    expression.style.maxWidth = '250px';
+    expression.style.width = '100%';
+    expression.style.resize = 'vertical';
     expression.placeholder = "Expression";
     td3.appendChild(expression);
     tr1.appendChild(td1);
@@ -2916,6 +2943,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     div.style.height = "100%";
+    div.style.width = "100%";
     var table = document.createElement('table');
     table.style.width = '100%';
     table.style.height = '80%';
@@ -3071,17 +3099,19 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     div.style.height = "100%";
+    var divTable = document.createElement('div');
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    divTable.style.width = '100%';
+    divTable.style.height = '80%';
+    divTable.style.overflowX = "auto";
+    divTable.style.overflowY = "auto";
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
     fillDataEnum(tbody, cell)
     table.appendChild(tbody);
-    div.appendChild(table);
+    divTable.appendChild(table);
+    div.appendChild(divTable);
 
     // Кнопка сохранения блока
     var applyBtn = mxUtils.button('Apply', function () {
@@ -3160,6 +3190,7 @@ function fillDataEnum(tbody, cell) {
         valuesEnum.forEach(element => {
             if(lastIndex != 1) {
                 let newTd = document.createElement('td');
+                newTd.style.minWidth = "200px";
                 let newInput = document.createElement('input');
                 newInput.type = "text";
                 newInput.style.width = '85%';
@@ -3184,6 +3215,7 @@ function fillDataEnum(tbody, cell) {
             .getElementsByTagName("input").item(0).checked = Islinear == 'true';
         if(Islinear == 'true') {
             var tdNameRDF = document.createElement('td');
+            tdNameRDF.style.minWidth = "100px";
             var inputNameRDF = document.createElement('input');
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';
@@ -3330,6 +3362,7 @@ function fillDataProperties(tbody, cell, editorUi) {
             .getElementsByTagName("input").item(0).checked = isStatic == 'true';
         if(isStatic == 'true') {
             var tdInputClass = document.createElement('td');
+            tdInputClass.style.minWidth = "150px";
             var selectClass = document.createElement('select');
             selectClass.style.width = '100%';
             var jsonClasses = getClasses(editorUi);
@@ -3340,8 +3373,10 @@ function fillDataProperties(tbody, cell, editorUi) {
             tdInputClass.appendChild(selectClass);
 
             var tdAddClass = document.createElement('td');
+            tdAddClass.style.minWidth = "50px";
             var btnAddClass = mxUtils.button('+', function (evt) {
                 let newTdClass = document.createElement('td');
+                newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
@@ -3369,6 +3404,7 @@ function fillDataProperties(tbody, cell, editorUi) {
             classes.forEach((element, index) => {
                 if(index != 0) {
                     let newTdClass = document.createElement('td');
+                    newTdClass.style.minWidth = "200px";
                     var newSelectClass = document.createElement('select');
                     newSelectClass.style.width = '85%';
                     newSelectClass.style.float = 'left';
@@ -3524,6 +3560,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
         classes.forEach(element => {
             if(lastIndex != 2) {
                 let newTdClass = document.createElement('td');
+                newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
@@ -3566,6 +3603,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             .getElementsByTagName("input").item(0).checked = isBetween == 'true';
         if(isBetween == 'true') {
             var tdType = document.createElement('td');
+            tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
             selectType.style.width = '100%';
             var scales = ["One to one", "One to many"];
@@ -9409,6 +9447,7 @@ function treeToXml(editorUi)
         var node = cells[key];
         
         if (typeof node.value == "object" && node.value.getAttribute("type") == "START") {
+            CheckCycleInTree(node);
             result += startNodeToXml(node, editorUi);
             return;
         }
@@ -9769,6 +9808,35 @@ function getTextFromValueInOutcome(value) {
     else {
         return value;
     }
+}
+
+function CheckCycleInTree(startNode) {
+    if(hasCycle(startNode)) {
+        throw new Error("В графе присутствуют циклы!");
+    }
+}
+
+function hasCycle(root) {
+    const visited = new Set(); // Список посещенных узлов
+  
+    function dfs(node) {
+      if (!node.edges) return false; // Достигнут конец дерева
+      if (visited.has(node)) return true; // Найден цикл
+
+      visited.add(node); // Добавляем текущий узел в список посещенных
+  
+      // Рекурсивно обходим потомков текущего узла
+      for(let i = 0; i < node.edges.length; i++) {
+        let child = node.edges[i].target;
+        if (child != node && dfs(child)) {
+            return true; // Найден цикл
+        }
+      }
+  
+      return false; // Нет цикла
+    }
+  
+    return dfs(root);
 }
 // Плагин
 Draw.loadPlugin(function (ui) {
