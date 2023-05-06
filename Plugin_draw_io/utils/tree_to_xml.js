@@ -10,6 +10,7 @@ function treeToXml(editorUi)
         var node = cells[key];
         
         if (typeof node.value == "object" && node.value.getAttribute("type") == "START") {
+            CheckCycleInTree(node);
             result += startNodeToXml(node, editorUi);
             return;
         }

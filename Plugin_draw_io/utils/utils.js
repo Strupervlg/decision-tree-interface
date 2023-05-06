@@ -130,3 +130,32 @@ function getTextFromValueInOutcome(value) {
         return value;
     }
 }
+
+function CheckCycleInTree(startNode) {
+    if(hasCycle(startNode)) {
+        throw new Error("В графе присутствуют циклы!");
+    }
+}
+
+function hasCycle(root) {
+    const visited = new Set(); // Список посещенных узлов
+  
+    function dfs(node) {
+      if (!node.edges) return false; // Достигнут конец дерева
+      if (visited.has(node)) return true; // Найден цикл
+
+      visited.add(node); // Добавляем текущий узел в список посещенных
+  
+      // Рекурсивно обходим потомков текущего узла
+      for(let i = 0; i < node.edges.length; i++) {
+        let child = node.edges[i].target;
+        if (child != node && dfs(child)) {
+            return true; // Найден цикл
+        }
+      }
+  
+      return false; // Нет цикла
+    }
+  
+    return dfs(root);
+}
