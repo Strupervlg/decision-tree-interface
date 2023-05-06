@@ -9,7 +9,7 @@ function treeToXml(editorUi)
 
         var node = cells[key];
         
-        if (typeof node.value == "object" && node.value.getAttribute("type") == "START") {
+        if (node.value != null && typeof node.value == "object" && node.value.getAttribute("type") == "START") {
             countStartNode++;
             CheckCycleInTree(node);
             result += startNodeToXml(node, editorUi);

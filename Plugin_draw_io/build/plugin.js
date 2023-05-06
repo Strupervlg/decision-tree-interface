@@ -9216,7 +9216,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    } else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR") {
+    } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = "type";
         let selectTypes = document.createElement('select');
@@ -9229,7 +9229,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    } else if(typeof outNode.value == "object" && outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR") {
+    } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = "type";
         let selectTypes = document.createElement('select');
@@ -9605,7 +9605,7 @@ function treeToXml(editorUi)
 
         var node = cells[key];
         
-        if (typeof node.value == "object" && node.value.getAttribute("type") == "START") {
+        if (node.value != null && typeof node.value == "object" && node.value.getAttribute("type") == "START") {
             countStartNode++;
             CheckCycleInTree(node);
             result += startNodeToXml(node, editorUi);
