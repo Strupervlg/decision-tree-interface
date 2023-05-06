@@ -19,9 +19,11 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     if(outNode == null) {
         throw new Error("Error: Source node is missing!");
     }
+    let typeValue = "";
     if(typeof outNode.value == "object" && outNode.value.getAttribute('expression')) {
         let typeNode = getTypeFromCode(outNode.value.getAttribute('expression'), editorUi);
         if(typeNode.type == "int") {
+            typeValue = "int";
             var labelType = document.createElement('label');
             labelType.innerHTML = "value";
             var numberInt = document.createElement('input');
@@ -34,6 +36,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
         } else if(typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+            typeValue = "bool";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -46,6 +49,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(typeNode.type == "class") {
+            typeValue = "class";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -59,6 +63,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(typeNode.type == "double") {
+            typeValue = "double";
             var labelType = document.createElement('label');
             labelType.innerHTML = "value";
             var numberInt = document.createElement('input');
@@ -72,6 +77,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
         } else if(typeNode.type == "string") {
+            typeValue = "string";
             var labelType = document.createElement('label');
             labelType.innerHTML = "value";
             var text = document.createElement('input');
@@ -82,6 +88,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelType.appendChild(text);
             divText.appendChild(labelType);
         } else if(typeNode.type == "enum") {
+            typeValue = "enum";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -96,6 +103,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(typeNode.type == "comparison") {
+            typeValue = "comparison";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -188,8 +196,10 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         let valInOutcome = "";
         if(vin != null && vin.tagName == "SELECT") {
             valInOutcome = vin.options[vin.options.selectedIndex].value;
+            graph.setAttributeForCell(cell, 'typeValue', typeValue);
         } else if(vin != null && vin.tagName == "INPUT") {
             valInOutcome = vin.value;
+            graph.setAttributeForCell(cell, 'typeValue', typeValue);
         }
         graph.setAttributeForCell(cell, 'value', valInOutcome);
 

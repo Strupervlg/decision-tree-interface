@@ -9077,9 +9077,11 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     if(outNode == null) {
         throw new Error("Error: Source node is missing!");
     }
+    let typeValue = "";
     if(typeof outNode.value == "object" && outNode.value.getAttribute('expression')) {
         let typeNode = getTypeFromCode(outNode.value.getAttribute('expression'), editorUi);
         if(typeNode.type == "int") {
+            typeValue = "int";
             var labelType = document.createElement('label');
             labelType.innerHTML = "value";
             var numberInt = document.createElement('input');
@@ -9092,6 +9094,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
         } else if(typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+            typeValue = "bool";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -9104,6 +9107,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(typeNode.type == "class") {
+            typeValue = "class";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -9117,6 +9121,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(typeNode.type == "double") {
+            typeValue = "double";
             var labelType = document.createElement('label');
             labelType.innerHTML = "value";
             var numberInt = document.createElement('input');
@@ -9130,6 +9135,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
         } else if(typeNode.type == "string") {
+            typeValue = "string";
             var labelType = document.createElement('label');
             labelType.innerHTML = "value";
             var text = document.createElement('input');
@@ -9140,6 +9146,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelType.appendChild(text);
             divText.appendChild(labelType);
         } else if(typeNode.type == "enum") {
+            typeValue = "enum";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -9154,6 +9161,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(typeNode.type == "comparison") {
+            typeValue = "comparison";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = "value";
             let selectValue = document.createElement('select');
@@ -9246,8 +9254,10 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         let valInOutcome = "";
         if(vin != null && vin.tagName == "SELECT") {
             valInOutcome = vin.options[vin.options.selectedIndex].value;
+            graph.setAttributeForCell(cell, 'typeValue', typeValue);
         } else if(vin != null && vin.tagName == "INPUT") {
             valInOutcome = vin.value;
+            graph.setAttributeForCell(cell, 'typeValue', typeValue);
         }
         graph.setAttributeForCell(cell, 'value', valInOutcome);
 
@@ -9904,6 +9914,27 @@ function outcomeToXml(node, editorUi)
                 if(valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error('Отсутствует значение у ветки');
+                }
+                let typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
+                if(typeNode.type == valueEdge.getAttribute("typeValue")) {
+                    if(valueEdge.getAttribute("typeValue") == "enum") {
+                        let enumsList = getEnums(editorUi);
+                        let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
+                        if(findEnum[0].values.indexOf(valueEdge.getAttribute("value")) == -1) {
+                            markOutcome(editorUi.editor.graph, node.edges[i])
+                            throw new Error('Значение enum отсутствует в словаре');
+                        }
+                    } else if(valueEdge.getAttribute("typeValue") == "class") {
+                        let jsonClasses = getClasses(editorUi);
+                        let findClass = jsonClasses.filter(el => el.name == valueEdge.getAttribute("value"));
+                        if(findClass.length == 0) {
+                            markOutcome(editorUi.editor.graph, node.edges[i])
+                            throw new Error('Класс отсутствует в словаре');
+                        }
+                    }
+                } else if(valueEdge.getAttribute("typeValue") && typeNode.type != valueEdge.getAttribute("typeValue")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error('Тип ветки не совпадает с типом возвращаемого значения выражения узла');
                 }
                 if(prevValues.has(valueEdge.getAttribute("value"))) {
                     markOutcome(editorUi.editor.graph, node.edges[i])

@@ -319,6 +319,27 @@ function outcomeToXml(node, editorUi)
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error('Отсутствует значение у ветки');
                 }
+                let typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
+                if(typeNode.type == valueEdge.getAttribute("typeValue")) {
+                    if(valueEdge.getAttribute("typeValue") == "enum") {
+                        let enumsList = getEnums(editorUi);
+                        let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
+                        if(findEnum[0].values.indexOf(valueEdge.getAttribute("value")) == -1) {
+                            markOutcome(editorUi.editor.graph, node.edges[i])
+                            throw new Error('Значение enum отсутствует в словаре');
+                        }
+                    } else if(valueEdge.getAttribute("typeValue") == "class") {
+                        let jsonClasses = getClasses(editorUi);
+                        let findClass = jsonClasses.filter(el => el.name == valueEdge.getAttribute("value"));
+                        if(findClass.length == 0) {
+                            markOutcome(editorUi.editor.graph, node.edges[i])
+                            throw new Error('Класс отсутствует в словаре');
+                        }
+                    }
+                } else if(valueEdge.getAttribute("typeValue") && typeNode.type != valueEdge.getAttribute("typeValue")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error('Тип ветки не совпадает с типом возвращаемого значения выражения узла');
+                }
                 if(prevValues.has(valueEdge.getAttribute("value"))) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error('Ветка имеет повторяющееся значение');
