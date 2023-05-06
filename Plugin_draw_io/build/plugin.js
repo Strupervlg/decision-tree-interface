@@ -9118,6 +9118,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         if(!cell.style.includes("editable=0;")) {
             cell.style += "editable=0;";
         }
+        cell.style = cell.style.replace("strokeColor=#FF0000;", "");
 
         graph.getModel().endUpdate();
         graph.refresh(); // update the graph
@@ -9462,6 +9463,10 @@ function startNodeToXml(startNode, editorUi)
     result += '</InputVariables>\n';
     if(startNode.edges) {
         for(let i = 0; i < startNode.edges.length; i++) {
+            if(startNode.edges[i].value == null || typeof startNode.edges[i].value != "object" || !startNode.edges[i].value.getAttribute("type")) {
+                markOutcome(editorUi.editor.graph, startNode.edges[i])
+                throw new Error('Отсутствует тип у ветки после начального узла');
+            }
             result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'">\n';
             if(startNode.edges[i].target != startNode) {
                 result += switchCaseNodes(startNode.edges[i].target, editorUi);
@@ -9532,7 +9537,7 @@ function branchResultNodeToXml(node, resultBranch) {
     let result = '<BranchResultNode value="'+resultBranch+'">\n';
 
     //Сделать проверку на пустой экспрешн
-    result += "<Expression>\n" + node.value.getAttribute("expression") != "" ? codeToXML(globalWS, node.value.getAttribute("expression")) : "" + "\n</Expression>\n";
+    result += "<Expression>\n" + ((node.value.getAttribute("expression") != "") ? codeToXML(globalWS, node.value.getAttribute("expression")) : ("")) + "\n</Expression>\n";
 
     result += '</BranchResultNode>\n';
     return result;
@@ -9581,9 +9586,14 @@ function cycleNodeToXml(node, editorUi)
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
-                let valueEdge = "";
-                if(node.edges[i]) {
-                    valueEdge = node.edges[i].value;
+                valueEdge = node.edges[i].value;
+                if(valueEdge == null || typeof valueEdge != "object" 
+                || !valueEdge.getAttribute("type") 
+                || (valueEdge.getAttribute("type") != "True" 
+                && valueEdge.getAttribute("type") != "False" 
+                && valueEdge.getAttribute("type") != "Body")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error('Отсутствует тип у ветки после узла цикла');
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
@@ -9610,9 +9620,14 @@ function logicNodeToXml(node, editorUi)
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
-                let valueEdge = "";
-                if(node.edges[i]) {
-                    valueEdge = node.edges[i].value;
+                valueEdge = node.edges[i].value;
+                if(valueEdge == null || typeof valueEdge != "object" 
+                || !valueEdge.getAttribute("type") 
+                || (valueEdge.getAttribute("type") != "True" 
+                && valueEdge.getAttribute("type") != "False" 
+                && valueEdge.getAttribute("type") != "Branch")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error('Отсутствует тип у ветки после логического узла');
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
@@ -9638,7 +9653,16 @@ function predeterminingNodeToXml(node, editorUi)
     //Следующие ветки
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
-            if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predetermining") {
+            valueEdge = node.edges[i].value;
+            if(node.edges[i].target != node && (valueEdge == null || typeof valueEdge != "object" 
+            || !valueEdge.getAttribute("type") 
+            || (valueEdge.getAttribute("type") != "predeterminingBranch" 
+            && valueEdge.getAttribute("type") != "undetermined"))) {
+                markOutcome(editorUi.editor.graph, node.edges[i])
+                throw new Error('Отсутствует тип у ветки после независимого ветвления');
+            }
+
+            if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
                 result += switchCaseNodes(node.edges[i].target, editorUi);
             }
         }
@@ -9665,9 +9689,10 @@ function outcomeToXml(node, editorUi)
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
-                let valueEdge = "";
-                if(node.edges[i]) {
-                    valueEdge = node.edges[i].value;
+                valueEdge = node.edges[i].value;
+                if(valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error('Отсутствует значение у ветки');
                 }
                 result += '<Outcome value="'+valueEdge.getAttribute("value")+'">\n';
                 result += switchCaseNodes(node.edges[i].target, editorUi);
@@ -9676,6 +9701,15 @@ function outcomeToXml(node, editorUi)
         }
     }
     return result;
+}
+
+function markOutcome(graph, cell) {
+    graph.getModel().beginUpdate();
+    if(!cell.style.includes("strokeColor=#FF0000;")) {
+        cell.style += "strokeColor=#FF0000;";
+    }
+    graph.getModel().endUpdate();
+    graph.refresh(); // update the graph
 }
 const SemanticType = { 
     OBJECT: 'object',

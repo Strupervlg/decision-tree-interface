@@ -202,6 +202,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         if(!cell.style.includes("editable=0;")) {
             cell.style += "editable=0;";
         }
+        cell.style = cell.style.replace("strokeColor=#FF0000;", "");
 
         graph.getModel().endUpdate();
         graph.refresh(); // update the graph
