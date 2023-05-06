@@ -23,6 +23,18 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
+        } else {
+            throw new Error('Отсутствует выражение');
+        }
+        error = "";
+        if(!nameVarInText.value) {
+            error += "Отсутствует имя переменной!\n";
+        }
+        if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+            error += "Отсутствует тип переменной!\n";
+        }
+        if(error) {
+            throw new Error(error);
         }
 
         var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
@@ -117,7 +129,19 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
         var code = generateCode(workspace);
-
+        if(!code) {
+            throw new Error('Отсутствует выражение');
+        }
+        error = "";
+        if(!nameVarInBlockly.value) {
+            error += "Отсутствует имя переменной!\n";
+        }
+        if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+            error += "Отсутствует тип переменной!\n";
+        }
+        if(error) {
+            throw new Error(error);
+        }
         var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
         var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
         

@@ -21,6 +21,8 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
+        } else {
+            throw new Error('Отсутствует выражение');
         }
         
         var theGraph = editorUi.editor.graph;
@@ -71,6 +73,9 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
         var code = generateCode(workspace);
+        if(!code) {
+            throw new Error('Отсутствует выражение');
+        }
         
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {

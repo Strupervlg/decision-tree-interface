@@ -21,6 +21,8 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
+        } else {
+            throw new Error('Отсутствует выражение');
         }
         
         var theGraph = editorUi.editor.graph;
@@ -67,6 +69,9 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
         var code = generateCode(workspace);
+        if(!code) {
+            throw new Error('Отсутствует выражение');
+        }
         
         var theGraph = editorUi.editor.graph;
 
