@@ -9590,17 +9590,21 @@ function treeToXml(editorUi)
 
     var graph = editorUi.editor.graph;
     var cells = graph.getModel().cells;
-
+    let countStartNode = 0;
     Object.keys(cells).forEach(function (key) {
 
         var node = cells[key];
         
         if (typeof node.value == "object" && node.value.getAttribute("type") == "START") {
+            countStartNode++;
             CheckCycleInTree(node);
             result += startNodeToXml(node, editorUi);
             return;
         }
     });
+    if(countStartNode != 1) {
+        throw new Error("Начальный узел должен быть один!");
+    }
     return result;
 }
 
@@ -9731,6 +9735,9 @@ function cycleNodeToXml(node, editorUi)
     let typeVar = node.value.getAttribute("typeVar");
     result += '<DecisionTreeVarDecl name="'+node.value.getAttribute("nameVar")+'" type="'+typeVar+'"/>\n';
 
+    let bodyCount = 0;
+    let trueCount = 0;
+    let falseCount = 0;
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
@@ -9744,16 +9751,35 @@ function cycleNodeToXml(node, editorUi)
                     throw new Error('Отсутствует тип у ветки после узла цикла');
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    if(valueEdge.getAttribute("type") == "True") {
+                        trueCount++;
+                    } else {
+                        falseCount++;
+                    }
                     result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
                 } else if(valueEdge.getAttribute("type") == "Body") {
+                    bodyCount++;
                     result += '<ThoughtBranch type="bool" paramName="'+node.value.getAttribute("nameVar")+'">\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
             }
         }
+    }
+    let errorCycle = "";
+    if(bodyCount != 1) {
+        errorCycle += "Ветка тела для узла цикла должна быть одна!\n";
+    }
+    if(trueCount != 1) {
+        errorCycle += "Истинная ветка для узла цикла должна быть одна!\n";
+    }
+    if(falseCount != 1) {
+        errorCycle += "Ложная ветка для узла цикла должна быть одна!\n";
+    }
+    if(errorCycle) {
+        throw new Error(errorCycle);
     }
 
 
@@ -9765,6 +9791,9 @@ function logicNodeToXml(node, editorUi)
 {
     let result = '<LogicAggregationNode operator="'+node.value.getAttribute("type").toLowerCase()+'">\n';
 
+    let branchCount = 0;
+    let trueCount = 0;
+    let falseCount = 0;
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
@@ -9778,16 +9807,35 @@ function logicNodeToXml(node, editorUi)
                     throw new Error('Отсутствует тип у ветки после логического узла');
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    if(valueEdge.getAttribute("type") == "True") {
+                        trueCount++;
+                    } else {
+                        falseCount++;
+                    }
                     result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
                 } else if(valueEdge.getAttribute("type") == "Branch") {
+                    branchCount++;
                     result += '<ThoughtBranch type="bool">\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
             }
         }
+    }
+    let errorLogic = "";
+    if(branchCount < 2) {
+        errorLogic += "Веток для логического узла должно быть 2 и более!\n";
+    }
+    if(trueCount > 1) {
+        errorLogic += "Истинная ветка для логического узла должна быть одна!\n";
+    }
+    if(falseCount > 1) {
+        errorLogic += "Ложная ветка для логического узла должна быть одна!\n";
+    }
+    if(errorLogic) {
+        throw new Error(errorLogic);
     }
 
     result += '</LogicAggregationNode>\n';
@@ -9799,6 +9847,8 @@ function predeterminingNodeToXml(node, editorUi)
     let result = '<PredeterminingFactorsNode>\n<Predetermining>\n';
 
     //Следующие ветки
+    let predCount = 0;
+    let undertermCount = 0;
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             valueEdge = node.edges[i].value;
@@ -9811,6 +9861,7 @@ function predeterminingNodeToXml(node, editorUi)
             }
 
             if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
+                predCount++;
                 result += switchCaseNodes(node.edges[i].target, editorUi);
             }
         }
@@ -9820,11 +9871,22 @@ function predeterminingNodeToXml(node, editorUi)
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
+                undertermCount++;
                 result += '<Outcome value="undetermined">\n';
                 result += switchCaseNodes(node.edges[i].target, editorUi);
                 result += "</Outcome>\n";
             }
         }
+    }
+    let errorPred = "";
+    if(predCount == 0) {
+        errorPred += "Отсутствует предрешающая ветка для узла независимое ветвление!\n";
+    }
+    if(undertermCount != 1) {
+        errorPred += "Ветка undetermined для узла независимое ветвление должна быть одна!\n";
+    }
+    if(errorPred) {
+        throw new Error(errorPred);
     }
 
     result += '</PredeterminingFactorsNode>\n';
@@ -9834,6 +9896,7 @@ function predeterminingNodeToXml(node, editorUi)
 function outcomeToXml(node, editorUi)
 {
     let result = "";
+    let prevValues = new Set();
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node) {
@@ -9842,6 +9905,11 @@ function outcomeToXml(node, editorUi)
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error('Отсутствует значение у ветки');
                 }
+                if(prevValues.has(valueEdge.getAttribute("value"))) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error('Ветка имеет повторяющееся значение');
+                }
+                prevValues.add(valueEdge.getAttribute("value"));
                 result += '<Outcome value="'+valueEdge.getAttribute("value")+'">\n';
                 result += switchCaseNodes(node.edges[i].target, editorUi);
                 result += "</Outcome>\n";
