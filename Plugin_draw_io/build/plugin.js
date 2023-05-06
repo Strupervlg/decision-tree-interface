@@ -612,6 +612,9 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -2613,6 +2616,9 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -7782,6 +7788,9 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -7897,6 +7906,9 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -8242,6 +8254,9 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -8346,6 +8361,9 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -8499,6 +8517,9 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -8673,6 +8694,9 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -9245,6 +9269,9 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -9376,6 +9403,9 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";

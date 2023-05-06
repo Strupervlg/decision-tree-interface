@@ -51,6 +51,9 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if(expression) {
+            parser.parse(expression)
+        }
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
