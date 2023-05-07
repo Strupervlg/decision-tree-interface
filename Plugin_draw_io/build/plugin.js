@@ -736,12 +736,16 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#000000;align=center;editable=0;");
 
-            strValue = generateStrValueForRelationships(table);
+            let valuesRels = generateStrValueForRelationships(table);
 
-            newElement.value = strValue;
+            newElement.value = valuesRels[0];
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
+            for (var i = 0; i < valuesRels[1].length; i++) {
+                theGraph.setAttributeForCell(newElement, 'namesRels_' + i, valuesRels[1][i]);
+                theGraph.setAttributeForCell(newElement, 'binFlags_' + i, valuesRels[2][i]);
+            }
         }
         win.destroy();
     });
@@ -848,6 +852,56 @@ function addRowRelationship(editorUi) {
         var newOption = new Option(element, element);
         selectScale.options[selectScale.options.length] = newOption;
     });
+
+    selectScale.addEventListener('change', (event) => {
+        checkFlags(event.target.parentElement.parentElement, 
+            event.target.options[event.target.options.selectedIndex].value)
+        if (event.target.options[event.target.options.selectedIndex].value == "Linear") {
+            var tdInputNames = document.createElement('td');
+            tdInputNames.classList = "names";
+            tdInputNames.style.minWidth = "150px";
+            var nameInput = document.createElement('input');
+            nameInput.type = "text";
+            nameInput.style.width = '100%';
+            nameInput.placeholder = "Name";
+            tdInputNames.appendChild(nameInput);
+
+            var tdAddName = document.createElement('td');
+            tdAddName.classList = "addNames";
+            tdAddName.style.minWidth = "50px";
+            var btnAddName = mxUtils.button('+', function (evt) {
+                let newTdName = document.createElement('td');
+                newTdName.style.minWidth = "200px";
+                var newNameInput = document.createElement('input');
+                newNameInput.type = "text";
+                newNameInput.style.width = '85%';
+                newNameInput.style.float = 'left';
+                newNameInput.placeholder = "Name";
+                var btnDelName = mxUtils.button('-', function (evt) {
+                    evt.target.parentElement.remove();
+                });
+                btnDelName.style.float = 'left';
+                btnDelName.style.width = '10%';
+                newTdName.appendChild(newNameInput);
+                newTdName.appendChild(btnDelName);
+                evt.target.parentElement.parentElement.insertBefore(newTdName, evt.target.parentElement)
+            });
+
+            tdAddName.appendChild(btnAddName);
+
+            event.currentTarget.parentElement.parentElement.insertBefore(tdAddName, event.currentTarget.parentElement.nextElementSibling);
+            event.currentTarget.parentElement.parentElement.insertBefore(tdInputNames, event.currentTarget.parentElement.nextElementSibling);
+        } else {
+            if(event.currentTarget.parentElement.nextElementSibling.classList.contains("names")) {
+                var currentTd = event.currentTarget.parentElement.nextElementSibling;
+                while(currentTd.classList != 'addNames') {
+                    currentTd.remove();
+                    currentTd = event.currentTarget.parentElement.nextElementSibling;
+                }
+                currentTd.remove();
+            }
+        }
+    });
     td5.appendChild(selectScale);
     tr1.appendChild(td5);
 
@@ -875,10 +929,76 @@ function addRowRelationship(editorUi) {
             //Удаление поля с типом
             event.currentTarget.parentElement.nextElementSibling.remove();
         }
-      })
+      });
     td6.appendChild(span);
     td6.appendChild(checkbox);
     tr1.appendChild(td6);
+
+    var td7 = document.createElement('td');
+    td7.style.minWidth = "80px";
+    td7.classList = "symmetry";
+    var span1 = document.createElement('span');
+    span1.innerText = "symmetry";
+    var checkbox1 = document.createElement('input');
+    checkbox1.type = "checkbox";
+    td7.appendChild(span1);
+    td7.appendChild(checkbox1);
+    tr1.appendChild(td7);
+
+    var td8 = document.createElement('td');
+    td8.style.minWidth = "90px";
+    td8.classList = "antisymmetry";
+    var span2 = document.createElement('span');
+    span2.innerText = "antisymmetry";
+    var checkbox2 = document.createElement('input');
+    checkbox2.type = "checkbox";
+    td8.appendChild(span2);
+    td8.appendChild(checkbox2);
+    tr1.appendChild(td8);
+
+    var td9 = document.createElement('td');
+    td9.style.minWidth = "80px";
+    td9.classList = "reflexivity";
+    var span3 = document.createElement('span');
+    span3.innerText = "reflexivity";
+    var checkbox3 = document.createElement('input');
+    checkbox3.type = "checkbox";
+    td9.appendChild(span3);
+    td9.appendChild(checkbox3);
+    tr1.appendChild(td9);
+
+    var td10 = document.createElement('td');
+    td10.style.minWidth = "100px";
+    td10.classList = "antireflexivity";
+    var span4 = document.createElement('span');
+    span4.innerText = "anti - reflexivity";
+    var checkbox4 = document.createElement('input');
+    checkbox4.type = "checkbox";
+    td10.appendChild(span4);
+    td10.appendChild(checkbox4);
+    tr1.appendChild(td10);
+
+    var td11 = document.createElement('td');
+    td11.style.minWidth = "80px";
+    td11.classList = "transitivity";
+    var span5 = document.createElement('span');
+    span5.innerText = "transitivity";
+    var checkbox5 = document.createElement('input');
+    checkbox5.type = "checkbox";
+    td11.appendChild(span5);
+    td11.appendChild(checkbox5);
+    tr1.appendChild(td11);
+
+    var td12 = document.createElement('td');
+    td12.style.minWidth = "80px";
+    td12.classList = "antitransivity";
+    var span6 = document.createElement('span');
+    span6.innerText = "antitransivity";
+    var checkbox6 = document.createElement('input');
+    checkbox6.type = "checkbox";
+    td12.appendChild(span6);
+    td12.appendChild(checkbox6);
+    tr1.appendChild(td12);
 
     return tr1;
 }
@@ -894,14 +1014,32 @@ function checkAllInputsRelationship(table) {
         let lastIndex = 2;
         let currentSelect = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("select").item(0);
+        let hasntClass = false;
         while(currentSelect != null) {
-            if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
+            if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined" && !hasntClass) {
                 errors += "В строке №" + (i+1) + " отсутствуют классы; ";
-                break;
+                hasntClass = true;
             }
             lastIndex++;
             currentSelect = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("select").item(0);
+        }
+        lastIndex++;
+        currentSelect = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("select").item(0);
+        if(currentSelect.options[currentSelect.options.selectedIndex].value == "Linear") {
+            lastIndex++;
+            let currentInputName = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("input").item(0);
+            while(currentInputName != null) {
+                if(currentInputName.value == "") {
+                    errors += "В строке №" + (i+1) + " отсутствуют имена отношений; ";
+                    break;
+                }
+                lastIndex++;
+                currentInputName = table.rows.item(i).getElementsByTagName("td")
+                    .item(lastIndex).getElementsByTagName("input").item(0);
+            }
         }
     }
     if(errors != "") {
@@ -911,6 +1049,8 @@ function checkAllInputsRelationship(table) {
 
 function generateStrValueForRelationships(table) {
     strValue = '<b><font color="#000000">Relationships between objects</font></b>';
+    let listNames = [];
+    let binFlags = [];
 
     for (var i = 0; i < table.rows.length; i++) {
         var relationship = table.rows.item(i).getElementsByTagName("td")
@@ -938,6 +1078,19 @@ function generateStrValueForRelationships(table) {
         var scaleSelect = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("select").item(0);
         var scale = scaleSelect.options[scaleSelect.options.selectedIndex].value;
+        let namesRels = [];
+        if(scale == "Linear") {
+            lastIndex++;
+            let currentInputName = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("input").item(0);
+            while(currentInputName != null) {
+                namesRels.push(currentInputName.value);
+                lastIndex++;
+                currentInputName = table.rows.item(i).getElementsByTagName("td")
+                    .item(lastIndex).getElementsByTagName("input").item(0);
+            }
+        }
+        listNames.push(namesRels.join(";"))
         lastIndex++;
 
         var isBetween = table.rows.item(i).getElementsByTagName("td")
@@ -949,6 +1102,7 @@ function generateStrValueForRelationships(table) {
                 .item(lastIndex).getElementsByTagName("select").item(0);
             type = typeSelect.options[typeSelect.options.selectedIndex].value;
         }
+        binFlags.push(getMarkedFlags(table.rows.item(i)));
 
         strValue += '<br>' + '<font color="#00cccc">' + relationship + '</font>';
         if(extendRelationship != "") {
@@ -971,17 +1125,77 @@ function generateStrValueForRelationships(table) {
         }
     }
 
-    return strValue;
+    return [strValue, listNames, binFlags];
 }
 
 function checkExistRelationshipsDictionary(graph) {
     var cells = graph.getModel().cells;
     Object.keys(cells).forEach(function (key) {
         var cellValue = cells[key].value;
-        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
+        if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
             throw new Error("Relationships dictionary already exists");
         }
     });
+}
+
+function checkFlags(row, scale) {
+    let tdSym = row.getElementsByClassName("symmetry")[0];
+    let tdAntiSym = row.getElementsByClassName("antisymmetry")[0];
+    let tdRelf = row.getElementsByClassName("reflexivity")[0];
+    let tdAntiRelf = row.getElementsByClassName("antireflexivity")[0];
+    let tdTrans = row.getElementsByClassName("transitivity")[0];
+    let tdAntiTrans = row.getElementsByClassName("antitransivity")[0];
+    if(scale == "Linear") {
+        tdSym.getElementsByTagName("input").item(0).checked = false;
+        tdSym.getElementsByTagName("input").item(0).disabled = true;
+        tdAntiSym.getElementsByTagName("input").item(0).checked = true;
+        tdAntiSym.getElementsByTagName("input").item(0).disabled = true;
+        tdRelf.getElementsByTagName("input").item(0).checked = true;
+        tdRelf.getElementsByTagName("input").item(0).disabled = true;
+        tdAntiRelf.getElementsByTagName("input").item(0).checked = false;
+        tdAntiRelf.getElementsByTagName("input").item(0).disabled = true;
+        tdTrans.getElementsByTagName("input").item(0).checked = false;
+        tdTrans.getElementsByTagName("input").item(0).disabled = true;
+        tdAntiTrans.getElementsByTagName("input").item(0).checked = false;
+        tdAntiTrans.getElementsByTagName("input").item(0).disabled = true;
+    } else if(scale == "Partially linear") {
+        tdSym.getElementsByTagName("input").item(0).checked = false;
+        tdSym.getElementsByTagName("input").item(0).disabled = true;
+        tdAntiSym.getElementsByTagName("input").item(0).checked = true;
+        tdAntiSym.getElementsByTagName("input").item(0).disabled = true;
+        tdRelf.getElementsByTagName("input").item(0).checked = true;
+        tdRelf.getElementsByTagName("input").item(0).disabled = true;
+        tdAntiRelf.getElementsByTagName("input").item(0).checked = false;
+        tdAntiRelf.getElementsByTagName("input").item(0).disabled = true;
+        tdTrans.getElementsByTagName("input").item(0).checked = true;
+        tdTrans.getElementsByTagName("input").item(0).disabled = true;
+        tdAntiTrans.getElementsByTagName("input").item(0).checked = false;
+        tdAntiTrans.getElementsByTagName("input").item(0).disabled = true;
+    } else if(scale == "None") {
+        tdSym.getElementsByTagName("input").item(0).checked = false;
+        tdSym.getElementsByTagName("input").item(0).disabled = false;
+        tdAntiSym.getElementsByTagName("input").item(0).checked = false;
+        tdAntiSym.getElementsByTagName("input").item(0).disabled = false;
+        tdRelf.getElementsByTagName("input").item(0).checked = false;
+        tdRelf.getElementsByTagName("input").item(0).disabled = false;
+        tdAntiRelf.getElementsByTagName("input").item(0).checked = false;
+        tdAntiRelf.getElementsByTagName("input").item(0).disabled = false;
+        tdTrans.getElementsByTagName("input").item(0).checked = false;
+        tdTrans.getElementsByTagName("input").item(0).disabled = false;
+        tdAntiTrans.getElementsByTagName("input").item(0).checked = false;
+        tdAntiTrans.getElementsByTagName("input").item(0).disabled = false;
+    }
+}
+
+function getMarkedFlags(row) {
+    let sym = row.getElementsByClassName("symmetry")[0].getElementsByTagName("input").item(0).checked;
+    let antiSym = row.getElementsByClassName("antisymmetry")[0].getElementsByTagName("input").item(0).checked;;
+    let relf = row.getElementsByClassName("reflexivity")[0].getElementsByTagName("input").item(0).checked;;
+    let AntiRelf = row.getElementsByClassName("antireflexivity")[0].getElementsByTagName("input").item(0).checked;;
+    let trans = row.getElementsByClassName("transitivity")[0].getElementsByTagName("input").item(0).checked;;
+    let antiTrans = row.getElementsByClassName("antitransivity")[0].getElementsByTagName("input").item(0).checked;;
+    return String(Number(sym)) + String(Number(antiSym)) + String(Number(relf)) + String(Number(AntiRelf)) 
+        + String(Number(trans)) + String(Number(antiTrans));
 }
 function getEnums(editorUi) {
 
@@ -1128,11 +1342,12 @@ function getRelationships(editorUi) {
 
         var cellValue = cells[key].value;
 
-        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
-            cellValue = cellValue.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
-            var values = cellValue.split('<br>');
+        if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
+            var cellLabel = cellValue.getAttribute('label');
+            cellLabel = cellLabel.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
+            var values = cellLabel.split('<br>');
 
-            values.forEach(element => {
+            values.forEach((element, index) => {
                 var nameRelationship = element.slice(element.indexOf('<font color="#00cccc">')+22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>')+7);
 
@@ -1164,6 +1379,9 @@ function getRelationships(editorUi) {
                     type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
                     type = type.toUpperCase().replaceAll(" ", "_");
                 }
+
+                let namesRels = cellValue.getAttribute('namesRels_'+index)
+                let binFlags = cellValue.getAttribute('binFlags_'+index)
                 
                 var ItemRelationship = {
                     "name": nameRelationship,
@@ -1171,7 +1389,10 @@ function getRelationships(editorUi) {
                     "classes": classes,
                     "scale": scale,
                     "isBetween": isBetween,
-                    "type": type
+                    "type": type,
+                    "namesRels": namesRels,
+                    "binFlags": binFlags,
+                    "decFlags": parseInt( binFlags.split('').reverse().join(''), 2),
                 };
                 relationships.push(ItemRelationship);
             });
@@ -3504,12 +3725,16 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     var applyBtn = mxUtils.button('Apply', function () {
         checkAllInputsRelationship(table);
 
-        strValue = generateStrValueForRelationships(table);
+        let valuesRels = generateStrValueForRelationships(table);
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
         cell.geometry.height = (table.rows.length + 1) * 17;
-        cell.value = strValue;
+        cell.value.setAttribute("label", valuesRels[0]);
+        for (var i = 0; i < valuesRels[1].length; i++) {
+            cell.value.setAttribute('namesRels_' + i, valuesRels[1][i]);
+            cell.value.setAttribute('binFlags_' + i, valuesRels[2][i]);
+        }
         theGraph.getModel().endUpdate();
         theGraph.refresh(); // update the graph
         win.destroy();
@@ -3549,9 +3774,10 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 function fillDataRelationships(tbody, cell, editorUi) {
     let cellValue = cell.value;
+    var cellLabel = cellValue.getAttribute('label');
 
-    cellValue = cellValue.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
-    var values = cellValue.split('<br>');
+    cellLabel = cellLabel.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
+    var values = cellLabel.split('<br>');
 
     values.forEach((element, index) => {
         var nameRelationship = element.slice(element.indexOf('<font color="#00cccc">')+22, element.indexOf('</font>'));
@@ -3583,6 +3809,9 @@ function fillDataRelationships(tbody, cell, editorUi) {
             element = element.slice(element.indexOf('type:</font>')+12);
             type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
         }
+
+        let namesRels = cellValue.getAttribute('namesRels_'+index);
+        let binFlags = cellValue.getAttribute('binFlags_'+index);
 
         var row = addRowRelationship(editorUi);
 
@@ -3627,11 +3856,76 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
         var scaleSelect = row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("select").item(0);
-        console.log(scale);
+
         for(let index = 0; index < scaleSelect.options.length; ++index) {
             if(scaleSelect.options[index].value == scale) {
                 scaleSelect.options[index].selected = true;
             }
+        }
+        checkFlags(row, scale);
+        let namesRelsArray = namesRels.split(";");
+        if(scale == "Linear") {
+            var tdInputNames = document.createElement('td');
+            tdInputNames.classList = "names";
+            tdInputNames.style.minWidth = "150px";
+            var nameInput = document.createElement('input');
+            nameInput.type = "text";
+            nameInput.style.width = '100%';
+            nameInput.placeholder = "Name";
+            tdInputNames.appendChild(nameInput);
+
+            var tdAddName = document.createElement('td');
+            tdAddName.classList = "addNames";
+            tdAddName.style.minWidth = "50px";
+            var btnAddName = mxUtils.button('+', function (evt) {
+                let newTdName = document.createElement('td');
+                newTdName.style.minWidth = "200px";
+                var newNameInput = document.createElement('input');
+                newNameInput.type = "text";
+                newNameInput.style.width = '85%';
+                newNameInput.style.float = 'left';
+                newNameInput.placeholder = "Name";
+                var btnDelName = mxUtils.button('-', function (evt) {
+                    evt.target.parentElement.remove();
+                });
+                btnDelName.style.float = 'left';
+                btnDelName.style.width = '10%';
+                newTdName.appendChild(newNameInput);
+                newTdName.appendChild(btnDelName);
+                evt.target.parentElement.parentElement.insertBefore(newTdName, evt.target.parentElement)
+            });
+
+            tdAddName.appendChild(btnAddName);
+
+            row.insertBefore(tdAddName, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
+            row.insertBefore(tdInputNames, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
+
+            lastIndex++;
+            namesRelsArray.forEach((element, index) => {
+                if(index != 0) {
+                    let newTdName = document.createElement('td');
+                    newTdName.style.minWidth = "200px";
+                    var newNameInput = document.createElement('input');
+                    newNameInput.type = "text";
+                    newNameInput.style.width = '85%';
+                    newNameInput.style.float = 'left';
+                    newNameInput.placeholder = "Name";
+                    var btnDelName = mxUtils.button('-', function (evt) {
+                        evt.target.parentElement.remove();
+                    });
+                    btnDelName.style.float = 'left';
+                    btnDelName.style.width = '10%';
+                    newTdName.appendChild(newNameInput);
+                    newTdName.appendChild(btnDelName);
+                    row.insertBefore(newTdName, row.getElementsByTagName("td").item(lastIndex));
+                }
+                row.getElementsByTagName("td").item(lastIndex)
+                    .getElementsByTagName("input").item(0).value = element;
+                lastIndex++;
+            });
+        }
+        if(!scale) {
+            fillFlags(row, binFlags);
         }
         lastIndex++;
         
@@ -3672,6 +3966,23 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
         tbody.appendChild(row);
     });
+}
+
+function fillFlags(row, strBinFlags) {
+    let arrayBinFlags = strBinFlags.split('');
+
+    row.getElementsByClassName("symmetry")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[0] == "1";
+    row.getElementsByClassName("antisymmetry")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[1] == "1";
+    row.getElementsByClassName("reflexivity")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[2] == "1";
+    row.getElementsByClassName("antireflexivity")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[3] == "1";
+    row.getElementsByClassName("transitivity")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[4] == "1";
+    row.getElementsByClassName("antitransivity")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[5] == "1";
 }
 // Do not edit this file; automatically generated.
 
@@ -6675,10 +6986,11 @@ function exportRelastionships(jsonRelationships) {
 
         result += "|" + relationshipItem.scale + "|";
         if(relationshipItem.isBetween == "true") {
-            result += "TRUE" + "|" + relationshipItem.type + "\n";
+            result += "TRUE" + "|" + relationshipItem.type + "|";
         } else {
-            result += "|\n";
+            result += "||";
         }
+        result += relationshipItem.namesRels + "|" + relationshipItem.decFlags + "\n";
     });
     return result;
 }
@@ -10458,8 +10770,8 @@ Draw.loadPlugin(function (ui) {
             && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classPropertiesEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
                 this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.relationshipsEditorWindow.window.setVisible(true);
@@ -10476,10 +10788,10 @@ Draw.loadPlugin(function (ui) {
             if(selectedcell.value != null && typeof selectedcell.value != "object" 
             && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
             && !selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
-            && !selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
             || selectedcell.value != null && typeof selectedcell.value == "object" 
             && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+            && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && selectedcell.value.getAttribute('type') != "AND" 
             && selectedcell.value.getAttribute('type') != "OR" 
             && selectedcell.value.getAttribute('type') != "predetermining"

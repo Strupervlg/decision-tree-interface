@@ -20,12 +20,16 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     var applyBtn = mxUtils.button('Apply', function () {
         checkAllInputsRelationship(table);
 
-        strValue = generateStrValueForRelationships(table);
+        let valuesRels = generateStrValueForRelationships(table);
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
         cell.geometry.height = (table.rows.length + 1) * 17;
-        cell.value = strValue;
+        cell.value.setAttribute("label", valuesRels[0]);
+        for (var i = 0; i < valuesRels[1].length; i++) {
+            cell.value.setAttribute('namesRels_' + i, valuesRels[1][i]);
+            cell.value.setAttribute('binFlags_' + i, valuesRels[2][i]);
+        }
         theGraph.getModel().endUpdate();
         theGraph.refresh(); // update the graph
         win.destroy();
@@ -65,9 +69,10 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 function fillDataRelationships(tbody, cell, editorUi) {
     let cellValue = cell.value;
+    var cellLabel = cellValue.getAttribute('label');
 
-    cellValue = cellValue.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
-    var values = cellValue.split('<br>');
+    cellLabel = cellLabel.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
+    var values = cellLabel.split('<br>');
 
     values.forEach((element, index) => {
         var nameRelationship = element.slice(element.indexOf('<font color="#00cccc">')+22, element.indexOf('</font>'));
@@ -99,6 +104,9 @@ function fillDataRelationships(tbody, cell, editorUi) {
             element = element.slice(element.indexOf('type:</font>')+12);
             type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
         }
+
+        let namesRels = cellValue.getAttribute('namesRels_'+index);
+        let binFlags = cellValue.getAttribute('binFlags_'+index);
 
         var row = addRowRelationship(editorUi);
 
@@ -143,11 +151,76 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
         var scaleSelect = row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("select").item(0);
-        console.log(scale);
+
         for(let index = 0; index < scaleSelect.options.length; ++index) {
             if(scaleSelect.options[index].value == scale) {
                 scaleSelect.options[index].selected = true;
             }
+        }
+        checkFlags(row, scale);
+        let namesRelsArray = namesRels.split(";");
+        if(scale == "Linear") {
+            var tdInputNames = document.createElement('td');
+            tdInputNames.classList = "names";
+            tdInputNames.style.minWidth = "150px";
+            var nameInput = document.createElement('input');
+            nameInput.type = "text";
+            nameInput.style.width = '100%';
+            nameInput.placeholder = "Name";
+            tdInputNames.appendChild(nameInput);
+
+            var tdAddName = document.createElement('td');
+            tdAddName.classList = "addNames";
+            tdAddName.style.minWidth = "50px";
+            var btnAddName = mxUtils.button('+', function (evt) {
+                let newTdName = document.createElement('td');
+                newTdName.style.minWidth = "200px";
+                var newNameInput = document.createElement('input');
+                newNameInput.type = "text";
+                newNameInput.style.width = '85%';
+                newNameInput.style.float = 'left';
+                newNameInput.placeholder = "Name";
+                var btnDelName = mxUtils.button('-', function (evt) {
+                    evt.target.parentElement.remove();
+                });
+                btnDelName.style.float = 'left';
+                btnDelName.style.width = '10%';
+                newTdName.appendChild(newNameInput);
+                newTdName.appendChild(btnDelName);
+                evt.target.parentElement.parentElement.insertBefore(newTdName, evt.target.parentElement)
+            });
+
+            tdAddName.appendChild(btnAddName);
+
+            row.insertBefore(tdAddName, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
+            row.insertBefore(tdInputNames, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
+
+            lastIndex++;
+            namesRelsArray.forEach((element, index) => {
+                if(index != 0) {
+                    let newTdName = document.createElement('td');
+                    newTdName.style.minWidth = "200px";
+                    var newNameInput = document.createElement('input');
+                    newNameInput.type = "text";
+                    newNameInput.style.width = '85%';
+                    newNameInput.style.float = 'left';
+                    newNameInput.placeholder = "Name";
+                    var btnDelName = mxUtils.button('-', function (evt) {
+                        evt.target.parentElement.remove();
+                    });
+                    btnDelName.style.float = 'left';
+                    btnDelName.style.width = '10%';
+                    newTdName.appendChild(newNameInput);
+                    newTdName.appendChild(btnDelName);
+                    row.insertBefore(newTdName, row.getElementsByTagName("td").item(lastIndex));
+                }
+                row.getElementsByTagName("td").item(lastIndex)
+                    .getElementsByTagName("input").item(0).value = element;
+                lastIndex++;
+            });
+        }
+        if(!scale) {
+            fillFlags(row, binFlags);
         }
         lastIndex++;
         
@@ -188,4 +261,21 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
         tbody.appendChild(row);
     });
+}
+
+function fillFlags(row, strBinFlags) {
+    let arrayBinFlags = strBinFlags.split('');
+
+    row.getElementsByClassName("symmetry")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[0] == "1";
+    row.getElementsByClassName("antisymmetry")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[1] == "1";
+    row.getElementsByClassName("reflexivity")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[2] == "1";
+    row.getElementsByClassName("antireflexivity")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[3] == "1";
+    row.getElementsByClassName("transitivity")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[4] == "1";
+    row.getElementsByClassName("antitransivity")[0].getElementsByTagName("input")
+        .item(0).checked = arrayBinFlags[5] == "1";
 }

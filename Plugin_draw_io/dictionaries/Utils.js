@@ -143,11 +143,12 @@ function getRelationships(editorUi) {
 
         var cellValue = cells[key].value;
 
-        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
-            cellValue = cellValue.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
-            var values = cellValue.split('<br>');
+        if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
+            var cellLabel = cellValue.getAttribute('label');
+            cellLabel = cellLabel.replace('<b><font color="#000000">Relationships between objects</font></b><br>', '');
+            var values = cellLabel.split('<br>');
 
-            values.forEach(element => {
+            values.forEach((element, index) => {
                 var nameRelationship = element.slice(element.indexOf('<font color="#00cccc">')+22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>')+7);
 
@@ -179,6 +180,9 @@ function getRelationships(editorUi) {
                     type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
                     type = type.toUpperCase().replaceAll(" ", "_");
                 }
+
+                let namesRels = cellValue.getAttribute('namesRels_'+index)
+                let binFlags = cellValue.getAttribute('binFlags_'+index)
                 
                 var ItemRelationship = {
                     "name": nameRelationship,
@@ -186,7 +190,10 @@ function getRelationships(editorUi) {
                     "classes": classes,
                     "scale": scale,
                     "isBetween": isBetween,
-                    "type": type
+                    "type": type,
+                    "namesRels": namesRels,
+                    "binFlags": binFlags,
+                    "decFlags": parseInt( binFlags.split('').reverse().join(''), 2),
                 };
                 relationships.push(ItemRelationship);
             });

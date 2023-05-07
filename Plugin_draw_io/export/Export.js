@@ -65,10 +65,11 @@ function exportRelastionships(jsonRelationships) {
 
         result += "|" + relationshipItem.scale + "|";
         if(relationshipItem.isBetween == "true") {
-            result += "TRUE" + "|" + relationshipItem.type + "\n";
+            result += "TRUE" + "|" + relationshipItem.type + "|";
         } else {
-            result += "|\n";
+            result += "||";
         }
+        result += relationshipItem.namesRels + "|" + relationshipItem.decFlags + "\n";
     });
     return result;
 }

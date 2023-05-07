@@ -337,8 +337,8 @@ Draw.loadPlugin(function (ui) {
             && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classPropertiesEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
+            && selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
                 this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.relationshipsEditorWindow.window.setVisible(true);
@@ -355,10 +355,10 @@ Draw.loadPlugin(function (ui) {
             if(selectedcell.value != null && typeof selectedcell.value != "object" 
             && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
             && !selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
-            && !selectedcell.value.startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
             || selectedcell.value != null && typeof selectedcell.value == "object" 
             && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+            && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && selectedcell.value.getAttribute('type') != "AND" 
             && selectedcell.value.getAttribute('type') != "OR" 
             && selectedcell.value.getAttribute('type') != "predetermining"
