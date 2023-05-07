@@ -91,13 +91,18 @@ function getProperties(editorUi) {
 
         var cellValue = cells[key].value;
 
-        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class properties</font></b>')) {
-            cellValue = cellValue.replace('<b><font color="#000000">Class properties</font></b><br>', '');
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class and Object properties</font></b>')) {
+            cellValue = cellValue.replace('<b><font color="#000000">Class and Object properties</font></b><br>', '');
             var values = cellValue.split('<br>');
 
             values.forEach(element => {
-                var nameProperty = element.slice(element.indexOf('<font color="#ffb366">')+22, element.indexOf('</font>'));
-                element = element.slice(element.indexOf('</font>,')+8);
+                var nameProperty = element.slice(element.indexOf('<font color="#')+22, element.indexOf('</font>'));
+                element = element.slice(element.indexOf('</font>')+7);
+
+                classes = [];
+                var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
+                classes = valuesStr.split(', ');
+                element = element.slice(element.indexOf('</font>)')+8);
 
                 var type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>')+7);
@@ -112,11 +117,6 @@ function getProperties(editorUi) {
                 isStatic = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>')+7);
 
-                classes = [];
-                if(isStatic) {
-                    var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
-                    classes = valuesStr.split(', ');
-                }
                 
                 var ItemProperty = {
                     "name": nameProperty,

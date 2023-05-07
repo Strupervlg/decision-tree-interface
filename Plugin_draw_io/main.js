@@ -49,7 +49,7 @@ Draw.loadPlugin(function (ui) {
     // Привязывание действий к разделам меню
     mxResources.parse('classesConstructor=Classes constructor');
 
-    mxResources.parse('classPropertiesConstructor=Class properties constructor');
+    mxResources.parse('classPropertiesConstructor=Class and Object properties constructor');
 
     mxResources.parse('relationshipsConstructor=Relationships constructor');
 
@@ -333,7 +333,7 @@ Draw.loadPlugin(function (ui) {
                 this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.enumEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
+            && selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
             && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classPropertiesEditorWindow.window.setVisible(true);
@@ -354,7 +354,7 @@ Draw.loadPlugin(function (ui) {
             var selectedcell = graph.getSelectionCell();
             if(selectedcell.value != null && typeof selectedcell.value != "object" 
             && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
-            && !selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
+            && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
             && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
             || selectedcell.value != null && typeof selectedcell.value == "object" 
             && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')

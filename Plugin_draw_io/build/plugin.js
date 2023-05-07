@@ -62,7 +62,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Class properties constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Class and Object properties constructor', div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -128,7 +128,7 @@ function addRowProperty(editorUi) {
                 event.currentTarget.parentElement.nextElementSibling.remove();
             }
         }
-      })
+      });
     td2.appendChild(selectType);
     var tdRange = document.createElement('td');
     tdRange.style.minWidth = "200px";
@@ -156,63 +156,52 @@ function addRowProperty(editorUi) {
 
     // Создание checkbox isStatic
     var td3 = document.createElement('td');
-    td3.style.minWidth = "150px";
+    td3.style.minWidth = "70px";
     var span = document.createElement('span');
     span.innerText = "is static";
     var checkbox = document.createElement('input');
     checkbox.type = "checkbox";
-    checkbox.addEventListener('change', (event) => {
-        if (event.currentTarget.checked) {
-            var tdInputClass = document.createElement('td');
-            tdInputClass.style.minWidth = "150px";
-            var selectClass = document.createElement('select');
-            selectClass.style.width = '100%';
-            var jsonClasses = getClasses(editorUi);
-            jsonClasses.forEach(classItem => {
-                var newOption = new Option(classItem.name, classItem.name);
-                selectClass.options[selectClass.options.length] = newOption;
-            });
-            tdInputClass.appendChild(selectClass);
-
-            var tdAddClass = document.createElement('td');
-            tdAddClass.style.minWidth = "50px";
-            var btnAddClass = mxUtils.button('+', function (evt) {
-                let newTdClass = document.createElement('td');
-                newTdClass.style.minWidth = "200px";
-                var newSelectClass = document.createElement('select');
-                newSelectClass.style.width = '85%';
-                newSelectClass.style.float = 'left';
-                var jsonClasses = getClasses(editorUi);
-                jsonClasses.forEach(classItem => {
-                    var newOption = new Option(classItem.name, classItem.name);
-                    newSelectClass.options[newSelectClass.options.length] = newOption;
-                });
-                var btnDelClass = mxUtils.button('-', function (evt) {
-                    evt.target.parentElement.remove();
-                });
-                btnDelClass.style.float = 'left';
-                btnDelClass.style.width = '10%';
-                newTdClass.appendChild(newSelectClass);
-                newTdClass.appendChild(btnDelClass);
-                evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
-            });
-
-            tdAddClass.appendChild(btnAddClass);
-
-            event.currentTarget.parentElement.parentElement.insertBefore(tdAddClass, event.currentTarget.parentElement.nextElementSibling);
-            event.currentTarget.parentElement.parentElement.insertBefore(tdInputClass, event.currentTarget.parentElement.nextElementSibling);
-        } else {
-            var currentTd = event.currentTarget.parentElement.nextElementSibling;
-            while(currentTd != null && currentTd.classList != 'delete') {
-                currentTd.remove();
-                currentTd = event.currentTarget.parentElement.nextElementSibling;
-            }
-        }
-      })
     td3.appendChild(span);
     td3.appendChild(checkbox);
     tr1.appendChild(td3);
 
+    var tdInputClass = document.createElement('td');
+    tdInputClass.style.minWidth = "150px";
+    var selectClass = document.createElement('select');
+    selectClass.style.width = '100%';
+    var jsonClasses = getClasses(editorUi);
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClass.options[selectClass.options.length] = newOption;
+    });
+    tdInputClass.appendChild(selectClass);
+
+    var tdAddClass = document.createElement('td');
+    tdAddClass.style.minWidth = "50px";
+    var btnAddClass = mxUtils.button('+', function (evt) {
+        let newTdClass = document.createElement('td');
+        newTdClass.style.minWidth = "200px";
+        var newSelectClass = document.createElement('select');
+        newSelectClass.style.width = '85%';
+        newSelectClass.style.float = 'left';
+        var jsonClasses = getClasses(editorUi);
+        jsonClasses.forEach(classItem => {
+            var newOption = new Option(classItem.name, classItem.name);
+            newSelectClass.options[newSelectClass.options.length] = newOption;
+        });
+        var btnDelClass = mxUtils.button('-', function (evt) {
+            evt.target.parentElement.remove();
+        });
+        btnDelClass.style.float = 'left';
+        btnDelClass.style.width = '10%';
+        newTdClass.appendChild(newSelectClass);
+        newTdClass.appendChild(btnDelClass);
+        evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
+    });
+
+    tdAddClass.appendChild(btnAddClass);
+    tr1.appendChild(tdInputClass);
+    tr1.appendChild(tdAddClass);
     return tr1;
 }
 
@@ -241,21 +230,17 @@ function checkAllInputsProperty(table) {
             lastIndex++;
         }
 
-        var isStatic = table.rows.item(i).getElementsByTagName("td")
-            .item(lastIndex).getElementsByTagName("input").item(0).checked;
-        if(isStatic) {
-            lastIndex++;
-            let currentSelect = table.rows.item(i).getElementsByTagName("td")
-                .item(lastIndex).getElementsByTagName("select").item(0);
-            while(currentSelect != null) {
-                if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
-                    errors += "В строке №" + (i+1) + " отсутствуют классы; ";
-                    break;
-                }
-                lastIndex++;
-                currentSelect = table.rows.item(i).getElementsByTagName("td")
-                    .item(lastIndex).getElementsByTagName("select").item(0);
+        lastIndex++;
+        let currentSelect = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("select").item(0);
+        while(currentSelect != null) {
+            if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
+                errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+                break;
             }
+            lastIndex++;
+            currentSelect = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex).getElementsByTagName("select").item(0);
         }
     }
     if(errors != "") {
@@ -264,7 +249,7 @@ function checkAllInputsProperty(table) {
 }
 
 function generateStrValueForProperties(table) {
-    strValue = '<b><font color="#000000">Class properties</font></b>';
+    strValue = '<b><font color="#000000">Class and Object properties</font></b>';
 
     for (var i = 0; i < table.rows.length; i++) {
         var property = table.rows.item(i).getElementsByTagName("td")
@@ -285,40 +270,41 @@ function generateStrValueForProperties(table) {
 
         var isStatic = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("input").item(0).checked;
-        if(isStatic) {
+        lastIndex++;
+        var classList = [];
+        var classSelect = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("select").item(0);
+        classList[0] = classSelect.options[classSelect.options.selectedIndex].value;
+        lastIndex++;
+        let currentSelect = table.rows.item(i).getElementsByTagName("td")
+            .item(lastIndex).getElementsByTagName("select").item(0);
+        while(currentSelect != null) {
+            classList.push(currentSelect.options[currentSelect.options.selectedIndex].value);
             lastIndex++;
-            var classList = [];
-
-            var classSelect = table.rows.item(i).getElementsByTagName("td")
+            currentSelect = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("select").item(0);
-            classList[0] = classSelect.options[classSelect.options.selectedIndex].value;
-            lastIndex++;
-            let currentSelect = table.rows.item(i).getElementsByTagName("td")
-                .item(lastIndex).getElementsByTagName("select").item(0);
-            while(currentSelect != null) {
-                classList.push(currentSelect.options[currentSelect.options.selectedIndex].value);
-                lastIndex++;
-                currentSelect = table.rows.item(i).getElementsByTagName("td")
-                    .item(lastIndex).getElementsByTagName("select").item(0);
-            }
         }
 
-        strValue += '<br><font color="#ffb366">' + property 
-            + '</font>, <font color="#000000">' + type + '</font>';
+        if(isStatic) {
+            strValue += '<br><font color="#FF8000">' + property 
+            + '</font>';
+        } else {
+            strValue += '<br><font color="#00CC00">' + property 
+            + '</font>';
+        }
+
+        strValue += ' (<font color="#fc49a4">' + classList[0];
+        for(let i = 1; i < classList.length; i++) {
+            strValue += ', ' + classList[i];
+        }
+        strValue += '</font>) <font color="#000000">' + type + '</font>';
+
         if(type == "Integer" || type == "Double") {
             strValue += '<font color="#000000">: ' + startValue + '-' + endValue + '</font>';
         }
 
         strValue += ' <font color="#19c3c0">isStatic:</font> ' 
             + '<font color="#000000">' + isStatic + '</font>';
-
-        if(isStatic) {
-            strValue += ' (<font color="#fc49a4">' + classList[0];
-            for(let i = 1; i < classList.length; i++) {
-                strValue += ', ' + classList[i];
-            }
-            strValue += '</font>)';
-        }
     }
 
     return strValue;
@@ -328,8 +314,8 @@ function checkExistClassPropertiesDictionary(graph) {
     var cells = graph.getModel().cells;
     Object.keys(cells).forEach(function (key) {
         var cellValue = cells[key].value;
-        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class properties</font></b>')) {
-            throw new Error("Class properties dictionary already exists");
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class and Object properties</font></b>')) {
+            throw new Error("Class and Object properties dictionary already exists");
         }
     });
 }
@@ -1290,13 +1276,18 @@ function getProperties(editorUi) {
 
         var cellValue = cells[key].value;
 
-        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class properties</font></b>')) {
-            cellValue = cellValue.replace('<b><font color="#000000">Class properties</font></b><br>', '');
+        if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class and Object properties</font></b>')) {
+            cellValue = cellValue.replace('<b><font color="#000000">Class and Object properties</font></b><br>', '');
             var values = cellValue.split('<br>');
 
             values.forEach(element => {
-                var nameProperty = element.slice(element.indexOf('<font color="#ffb366">')+22, element.indexOf('</font>'));
-                element = element.slice(element.indexOf('</font>,')+8);
+                var nameProperty = element.slice(element.indexOf('<font color="#')+22, element.indexOf('</font>'));
+                element = element.slice(element.indexOf('</font>')+7);
+
+                classes = [];
+                var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
+                classes = valuesStr.split(', ');
+                element = element.slice(element.indexOf('</font>)')+8);
 
                 var type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>')+7);
@@ -1311,11 +1302,6 @@ function getProperties(editorUi) {
                 isStatic = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>')+7);
 
-                classes = [];
-                if(isStatic) {
-                    var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
-                    classes = valuesStr.split(', ');
-                }
                 
                 var ItemProperty = {
                     "name": nameProperty,
@@ -3552,7 +3538,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Class properties editor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Class and Object properties editor', div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -3564,12 +3550,17 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
 function fillDataProperties(tbody, cell, editorUi) {
     let cellValue = cell.value;
 
-    cellValue = cellValue.replace('<b><font color="#000000">Class properties</font></b><br>', '');
+    cellValue = cellValue.replace('<b><font color="#000000">Class and Object properties</font></b><br>', '');
     var values = cellValue.split('<br>');
 
     values.forEach((element, index) => {
-        var nameProperty = element.slice(element.indexOf('<font color="#ffb366">')+22, element.indexOf('</font>'));
-        element = element.slice(element.indexOf('</font>,')+8);
+        var nameProperty = element.slice(element.indexOf('<font color="#')+22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>')+7);
+
+        classes = [];
+        var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
+        classes = valuesStr.split(', ');
+        element = element.slice(element.indexOf('</font>)')+8);
 
         var type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
         element = element.slice(element.indexOf('</font>')+7);
@@ -3580,15 +3571,10 @@ function fillDataProperties(tbody, cell, editorUi) {
             element = element.slice(element.indexOf('</font>')+7);
         }
         element = element.slice(element.indexOf('<font color="#19c3c0">isStatic:</font>')+38);
-        
+                
         isStatic = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
         element = element.slice(element.indexOf('</font>')+7);
 
-        classes = [];
-        if(isStatic) {
-            var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
-            classes = valuesStr.split(', ');
-        }
 
         var row = addRowProperty(editorUi);
 
@@ -3617,21 +3603,9 @@ function fillDataProperties(tbody, cell, editorUi) {
 
         row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("input").item(0).checked = isStatic == 'true';
-        if(isStatic == 'true') {
-            var tdInputClass = document.createElement('td');
-            tdInputClass.style.minWidth = "150px";
-            var selectClass = document.createElement('select');
-            selectClass.style.width = '100%';
-            var jsonClasses = getClasses(editorUi);
-            jsonClasses.forEach(classItem => {
-                var newOption = new Option(classItem.name, classItem.name);
-                selectClass.options[selectClass.options.length] = newOption;
-            });
-            tdInputClass.appendChild(selectClass);
-
-            var tdAddClass = document.createElement('td');
-            tdAddClass.style.minWidth = "50px";
-            var btnAddClass = mxUtils.button('+', function (evt) {
+        lastIndex++;
+        classes.forEach((element, index) => {
+            if(index != 0) {
                 let newTdClass = document.createElement('td');
                 newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
@@ -3649,46 +3623,17 @@ function fillDataProperties(tbody, cell, editorUi) {
                 btnDelClass.style.width = '10%';
                 newTdClass.appendChild(newSelectClass);
                 newTdClass.appendChild(btnDelClass);
-                evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
-            });
-
-            tdAddClass.appendChild(btnAddClass);
-
-            row.insertBefore(tdAddClass, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
-            row.insertBefore(tdInputClass, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
-
+                row.insertBefore(newTdClass, row.getElementsByTagName("td").item(lastIndex));
+            }
+            var classSelect = row.getElementsByTagName("td").item(lastIndex)
+                .getElementsByTagName("select").item(0);
+            for(let index = 0; index < classSelect.options.length; ++index) {
+                if(classSelect.options[index].value == element) {
+                    classSelect.options[index].selected = true;
+                }
+            }
             lastIndex++;
-            classes.forEach((element, index) => {
-                if(index != 0) {
-                    let newTdClass = document.createElement('td');
-                    newTdClass.style.minWidth = "200px";
-                    var newSelectClass = document.createElement('select');
-                    newSelectClass.style.width = '85%';
-                    newSelectClass.style.float = 'left';
-                    var jsonClasses = getClasses(editorUi);
-                    jsonClasses.forEach(classItem => {
-                        var newOption = new Option(classItem.name, classItem.name);
-                        newSelectClass.options[newSelectClass.options.length] = newOption;
-                    });
-                    var btnDelClass = mxUtils.button('-', function (evt) {
-                        evt.target.parentElement.remove();
-                    });
-                    btnDelClass.style.float = 'left';
-                    btnDelClass.style.width = '10%';
-                    newTdClass.appendChild(newSelectClass);
-                    newTdClass.appendChild(btnDelClass);
-                    row.insertBefore(newTdClass, row.getElementsByTagName("td").item(lastIndex));
-                }
-                var classSelect = row.getElementsByTagName("td").item(lastIndex)
-                    .getElementsByTagName("select").item(0);
-                for(let index = 0; index < classSelect.options.length; ++index) {
-                    if(classSelect.options[index].value == element) {
-                        classSelect.options[index].selected = true;
-                    }
-                }
-                lastIndex++;
-            });
-        }
+        });
 
         if(index != 0) {
             var tdDelRow = document.createElement('td');
@@ -10482,7 +10427,7 @@ Draw.loadPlugin(function (ui) {
     // Привязывание действий к разделам меню
     mxResources.parse('classesConstructor=Classes constructor');
 
-    mxResources.parse('classPropertiesConstructor=Class properties constructor');
+    mxResources.parse('classPropertiesConstructor=Class and Object properties constructor');
 
     mxResources.parse('relationshipsConstructor=Relationships constructor');
 
@@ -10766,7 +10711,7 @@ Draw.loadPlugin(function (ui) {
                 this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.enumEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
+            && selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
             && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.classPropertiesEditorWindow.window.setVisible(true);
@@ -10787,7 +10732,7 @@ Draw.loadPlugin(function (ui) {
             var selectedcell = graph.getSelectionCell();
             if(selectedcell.value != null && typeof selectedcell.value != "object" 
             && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
-            && !selectedcell.value.startsWith('<b><font color="#000000">Class properties</font></b>')
+            && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
             && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
             || selectedcell.value != null && typeof selectedcell.value == "object" 
             && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')

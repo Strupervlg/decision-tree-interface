@@ -54,7 +54,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Class properties editor', div, x, y, w, h, true, true);
+    var win = new mxWindow('Class and Object properties editor', div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -66,12 +66,17 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
 function fillDataProperties(tbody, cell, editorUi) {
     let cellValue = cell.value;
 
-    cellValue = cellValue.replace('<b><font color="#000000">Class properties</font></b><br>', '');
+    cellValue = cellValue.replace('<b><font color="#000000">Class and Object properties</font></b><br>', '');
     var values = cellValue.split('<br>');
 
     values.forEach((element, index) => {
-        var nameProperty = element.slice(element.indexOf('<font color="#ffb366">')+22, element.indexOf('</font>'));
-        element = element.slice(element.indexOf('</font>,')+8);
+        var nameProperty = element.slice(element.indexOf('<font color="#')+22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>')+7);
+
+        classes = [];
+        var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
+        classes = valuesStr.split(', ');
+        element = element.slice(element.indexOf('</font>)')+8);
 
         var type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
         element = element.slice(element.indexOf('</font>')+7);
@@ -82,15 +87,10 @@ function fillDataProperties(tbody, cell, editorUi) {
             element = element.slice(element.indexOf('</font>')+7);
         }
         element = element.slice(element.indexOf('<font color="#19c3c0">isStatic:</font>')+38);
-        
+                
         isStatic = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
         element = element.slice(element.indexOf('</font>')+7);
 
-        classes = [];
-        if(isStatic) {
-            var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
-            classes = valuesStr.split(', ');
-        }
 
         var row = addRowProperty(editorUi);
 
@@ -119,21 +119,9 @@ function fillDataProperties(tbody, cell, editorUi) {
 
         row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("input").item(0).checked = isStatic == 'true';
-        if(isStatic == 'true') {
-            var tdInputClass = document.createElement('td');
-            tdInputClass.style.minWidth = "150px";
-            var selectClass = document.createElement('select');
-            selectClass.style.width = '100%';
-            var jsonClasses = getClasses(editorUi);
-            jsonClasses.forEach(classItem => {
-                var newOption = new Option(classItem.name, classItem.name);
-                selectClass.options[selectClass.options.length] = newOption;
-            });
-            tdInputClass.appendChild(selectClass);
-
-            var tdAddClass = document.createElement('td');
-            tdAddClass.style.minWidth = "50px";
-            var btnAddClass = mxUtils.button('+', function (evt) {
+        lastIndex++;
+        classes.forEach((element, index) => {
+            if(index != 0) {
                 let newTdClass = document.createElement('td');
                 newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
@@ -151,46 +139,17 @@ function fillDataProperties(tbody, cell, editorUi) {
                 btnDelClass.style.width = '10%';
                 newTdClass.appendChild(newSelectClass);
                 newTdClass.appendChild(btnDelClass);
-                evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
-            });
-
-            tdAddClass.appendChild(btnAddClass);
-
-            row.insertBefore(tdAddClass, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
-            row.insertBefore(tdInputClass, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
-
+                row.insertBefore(newTdClass, row.getElementsByTagName("td").item(lastIndex));
+            }
+            var classSelect = row.getElementsByTagName("td").item(lastIndex)
+                .getElementsByTagName("select").item(0);
+            for(let index = 0; index < classSelect.options.length; ++index) {
+                if(classSelect.options[index].value == element) {
+                    classSelect.options[index].selected = true;
+                }
+            }
             lastIndex++;
-            classes.forEach((element, index) => {
-                if(index != 0) {
-                    let newTdClass = document.createElement('td');
-                    newTdClass.style.minWidth = "200px";
-                    var newSelectClass = document.createElement('select');
-                    newSelectClass.style.width = '85%';
-                    newSelectClass.style.float = 'left';
-                    var jsonClasses = getClasses(editorUi);
-                    jsonClasses.forEach(classItem => {
-                        var newOption = new Option(classItem.name, classItem.name);
-                        newSelectClass.options[newSelectClass.options.length] = newOption;
-                    });
-                    var btnDelClass = mxUtils.button('-', function (evt) {
-                        evt.target.parentElement.remove();
-                    });
-                    btnDelClass.style.float = 'left';
-                    btnDelClass.style.width = '10%';
-                    newTdClass.appendChild(newSelectClass);
-                    newTdClass.appendChild(btnDelClass);
-                    row.insertBefore(newTdClass, row.getElementsByTagName("td").item(lastIndex));
-                }
-                var classSelect = row.getElementsByTagName("td").item(lastIndex)
-                    .getElementsByTagName("select").item(0);
-                for(let index = 0; index < classSelect.options.length; ++index) {
-                    if(classSelect.options[index].value == element) {
-                        classSelect.options[index].selected = true;
-                    }
-                }
-                lastIndex++;
-            });
-        }
+        });
 
         if(index != 0) {
             var tdDelRow = document.createElement('td');
