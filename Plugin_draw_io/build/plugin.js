@@ -8478,6 +8478,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var divText = document.createElement('div');
     var text = document.createElement('textarea');
     text.style.width = "100%";
+    text.style.resize = "vertical";
     text.style.height = "400px";
     if(typeof cell.value == "object") {
         text.value = cell.value.getAttribute("label");
@@ -8497,7 +8498,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
         }
         graph.getModel().endUpdate();
         graph.refresh(); // update the graph
-        win.setVisible(false);
+        win.destroy();
     });
 
     // Кнопка генерации человекочитаемого текста
@@ -9851,6 +9852,302 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
+// Окно редактирования информации для вопросов в узлах
+var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
+
+    var graph = editorUi.editor.graph;
+
+    let isLogicAggreg = cell.value.getAttribute("type") == "AND" || cell.value.getAttribute("type") == "OR";
+
+    // Верстка окна
+    var div = document.createElement('div');
+    var divText = document.createElement('div');
+    divText.style.height = "500px";
+    divText.style.overflow = "scroll";
+
+    //_asNextStep
+    var asNextStep = document.createElement('textarea');
+    asNextStep.style.width = "95%";
+    asNextStep.style.height = "100px";
+    asNextStep.style.fontSize = "20px";
+    asNextStep.style.resize = "vertical";
+    if(cell.value.getAttribute("_asNextStep")) {
+        asNextStep.value = cell.value.getAttribute("_asNextStep");
+    }
+    var divAsNextStep = document.createElement('div');
+    divAsNextStep.innerHTML = "Шаблон формулировки данного узла как следующего шага.";
+    divAsNextStep.style.fontSize = "20px";
+    divText.appendChild(divAsNextStep);
+    divText.appendChild(asNextStep);
+
+    //_question / _description
+    var question = document.createElement('textarea');
+    question.style.width = "95%";
+    question.style.height = "100px";
+    question.style.fontSize = "20px";
+    question.style.resize = "vertical";
+    if(isLogicAggreg && cell.value.getAttribute("_description")) {
+        question.value = cell.value.getAttribute("_description");
+    } else if(!isLogicAggreg && cell.value.getAttribute("_question")) {
+        question.value = cell.value.getAttribute("_question");
+    }
+    var divQuestion = document.createElement('div');
+    if(isLogicAggreg) {
+        divQuestion.innerHTML = "Шаблон описания результата данного узла.";
+    } else {
+        divQuestion.innerHTML = "Шаблон вопроса про данный узел.";
+    }
+    divQuestion.style.fontSize = "20px";
+    divText.appendChild(divQuestion);
+    divText.appendChild(question);
+
+    //_endingCause
+    var endingCause = document.createElement('textarea');
+    endingCause.style.width = "95%";
+    endingCause.style.height = "100px";
+    endingCause.style.fontSize = "20px";
+    endingCause.style.resize = "vertical";
+    if(cell.value.getAttribute("_endingCause")) {
+        endingCause.value = cell.value.getAttribute("_endingCause");
+    }
+    var divEndingCause = document.createElement('div');
+    divEndingCause.innerHTML = "Шаблон формулировки конечности данного узла.";
+    divEndingCause.style.fontSize = "20px";
+    divText.appendChild(divEndingCause);
+    divText.appendChild(endingCause);
+
+    // Кнопка сохранение узла
+    var btnSaveTextInNode = mxUtils.button('Save', function () {
+        graph.getModel().beginUpdate();
+        cell.value.setAttribute("_asNextStep", asNextStep.value);
+        if(isLogicAggreg) {
+            cell.value.setAttribute("_description", question.value);
+        } else {
+            cell.value.setAttribute("_question", question.value);
+        }
+        cell.value.setAttribute("_endingCause", endingCause.value);
+        graph.getModel().endUpdate();
+        graph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    var btnDiv = document.createElement('div');
+    btnDiv.style.display = "flex";
+    btnDiv.style.gap = "5px";
+    btnDiv.style.height = "10%";
+    btnDiv.style.alignItems = "center";
+    btnDiv.style.justifyContent = "center";
+
+    btnSaveTextInNode.style.height = "50%";
+    btnSaveTextInNode.style.width = "50px";
+    btnDiv.appendChild(btnSaveTextInNode);
+
+    div.appendChild(divText);
+    div.appendChild(btnDiv);
+
+    // Настройки окна
+    var win = new mxWindow('Edit question info in node', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+// Окно редактирования информации для вопросов в узлах
+var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
+
+    var graph = editorUi.editor.graph;
+
+    let outNode = cell.source;
+    if(outNode == null) {
+        throw new Error("Error: Source node is missing!");
+    }
+    if(!cell.value || typeof cell.value != "object") {
+        throw new Error("Error: Ветке не задано значение!");
+    }
+
+    // Верстка окна
+    var div = document.createElement('div');
+    var divText = document.createElement('div');
+    divText.style.height = "500px";
+    divText.style.overflow = "scroll";
+    let isThoughtBranch = typeof outNode.value == "object"
+    && (outNode.value.getAttribute('type') == "START" 
+    || ((outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")
+    && typeof cell.value == "object" && cell.value.getAttribute("type") == "Branch")
+    || ((outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR") 
+    && typeof cell.value == "object" && cell.value.getAttribute("type") == "Body"));
+    if(isThoughtBranch) {
+        //_description
+        var description = document.createElement('textarea');
+        description.id = "_description";
+        description.style.width = "95%";
+        description.style.height = "100px";
+        description.style.fontSize = "20px";
+        description.style.resize = "vertical";
+        if(cell.value.getAttribute("_description")) {
+            description.value = cell.value.getAttribute("_description");
+        }
+        var divDescription = document.createElement('div');
+        divDescription.innerHTML = "Шаблон описания результата ветки.";
+        divDescription.style.fontSize = "20px";
+        divText.appendChild(divDescription);
+        divText.appendChild(description);
+
+        //_nextStepQuestion
+        var nextStepQuestion = document.createElement('textarea');
+        nextStepQuestion.id = "_nextStepQuestion";
+        nextStepQuestion.style.width = "95%";
+        nextStepQuestion.style.height = "100px";
+        nextStepQuestion.style.fontSize = "20px";
+        nextStepQuestion.style.resize = "vertical";
+        if(cell.value.getAttribute("_nextStepQuestion")) {
+            nextStepQuestion.value = cell.value.getAttribute("_nextStepQuestion");
+        }
+        var divNextStepQuestion = document.createElement('div');
+        divNextStepQuestion.innerHTML = "Шаблон вопроса о том, с чего надо начать в ветке.";
+        divNextStepQuestion.style.fontSize = "20px";
+        divText.appendChild(divNextStepQuestion);
+        divText.appendChild(nextStepQuestion);
+
+        //_nextStepExplanation
+        var nextStepExplanation = document.createElement('textarea');
+        nextStepExplanation.id = "_nextStepExplanation";
+        nextStepExplanation.style.width = "95%";
+        nextStepExplanation.style.height = "100px";
+        nextStepExplanation.style.fontSize = "20px";
+        nextStepExplanation.style.resize = "vertical";
+        if(cell.value.getAttribute("_nextStepExplanation")) {
+            nextStepExplanation.value = cell.value.getAttribute("_nextStepExplanation");
+        }
+        var divNextStepExplanation = document.createElement('div');
+        divNextStepExplanation.innerHTML = "Шаблон объяснения того, с чего на самом деле нужно начать в ветке.";
+        divNextStepExplanation.style.fontSize = "20px";
+        divText.appendChild(divNextStepExplanation);
+        divText.appendChild(nextStepExplanation);
+    } else {
+        //_text
+        var text = document.createElement('textarea');
+        text.id = "_text";
+        text.style.width = "95%";
+        text.style.height = "100px";
+        text.style.fontSize = "20px";
+        text.style.resize = "vertical";
+        if(cell.value.getAttribute("_text")) {
+            text.value = cell.value.getAttribute("_text");
+        }
+        var divTextO = document.createElement('div');
+        divTextO.innerHTML = "Шаблон текста данного варианта ответа.";
+        divTextO.style.fontSize = "20px";
+        divText.appendChild(divTextO);
+        divText.appendChild(text);
+
+        //_explanation
+        var explanation = document.createElement('textarea');
+        explanation.id = "_explanation";
+        explanation.style.width = "95%";
+        explanation.style.height = "100px";
+        explanation.style.fontSize = "20px";
+        explanation.style.resize = "vertical";
+        if(cell.value.getAttribute("_explanation")) {
+            explanation.value = cell.value.getAttribute("_explanation");
+        }
+        var divExplanation = document.createElement('div');
+        divExplanation.innerHTML = "Шаблон объяснения, почему данный ответ правильный.";
+        divExplanation.style.fontSize = "20px";
+        divText.appendChild(divExplanation);
+        divText.appendChild(explanation);
+
+        //_nextStepQuestion
+        var nextStepQuestion = document.createElement('textarea');
+        nextStepQuestion.id = "_nextStepQuestion";
+        nextStepQuestion.style.width = "95%";
+        nextStepQuestion.style.height = "100px";
+        nextStepQuestion.style.fontSize = "20px";
+        nextStepQuestion.style.resize = "vertical";
+        if(cell.value.getAttribute("_nextStepQuestion")) {
+            nextStepQuestion.value = cell.value.getAttribute("_nextStepQuestion");
+        }
+        var divNextStepQuestion = document.createElement('div');
+        divNextStepQuestion.innerHTML = "Шаблон вопроса о том, что делать дальше при данном ответе.";
+        divNextStepQuestion.style.fontSize = "20px";
+        divText.appendChild(divNextStepQuestion);
+        divText.appendChild(nextStepQuestion);
+
+        //_nextStepBranchResult
+        var nextStepBranchResult = document.createElement('textarea');
+        nextStepBranchResult.id = "_nextStepBranchResult";
+        nextStepBranchResult.style.width = "95%";
+        nextStepBranchResult.style.height = "100px";
+        nextStepBranchResult.style.fontSize = "20px";
+        nextStepBranchResult.style.resize = "vertical";
+        if(cell.value.getAttribute("_nextStepBranchResult")) {
+            nextStepBranchResult.value = cell.value.getAttribute("_nextStepBranchResult");
+        }
+        var divNextStepBranchResult = document.createElement('div');
+        divNextStepBranchResult.innerHTML = "Шаблон формулировок для красных/зеленых узлов при данном ответе.";
+        divNextStepBranchResult.style.fontSize = "20px";
+        divText.appendChild(divNextStepBranchResult);
+        divText.appendChild(nextStepBranchResult);
+
+        //_nextStepExplanation
+        var nextStepExplanation = document.createElement('textarea');
+        nextStepExplanation.id = "_nextStepExplanation";
+        nextStepExplanation.style.width = "95%";
+        nextStepExplanation.style.height = "100px";
+        nextStepExplanation.style.fontSize = "20px";
+        nextStepExplanation.style.resize = "vertical";
+        if(cell.value.getAttribute("_nextStepExplanation")) {
+            nextStepExplanation.value = cell.value.getAttribute("_nextStepExplanation");
+        }
+        var divNextStepExplanation = document.createElement('div');
+        divNextStepExplanation.innerHTML = "Шаблон объяснения того, что на самом деле делать дальше при данном ответе.";
+        divNextStepExplanation.style.fontSize = "20px";
+        divText.appendChild(divNextStepExplanation);
+        divText.appendChild(nextStepExplanation);
+    }
+
+    // Кнопка сохранение узла
+    var btnSaveTextInNode = mxUtils.button('Save', function () {
+        graph.getModel().beginUpdate();
+        if(isThoughtBranch) {
+            cell.value.setAttribute("_description", divText.querySelector("#_description").value);
+        } else {
+            cell.value.setAttribute("_text", divText.querySelector("#_text").value);
+            cell.value.setAttribute("_explanation", divText.querySelector("#_explanation").value);
+            cell.value.setAttribute("_nextStepBranchResult", divText.querySelector("#_nextStepBranchResult").value);
+        }
+        cell.value.setAttribute("_nextStepQuestion", divText.querySelector("#_nextStepQuestion").value);
+        cell.value.setAttribute("_nextStepExplanation", divText.querySelector("#_nextStepExplanation").value);
+        graph.getModel().endUpdate();
+        graph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    var btnDiv = document.createElement('div');
+    btnDiv.style.display = "flex";
+    btnDiv.style.gap = "5px";
+    btnDiv.style.height = "10%";
+    btnDiv.style.alignItems = "center";
+    btnDiv.style.justifyContent = "center";
+
+    btnSaveTextInNode.style.height = "50%";
+    btnSaveTextInNode.style.width = "50px";
+    btnDiv.appendChild(btnSaveTextInNode);
+
+    div.appendChild(divText);
+    div.appendChild(btnDiv);
+
+    // Настройки окна
+    var win = new mxWindow('Edit question info in outcome', div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
 function treeToXml(editorUi)
 {
     let result = '<?xml version="1.0"?>\n';
@@ -9886,7 +10183,8 @@ function startNodeToXml(startNode, editorUi)
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
                 throw new Error('Отсутствует тип у ветки после начального узла');
             }
-            result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'">\n';
+            let questionInfo = getQuestionInfoThoughtBranch(startNode.edges[i]);
+            result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'"'+ questionInfo +'>\n';
             if(startNode.edges[i].target != startNode) {
                 result += switchCaseNodes(startNode.edges[i].target, editorUi);
             }
@@ -9964,7 +10262,8 @@ function branchResultNodeToXml(node, resultBranch) {
 
 function questionNodeToXml(node, isSwitch, editorUi)
 {
-    let result = '<QuestionNode type="'+getTypeFromCode(node.value.getAttribute("expression"), editorUi).type+'" isSwitch="'+isSwitch+'">\n';
+    let questionInfo = getQuestionInfoNode(node, false);
+    let result = '<QuestionNode type="'+getTypeFromCode(node.value.getAttribute("expression"), editorUi).type+'" isSwitch="'+isSwitch+'"'+questionInfo+'>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
@@ -9977,7 +10276,8 @@ function questionNodeToXml(node, isSwitch, editorUi)
 
 function actionNodeToXml(node, editorUi)
 {
-    let result = '<FindActionNode>\n';
+    let questionInfo = getQuestionInfoNode(node, false);
+    let result = '<FindActionNode'+questionInfo+'>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
@@ -9995,7 +10295,8 @@ function actionNodeToXml(node, editorUi)
 
 function cycleNodeToXml(node, editorUi)
 {
-    let result = '<CycleAggregationNode operator="'+node.value.getAttribute("operator")+'">\n';
+    let questionInfo = getQuestionInfoNode(node, false);
+    let result = '<CycleAggregationNode operator="'+node.value.getAttribute("operator")+'"'+questionInfo+'>\n';
 
     result += "<SelectorExpression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</SelectorExpression>\n";
 
@@ -10023,12 +10324,14 @@ function cycleNodeToXml(node, editorUi)
                     } else {
                         falseCount++;
                     }
-                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
+                    let questionInfo = getQuestionInfoOutcome(node.edges[i]);
+                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'"'+questionInfo+'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
                 } else if(valueEdge.getAttribute("type") == "Body") {
+                    let questionInfo = getQuestionInfoThoughtBranch(node.edges[i]);
                     bodyCount++;
-                    result += '<ThoughtBranch type="bool" paramName="'+node.value.getAttribute("nameVar")+'">\n';
+                    result += '<ThoughtBranch type="bool" paramName="'+node.value.getAttribute("nameVar")+'"'+ questionInfo +'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
@@ -10056,7 +10359,8 @@ function cycleNodeToXml(node, editorUi)
 
 function logicNodeToXml(node, editorUi)
 {
-    let result = '<LogicAggregationNode operator="'+node.value.getAttribute("type").toLowerCase()+'">\n';
+    let questionInfo = getQuestionInfoNode(node, true);
+    let result = '<LogicAggregationNode operator="'+node.value.getAttribute("type").toLowerCase()+'"'+questionInfo+'>\n';
 
     let branchCount = 0;
     let trueCount = 0;
@@ -10079,12 +10383,14 @@ function logicNodeToXml(node, editorUi)
                     } else {
                         falseCount++;
                     }
-                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
+                    let questionInfo = getQuestionInfoOutcome(node.edges[i]);
+                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'"'+questionInfo+'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
                 } else if(valueEdge.getAttribute("type") == "Branch") {
+                    let questionInfo = getQuestionInfoThoughtBranch(node.edges[i]);
                     branchCount++;
-                    result += '<ThoughtBranch type="bool">\n';
+                    result += '<ThoughtBranch type="bool"'+ questionInfo +'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
@@ -10111,7 +10417,8 @@ function logicNodeToXml(node, editorUi)
 
 function predeterminingNodeToXml(node, editorUi)
 {
-    let result = '<PredeterminingFactorsNode>\n<Predetermining>\n';
+    let questionInfo = getQuestionInfoNode(node, false);
+    let result = '<PredeterminingFactorsNode'+questionInfo+'>\n<Predetermining>\n';
 
     //Следующие ветки
     let predCount = 0;
@@ -10198,7 +10505,8 @@ function outcomeToXml(node, editorUi)
                     throw new Error('Ветка имеет повторяющееся значение');
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
-                result += '<Outcome value="'+valueEdge.getAttribute("value")+'">\n';
+                let questionInfo = getQuestionInfoOutcome(node.edges[i]);
+                result += '<Outcome value="'+valueEdge.getAttribute("value")+'"'+questionInfo+'>\n';
                 result += switchCaseNodes(node.edges[i].target, editorUi);
                 result += "</Outcome>\n";
             }
@@ -10214,6 +10522,60 @@ function markOutcome(graph, cell) {
     }
     graph.getModel().endUpdate();
     graph.refresh(); // update the graph
+}
+
+function getQuestionInfoThoughtBranch(edge) {
+    let resultInfo = "";
+    if(edge.value.getAttribute("_description")) {
+        resultInfo += ` _description="`+specialChars(edge.value.getAttribute("_description"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepQuestion")) {
+        resultInfo += ` _nextStepQuestion="`+specialChars(edge.value.getAttribute("_nextStepQuestion"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepExplanation")) {
+        resultInfo += ` _nextStepExplanation="`+specialChars(edge.value.getAttribute("_nextStepExplanation"))+`"`;
+    }
+    return resultInfo + " ";
+}
+
+function getQuestionInfoOutcome(edge) {
+    let resultInfo = "";
+    if(edge.value.getAttribute("_text")) {
+        resultInfo += ` _text="`+specialChars(edge.value.getAttribute("_text"))+`"`;
+    }
+    if(edge.value.getAttribute("_explanation")) {
+        resultInfo += ` _explanation="`+specialChars(edge.value.getAttribute("_explanation"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepBranchResult")) {
+        resultInfo += ` _nextStepBranchResult="`+specialChars(edge.value.getAttribute("_nextStepBranchResult"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepQuestion")) {
+        resultInfo += ` _nextStepQuestion="`+specialChars(edge.value.getAttribute("_nextStepQuestion"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepExplanation")) {
+        resultInfo += ` _nextStepExplanation="`+specialChars(edge.value.getAttribute("_nextStepExplanation"))+`"`;
+    }
+    return resultInfo + " ";
+}
+
+function getQuestionInfoNode(node, isLogic) {
+    let resultInfo = "";
+    if(isLogic) {
+        if(node.value.getAttribute("_description")) {
+            resultInfo += ` _description="`+specialChars(node.value.getAttribute("_description"))+`"`;
+        }
+    } else {
+        if(node.value.getAttribute("_question")) {
+            resultInfo += ` _question="`+specialChars(node.value.getAttribute("_question"))+`"`;
+        }
+    }
+    if(node.value.getAttribute("_asNextStep")) {
+        resultInfo += ` _asNextStep="`+specialChars(node.value.getAttribute("_asNextStep"))+`"`;
+    }
+    if(node.value.getAttribute("_endingCause")) {
+        resultInfo += ` _endingCause="`+specialChars(node.value.getAttribute("_endingCause"))+`"`;
+    }
+    return resultInfo + " ";
 }
 const SemanticType = { 
     OBJECT: 'object',
@@ -10376,6 +10738,14 @@ function hasCycle(root) {
   
     return dfs(root);
 }
+
+function specialChars(str) {
+    return str.replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 // Плагин
 Draw.loadPlugin(function (ui) {
 
@@ -10421,6 +10791,7 @@ Draw.loadPlugin(function (ui) {
     ui.menubar.addMenu('Edit', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'editValue');
         ui.menus.addMenuItem(menu, 'editTextInNode');
+        ui.menus.addMenuItem(menu, 'editQuestionInfo');
     });
 
 
@@ -10466,6 +10837,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('editValue=Edit value');
 
     mxResources.parse('editTextInNode=Edit text in node');
+
+    mxResources.parse('editQuestionInfo=Edit question info');
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -10730,7 +11103,7 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editTextInNode', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && typeof selectedcell.value != "object" 
+            if(selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object" 
             && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
             && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
             && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
@@ -10743,6 +11116,28 @@ Draw.loadPlugin(function (ui) {
             && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editTextInNodeWindow.window.setVisible(true);
+            }
+        }
+    });
+
+    ui.actions.addAction('editQuestionInfo', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            if(selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object" 
+            && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+            && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
+            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
+            || selectedcell.value != null && typeof selectedcell.value == "object" 
+            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
+            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+            && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+            && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+            && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+                this.editQuestionInfoInNodeWindow = new EditQuestionInfoInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editQuestionInfoInNodeWindow.window.setVisible(true);
+            } else if(selectedcell.edge) {
+                this.editQuestionInfoInOutcomeWindow = new EditQuestionInfoInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editQuestionInfoInOutcomeWindow.window.setVisible(true);
             }
         }
     });

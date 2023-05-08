@@ -8,6 +8,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var divText = document.createElement('div');
     var text = document.createElement('textarea');
     text.style.width = "100%";
+    text.style.resize = "vertical";
     text.style.height = "400px";
     if(typeof cell.value == "object") {
         text.value = cell.value.getAttribute("label");
@@ -27,7 +28,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
         }
         graph.getModel().endUpdate();
         graph.refresh(); // update the graph
-        win.setVisible(false);
+        win.destroy();
     });
 
     // Кнопка генерации человекочитаемого текста

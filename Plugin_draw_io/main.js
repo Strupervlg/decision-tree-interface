@@ -43,6 +43,7 @@ Draw.loadPlugin(function (ui) {
     ui.menubar.addMenu('Edit', function (menu, parent) {
         ui.menus.addMenuItem(menu, 'editValue');
         ui.menus.addMenuItem(menu, 'editTextInNode');
+        ui.menus.addMenuItem(menu, 'editQuestionInfo');
     });
 
 
@@ -88,6 +89,8 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('editValue=Edit value');
 
     mxResources.parse('editTextInNode=Edit text in node');
+
+    mxResources.parse('editQuestionInfo=Edit question info');
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -352,7 +355,7 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editTextInNode', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && typeof selectedcell.value != "object" 
+            if(selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object" 
             && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
             && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
             && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
@@ -365,6 +368,28 @@ Draw.loadPlugin(function (ui) {
             && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editTextInNodeWindow.window.setVisible(true);
+            }
+        }
+    });
+
+    ui.actions.addAction('editQuestionInfo', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            if(selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object" 
+            && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+            && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
+            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
+            || selectedcell.value != null && typeof selectedcell.value == "object" 
+            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
+            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+            && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+            && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+            && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+                this.editQuestionInfoInNodeWindow = new EditQuestionInfoInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editQuestionInfoInNodeWindow.window.setVisible(true);
+            } else if(selectedcell.edge) {
+                this.editQuestionInfoInOutcomeWindow = new EditQuestionInfoInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editQuestionInfoInOutcomeWindow.window.setVisible(true);
             }
         }
     });

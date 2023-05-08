@@ -33,7 +33,8 @@ function startNodeToXml(startNode, editorUi)
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
                 throw new Error('Отсутствует тип у ветки после начального узла');
             }
-            result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'">\n';
+            let questionInfo = getQuestionInfoThoughtBranch(startNode.edges[i]);
+            result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'"'+ questionInfo +'>\n';
             if(startNode.edges[i].target != startNode) {
                 result += switchCaseNodes(startNode.edges[i].target, editorUi);
             }
@@ -111,7 +112,8 @@ function branchResultNodeToXml(node, resultBranch) {
 
 function questionNodeToXml(node, isSwitch, editorUi)
 {
-    let result = '<QuestionNode type="'+getTypeFromCode(node.value.getAttribute("expression"), editorUi).type+'" isSwitch="'+isSwitch+'">\n';
+    let questionInfo = getQuestionInfoNode(node, false);
+    let result = '<QuestionNode type="'+getTypeFromCode(node.value.getAttribute("expression"), editorUi).type+'" isSwitch="'+isSwitch+'"'+questionInfo+'>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
@@ -124,7 +126,8 @@ function questionNodeToXml(node, isSwitch, editorUi)
 
 function actionNodeToXml(node, editorUi)
 {
-    let result = '<FindActionNode>\n';
+    let questionInfo = getQuestionInfoNode(node, false);
+    let result = '<FindActionNode'+questionInfo+'>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
@@ -142,7 +145,8 @@ function actionNodeToXml(node, editorUi)
 
 function cycleNodeToXml(node, editorUi)
 {
-    let result = '<CycleAggregationNode operator="'+node.value.getAttribute("operator")+'">\n';
+    let questionInfo = getQuestionInfoNode(node, false);
+    let result = '<CycleAggregationNode operator="'+node.value.getAttribute("operator")+'"'+questionInfo+'>\n';
 
     result += "<SelectorExpression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</SelectorExpression>\n";
 
@@ -170,12 +174,14 @@ function cycleNodeToXml(node, editorUi)
                     } else {
                         falseCount++;
                     }
-                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
+                    let questionInfo = getQuestionInfoOutcome(node.edges[i]);
+                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'"'+questionInfo+'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
                 } else if(valueEdge.getAttribute("type") == "Body") {
+                    let questionInfo = getQuestionInfoThoughtBranch(node.edges[i]);
                     bodyCount++;
-                    result += '<ThoughtBranch type="bool" paramName="'+node.value.getAttribute("nameVar")+'">\n';
+                    result += '<ThoughtBranch type="bool" paramName="'+node.value.getAttribute("nameVar")+'"'+ questionInfo +'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
@@ -203,7 +209,8 @@ function cycleNodeToXml(node, editorUi)
 
 function logicNodeToXml(node, editorUi)
 {
-    let result = '<LogicAggregationNode operator="'+node.value.getAttribute("type").toLowerCase()+'">\n';
+    let questionInfo = getQuestionInfoNode(node, true);
+    let result = '<LogicAggregationNode operator="'+node.value.getAttribute("type").toLowerCase()+'"'+questionInfo+'>\n';
 
     let branchCount = 0;
     let trueCount = 0;
@@ -226,12 +233,14 @@ function logicNodeToXml(node, editorUi)
                     } else {
                         falseCount++;
                     }
-                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'">\n';
+                    let questionInfo = getQuestionInfoOutcome(node.edges[i]);
+                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'"'+questionInfo+'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</Outcome>\n";
                 } else if(valueEdge.getAttribute("type") == "Branch") {
+                    let questionInfo = getQuestionInfoThoughtBranch(node.edges[i]);
                     branchCount++;
-                    result += '<ThoughtBranch type="bool">\n';
+                    result += '<ThoughtBranch type="bool"'+ questionInfo +'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi);
                     result += "</ThoughtBranch>\n";
                 }
@@ -258,7 +267,8 @@ function logicNodeToXml(node, editorUi)
 
 function predeterminingNodeToXml(node, editorUi)
 {
-    let result = '<PredeterminingFactorsNode>\n<Predetermining>\n';
+    let questionInfo = getQuestionInfoNode(node, false);
+    let result = '<PredeterminingFactorsNode'+questionInfo+'>\n<Predetermining>\n';
 
     //Следующие ветки
     let predCount = 0;
@@ -345,7 +355,8 @@ function outcomeToXml(node, editorUi)
                     throw new Error('Ветка имеет повторяющееся значение');
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
-                result += '<Outcome value="'+valueEdge.getAttribute("value")+'">\n';
+                let questionInfo = getQuestionInfoOutcome(node.edges[i]);
+                result += '<Outcome value="'+valueEdge.getAttribute("value")+'"'+questionInfo+'>\n';
                 result += switchCaseNodes(node.edges[i].target, editorUi);
                 result += "</Outcome>\n";
             }
@@ -361,4 +372,58 @@ function markOutcome(graph, cell) {
     }
     graph.getModel().endUpdate();
     graph.refresh(); // update the graph
+}
+
+function getQuestionInfoThoughtBranch(edge) {
+    let resultInfo = "";
+    if(edge.value.getAttribute("_description")) {
+        resultInfo += ` _description="`+specialChars(edge.value.getAttribute("_description"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepQuestion")) {
+        resultInfo += ` _nextStepQuestion="`+specialChars(edge.value.getAttribute("_nextStepQuestion"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepExplanation")) {
+        resultInfo += ` _nextStepExplanation="`+specialChars(edge.value.getAttribute("_nextStepExplanation"))+`"`;
+    }
+    return resultInfo + " ";
+}
+
+function getQuestionInfoOutcome(edge) {
+    let resultInfo = "";
+    if(edge.value.getAttribute("_text")) {
+        resultInfo += ` _text="`+specialChars(edge.value.getAttribute("_text"))+`"`;
+    }
+    if(edge.value.getAttribute("_explanation")) {
+        resultInfo += ` _explanation="`+specialChars(edge.value.getAttribute("_explanation"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepBranchResult")) {
+        resultInfo += ` _nextStepBranchResult="`+specialChars(edge.value.getAttribute("_nextStepBranchResult"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepQuestion")) {
+        resultInfo += ` _nextStepQuestion="`+specialChars(edge.value.getAttribute("_nextStepQuestion"))+`"`;
+    }
+    if(edge.value.getAttribute("_nextStepExplanation")) {
+        resultInfo += ` _nextStepExplanation="`+specialChars(edge.value.getAttribute("_nextStepExplanation"))+`"`;
+    }
+    return resultInfo + " ";
+}
+
+function getQuestionInfoNode(node, isLogic) {
+    let resultInfo = "";
+    if(isLogic) {
+        if(node.value.getAttribute("_description")) {
+            resultInfo += ` _description="`+specialChars(node.value.getAttribute("_description"))+`"`;
+        }
+    } else {
+        if(node.value.getAttribute("_question")) {
+            resultInfo += ` _question="`+specialChars(node.value.getAttribute("_question"))+`"`;
+        }
+    }
+    if(node.value.getAttribute("_asNextStep")) {
+        resultInfo += ` _asNextStep="`+specialChars(node.value.getAttribute("_asNextStep"))+`"`;
+    }
+    if(node.value.getAttribute("_endingCause")) {
+        resultInfo += ` _endingCause="`+specialChars(node.value.getAttribute("_endingCause"))+`"`;
+    }
+    return resultInfo + " ";
 }
