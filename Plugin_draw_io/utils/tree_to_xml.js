@@ -263,10 +263,10 @@ function logicNodeToXml(node, editorUi, isPredetermining)
     if(branchCount < 2) {
         errorLogic += "Веток для логического узла должно быть 2 и более!\n";
     }
-    if(trueCount > 1) {
+    if(trueCount != 1) {
         errorLogic += "Истинная ветка для логического узла должна быть одна!\n";
     }
-    if(falseCount > 1) {
+    if(falseCount != 1) {
         errorLogic += "Ложная ветка для логического узла должна быть одна!\n";
     }
     if(errorLogic) {
