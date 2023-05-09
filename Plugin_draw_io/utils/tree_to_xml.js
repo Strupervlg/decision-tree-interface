@@ -51,7 +51,7 @@ function getVariables(nodeValue)
     let vars = nodeValue.split("\n");
     vars.forEach(element => {
         let varWithClass = element.split(" - ");
-        variables += '<DecisionTreeVarDecl name="'+varWithClass[0]+'" type="'+varWithClass[1]+'"/>\n';
+        variables += '<DecisionTreeVarDecl name="'+specialChars(varWithClass[0])+'" type="'+specialChars(varWithClass[1])+'"/>\n';
     });
     return variables;
 }
@@ -125,7 +125,7 @@ function branchResultNodeToXml(node, resultBranch) {
 function questionNodeToXml(node, isSwitch, editorUi, isPredetermining)
 {
     let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<QuestionNode type="'+getTypeFromCode(node.value.getAttribute("expression"), editorUi).type+'" isSwitch="'+isSwitch+'"'+questionInfo+'>\n';
+    let result = '<QuestionNode type="'+specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type)+'" isSwitch="'+isSwitch+'"'+questionInfo+'>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
@@ -145,7 +145,7 @@ function actionNodeToXml(node, editorUi, isPredetermining)
 
     let typeVar = node.value.getAttribute("typeVar");
 
-    result += '<DecisionTreeVarDecl name="'+node.value.getAttribute("nameVar")+'" type="'+typeVar+'"/>\n';
+    result += '<DecisionTreeVarDecl name="'+specialChars(node.value.getAttribute("nameVar"))+'" type="'+specialChars(typeVar)+'"/>\n';
 
     //Следующие ветки
     result += outcomeToXml(node, editorUi, isPredetermining)
@@ -163,7 +163,7 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
     result += "<SelectorExpression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</SelectorExpression>\n";
 
     let typeVar = node.value.getAttribute("typeVar");
-    result += '<DecisionTreeVarDecl name="'+node.value.getAttribute("nameVar")+'" type="'+typeVar+'"/>\n';
+    result += '<DecisionTreeVarDecl name="'+specialChars(node.value.getAttribute("nameVar"))+'" type="'+specialChars(typeVar)+'"/>\n';
 
     let bodyCount = 0;
     let trueCount = 0;
@@ -187,13 +187,13 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
                         falseCount++;
                     }
                     let questionInfo = getQuestionInfoOutcome(node.edges[i]);
-                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'"'+questionInfo+'>\n';
+                    result += '<Outcome value="'+specialChars(valueEdge.getAttribute("type"))+'"'+questionInfo+'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
                     result += "</Outcome>\n";
                 } else if(valueEdge.getAttribute("type") == "Body") {
                     let questionInfo = getQuestionInfoThoughtBranch(node.edges[i]);
                     bodyCount++;
-                    result += '<ThoughtBranch type="bool" paramName="'+node.value.getAttribute("nameVar")+'"'+ questionInfo +'>\n';
+                    result += '<ThoughtBranch type="bool" paramName="'+specialChars(node.value.getAttribute("nameVar"))+'"'+ questionInfo +'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
                     result += "</ThoughtBranch>\n";
                 }
@@ -246,7 +246,7 @@ function logicNodeToXml(node, editorUi, isPredetermining)
                         falseCount++;
                     }
                     let questionInfo = getQuestionInfoOutcome(node.edges[i]);
-                    result += '<Outcome value="'+valueEdge.getAttribute("type")+'"'+questionInfo+'>\n';
+                    result += '<Outcome value="'+specialChars(valueEdge.getAttribute("type"))+'"'+questionInfo+'>\n';
                     result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
                     result += "</Outcome>\n";
                 } else if(valueEdge.getAttribute("type") == "Branch") {
@@ -300,7 +300,7 @@ function predeterminingNodeToXml(node, editorUi)
                 let resultNode = checkCorrectPredeterminingBranch(node.edges[i].target);
                 predCount++;
                 let questionInfo = getQuestionInfoPredetermining(node.edges[i]);
-                result += '<Outcome value="'+node.edges[i].value.getAttribute("label")+'"'+questionInfo[0]+'>\n';
+                result += '<Outcome value="'+specialChars(node.edges[i].value.getAttribute("label"))+'"'+questionInfo[0]+'>\n';
                 
                 result += switchCaseNodes(resultNode, editorUi, false);
                 
@@ -378,7 +378,7 @@ function outcomeToXml(node, editorUi, isPredetermining)
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
                 let questionInfo = getQuestionInfoOutcome(node.edges[i]);
-                result += '<Outcome value="'+valueEdge.getAttribute("value")+'"'+questionInfo+'>\n';
+                result += '<Outcome value="'+specialChars(valueEdge.getAttribute("value"))+'"'+questionInfo+'>\n';
                 result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
                 result += "</Outcome>\n";
             }
