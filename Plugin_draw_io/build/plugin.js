@@ -7230,10 +7230,17 @@ const xslTxt = `<?xml version="1.0"?>
     </xsl:template>
 
 </xsl:stylesheet>`
+var validator = function(newValue) {
+  if (!/^[a-zA-Z_][A-Za-z0-9_]*$/.test(newValue)) {
+    return null;
+  }
+  return newValue;
+};
+
 Blockly.Blocks['object'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("object"), "object_name");
+        .appendField(new Blockly.FieldTextInput("object", validator), "object_name");
     this.setOutput(true, "Object");
     this.setColour(120);
  this.setTooltip("");
@@ -7244,7 +7251,7 @@ Blockly.Blocks['object'] = {
 Blockly.Blocks['class'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("class"), "class_name");
+        .appendField(new Blockly.FieldTextInput("class", validator), "class_name");
     this.setOutput(true, "Class");
     this.setColour(315);
  this.setTooltip("");
@@ -7255,7 +7262,7 @@ Blockly.Blocks['class'] = {
 Blockly.Blocks['property'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("property"), "property_name");
+        .appendField(new Blockly.FieldTextInput("property", validator), "property_name");
     this.setOutput(true, "Property");
     this.setColour(60);
  this.setTooltip("");
@@ -7266,7 +7273,7 @@ Blockly.Blocks['property'] = {
 Blockly.Blocks['relationship'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("relationship"), "relationship_name");
+        .appendField(new Blockly.FieldTextInput("relationship", validator), "relationship_name");
     this.setOutput(true, "Relationship");
     this.setColour(180);
  this.setTooltip("");
@@ -7369,7 +7376,7 @@ Blockly.Blocks['get_relationship_object'] = {
         .setCheck("Relationship")
         .appendField("relationship");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var"), "name_var");
+        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.appendValueInput("boolean")
         .setCheck("Boolean")
         .appendField("boolean");
@@ -7389,7 +7396,7 @@ Blockly.Blocks['get_condition_object'] = {
         .setCheck("Boolean")
         .appendField("condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var"), "name_var");
+        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, ["Object"]);
     this.setColour(240);
@@ -7403,12 +7410,12 @@ Blockly.Blocks['get_extr_object'] = {
     this.appendDummyInput()
         .appendField("get extreme object");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var1"), "name_var1");
+        .appendField(new Blockly.FieldTextInput("var1", validator), "name_var1");
     this.appendValueInput("extreme_condition")
         .setCheck("Boolean")
         .appendField("extreme condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var2"), "name_var2");
+        .appendField(new Blockly.FieldTextInput("var2", validator), "name_var2");
     this.appendValueInput("general_condition")
         .setCheck("Boolean")
         .appendField("general condition");
@@ -7703,7 +7710,7 @@ Blockly.Blocks['quantifier_of_existence'] = {
         .setCheck("Boolean")
         .appendField("verification condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var"), "name_var");
+        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setColour(240);
@@ -7723,7 +7730,7 @@ Blockly.Blocks['quantifier_of_generality'] = {
         .setCheck("Boolean")
         .appendField("verification condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var"), "name_var");
+        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setColour(240);
@@ -7735,7 +7742,7 @@ Blockly.Blocks['quantifier_of_generality'] = {
 Blockly.Blocks['ref_to_decision_tree_var'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("decision_tree_var"), "var_name");
+        .appendField(new Blockly.FieldTextInput("decision_tree_var", validator), "var_name");
     this.setOutput(true, ["Object", "VarObject"]);
     this.setColour(60);
  this.setTooltip("");
@@ -7746,7 +7753,7 @@ Blockly.Blocks['ref_to_decision_tree_var'] = {
 Blockly.Blocks['variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("variable"), "var_name");
+        .appendField(new Blockly.FieldTextInput("variable", validator), "var_name");
     this.setOutput(true, "Object");
     this.setColour(45);
  this.setTooltip("");
@@ -7757,16 +7764,15 @@ Blockly.Blocks['variable'] = {
 Blockly.Blocks['enum'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("owner"), "owner_name");
+        .appendField(new Blockly.FieldTextInput("owner", validator), "owner_name");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("value"), "value");
+        .appendField(new Blockly.FieldTextInput("value", validator), "value");
     this.setOutput(true, "Enum");
     this.setColour(0);
  this.setTooltip("");
  this.setHelpUrl("");
   }
-};
-Blockly.JavaScript['object'] = function(block) {
+};Blockly.JavaScript['object'] = function(block) {
   var text_object_name = block.getFieldValue('object_name');
   var code = text_object_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
