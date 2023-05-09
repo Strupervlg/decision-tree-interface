@@ -97,7 +97,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             let enumsList = getEnums(editorUi);
             let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
             findEnum[0].values.forEach(enumValue => {
-                var newOption = new Option(enumValue, enumValue);
+                var newOption = new Option(typeNode.enum+":"+enumValue, typeNode.enum+":"+enumValue);
                 selectValue.options[selectValue.options.length] = newOption;
             });
             labelValue.appendChild(selectValue);

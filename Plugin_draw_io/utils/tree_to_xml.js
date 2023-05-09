@@ -62,7 +62,7 @@ function switchCaseNodes(node, editorUi, isPredetermining)
     //Узел истина
     if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;") {
         if(isPredetermining) {
-            result = '<BranchResultNode value="true">\n<Expression></Expression>\n</BranchResultNode>\n';
+            result = '<BranchResultNode value="true">\n</BranchResultNode>\n';
         } else {
             result = branchResultNodeToXml(node, true);
         }
@@ -70,7 +70,7 @@ function switchCaseNodes(node, editorUi, isPredetermining)
     //Узел ложь
     else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;") {
         if(isPredetermining) {
-            result = '<BranchResultNode value="true">\n<Expression></Expression>\n</BranchResultNode>\n';
+            result = '<BranchResultNode value="true">\n</BranchResultNode>\n';
         } else {
             result = branchResultNodeToXml(node, false);
         }
@@ -104,7 +104,7 @@ function switchCaseNodes(node, editorUi, isPredetermining)
     //Узел неопределенность предрешающего фактора
     else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
         if(isPredetermining) {
-            result = '<BranchResultNode value="false">\n<Expression></Expression>\n</BranchResultNode>\n';
+            result = '<BranchResultNode value="false">\n</BranchResultNode>\n';
         } else {
             result = '<UndeterminedNode/>\n';
         }
@@ -115,8 +115,9 @@ function switchCaseNodes(node, editorUi, isPredetermining)
 function branchResultNodeToXml(node, resultBranch) {
     let result = '<BranchResultNode value="'+resultBranch+'">\n';
 
-    //Сделать проверку на пустой экспрешн
-    result += "<Expression>\n" + ((node.value.getAttribute("expression") != "") ? codeToXML(globalWS, node.value.getAttribute("expression")) : ("")) + "\n</Expression>\n";
+    if(node.value.getAttribute("expression") != "") {
+        result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
+    }
 
     result += '</BranchResultNode>\n';
     return result;
@@ -356,7 +357,8 @@ function outcomeToXml(node, editorUi, isPredetermining)
                     if(valueEdge.getAttribute("typeValue") == "enum") {
                         let enumsList = getEnums(editorUi);
                         let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
-                        if(findEnum[0].values.indexOf(valueEdge.getAttribute("value")) == -1) {
+                        let valueEnumInOutcome = valueEdge.getAttribute("value").split(":");
+                        if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
                             markOutcome(editorUi.editor.graph, node.edges[i])
                             throw new Error('Значение enum отсутствует в словаре');
                         }
