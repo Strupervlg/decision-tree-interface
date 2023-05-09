@@ -56,12 +56,12 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 <STRING>\\t                       string += '\t';
 <STRING>\\v                       string += '\v';
 <STRING>\\\\                      string += '\\';
-<STRING>\\[^bfnrtv\"\'\\]         console.log('Error: invalid escape\n');
-<STRING>\n                        console.log('Error: unfinished string.\n');
+<STRING>\\[^bfnrtv\"\'\\]         throw new Error('Error: invalid escape\n');
+<STRING>\n                        throw new Error('Error: unfinished string.\n');
 <STRING>\\\"                      string += '"';
 <STRING>\\\'                      string += '\'';
 <STRING>\"                        { this.begin('INITIAL'); yytext = string; return 'STRING'; }
-<STRING><<EOF>>                   { this.begin('INITIAL'); console.log('Error: expected \".\n'); }
+<STRING><<EOF>>                   { this.begin('INITIAL'); throw new Error('Error: expected \".\n'); }
             
 
 ([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)    return 'DOUBLE';

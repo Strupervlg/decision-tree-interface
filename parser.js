@@ -753,9 +753,9 @@ case 43:string += '\v';
 break;
 case 44:string += '\\';
 break;
-case 45:console.log('Error: invalid escape\n');
+case 45:throw new Error('Error: invalid escape\n');
 break;
-case 46:console.log('Error: unfinished string.\n');
+case 46:throw new Error('Error: unfinished string.\n');
 break;
 case 47:string += '"';
 break;
@@ -763,7 +763,7 @@ case 48:string += '\'';
 break;
 case 49: this.begin('INITIAL'); yy_.yytext = string; return 8; 
 break;
-case 50: this.begin('INITIAL'); console.log('Error: expected \".\n'); 
+case 50: this.begin('INITIAL'); throw new Error('Error: expected \".\n'); 
 break;
 case 51:return 10;
 break;
@@ -805,10 +805,3 @@ if (typeof module !== 'undefined' && require.main === module) {
   exports.main(process.argv.slice(1));
 }
 }
-
-// Для тестов
-const { createBinExprNode, createGetObjectByRel, createUnaryExprNode,
-    createLiteral, createEnum, createCheckRelExprNode, createGetExprNode, createFindExtremeExprNode,
-    createQuantifierExprNode, createObjectSeqNode, addObjectToObjectSeqNode, ObjectSeq,
-    ProgramNode, StatementNode, ExpressionNode, ExprType } = require('./create_nodes');
-var { root, string } = require('./create_nodes');
