@@ -146,10 +146,13 @@ function addRowEnum() {
 function checkAllInputsEnum(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
-        if(table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("input").item(0).value == "") {
+        let checkValue = table.rows.item(i).getElementsByTagName("td")
+        .item(0).getElementsByTagName("input").item(0).value;
+        if(checkValue == "") {
                 errors += "В строке №" + (i+1) + " отсутствует название; ";
-            }
+        } else if(!checkValidID(checkValue)) {
+            errors += "В строке №" + (i+1) + " название некорректно; ";
+        }
 
         let lastIndex = 1;
         let currentInput = table.rows.item(i).getElementsByTagName("td")
@@ -158,6 +161,9 @@ function checkAllInputsEnum(table) {
         while(currentInput != null) {
             if(currentInput.value == "" && !isErrorValue) {
                 errors += "В строке №" + (i+1) + " отсутствует значение; ";
+                isErrorValue = true;
+            } else if(!checkValidID(currentInput.value) && !isErrorValue) {
+                errors += "В строке №" + (i+1) + " значение некорректно; ";
                 isErrorValue = true;
             }
             lastIndex++;
@@ -168,9 +174,15 @@ function checkAllInputsEnum(table) {
 
         var Islinear = table.rows.item(i).getElementsByTagName("td")
         .item(lastIndex).getElementsByTagName("input").item(0).checked;
-        if(Islinear && table.rows.item(i).getElementsByTagName("td")
-            .item(lastIndex+1).getElementsByTagName("input").item(0).value == "") {
+        let checkRdfName;
+        if(Islinear) {
+            checkRdfName = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex+1).getElementsByTagName("input").item(0).value;
+        }
+        if(Islinear && checkRdfName == "") {
                 errors += "В строке №" + (i+1) + " отсутствует название в RDF; ";
+        } else if(Islinear && !checkValidID(checkRdfName)) {
+            errors += "В строке №" + (i+1) + " название в RDF некорректно; ";
         }
     }
     if(errors != "") {

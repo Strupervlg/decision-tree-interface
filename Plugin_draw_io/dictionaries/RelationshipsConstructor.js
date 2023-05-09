@@ -298,9 +298,17 @@ function addRowRelationship(editorUi) {
 function checkAllInputsRelationship(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
-        if(table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("input").item(0).value == "") {
+        let checkValue = table.rows.item(i).getElementsByTagName("td")
+            .item(0).getElementsByTagName("input").item(0).value;
+        let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
+            .item(1).getElementsByTagName("input").item(0).value;
+        if(checkValue == "") {
             errors += "В строке №" + (i+1) + " отсутствует название; ";
+        } else if(!checkValidID(checkValue)) {
+            errors += "В строке №" + (i+1) + " название некорректно; ";
+        }
+        if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
+            errors += "В строке №" + (i+1) + " название наследуемого отношения некорректно; ";
         }
 
         let lastIndex = 2;
@@ -326,6 +334,9 @@ function checkAllInputsRelationship(table) {
             while(currentInputName != null) {
                 if(currentInputName.value == "") {
                     errors += "В строке №" + (i+1) + " отсутствуют имена отношений; ";
+                    break;
+                } else if(!checkValidID(currentInputName.value)) {
+                    errors += "В строке №" + (i+1) + " имя отношения некорректно; ";
                     break;
                 }
                 lastIndex++;

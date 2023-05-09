@@ -208,9 +208,12 @@ function addRowProperty(editorUi) {
 function checkAllInputsProperty(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
-        if(table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("input").item(0).value == "") {
+        let checkValue = table.rows.item(i).getElementsByTagName("td")
+        .item(0).getElementsByTagName("input").item(0).value;
+        if(checkValue == "") {
             errors += "В строке №" + (i+1) + " отсутствует название; ";
+        } else if(!checkValidID(checkValue)) {
+            errors += "В строке №" + (i+1) + " название некорректно; ";
         }
 
         var typeSelect = table.rows.item(i).getElementsByTagName("td")
@@ -467,10 +470,13 @@ function addRowEnum() {
 function checkAllInputsEnum(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
-        if(table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("input").item(0).value == "") {
+        let checkValue = table.rows.item(i).getElementsByTagName("td")
+        .item(0).getElementsByTagName("input").item(0).value;
+        if(checkValue == "") {
                 errors += "В строке №" + (i+1) + " отсутствует название; ";
-            }
+        } else if(!checkValidID(checkValue)) {
+            errors += "В строке №" + (i+1) + " название некорректно; ";
+        }
 
         let lastIndex = 1;
         let currentInput = table.rows.item(i).getElementsByTagName("td")
@@ -479,6 +485,9 @@ function checkAllInputsEnum(table) {
         while(currentInput != null) {
             if(currentInput.value == "" && !isErrorValue) {
                 errors += "В строке №" + (i+1) + " отсутствует значение; ";
+                isErrorValue = true;
+            } else if(!checkValidID(currentInput.value) && !isErrorValue) {
+                errors += "В строке №" + (i+1) + " значение некорректно; ";
                 isErrorValue = true;
             }
             lastIndex++;
@@ -489,9 +498,15 @@ function checkAllInputsEnum(table) {
 
         var Islinear = table.rows.item(i).getElementsByTagName("td")
         .item(lastIndex).getElementsByTagName("input").item(0).checked;
-        if(Islinear && table.rows.item(i).getElementsByTagName("td")
-            .item(lastIndex+1).getElementsByTagName("input").item(0).value == "") {
+        let checkRdfName;
+        if(Islinear) {
+            checkRdfName = table.rows.item(i).getElementsByTagName("td")
+                .item(lastIndex+1).getElementsByTagName("input").item(0).value;
+        }
+        if(Islinear && checkRdfName == "") {
                 errors += "В строке №" + (i+1) + " отсутствует название в RDF; ";
+        } else if(Islinear && !checkValidID(checkRdfName)) {
+            errors += "В строке №" + (i+1) + " название в RDF некорректно; ";
         }
     }
     if(errors != "") {
@@ -992,9 +1007,17 @@ function addRowRelationship(editorUi) {
 function checkAllInputsRelationship(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
-        if(table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("input").item(0).value == "") {
+        let checkValue = table.rows.item(i).getElementsByTagName("td")
+            .item(0).getElementsByTagName("input").item(0).value;
+        let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
+            .item(1).getElementsByTagName("input").item(0).value;
+        if(checkValue == "") {
             errors += "В строке №" + (i+1) + " отсутствует название; ";
+        } else if(!checkValidID(checkValue)) {
+            errors += "В строке №" + (i+1) + " название некорректно; ";
+        }
+        if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
+            errors += "В строке №" + (i+1) + " название наследуемого отношения некорректно; ";
         }
 
         let lastIndex = 2;
@@ -1020,6 +1043,9 @@ function checkAllInputsRelationship(table) {
             while(currentInputName != null) {
                 if(currentInputName.value == "") {
                     errors += "В строке №" + (i+1) + " отсутствуют имена отношений; ";
+                    break;
+                } else if(!checkValidID(currentInputName.value)) {
+                    errors += "В строке №" + (i+1) + " имя отношения некорректно; ";
                     break;
                 }
                 lastIndex++;
@@ -2810,6 +2836,8 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInText.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInText.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -2908,6 +2936,8 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInBlockly.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInBlockly.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -3143,9 +3173,17 @@ function addRowClass() {
 function checkAllInputsClass(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
-        if(table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("input").item(0).value == "") {
+        let checkValue = table.rows.item(i).getElementsByTagName("td")
+        .item(0).getElementsByTagName("input").item(0).value;
+        let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
+            .item(1).getElementsByTagName("input").item(0).value;
+        if(checkValue == "") {
             errors += "В строке №" + (i+1) + " отсутствует название; ";
+        } else if(!checkValidID(checkValue)) {
+            errors += "В строке №" + (i+1) + " название некорректно; ";
+        }
+        if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
+            errors += "В строке №" + (i+1) + " название наследуемого класса некорректно; ";
         }
     }
     if(errors != "") {
@@ -8176,6 +8214,8 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInText.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInText.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -8273,6 +8313,8 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInBlockly.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInBlockly.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -8439,9 +8481,12 @@ function addRowStartNode(editorUi) {
 function checkAllInputsStartNode(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
-        if(table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("input").item(0).value == "") {
+        let checkValue = table.rows.item(i).getElementsByTagName("td")
+        .item(0).getElementsByTagName("input").item(0).value;
+        if(checkValue == "") {
             errors += "В строке №" + (i+1) + " отсутствует название; ";
+        } else if(!checkValidID(checkValue)) {
+            errors += "В строке №" + (i+1) + " название некорректно; ";
         }
         var classSelect = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("select").item(0);
@@ -8668,6 +8713,8 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInText.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInText.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -8755,6 +8802,8 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInBlockly.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInBlockly.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -8846,6 +8895,8 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInText.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInText.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -8952,6 +9003,8 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInBlockly.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInBlockly.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -10979,6 +11032,10 @@ function specialChars(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function checkValidID(str) {
+    return /^[a-zA-Z_][A-Za-z0-9_]*$/.test(str);
 }
 // Плагин
 Draw.loadPlugin(function (ui) {

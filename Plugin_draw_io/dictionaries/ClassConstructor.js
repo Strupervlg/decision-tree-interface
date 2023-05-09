@@ -154,9 +154,17 @@ function addRowClass() {
 function checkAllInputsClass(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
-        if(table.rows.item(i).getElementsByTagName("td")
-            .item(0).getElementsByTagName("input").item(0).value == "") {
+        let checkValue = table.rows.item(i).getElementsByTagName("td")
+        .item(0).getElementsByTagName("input").item(0).value;
+        let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
+            .item(1).getElementsByTagName("input").item(0).value;
+        if(checkValue == "") {
             errors += "В строке №" + (i+1) + " отсутствует название; ";
+        } else if(!checkValidID(checkValue)) {
+            errors += "В строке №" + (i+1) + " название некорректно; ";
+        }
+        if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
+            errors += "В строке №" + (i+1) + " название наследуемого класса некорректно; ";
         }
     }
     if(errors != "") {

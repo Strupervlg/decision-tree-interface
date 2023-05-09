@@ -167,3 +167,7 @@ function specialChars(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
+function checkValidID(str) {
+    return /^[a-zA-Z_][A-Za-z0-9_]*$/.test(str);
+}

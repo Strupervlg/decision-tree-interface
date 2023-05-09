@@ -32,6 +32,8 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInText.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInText.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
@@ -130,6 +132,8 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         error = "";
         if(!nameVarInBlockly.value) {
             error += "Отсутствует имя переменной!\n";
+        } else if(!checkValidID(nameVarInBlockly.value)) {
+            error += "Имя переменной некорректно!\n";
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += "Отсутствует тип переменной!\n";
