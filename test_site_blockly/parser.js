@@ -739,44 +739,36 @@ case 36: string = ''; this.begin('STRING');
 break;
 case 37:string += yy_.yytext;
 break;
-case 38:string += '\b';
+case 38:string += '\n';
 break;
-case 39:string += '\f';
+case 39:string += '\t';
 break;
-case 40:string += '\n';
+case 40:string += '\\';
 break;
-case 41:string += '\r';
+case 41:throw new Error('Error: invalid escape\n');
 break;
-case 42:string += '\t';
+case 42:throw new Error('Error: unfinished string.\n');
 break;
-case 43:string += '\v';
+case 43:string += '"';
 break;
-case 44:string += '\\';
+case 44:string += '\'';
 break;
-case 45:throw new Error('Error: invalid escape\n');
+case 45: this.begin('INITIAL'); yy_.yytext = string; return 8; 
 break;
-case 46:throw new Error('Error: unfinished string.\n');
+case 46: this.begin('INITIAL'); throw new Error('Error: expected \".\n'); 
 break;
-case 47:string += '"';
+case 47:return 10;
 break;
-case 48:string += '\'';
+case 48:return 9;
 break;
-case 49: this.begin('INITIAL'); yy_.yytext = string; return 8; 
+case 49:return 19;
 break;
-case 50: this.begin('INITIAL'); throw new Error('Error: expected \".\n'); 
-break;
-case 51:return 10;
-break;
-case 52:return 9;
-break;
-case 53:return 19;
-break;
-case 54:/* skip whitespace */
+case 50:/* skip whitespace */
 break;
 }
 },
-rules: [/^(?:true\b)/,/^(?:false\b)/,/^(?:greater\b)/,/^(?:less\b)/,/^(?:equal\b)/,/^(?:getClass\b)/,/^(?:undetermined\b)/,/^(?:find\b)/,/^(?:findExtreme\b)/,/^(?:is\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:not\b)/,/^(?:compare\b)/,/^(?:exist\b)/,/^(?:forall\b)/,/^(?:where\b)/,/^(?:->)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:==)/,/^(?:!=)/,/^(?:>=)/,/^(?:<=)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?:>)/,/^(?:<)/,/^(?:::)/,/^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:")/,/^(?:[^\\\"\n]+)/,/^(?:\\b)/,/^(?:\\f)/,/^(?:\\n)/,/^(?:\\r)/,/^(?:\\t)/,/^(?:\\v)/,/^(?:\\\\)/,/^(?:\\[^bfnrtv\"\'\\])/,/^(?:\n)/,/^(?:\\")/,/^(?:\\')/,/^(?:")/,/^(?:$)/,/^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/,/^(?:[0-9]+)/,/^(?:\.)/,/^(?:\s+)/],
-conditions: {"STRING":{"rules":[37,38,39,40,41,42,43,44,45,46,47,48,49,50],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,51,52,53,54],"inclusive":true}}
+rules: [/^(?:true\b)/,/^(?:false\b)/,/^(?:greater\b)/,/^(?:less\b)/,/^(?:equal\b)/,/^(?:getClass\b)/,/^(?:undetermined\b)/,/^(?:find\b)/,/^(?:findExtreme\b)/,/^(?:is\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:not\b)/,/^(?:compare\b)/,/^(?:exist\b)/,/^(?:forall\b)/,/^(?:where\b)/,/^(?:->)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:==)/,/^(?:!=)/,/^(?:>=)/,/^(?:<=)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?:>)/,/^(?:<)/,/^(?:::)/,/^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:")/,/^(?:[^\\\"\n]+)/,/^(?:\\n)/,/^(?:\\t)/,/^(?:\\\\)/,/^(?:\\[^nt\"\'\\])/,/^(?:\n)/,/^(?:\\")/,/^(?:\\')/,/^(?:")/,/^(?:$)/,/^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/,/^(?:[0-9]+)/,/^(?:\.)/,/^(?:\s+)/],
+conditions: {"STRING":{"rules":[37,38,39,40,41,42,43,44,45,46],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,47,48,49,50],"inclusive":true}}
 });
 return lexer;
 })();
