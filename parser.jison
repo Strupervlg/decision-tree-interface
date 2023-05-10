@@ -49,14 +49,10 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 
 \"                                { string = ''; this.begin('STRING'); }
 <STRING>[^\\\"\n]+                string += yytext;
-<STRING>\\b                       string += '\b';
-<STRING>\\f                       string += '\f';
 <STRING>\\n                       string += '\n';
-<STRING>\\r                       string += '\r';
 <STRING>\\t                       string += '\t';
-<STRING>\\v                       string += '\v';
 <STRING>\\\\                      string += '\\';
-<STRING>\\[^bfnrtv\"\'\\]         throw new Error('Error: invalid escape\n');
+<STRING>\\[^nt\"\'\\]             throw new Error('Error: invalid escape\n');
 <STRING>\n                        throw new Error('Error: unfinished string.\n');
 <STRING>\\\"                      string += '"';
 <STRING>\\\'                      string += '\'';
