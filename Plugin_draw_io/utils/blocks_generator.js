@@ -24,7 +24,12 @@ Blockly.JavaScript['relationship'] = function(block) {
 
 Blockly.JavaScript['string'] = function(block) {
   var text_value = block.getFieldValue('value');
-  var code = "\"" + text_value + "\"";
+  var newTextValue = text_value
+    .replaceAll("\\", '\\\\')
+    .replaceAll("\"", '\\"')
+    .replaceAll("\n", '\\n')
+    .replaceAll("\t", '\\t');
+  var code = "\"" + newTextValue + "\"";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
