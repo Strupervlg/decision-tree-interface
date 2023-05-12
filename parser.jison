@@ -6,11 +6,7 @@
 
 true            return 'TRUE';
 false           return 'FALSE';
-greater         return 'GREATER';
-less            return 'LESS';
-equal           return 'EQUAL';
 getClass           return 'CLASS';
-undetermined    return 'UNDETERMINED';
 find            return 'FIND';
 findExtreme     return 'FIND_EXTREM';
 is              return 'IS';
@@ -20,7 +16,6 @@ not             return 'NOT';
 compare         return 'COMPARE';
 exist           return 'EXIST';
 forall          return 'FORALL';
-where           return 'WHERE';
 
 
 
