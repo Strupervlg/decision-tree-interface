@@ -16,7 +16,7 @@ not             return 'NOT';
 compare         return 'COMPARE';
 exist           return 'EXIST';
 forall          return 'FORALL';
-
+where           return 'WHERE';
 
 
 "->"         return '->';
