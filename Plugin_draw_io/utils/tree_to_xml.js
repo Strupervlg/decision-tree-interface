@@ -494,8 +494,10 @@ function checkCorrectPredeterminingBranch(node) {
     let resultNode = null;
 
     function branchBypass(node) {
-        if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;" 
-        || node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;") {
+        if ((node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;" 
+        || node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;")
+        && (!resultNode || resultNode && (resultNode.style != node.style || 
+        resultNode.value.getAttribute("expression") != node.value.getAttribute("expression")))) {
             countResultNode++;
             resultNode = node;
             return true;
