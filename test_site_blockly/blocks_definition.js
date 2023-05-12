@@ -93,17 +93,6 @@ Blockly.Blocks['double'] = {
   }
 };
 
-Blockly.Blocks['comparison_result'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["undetermined","UNDETERMINED"]]), "value");
-    this.setOutput(true, "ComparisonResult");
-    this.setColour(0);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
-};
-
 Blockly.Blocks['get_class'] = {
   init: function() {
     this.appendValueInput("object")
@@ -460,7 +449,7 @@ Blockly.Blocks['three_digit_comparison'] = {
     this.appendValueInput("operand2")
         .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand2");
-    this.setOutput(true, "ComparisonResult");
+    this.setOutput(true, "Enum");
     this.setColour(240);
  this.setTooltip("");
  this.setHelpUrl("");

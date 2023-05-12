@@ -51,13 +51,6 @@ Blockly.JavaScript['double'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['comparison_result'] = function(block) {
-  var dropdown_value = block.getFieldValue('value');
-  // var comparisonResult = {GREATER: "1", LESS: "-1", EQUAL: "0", UNDETERMINED: "undetermined"};
-  var code = dropdown_value;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};
-
 Blockly.JavaScript['get_class'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var code = value_object + ".getClass()";
