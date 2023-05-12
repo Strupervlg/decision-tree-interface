@@ -159,7 +159,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
         }
         checkFlags(row, scale);
         let namesRelsArray = namesRels.split(";");
-        if(scale == "Linear") {
+        if(scale == "Linear" || scale == "Partially linear") {
             var tdInputNames = document.createElement('td');
             tdInputNames.classList = "names";
             tdInputNames.style.minWidth = "150px";

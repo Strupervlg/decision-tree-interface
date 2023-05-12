@@ -896,7 +896,9 @@ function addRowRelationship(editorUi) {
     selectScale.addEventListener('change', (event) => {
         checkFlags(event.target.parentElement.parentElement, 
             event.target.options[event.target.options.selectedIndex].value)
-        if (event.target.options[event.target.options.selectedIndex].value == "Linear") {
+        if ((event.target.options[event.target.options.selectedIndex].value == "Linear" 
+        || event.target.options[event.target.options.selectedIndex].value == "Partially linear") 
+        && !event.currentTarget.parentElement.nextElementSibling.classList.contains("names")) {
             var tdInputNames = document.createElement('td');
             tdInputNames.classList = "names";
             tdInputNames.style.minWidth = "150px";
@@ -931,15 +933,14 @@ function addRowRelationship(editorUi) {
 
             event.currentTarget.parentElement.parentElement.insertBefore(tdAddName, event.currentTarget.parentElement.nextElementSibling);
             event.currentTarget.parentElement.parentElement.insertBefore(tdInputNames, event.currentTarget.parentElement.nextElementSibling);
-        } else {
-            if(event.currentTarget.parentElement.nextElementSibling.classList.contains("names")) {
-                var currentTd = event.currentTarget.parentElement.nextElementSibling;
-                while(currentTd.classList != 'addNames') {
-                    currentTd.remove();
-                    currentTd = event.currentTarget.parentElement.nextElementSibling;
-                }
+        } else if(event.target.options[event.target.options.selectedIndex].value == "None"
+        && event.currentTarget.parentElement.nextElementSibling.classList.contains("names")) {
+            var currentTd = event.currentTarget.parentElement.nextElementSibling;
+            while(currentTd.classList != 'addNames') {
                 currentTd.remove();
+                currentTd = event.currentTarget.parentElement.nextElementSibling;
             }
+            currentTd.remove();
         }
     });
     td5.appendChild(selectScale);
@@ -1075,7 +1076,8 @@ function checkAllInputsRelationship(table) {
         lastIndex++;
         currentSelect = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("select").item(0);
-        if(currentSelect.options[currentSelect.options.selectedIndex].value == "Linear") {
+        if(currentSelect.options[currentSelect.options.selectedIndex].value == "Linear" 
+        || currentSelect.options[currentSelect.options.selectedIndex].value == "Partially linear") {
             lastIndex++;
             let currentInputName = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(0);
@@ -1130,7 +1132,7 @@ function generateStrValueForRelationships(table) {
             .item(lastIndex).getElementsByTagName("select").item(0);
         var scale = scaleSelect.options[scaleSelect.options.selectedIndex].value;
         let namesRels = [];
-        if(scale == "Linear") {
+        if(scale == "Linear" || scale == "Partially linear") {
             lastIndex++;
             let currentInputName = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(0);
@@ -3891,7 +3893,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
         }
         checkFlags(row, scale);
         let namesRelsArray = namesRels.split(";");
-        if(scale == "Linear") {
+        if(scale == "Linear" || scale == "Partially linear") {
             var tdInputNames = document.createElement('td');
             tdInputNames.classList = "names";
             tdInputNames.style.minWidth = "150px";
