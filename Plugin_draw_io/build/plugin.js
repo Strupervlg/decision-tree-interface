@@ -207,9 +207,11 @@ function addRowProperty(editorUi) {
 
 function checkAllInputsProperty(table) {
     errors = "";
+    let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
         .item(0).getElementsByTagName("input").item(0).value;
+        arrayNames.push(checkValue);
         if(checkValue == "") {
             errors += "В строке №" + (i+1) + " отсутствует название; ";
         } else if(!checkValidID(checkValue)) {
@@ -245,6 +247,9 @@ function checkAllInputsProperty(table) {
             currentSelect = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("select").item(0);
         }
+    }
+    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+        errors += "В словаре содержатся неуникальные названия свойств!";
     }
     if(errors != "") {
         throw new Error(errors);
@@ -470,9 +475,11 @@ function addRowEnum() {
 
 function checkAllInputsEnum(table) {
     errors = "";
+    let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
         .item(0).getElementsByTagName("input").item(0).value;
+        arrayNames.push(checkValue);
         if(checkValue == "") {
                 errors += "В строке №" + (i+1) + " отсутствует название; ";
         } else if(!checkValidID(checkValue)) {
@@ -509,6 +516,9 @@ function checkAllInputsEnum(table) {
         } else if(Islinear && !checkValidID(checkRdfName)) {
             errors += "В строке №" + (i+1) + " название в RDF некорректно; ";
         }
+    }
+    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+        errors += "В словаре содержатся неуникальные названия перечислений!";
     }
     if(errors != "") {
         throw new Error(errors);
@@ -1046,9 +1056,11 @@ function addRowRelationship(editorUi) {
 
 function checkAllInputsRelationship(table) {
     errors = "";
+    let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
             .item(0).getElementsByTagName("input").item(0).value;
+        arrayNames.push(checkValue);
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
@@ -1094,6 +1106,9 @@ function checkAllInputsRelationship(table) {
                     .item(lastIndex).getElementsByTagName("input").item(0);
             }
         }
+    }
+    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+        errors += "В словаре содержатся неуникальные названия отношений!";
     }
     if(errors != "") {
         throw new Error(errors);
@@ -3197,9 +3212,11 @@ function addRowClass() {
 
 function checkAllInputsClass(table) {
     errors = "";
+    let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
         .item(0).getElementsByTagName("input").item(0).value;
+        arrayNames.push(checkValue);
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
@@ -3210,6 +3227,9 @@ function checkAllInputsClass(table) {
         if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
             errors += "В строке №" + (i+1) + " название наследуемого класса некорректно; ";
         }
+    }
+    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+        errors += "В словаре содержатся неуникальные названия классов!";
     }
     if(errors != "") {
         throw new Error(errors);
@@ -11071,6 +11091,12 @@ function specialChars(str) {
 
 function checkValidID(str) {
     return /^[a-zA-Z_][A-Za-z0-9_]*$/.test(str);
+}
+
+function checkUniqueValues(values) {
+    let setUniqueValues = new Set(values);
+    let arrayUniqueValues = Array.from(setUniqueValues);
+    return arrayUniqueValues.length == values.length;
 }
 // Плагин
 Draw.loadPlugin(function (ui) {

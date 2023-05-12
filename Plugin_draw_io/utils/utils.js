@@ -174,3 +174,9 @@ function specialChars(str) {
 function checkValidID(str) {
     return /^[a-zA-Z_][A-Za-z0-9_]*$/.test(str);
 }
+
+function checkUniqueValues(values) {
+    let setUniqueValues = new Set(values);
+    let arrayUniqueValues = Array.from(setUniqueValues);
+    return arrayUniqueValues.length == values.length;
+}

@@ -146,9 +146,11 @@ function addRowEnum() {
 
 function checkAllInputsEnum(table) {
     errors = "";
+    let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
         .item(0).getElementsByTagName("input").item(0).value;
+        arrayNames.push(checkValue);
         if(checkValue == "") {
                 errors += "В строке №" + (i+1) + " отсутствует название; ";
         } else if(!checkValidID(checkValue)) {
@@ -185,6 +187,9 @@ function checkAllInputsEnum(table) {
         } else if(Islinear && !checkValidID(checkRdfName)) {
             errors += "В строке №" + (i+1) + " название в RDF некорректно; ";
         }
+    }
+    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+        errors += "В словаре содержатся неуникальные названия перечислений!";
     }
     if(errors != "") {
         throw new Error(errors);

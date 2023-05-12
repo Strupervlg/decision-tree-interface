@@ -298,9 +298,11 @@ function addRowRelationship(editorUi) {
 
 function checkAllInputsRelationship(table) {
     errors = "";
+    let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
             .item(0).getElementsByTagName("input").item(0).value;
+        arrayNames.push(checkValue);
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
@@ -346,6 +348,9 @@ function checkAllInputsRelationship(table) {
                     .item(lastIndex).getElementsByTagName("input").item(0);
             }
         }
+    }
+    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+        errors += "В словаре содержатся неуникальные названия отношений!";
     }
     if(errors != "") {
         throw new Error(errors);
