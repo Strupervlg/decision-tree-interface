@@ -13,6 +13,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     tbody.style.height = "100%";
     
     var row = addRowEnum();
+    addComparisonResult(row);
     tbody.appendChild(row);
 
     table.appendChild(tbody);
@@ -239,4 +240,42 @@ function checkExistEnumDictionary(graph) {
             throw new Error("Enum dictionary already exists");
         }
     });
+}
+
+function addComparisonResult(row) {
+    var nameEnum = "comparisonResult";
+    var valuesEnum = ["greater", "less", "equal", "undetermined"];
+    var Islinear = false;
+    var nameRDF = "";
+
+    row.getElementsByTagName("td").item(0)
+        .getElementsByTagName("input").item(0).value = nameEnum;
+    row.getElementsByTagName("td").item(0)
+        .getElementsByTagName("input").item(0).disabled = true;
+
+    let lastIndex = 1;
+    valuesEnum.forEach(element => {
+        if(lastIndex != 1) {
+            let newTd = document.createElement('td');
+            newTd.style.minWidth = "200px";
+            let newInput = document.createElement('input');
+            newInput.type = "text";
+            newInput.style.width = '100%';
+            newInput.style.float = 'left';
+            newInput.placeholder = "Value";
+            newTd.appendChild(newInput);
+            row.insertBefore(newTd, row.getElementsByTagName("td").item(lastIndex));
+        }
+        row.getElementsByTagName("td").item(lastIndex)
+            .getElementsByTagName("input").item(0).value = element;
+        row.getElementsByTagName("td").item(lastIndex)
+            .getElementsByTagName("input").item(0).disabled = true;
+        lastIndex++;
+    });
+    row.getElementsByTagName("td").item(lastIndex).style.display = "none";
+
+    row.getElementsByTagName("td").item(lastIndex+1)
+        .getElementsByTagName("input").item(0).checked = Islinear;
+    row.getElementsByTagName("td").item(lastIndex+1)
+        .getElementsByTagName("input").item(0).disabled = true;
 }

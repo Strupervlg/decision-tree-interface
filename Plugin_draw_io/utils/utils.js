@@ -97,6 +97,9 @@ function getTypeFromCode(code, editorUi) {
             propType = "bool"
         }
         obj.type = propType.toLowerCase();
+    } else if(obj.type == SemanticType.COMPARISON_RESULT) {
+        obj.enum = "comparisonResult";
+        obj.type = "enum";
     }
     return obj;
 }
@@ -105,14 +108,14 @@ function getTextFromCode(code, editorUi) {
     if(code == "") {
         return "";
     }
-    let type = getTypeFromCode(code, editorUi).type;
-    if(type == "int" || type == "double") {
+    let type = getTypeFromCode(code, editorUi);
+    if(type.type == "int" || type.type == "double") {
         return "How many ";
-    } else if(type == "bool") {
+    } else if(type.type == "bool") {
         return "Is ";
-    } else if(type == "enum") {
+    } else if(type.type == "enum" && type.enum != "comparisonResult") {
         return "What is ";
-    } else if(type == "comparison") {
+    } else if(type.type == "enum" && type.enum == "comparisonResult") {
         return "Compare ";
     }
     return "";

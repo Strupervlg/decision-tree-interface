@@ -337,6 +337,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     tbody.style.height = "100%";
     
     var row = addRowEnum();
+    addComparisonResult(row);
     tbody.appendChild(row);
 
     table.appendChild(tbody);
@@ -563,6 +564,44 @@ function checkExistEnumDictionary(graph) {
             throw new Error("Enum dictionary already exists");
         }
     });
+}
+
+function addComparisonResult(row) {
+    var nameEnum = "comparisonResult";
+    var valuesEnum = ["greater", "less", "equal", "undetermined"];
+    var Islinear = false;
+    var nameRDF = "";
+
+    row.getElementsByTagName("td").item(0)
+        .getElementsByTagName("input").item(0).value = nameEnum;
+    row.getElementsByTagName("td").item(0)
+        .getElementsByTagName("input").item(0).disabled = true;
+
+    let lastIndex = 1;
+    valuesEnum.forEach(element => {
+        if(lastIndex != 1) {
+            let newTd = document.createElement('td');
+            newTd.style.minWidth = "200px";
+            let newInput = document.createElement('input');
+            newInput.type = "text";
+            newInput.style.width = '100%';
+            newInput.style.float = 'left';
+            newInput.placeholder = "Value";
+            newTd.appendChild(newInput);
+            row.insertBefore(newTd, row.getElementsByTagName("td").item(lastIndex));
+        }
+        row.getElementsByTagName("td").item(lastIndex)
+            .getElementsByTagName("input").item(0).value = element;
+        row.getElementsByTagName("td").item(lastIndex)
+            .getElementsByTagName("input").item(0).disabled = true;
+        lastIndex++;
+    });
+    row.getElementsByTagName("td").item(lastIndex).style.display = "none";
+
+    row.getElementsByTagName("td").item(lastIndex+1)
+        .getElementsByTagName("input").item(0).checked = Islinear;
+    row.getElementsByTagName("td").item(lastIndex+1)
+        .getElementsByTagName("input").item(0).disabled = true;
 }
 // Окно коструктора узлов условий
 var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
@@ -2664,108 +2703,100 @@ case 0:return 11;
 break;
 case 1:return 12;
 break;
-case 2:return 'GREATER';
+case 2:return 34;
 break;
-case 3:return 'LESS';
+case 3:return 35;
 break;
-case 4:return 'EQUAL';
+case 4:return 36;
 break;
-case 5:return 34;
+case 5:return 20;
 break;
-case 6:return 'UNDETERMINED';
+case 6:return 30;
 break;
-case 7:return 35;
+case 7:return 31;
 break;
-case 8:return 36;
+case 8:return 32;
 break;
-case 9:return 20;
+case 9:return 27;
 break;
-case 10:return 30;
+case 10:return 40;
 break;
-case 11:return 31;
+case 11:return 41;
 break;
-case 12:return 32;
+case 12:return 39;
 break;
-case 13:return 27;
+case 13:return 16;
 break;
-case 14:return 40;
+case 14:return 17;
 break;
-case 15:return 41;
+case 15:return 18;
 break;
-case 16:return 39;
+case 16:return 37;
 break;
-case 17:return 16;
+case 17:return 38;
 break;
-case 18:return 17;
+case 18:return 23;
 break;
-case 19:return 18;
+case 19:return 24;
 break;
-case 20:return 37;
+case 20:return 25;
 break;
-case 21:return 38;
+case 21:return 26;
 break;
-case 22:return 23;
+case 22:return 6;
 break;
-case 23:return 24;
+case 23:return 28;
 break;
-case 24:return 25;
+case 24:return 29;
 break;
-case 25:return 26;
+case 25:return 42;
 break;
-case 26:return 6;
+case 26:return 21;
 break;
-case 27:return 28;
+case 27:return 22;
 break;
-case 28:return 29;
+case 28:return 15;
 break;
-case 29:return 42;
+case 29:return 13;
 break;
-case 30:return 21;
+case 30:return 7; 
 break;
-case 31:return 22;
+case 31:return 14;
 break;
-case 32:return 15;
+case 32: string = ''; this.begin('STRING'); 
 break;
-case 33:return 13;
+case 33:string += yy_.yytext;
 break;
-case 34:return 7; 
+case 34:string += '\n';
 break;
-case 35:return 14;
+case 35:string += '\t';
 break;
-case 36: string = ''; this.begin('STRING'); 
+case 36:string += '\\';
 break;
-case 37:string += yy_.yytext;
+case 37:throw new Error('Error: invalid escape\n');
 break;
-case 38:string += '\n';
+case 38:throw new Error('Error: unfinished string.\n');
 break;
-case 39:string += '\t';
+case 39:string += '"';
 break;
-case 40:string += '\\';
+case 40:string += '\'';
 break;
-case 41:throw new Error('Error: invalid escape\n');
+case 41: this.begin('INITIAL'); yy_.yytext = string; return 8; 
 break;
-case 42:throw new Error('Error: unfinished string.\n');
+case 42: this.begin('INITIAL'); throw new Error('Error: expected \".\n'); 
 break;
-case 43:string += '"';
+case 43:return 10;
 break;
-case 44:string += '\'';
+case 44:return 9;
 break;
-case 45: this.begin('INITIAL'); yy_.yytext = string; return 8; 
+case 45:return 19;
 break;
-case 46: this.begin('INITIAL'); throw new Error('Error: expected \".\n'); 
-break;
-case 47:return 10;
-break;
-case 48:return 9;
-break;
-case 49:return 19;
-break;
-case 50:/* skip whitespace */
+case 46:/* skip whitespace */
 break;
 }
 },
-rules: [/^(?:true\b)/,/^(?:false\b)/,/^(?:greater\b)/,/^(?:less\b)/,/^(?:equal\b)/,/^(?:getClass\b)/,/^(?:undetermined\b)/,/^(?:find\b)/,/^(?:findExtreme\b)/,/^(?:is\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:not\b)/,/^(?:compare\b)/,/^(?:exist\b)/,/^(?:forall\b)/,/^(?:where\b)/,/^(?:->)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:==)/,/^(?:!=)/,/^(?:>=)/,/^(?:<=)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?:>)/,/^(?:<)/,/^(?:::)/,/^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:")/,/^(?:[^\\\"\n]+)/,/^(?:\\n)/,/^(?:\\t)/,/^(?:\\\\)/,/^(?:\\[^nt\"\'\\])/,/^(?:\n)/,/^(?:\\")/,/^(?:\\')/,/^(?:")/,/^(?:$)/,/^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/,/^(?:[0-9]+)/,/^(?:\.)/,/^(?:\s+)/],
-conditions: {"STRING":{"rules":[37,38,39,40,41,42,43,44,45,46],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,47,48,49,50],"inclusive":true}}
+rules: [/^(?:true\b)/,/^(?:false\b)/,/^(?:getClass\b)/,/^(?:find\b)/,/^(?:findExtreme\b)/,/^(?:is\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:not\b)/,/^(?:compare\b)/,/^(?:exist\b)/,/^(?:forall\b)/,/^(?:where\b)/,/^(?:->)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:==)/,/^(?:!=)/,/^(?:>=)/,/^(?:<=)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?:>)/,/^(?:<)/,/^(?:::)/,/^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:")/,/^(?:[^\\\"\n]+)/,/^(?:\\n)/,/^(?:\\t)/,/^(?:\\\\)/,/^(?:\\[^nt\"\'\\])/,/^(?:\n)/,/^(?:\\")/,/^(?:\\')/,/^(?:")/,/^(?:$)/,/^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/,/^(?:[0-9]+)/,/^(?:\.)/,/^(?:\s+)/],
+conditions: {"STRING":{"rules":[33,34,35,36,37,38,39,40,41,42],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,43,44,45,46],"inclusive":true}}
 });
 return lexer;
 })();
@@ -3381,7 +3412,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
-    fillDataEnum(tbody, cell)
+    fillDataEnum(tbody, cell);
     table.appendChild(tbody);
     divTable.appendChild(table);
     div.appendChild(divTable);
@@ -3459,6 +3490,11 @@ function fillDataEnum(tbody, cell) {
         row.getElementsByTagName("td").item(0)
             .getElementsByTagName("input").item(0).value = nameEnum;
 
+        if(index == 0) {
+            row.getElementsByTagName("td").item(0)
+                .getElementsByTagName("input").item(0).disabled = true;
+        }
+
         let lastIndex = 1;
         valuesEnum.forEach(element => {
             if(lastIndex != 1) {
@@ -3475,17 +3511,33 @@ function fillDataEnum(tbody, cell) {
                 btnDel.style.float = 'left';
                 btnDel.style.width = '10%';
                 newTd.appendChild(newInput);
-                newTd.appendChild(btnDel);
+                if(index != 0) {
+                    newTd.appendChild(btnDel);
+                }
                 row.insertBefore(newTd, row.getElementsByTagName("td").item(lastIndex));
             }
             row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("input").item(0).value = element;
+            if(index == 0) {
+                row.getElementsByTagName("td").item(lastIndex)
+                    .getElementsByTagName("input").item(0).disabled = true;
+                row.getElementsByTagName("td").item(lastIndex)
+                    .getElementsByTagName("input").item(0).style.width = '100%';
+
+            }
             lastIndex++;
         });
+        if(index == 0) {
+            row.getElementsByTagName("td").item(lastIndex).style.display = "none";
+        }
         lastIndex++;
 
         row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("input").item(0).checked = Islinear == 'true';
+        if(index == 0) {
+            row.getElementsByTagName("td").item(lastIndex)
+                .getElementsByTagName("input").item(0).disabled = true;
+        }
         if(Islinear == 'true') {
             var tdNameRDF = document.createElement('td');
             tdNameRDF.style.minWidth = "100px";
@@ -6779,10 +6831,6 @@ var toolbox = {
                 },
                 {
                     "kind": "block",
-                    "type": "comparison_result"
-                },
-                {
-                    "kind": "block",
                     "type": "ref_to_decision_tree_var"
                 },
                 {
@@ -7317,17 +7365,6 @@ Blockly.Blocks['double'] = {
   }
 };
 
-Blockly.Blocks['comparison_result'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["undetermined","UNDETERMINED"]]), "value");
-    this.setOutput(true, "ComparisonResult");
-    this.setColour(0);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
-};
-
 Blockly.Blocks['get_class'] = {
   init: function() {
     this.appendValueInput("object")
@@ -7684,7 +7721,7 @@ Blockly.Blocks['three_digit_comparison'] = {
     this.appendValueInput("operand2")
         .setCheck(["String", "Integer", "Double", "Enum", "Object"])
         .appendField("operand2");
-    this.setOutput(true, "ComparisonResult");
+    this.setOutput(true, "Enum");
     this.setColour(240);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -7764,7 +7801,8 @@ Blockly.Blocks['enum'] = {
  this.setTooltip("");
  this.setHelpUrl("");
   }
-};Blockly.JavaScript['object'] = function(block) {
+};
+Blockly.JavaScript['object'] = function(block) {
   var text_object_name = block.getFieldValue('object_name');
   var code = text_object_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
@@ -7814,13 +7852,6 @@ Blockly.JavaScript['integer'] = function(block) {
 Blockly.JavaScript['double'] = function(block) {
   var number_value = block.getFieldValue('value');
   var code = number_value;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};
-
-Blockly.JavaScript['comparison_result'] = function(block) {
-  var dropdown_value = block.getFieldValue('value');
-  // var comparisonResult = {GREATER: "1", LESS: "-1", EQUAL: "0", UNDETERMINED: "undetermined"};
-  var code = dropdown_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -7973,7 +8004,8 @@ Blockly.JavaScript['enum'] = function(block) {
   var text_value = block.getFieldValue('value');
   var code = text_owner_name + "::" + text_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};// Окно создание логических узлов
+};
+// Окно создание логических узлов
 var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окнаx
@@ -9467,24 +9499,14 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue.style.width = '100%';
             let enumsList = getEnums(editorUi);
             let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
-            findEnum[0].values.forEach(enumValue => {
-                var newOption = new Option(typeNode.enum+":"+enumValue, typeNode.enum+":"+enumValue);
-                selectValue.options[selectValue.options.length] = newOption;
-            });
-            labelValue.appendChild(selectValue);
-            divText.appendChild(labelValue);
-        } else if(typeNode.type == "comparison") {
-            typeValue = "comparison";
-            let labelValue = document.createElement('label');
-            labelValue.innerHTML = "value";
-            let selectValue = document.createElement('select');
-            selectValue.id = "value_input";
-            selectValue.style.width = '100%';
-            let values = ["less", "equal", "greater"];
-            values.forEach(item => {
-                var newOption = new Option(item, item);
-                selectValue.options[selectValue.options.length] = newOption;
-            });
+            if(findEnum[0] != undefined) {
+                findEnum[0].values.forEach(enumValue => {
+                    var newOption = new Option(typeNode.enum+":"+enumValue, typeNode.enum+":"+enumValue);
+                    selectValue.options[selectValue.options.length] = newOption;
+                });
+            } else {
+                throw new Error("Отсутствует enum в словаре");
+            }
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
@@ -9509,7 +9531,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         let selectTypes = document.createElement('select');
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["int", "bool", "double", "object", "enum", "comparison"];
+        let types = ["int", "bool", "double", "object", "enum"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
@@ -10705,9 +10727,13 @@ function outcomeToXml(node, editorUi, isPredetermining)
                         let enumsList = getEnums(editorUi);
                         let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
                         let valueEnumInOutcome = valueEdge.getAttribute("value").split(":");
-                        if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
-                            markOutcome(editorUi.editor.graph, node.edges[i])
-                            throw new Error('Значение enum отсутствует в словаре');
+                        if(findEnum[0] != undefined) {
+                            if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
+                                markOutcome(editorUi.editor.graph, node.edges[i])
+                                throw new Error('Значение enum отсутствует в словаре');
+                            }
+                        } else {
+                            throw new Error("Отсутствует enum в словаре");
                         }
                     } else if(valueEdge.getAttribute("typeValue") == "class") {
                         let jsonClasses = getClasses(editorUi);
@@ -10967,6 +10993,9 @@ function getTypeFromCode(code, editorUi) {
             propType = "bool"
         }
         obj.type = propType.toLowerCase();
+    } else if(obj.type == SemanticType.COMPARISON_RESULT) {
+        obj.enum = "comparisonResult";
+        obj.type = "enum";
     }
     return obj;
 }
@@ -10975,14 +11004,14 @@ function getTextFromCode(code, editorUi) {
     if(code == "") {
         return "";
     }
-    let type = getTypeFromCode(code, editorUi).type;
-    if(type == "int" || type == "double") {
+    let type = getTypeFromCode(code, editorUi);
+    if(type.type == "int" || type.type == "double") {
         return "How many ";
-    } else if(type == "bool") {
+    } else if(type.type == "bool") {
         return "Is ";
-    } else if(type == "enum") {
+    } else if(type.type == "enum" && type.enum != "comparisonResult") {
         return "What is ";
-    } else if(type == "comparison") {
+    } else if(type.type == "enum" && type.enum == "comparisonResult") {
         return "Compare ";
     }
     return "";

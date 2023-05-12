@@ -358,9 +358,13 @@ function outcomeToXml(node, editorUi, isPredetermining)
                         let enumsList = getEnums(editorUi);
                         let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
                         let valueEnumInOutcome = valueEdge.getAttribute("value").split(":");
-                        if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
-                            markOutcome(editorUi.editor.graph, node.edges[i])
-                            throw new Error('Значение enum отсутствует в словаре');
+                        if(findEnum[0] != undefined) {
+                            if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
+                                markOutcome(editorUi.editor.graph, node.edges[i])
+                                throw new Error('Значение enum отсутствует в словаре');
+                            }
+                        } else {
+                            throw new Error("Отсутствует enum в словаре");
                         }
                     } else if(valueEdge.getAttribute("typeValue") == "class") {
                         let jsonClasses = getClasses(editorUi);

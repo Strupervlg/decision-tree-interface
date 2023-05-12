@@ -13,7 +13,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
-    fillDataEnum(tbody, cell)
+    fillDataEnum(tbody, cell);
     table.appendChild(tbody);
     divTable.appendChild(table);
     div.appendChild(divTable);
@@ -91,6 +91,11 @@ function fillDataEnum(tbody, cell) {
         row.getElementsByTagName("td").item(0)
             .getElementsByTagName("input").item(0).value = nameEnum;
 
+        if(index == 0) {
+            row.getElementsByTagName("td").item(0)
+                .getElementsByTagName("input").item(0).disabled = true;
+        }
+
         let lastIndex = 1;
         valuesEnum.forEach(element => {
             if(lastIndex != 1) {
@@ -107,17 +112,33 @@ function fillDataEnum(tbody, cell) {
                 btnDel.style.float = 'left';
                 btnDel.style.width = '10%';
                 newTd.appendChild(newInput);
-                newTd.appendChild(btnDel);
+                if(index != 0) {
+                    newTd.appendChild(btnDel);
+                }
                 row.insertBefore(newTd, row.getElementsByTagName("td").item(lastIndex));
             }
             row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("input").item(0).value = element;
+            if(index == 0) {
+                row.getElementsByTagName("td").item(lastIndex)
+                    .getElementsByTagName("input").item(0).disabled = true;
+                row.getElementsByTagName("td").item(lastIndex)
+                    .getElementsByTagName("input").item(0).style.width = '100%';
+
+            }
             lastIndex++;
         });
+        if(index == 0) {
+            row.getElementsByTagName("td").item(lastIndex).style.display = "none";
+        }
         lastIndex++;
 
         row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("input").item(0).checked = Islinear == 'true';
+        if(index == 0) {
+            row.getElementsByTagName("td").item(lastIndex)
+                .getElementsByTagName("input").item(0).disabled = true;
+        }
         if(Islinear == 'true') {
             var tdNameRDF = document.createElement('td');
             tdNameRDF.style.minWidth = "100px";

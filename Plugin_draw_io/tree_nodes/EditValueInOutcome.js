@@ -96,24 +96,14 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue.style.width = '100%';
             let enumsList = getEnums(editorUi);
             let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
-            findEnum[0].values.forEach(enumValue => {
-                var newOption = new Option(typeNode.enum+":"+enumValue, typeNode.enum+":"+enumValue);
-                selectValue.options[selectValue.options.length] = newOption;
-            });
-            labelValue.appendChild(selectValue);
-            divText.appendChild(labelValue);
-        } else if(typeNode.type == "comparison") {
-            typeValue = "comparison";
-            let labelValue = document.createElement('label');
-            labelValue.innerHTML = "value";
-            let selectValue = document.createElement('select');
-            selectValue.id = "value_input";
-            selectValue.style.width = '100%';
-            let values = ["less", "equal", "greater"];
-            values.forEach(item => {
-                var newOption = new Option(item, item);
-                selectValue.options[selectValue.options.length] = newOption;
-            });
+            if(findEnum[0] != undefined) {
+                findEnum[0].values.forEach(enumValue => {
+                    var newOption = new Option(typeNode.enum+":"+enumValue, typeNode.enum+":"+enumValue);
+                    selectValue.options[selectValue.options.length] = newOption;
+                });
+            } else {
+                throw new Error("Отсутствует enum в словаре");
+            }
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
@@ -138,7 +128,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         let selectTypes = document.createElement('select');
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["int", "bool", "double", "object", "enum", "comparison"];
+        let types = ["int", "bool", "double", "object", "enum"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
