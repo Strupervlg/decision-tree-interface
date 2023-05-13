@@ -19,7 +19,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
 
         checkAllInputsClass(table);
 
@@ -56,10 +56,10 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addClass = mxUtils.button('Add Class', function () {
+    var addClass = mxUtils.button(getTextByLocale("AddClass"), function () {
         var newRow = addRowClass();
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -68,7 +68,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка открытия окна с блокли для выражений
-    var openBlockly = mxUtils.button('Open blockly', function () {
+    var openBlockly = mxUtils.button(getTextByLocale("OpenBlockly"), function () {
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
         divBlockly.id = 'classCreateBlocklyDiv'
@@ -85,7 +85,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         divInput.appendChild(codeInput);
         mainDivBlockly.appendChild(divInput);
 
-        var toCodeBtn = mxUtils.button('to code', function () {
+        var toCodeBtn = mxUtils.button(getTextByLocale("toСode"), function () {
             let code = Blockly.JavaScript.workspaceToCode(workspaceInWindow);
             codeInput.value = code;
         });
@@ -112,7 +112,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Classes constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleClassConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -161,16 +161,16 @@ function checkAllInputsClass(table) {
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
-            errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
         if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
-            errors += "В строке №" + (i+1) + " название наследуемого класса некорректно; ";
+            errors += getTextByLocale("extendClassIsIncorrect").replace("%i", (i+1));
         }
     }
     if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
-        errors += "В словаре содержатся неуникальные названия классов!";
+        errors += getTextByLocale("nonUniqueClassName");
     }
     if(errors != "") {
         throw new Error(errors);
@@ -200,7 +200,7 @@ function checkExistClassDictionary(graph) {
     Object.keys(cells).forEach(function (key) {
         var cellValue = cells[key].value;
         if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) { //TODO: Возможно это кал способ надо протестировать
-            throw new Error("Class dictionary already exists");
+            throw new Error(getTextByLocale("ClassExists"));
         }
     });
 }

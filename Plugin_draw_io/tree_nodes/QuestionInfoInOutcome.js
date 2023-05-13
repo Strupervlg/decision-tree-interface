@@ -5,10 +5,10 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
     let outNode = cell.source;
     if(outNode == null) {
-        throw new Error("Error: Source node is missing!");
+        throw new Error(getTextByLocale("sourceNodeIsMissing"));
     }
     if(!cell.value || typeof cell.value != "object") {
-        throw new Error("Error: Ветке не задано значение!");
+        throw new Error(getTextByLocale("ValueInOutcomeIsMissing"));
     }
 
     // Верстка окна
@@ -36,7 +36,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             description.value = cell.value.getAttribute("_description");
         }
         var divDescription = document.createElement('div');
-        divDescription.innerHTML = "Шаблон описания результата ветки.";
+        divDescription.innerHTML = getTextByLocale("descriptionOutcome");
         divDescription.style.fontSize = "20px";
         divText.appendChild(divDescription);
         divText.appendChild(description);
@@ -52,7 +52,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepQuestion.value = cell.value.getAttribute("_nextStepQuestion");
         }
         var divNextStepQuestion = document.createElement('div');
-        divNextStepQuestion.innerHTML = "Шаблон вопроса о том, с чего надо начать в ветке.";
+        divNextStepQuestion.innerHTML = getTextByLocale("nextStepQuestion");
         divNextStepQuestion.style.fontSize = "20px";
         divText.appendChild(divNextStepQuestion);
         divText.appendChild(nextStepQuestion);
@@ -68,7 +68,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepExplanation.value = cell.value.getAttribute("_nextStepExplanation");
         }
         var divNextStepExplanation = document.createElement('div');
-        divNextStepExplanation.innerHTML = "Шаблон объяснения того, с чего на самом деле нужно начать в ветке.";
+        divNextStepExplanation.innerHTML = getTextByLocale("nextStepExplanation");
         divNextStepExplanation.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanation);
         divText.appendChild(nextStepExplanation);
@@ -84,7 +84,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             text.value = cell.value.getAttribute("_text");
         }
         var divTextO = document.createElement('div');
-        divTextO.innerHTML = "Шаблон текста данного варианта ответа.";
+        divTextO.innerHTML = getTextByLocale("textQuestion");
         divTextO.style.fontSize = "20px";
         divText.appendChild(divTextO);
         divText.appendChild(text);
@@ -100,7 +100,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             explanation.value = cell.value.getAttribute("_explanation");
         }
         var divExplanation = document.createElement('div');
-        divExplanation.innerHTML = "Шаблон объяснения, почему данный ответ правильный.";
+        divExplanation.innerHTML = getTextByLocale("explanation");
         divExplanation.style.fontSize = "20px";
         divText.appendChild(divExplanation);
         divText.appendChild(explanation);
@@ -116,7 +116,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepQuestionOutcome.value = cell.value.getAttribute("_nextStepQuestionOutcome");
         }
         var divNextStepQuestionOutcome = document.createElement('div');
-        divNextStepQuestionOutcome.innerHTML = "Шаблон вопроса о том, что делать дальше при данном ответе.";
+        divNextStepQuestionOutcome.innerHTML = getTextByLocale("nextStepQuestionOutcome");
         divNextStepQuestionOutcome.style.fontSize = "20px";
         divText.appendChild(divNextStepQuestionOutcome);
         divText.appendChild(nextStepQuestionOutcome);
@@ -132,7 +132,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepBranchResult.value = cell.value.getAttribute("_nextStepBranchResult");
         }
         var divNextStepBranchResult = document.createElement('div');
-        divNextStepBranchResult.innerHTML = "Шаблон формулировок для красных/зеленых узлов при данном ответе.";
+        divNextStepBranchResult.innerHTML = getTextByLocale("nextStepBranchResult");
         divNextStepBranchResult.style.fontSize = "20px";
         divText.appendChild(divNextStepBranchResult);
         divText.appendChild(nextStepBranchResult);
@@ -148,7 +148,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepExplanationOutcome.value = cell.value.getAttribute("_nextStepExplanationOutcome");
         }
         var divNextStepExplanationOutcome = document.createElement('div');
-        divNextStepExplanationOutcome.innerHTML = "Шаблон объяснения того, что на самом деле делать дальше при данном ответе.";
+        divNextStepExplanationOutcome.innerHTML = getTextByLocale("nextStepExplanationOutcome");
         divNextStepExplanationOutcome.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanationOutcome);
         divText.appendChild(nextStepExplanationOutcome);
@@ -164,7 +164,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             description.value = cell.value.getAttribute("_description");
         }
         var divDescription = document.createElement('div');
-        divDescription.innerHTML = "Шаблон описания результата ветки.";
+        divDescription.innerHTML = getTextByLocale("descriptionOutcome");
         divDescription.style.fontSize = "20px";
         divText.appendChild(divDescription);
         divText.appendChild(description);
@@ -180,7 +180,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepQuestionThoughtBranch.value = cell.value.getAttribute("_nextStepQuestionThoughtBranch");
         }
         var divNextStepQuestionThoughtBranch = document.createElement('div');
-        divNextStepQuestionThoughtBranch.innerHTML = "Шаблон вопроса о том, с чего надо начать в ветке.";
+        divNextStepQuestionThoughtBranch.innerHTML = getTextByLocale("nextStepQuestion");
         divNextStepQuestionThoughtBranch.style.fontSize = "20px";
         divText.appendChild(divNextStepQuestionThoughtBranch);
         divText.appendChild(nextStepQuestionThoughtBranch);
@@ -196,7 +196,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepExplanationThoughtBranch.value = cell.value.getAttribute("_nextStepExplanationThoughtBranch");
         }
         var divNextStepExplanationThoughtBranch = document.createElement('div');
-        divNextStepExplanationThoughtBranch.innerHTML = "Шаблон объяснения того, с чего на самом деле нужно начать в ветке.";
+        divNextStepExplanationThoughtBranch.innerHTML = getTextByLocale("nextStepExplanation");
         divNextStepExplanationThoughtBranch.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanationThoughtBranch);
         divText.appendChild(nextStepExplanationThoughtBranch);
@@ -212,7 +212,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             text.value = cell.value.getAttribute("_text");
         }
         var divTextO = document.createElement('div');
-        divTextO.innerHTML = "Шаблон текста данного варианта ответа.";
+        divTextO.innerHTML = getTextByLocale("textQuestion");
         divTextO.style.fontSize = "20px";
         divText.appendChild(divTextO);
         divText.appendChild(text);
@@ -228,7 +228,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             explanation.value = cell.value.getAttribute("_explanation");
         }
         var divExplanation = document.createElement('div');
-        divExplanation.innerHTML = "Шаблон объяснения, почему данный ответ правильный.";
+        divExplanation.innerHTML = getTextByLocale("explanation");
         divExplanation.style.fontSize = "20px";
         divText.appendChild(divExplanation);
         divText.appendChild(explanation);
@@ -244,7 +244,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepQuestion.value = cell.value.getAttribute("_nextStepQuestion");
         }
         var divNextStepQuestion = document.createElement('div');
-        divNextStepQuestion.innerHTML = "Шаблон вопроса о том, что делать дальше при данном ответе.";
+        divNextStepQuestion.innerHTML = getTextByLocale("nextStepQuestionOutcome");
         divNextStepQuestion.style.fontSize = "20px";
         divText.appendChild(divNextStepQuestion);
         divText.appendChild(nextStepQuestion);
@@ -260,7 +260,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepBranchResult.value = cell.value.getAttribute("_nextStepBranchResult");
         }
         var divNextStepBranchResult = document.createElement('div');
-        divNextStepBranchResult.innerHTML = "Шаблон формулировок для красных/зеленых узлов при данном ответе.";
+        divNextStepBranchResult.innerHTML = getTextByLocale("nextStepBranchResult");
         divNextStepBranchResult.style.fontSize = "20px";
         divText.appendChild(divNextStepBranchResult);
         divText.appendChild(nextStepBranchResult);
@@ -276,14 +276,14 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepExplanation.value = cell.value.getAttribute("_nextStepExplanation");
         }
         var divNextStepExplanation = document.createElement('div');
-        divNextStepExplanation.innerHTML = "Шаблон объяснения того, что на самом деле делать дальше при данном ответе.";
+        divNextStepExplanation.innerHTML = getTextByLocale("nextStepExplanationOutcome");
         divNextStepExplanation.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanation);
         divText.appendChild(nextStepExplanation);
     }
 
     // Кнопка сохранение узла
-    var btnSaveTextInNode = mxUtils.button('Save', function () {
+    var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         graph.getModel().beginUpdate();
         if(isThoughtBranch && !isPredeterminingBranch) {
             cell.value.setAttribute("_description", divText.querySelector("#_description").value);
@@ -326,7 +326,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Edit question info in outcome', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEditQuestionInfoInOutcomeWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

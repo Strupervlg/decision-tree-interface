@@ -20,7 +20,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
         
         checkAllInputsEnum(tbody);
 
@@ -43,10 +43,10 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addEnum = mxUtils.button('Add Enum', function () {
+    var addEnum = mxUtils.button(getTextByLocale("AddEnum"), function () {
         var newRow = addRowEnum();
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -64,7 +64,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Enum constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEnumConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -152,9 +152,9 @@ function checkAllInputsEnum(table) {
         .item(0).getElementsByTagName("input").item(0).value;
         arrayNames.push(checkValue);
         if(checkValue == "") {
-                errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
 
         let lastIndex = 1;
@@ -163,10 +163,10 @@ function checkAllInputsEnum(table) {
         let isErrorValue = false;
         while(currentInput != null) {
             if(currentInput.value == "" && !isErrorValue) {
-                errors += "В строке №" + (i+1) + " отсутствует значение; ";
+                errors += getTextByLocale("valueIsMissing").replace("%i", (i+1));
                 isErrorValue = true;
             } else if(!checkValidID(currentInput.value) && !isErrorValue) {
-                errors += "В строке №" + (i+1) + " значение некорректно; ";
+                errors += getTextByLocale("valueIsIncorrect").replace("%i", (i+1));
                 isErrorValue = true;
             }
             lastIndex++;
@@ -183,13 +183,13 @@ function checkAllInputsEnum(table) {
                 .item(lastIndex+1).getElementsByTagName("input").item(0).value;
         }
         if(Islinear && checkRdfName == "") {
-                errors += "В строке №" + (i+1) + " отсутствует название в RDF; ";
+            errors += getTextByLocale("nameRDFIsMissing").replace("%i", (i+1));
         } else if(Islinear && !checkValidID(checkRdfName)) {
-            errors += "В строке №" + (i+1) + " название в RDF некорректно; ";
+            errors += getTextByLocale("nameRDFIsIncorrect").replace("%i", (i+1));
         }
     }
     if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
-        errors += "В словаре содержатся неуникальные названия перечислений!";
+        errors += getTextByLocale("nonUniqueEnumName");
     }
     if(errors != "") {
         throw new Error(errors);

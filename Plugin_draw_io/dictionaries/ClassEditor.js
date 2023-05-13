@@ -18,7 +18,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка сохранения блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
 
         checkAllInputsClass(table);
 
@@ -49,10 +49,10 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addClass = mxUtils.button('Add Class', function () {
+    var addClass = mxUtils.button(getTextByLocale("AddClass"), function () {
         var newRow = addRowClass();
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -61,7 +61,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка открытия окна с блокли для выражений
-    var openBlockly = mxUtils.button('Open blockly', function () {
+    var openBlockly = mxUtils.button(getTextByLocale("OpenBlockly"), function () {
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
         divBlockly.id = 'classUpdateBlocklyDiv'
@@ -78,7 +78,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
         divInput.appendChild(codeInput);
         mainDivBlockly.appendChild(divInput);
 
-        var toCodeBtn = mxUtils.button('to code', function () {
+        var toCodeBtn = mxUtils.button(getTextByLocale("toСode"), function () {
             let code = Blockly.JavaScript.workspaceToCode(workspaceInWindow);
             codeInput.value = code;
         });
@@ -105,7 +105,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Classes editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleClassEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -144,7 +144,7 @@ function fillDataClass(tbody, cell) {
         
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);

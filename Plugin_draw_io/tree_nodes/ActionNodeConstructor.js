@@ -20,23 +20,23 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     text.style.height = "80%";
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Create', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInText.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInText.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -62,7 +62,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -124,19 +124,19 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nestedDiv.style.height = h*0.80+'px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInBlockly.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInBlockly.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -159,7 +159,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -204,7 +204,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Action node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleActionNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;

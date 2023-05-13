@@ -17,7 +17,7 @@ function treeToXml(editorUi)
         }
     });
     if(countStartNode != 1) {
-        throw new Error("Начальный узел должен быть один!");
+        throw new Error(getTextByLocale("StartNodeOnlyOne"));
     }
     return result;
 }
@@ -31,7 +31,7 @@ function startNodeToXml(startNode, editorUi)
         for(let i = 0; i < startNode.edges.length; i++) {
             if(startNode.edges[i].value == null || typeof startNode.edges[i].value != "object" || !startNode.edges[i].value.getAttribute("type")) {
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
-                throw new Error('Отсутствует тип у ветки после начального узла');
+                throw new Error(getTextByLocale("typeOutcomeStartNodeIsMissing"));
             }
             let questionInfo = getQuestionInfoThoughtBranch(startNode.edges[i]);
             result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'"'+ questionInfo +'>\n';
@@ -179,7 +179,7 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
                 && valueEdge.getAttribute("type") != "False" 
                 && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Отсутствует тип у ветки после узла цикла');
+                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing"));
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     if(valueEdge.getAttribute("type") == "True") {
@@ -203,13 +203,13 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
     }
     let errorCycle = "";
     if(bodyCount != 1) {
-        errorCycle += "Ветка тела для узла цикла должна быть одна!\n";
+        errorCycle += getTextByLocale("bodyOnlyOne");
     }
     if(trueCount != 1) {
-        errorCycle += "Истинная ветка для узла цикла должна быть одна!\n";
+        errorCycle += getTextByLocale("trueCycleOnlyOne");
     }
     if(falseCount != 1) {
-        errorCycle += "Ложная ветка для узла цикла должна быть одна!\n";
+        errorCycle += getTextByLocale("falseCycleOnlyOne");
     }
     if(errorCycle) {
         throw new Error(errorCycle);
@@ -238,7 +238,7 @@ function logicNodeToXml(node, editorUi, isPredetermining)
                 && valueEdge.getAttribute("type") != "False" 
                 && valueEdge.getAttribute("type") != "Branch")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Отсутствует тип у ветки после логического узла');
+                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing"));
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     if(valueEdge.getAttribute("type") == "True") {
@@ -262,13 +262,13 @@ function logicNodeToXml(node, editorUi, isPredetermining)
     }
     let errorLogic = "";
     if(branchCount < 2) {
-        errorLogic += "Веток для логического узла должно быть 2 и более!\n";
+        errorLogic += getTextByLocale("OutcomeLogicNodeOnlyTwo");
     }
     if(trueCount != 1) {
-        errorLogic += "Истинная ветка для логического узла должна быть одна!\n";
+        errorLogic += getTextByLocale("trueLogicNodeOnlyOne");
     }
     if(falseCount != 1) {
-        errorLogic += "Ложная ветка для логического узла должна быть одна!\n";
+        errorLogic += getTextByLocale("falseLogicNodeOnlyOne");
     }
     if(errorLogic) {
         throw new Error(errorLogic);
@@ -294,7 +294,7 @@ function predeterminingNodeToXml(node, editorUi)
             || (valueEdge.getAttribute("type") != "predeterminingBranch" 
             && valueEdge.getAttribute("type") != "undetermined"))) {
                 markOutcome(editorUi.editor.graph, node.edges[i])
-                throw new Error('Отсутствует тип у ветки после независимого ветвления');
+                throw new Error(getTextByLocale("typeOutcomePredIsMissing"));
             }
 
             if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
@@ -327,10 +327,10 @@ function predeterminingNodeToXml(node, editorUi)
     }
     let errorPred = "";
     if(predCount == 0) {
-        errorPred += "Отсутствует предрешающая ветка для узла независимое ветвление!\n";
+        errorPred += getTextByLocale("predOutcomeIsMissing");
     }
     if(undertermCount != 1) {
-        errorPred += "Ветка undetermined для узла независимое ветвление должна быть одна!\n";
+        errorPred += getTextByLocale("undeterminedOnlyOne");
     }
     if(errorPred) {
         throw new Error(errorPred);
@@ -350,7 +350,7 @@ function outcomeToXml(node, editorUi, isPredetermining)
                 valueEdge = node.edges[i].value;
                 if(valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Отсутствует значение у ветки');
+                    throw new Error(getTextByLocale("valueInOutcomeIsMissing"));
                 }
                 let typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
                 if(typeNode.type == valueEdge.getAttribute("typeValue")) {
@@ -361,26 +361,26 @@ function outcomeToXml(node, editorUi, isPredetermining)
                         if(findEnum[0] != undefined) {
                             if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
                                 markOutcome(editorUi.editor.graph, node.edges[i])
-                                throw new Error('Значение enum отсутствует в словаре');
+                                throw new Error(getTextByLocale("valueEnumIsMissing"));
                             }
                         } else {
-                            throw new Error("Отсутствует enum в словаре");
+                            throw new Error(getTextByLocale("EnumIsMissing"));
                         }
                     } else if(valueEdge.getAttribute("typeValue") == "class") {
                         let jsonClasses = getClasses(editorUi);
                         let findClass = jsonClasses.filter(el => el.name == valueEdge.getAttribute("value"));
                         if(findClass.length == 0) {
                             markOutcome(editorUi.editor.graph, node.edges[i])
-                            throw new Error('Класс отсутствует в словаре');
+                            throw new Error(getTextByLocale("ClassInDictIsMissing"));
                         }
                     }
                 } else if(valueEdge.getAttribute("typeValue") && typeNode.type != valueEdge.getAttribute("typeValue")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Тип ветки не совпадает с типом возвращаемого значения выражения узла');
+                    throw new Error(getTextByLocale("TypesDontMatch"));
                 }
                 if(prevValues.has(valueEdge.getAttribute("value"))) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Ветка имеет повторяющееся значение');
+                    throw new Error(getTextByLocale("OutcomesHasSameValues"));
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
                 let questionInfo = getQuestionInfoOutcome(node.edges[i]);
@@ -523,7 +523,7 @@ function checkCorrectPredeterminingBranch(node) {
     }
     branchBypass(node);
     if(countResultNode != 1) {
-        throw new Error("Результативный узел (Ложь/Истина) для предрешающей ветки должен быть один!");
+        throw new Error(getTextByLocale("ResultOutcomeForPredNode"));
     }
     return resultNode;
 }

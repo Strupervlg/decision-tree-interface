@@ -18,7 +18,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
         checkAllInputsProperty(table);
         var theGraph = editorUi.editor.graph;
 
@@ -40,11 +40,11 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового свойства класса
-    var addProperty = mxUtils.button('Add property class', function () {
+    var addProperty = mxUtils.button(getTextByLocale("AddPropertyClass"), function () {
         var newRowProperty = addRowProperty(editorUi);
         var tdDelRow = document.createElement('td');
         tdDelRow.classList = 'delete';
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -62,7 +62,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Class and Object properties constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleClassPropertiesConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -213,9 +213,9 @@ function checkAllInputsProperty(table) {
         .item(0).getElementsByTagName("input").item(0).value;
         arrayNames.push(checkValue);
         if(checkValue == "") {
-            errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
 
         var typeSelect = table.rows.item(i).getElementsByTagName("td")
@@ -226,11 +226,11 @@ function checkAllInputsProperty(table) {
         if(type == "Integer" || type == "Double") {
             if(table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(0).value == "") {
-                errors += "В строке №" + (i+1) + " отсутствует начальное значение; ";
+                errors += getTextByLocale("startValueIsMissing").replace("%i", (i+1));
             }
             if(table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(1).value == "") {
-                errors += "В строке №" + (i+1) + " отсутствует конечное значение; ";
+                errors += getTextByLocale("endValueIsMissing").replace("%i", (i+1));
             }
             lastIndex++;
         }
@@ -240,7 +240,7 @@ function checkAllInputsProperty(table) {
             .item(lastIndex).getElementsByTagName("select").item(0);
         while(currentSelect != null) {
             if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
-                errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+                errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
                 break;
             }
             lastIndex++;
@@ -249,7 +249,7 @@ function checkAllInputsProperty(table) {
         }
     }
     if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
-        errors += "В словаре содержатся неуникальные названия свойств!";
+        errors += getTextByLocale("nonUniquePropertyName");
     }
     if(errors != "") {
         throw new Error(errors);
@@ -323,7 +323,7 @@ function checkExistClassPropertiesDictionary(graph) {
     Object.keys(cells).forEach(function (key) {
         var cellValue = cells[key].value;
         if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class and Object properties</font></b>')) {
-            throw new Error("Class and Object properties dictionary already exists");
+            throw new Error(getTextByLocale("PropertyExists"));
         }
     });
 }

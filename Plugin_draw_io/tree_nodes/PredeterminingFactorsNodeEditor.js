@@ -22,7 +22,7 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
     div.appendChild(table);
 
     // Кнопка создания узла
-    var btnCreateNode = mxUtils.button('Apply', function () {
+    var btnCreateNode = mxUtils.button(getTextByLocale("Apply"), function () {
         var theGraph = editorUi.editor.graph;
         var strValue = table.rows.item(0).getElementsByTagName("td")
         .item(0).getElementsByTagName("input").item(0).value;
@@ -37,7 +37,7 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
     div.appendChild(btnCreateNode);
 
     // Настройки окна
-    var win = new mxWindow('Predetermining factors node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitlePredeterminingFactorsNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

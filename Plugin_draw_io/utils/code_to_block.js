@@ -41,7 +41,7 @@ function stmtNodeToBlock(stmtNode, workspace) {
         assignment.getInput("new_value").connection.connect(valueBlock.outputConnection);
     } else if(stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY 
         && stmtNode.firstExpr.type != ExprType.TREE_VAR) {
-            throw new Error('Invalid type in ASSIGN: to the left of "=" is expected TREE VAR or GET PROPERTY');
+            throw new Error(getTextByLocale("invalidAssign"));
         }
 }
 
@@ -400,6 +400,7 @@ function checkTypeBlocks(blockInput, blockOutput, input) {
     let outputCheck = blockOutput.outputConnection.check_;
     let inputCheck = blockInput.getInput(input).connection.check_;
     if(outputCheck.filter(x => inputCheck.includes(x)).length == 0) {
-        throw new Error("Invalid type in " + blockInput.type + ": expected " + inputCheck +"; actual " + outputCheck)
+        throw new Error(getTextByLocale("InvalidType").replace("%type", blockInput.type)
+            .replace("%inputCheck", inputCheck).replace("%outputCheck", outputCheck))
     }
 }

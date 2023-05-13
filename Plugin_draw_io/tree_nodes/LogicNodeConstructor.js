@@ -38,7 +38,7 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnCreateORNode);
 
     // Настройки окна
-    var win = new mxWindow('Logic node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleLogicNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

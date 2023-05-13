@@ -13,7 +13,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
 
         checkAllInputsStartNode(table);
 
@@ -29,10 +29,10 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addClass = mxUtils.button('Add Variable', function () {
+    var addClass = mxUtils.button(getTextByLocale("AddVariable"), function () {
         var newRow = addRowStartNode(editorUi);
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -46,7 +46,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(applyBtn);
 
     // Настройки окна
-    var win = new mxWindow('Start node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleStartEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -78,7 +78,7 @@ function fillDataStart(tbody, cell, editorUi) {
         
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);

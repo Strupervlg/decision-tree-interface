@@ -21,7 +21,7 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
     div.appendChild(table);
 
     // Кнопка создания узла
-    var btnCreateNode = mxUtils.button('Create', function () {
+    var btnCreateNode = mxUtils.button(getTextByLocale("Create"), function () {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
@@ -40,7 +40,7 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
     div.appendChild(btnCreateNode);
 
     // Настройки окна
-    var win = new mxWindow('Predetermining factors node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitlePredeterminingFactorsNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

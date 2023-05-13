@@ -18,7 +18,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
         checkAllInputsRelationship(table);
         var theGraph = editorUi.editor.graph;
 
@@ -43,11 +43,11 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового отношения между классами
-    var addRelationship = mxUtils.button('Add relationship', function () {
+    var addRelationship = mxUtils.button(getTextByLocale("AddRelationship"), function () {
         var newRowRelationship = addRowRelationship(editorUi);
         var tdDelRow = document.createElement('td');
         tdDelRow.classList = 'delete';
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -65,7 +65,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Relationships constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleRelationshipsConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -306,12 +306,12 @@ function checkAllInputsRelationship(table) {
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
-            errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
         if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
-            errors += "В строке №" + (i+1) + " название наследуемого отношения некорректно; ";
+            errors += getTextByLocale("extendRelationshipIsIncorrect").replace("%i", (i+1));
         }
 
         let lastIndex = 2;
@@ -320,7 +320,7 @@ function checkAllInputsRelationship(table) {
         let hasntClass = false;
         while(currentSelect != null) {
             if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined" && !hasntClass) {
-                errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+                errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
                 hasntClass = true;
             }
             lastIndex++;
@@ -337,10 +337,10 @@ function checkAllInputsRelationship(table) {
                 .item(lastIndex).getElementsByTagName("input").item(0);
             while(currentInputName != null) {
                 if(currentInputName.value == "") {
-                    errors += "В строке №" + (i+1) + " отсутствуют имена отношений; ";
+                    errors += getTextByLocale("nameRelationshipsIsMissing").replace("%i", (i+1));
                     break;
                 } else if(!checkValidID(currentInputName.value)) {
-                    errors += "В строке №" + (i+1) + " имя отношения некорректно; ";
+                    errors += getTextByLocale("nameRelationshipsIsIncorrect").replace("%i", (i+1));
                     break;
                 }
                 lastIndex++;
@@ -350,7 +350,7 @@ function checkAllInputsRelationship(table) {
         }
     }
     if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
-        errors += "В словаре содержатся неуникальные названия отношений!";
+        errors += getTextByLocale("nonUniqueRelationshipName");
     }
     if(errors != "") {
         throw new Error(errors);
@@ -443,7 +443,7 @@ function checkExistRelationshipsDictionary(graph) {
     Object.keys(cells).forEach(function (key) {
         var cellValue = cells[key].value;
         if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
-            throw new Error("Relationships dictionary already exists");
+            throw new Error(getTextByLocale("RelationshipExists"));
         }
     });
 }

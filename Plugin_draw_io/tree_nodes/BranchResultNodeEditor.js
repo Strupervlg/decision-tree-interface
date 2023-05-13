@@ -15,7 +15,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
@@ -36,7 +36,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -65,7 +65,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
         
         var theGraph = editorUi.editor.graph;
@@ -79,7 +79,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -93,7 +93,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Branch result node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleBranchResultNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

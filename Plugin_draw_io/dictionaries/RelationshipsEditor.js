@@ -17,7 +17,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
         checkAllInputsRelationship(table);
 
         let valuesRels = generateStrValueForRelationships(table);
@@ -36,11 +36,11 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового отношения между классами
-    var addRelationship = mxUtils.button('Add relationship', function () {
+    var addRelationship = mxUtils.button(getTextByLocale("AddRelationship"), function () {
         var newRowRelationship = addRowRelationship(editorUi);
         var tdDelRow = document.createElement('td');
         tdDelRow.classList = 'delete';
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -58,7 +58,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Relationships editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleRelationshipsEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -252,7 +252,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);

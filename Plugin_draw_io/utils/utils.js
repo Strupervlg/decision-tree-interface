@@ -62,7 +62,7 @@ function getType(root) {
 
 function generateCode(workspace) {
     if(workspace.getTopBlocks().length > 1) {
-        throw new Error('Error: There is more than one block in the workspace');
+        throw new Error(getTextByLocale("moreBlocksInWorkspace"));
     }
     let code = Blockly.JavaScript.workspaceToCode(workspace);
     if(code.slice(-1) == "\n") {
@@ -80,7 +80,7 @@ function getTypeFromCode(code, editorUi) {
         let properties = getProperties(editorUi);
         let foundProp = properties.filter(el => el.name == propertyName);
         if(typeof foundProp[0] == "undefined") {
-            throw new Error('Error: property "'+propertyName+'" does not exist in the dictionary')
+            throw new Error(getTextByLocale("propertyIsMissingInDict").replace("%propertyName", propertyName));
         }
         obj = foundProp[0];
         let propType = obj.type;
@@ -136,7 +136,7 @@ function getTextFromValueInOutcome(value) {
 
 function CheckCycleInTree(startNode) {
     if(hasCycle(startNode)) {
-        throw new Error("В графе присутствуют циклы!");
+        throw new Error(getTextByLocale("hasCycleInTree"));
     }
 }
 

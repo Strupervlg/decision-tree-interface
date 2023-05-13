@@ -19,7 +19,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(divTable);
 
     // Кнопка сохранения блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
         
         checkAllInputsEnum(tbody);
 
@@ -35,10 +35,10 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addEnum = mxUtils.button('Add Enum', function () {
+    var addEnum = mxUtils.button(getTextByLocale("AddEnum"), function () {
         var newRow = addRowEnum();
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -56,7 +56,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Enum editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEnumEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -155,7 +155,7 @@ function fillDataEnum(tbody, cell) {
 
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);

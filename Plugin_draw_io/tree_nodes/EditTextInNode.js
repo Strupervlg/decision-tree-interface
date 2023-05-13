@@ -18,7 +18,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var expr = cell.value.getAttribute("expression");
 
     // Кнопка создания узла
-    var btnSaveTextInNode = mxUtils.button('Save', function () {
+    var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         var textInNode = divText.getElementsByTagName("textarea").item(0).value;
         graph.getModel().beginUpdate();
         if(typeof cell.value == "object") {
@@ -32,7 +32,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка генерации человекочитаемого текста
-    var btnGenerateTextInNode = mxUtils.button('Generate', function () {
+    var btnGenerateTextInNode = mxUtils.button(getTextByLocale("Generate"), function () {
         let code = "";
         if(typeof cell.value == "object") {
             code = cell.value.getAttribute("expression");
@@ -44,7 +44,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     var divExprText = document.createElement('div');
-    divExprText.innerHTML = "Expression in node: " + expr;
+    divExprText.innerHTML = getTextByLocale("ExpressionInNode") + expr;
     divExprText.style.height = "50px";
     divText.appendChild(divExprText);
     divText.appendChild(text);
@@ -53,7 +53,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(divText);
 
     // Настройки окна
-    var win = new mxWindow('Edit text in node', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEditTextInNodeWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

@@ -17,7 +17,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
         checkAllInputsProperty(table);
 
         strValue = generateStrValueForProperties(table);
@@ -32,11 +32,11 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового свойства класса
-    var addProperty = mxUtils.button('Add property class', function () {
+    var addProperty = mxUtils.button(getTextByLocale("AddPropertyClass"), function () {
         var newRowProperty = addRowProperty(editorUi);
         var tdDelRow = document.createElement('td');
         tdDelRow.classList = 'delete';
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -54,7 +54,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Class and Object properties editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleClassPropertiesEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -153,7 +153,7 @@ function fillDataProperties(tbody, cell, editorUi) {
 
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);

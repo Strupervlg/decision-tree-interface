@@ -1,3 +1,318 @@
+function getTextByLocale(type) {
+    if(mxClient.language == "ru") {
+        return RU_TEXT[type];
+    } else {
+        return EN_TEXT[type];
+    }
+}
+
+const RU_TEXT = {
+    //Разделы меню
+    "menuItemDictionaryConstructors": "Конструкторы словарей",
+    "menuItemNodeConstructors": "Конструкторы узлов",
+    "menuItemExport": "Экспорт",
+    "menuItemEdit": "Изменить",
+
+    //Элементы меню
+    "classesConstructor": "Конструктор классов",
+    "classPropertiesConstructor": "Конструктор свойств для классов и объектов",
+    "relationshipsConstructor": "Конструктор отношений",
+    "enumConstructor": "Конструктор enum",
+    "startNodeConstructor": "Создать начальный узел",
+    "TrueNodeCreate": 'Создать узел "Истина"',
+    "FalseNodeCreate": 'Создать узел "Ложь"',
+    "LogicNodeCreate": "Создать логический узел",
+    "PredeterminingFactorsNodeCreate": 'Создать узел "Независимое ветвление"',
+    "UncertaintyNodeCreate": 'Создать узел "Неопределенность"',
+    "actionNodeConstructor": "Создать узел действия",
+    "cycleNodeConstructor": 'Создать узел "Цикл"',
+    "conditionNodeConstructor": "Создать узел вопроса",
+    "switchCaseNodeConstructor": 'Создать узел "Switch case"',
+    "exportClass": "Экспорт словаря классов",
+    "exportProperty": "Экспорт словаря свойств",
+    "exportRelationship": "Экспорт словаря отношений",
+    "exportEnum": "Экспорт словаря enum",
+    "exportTree": "Экспорт дерева",
+    "editValue": "Изменить значение",
+    "editTextInNode": "Изменить текстовое значение узла",
+    "editQuestionInfo": "Изменить информацию для вопросов",
+
+    //Текст окон (названия, кнопки)
+    //Словари
+    "TitleClassConstructorWindow": "Конструктор классов",
+    "TitleClassEditorWindow": "Редактор классов",
+    "TitleClassPropertiesConstructorWindow": "Конструктор свойств для классов и объектов",
+    "TitleClassPropertiesEditorWindow": "Редактор свойств для классов и объектов",
+    "TitleEnumConstructorWindow": "Конструктор enum",
+    "TitleEnumEditorWindow": "Редактор enum",
+    "TitleRelationshipsConstructorWindow": "Конструктор отношений",
+    "TitleRelationshipsEditorWindow": "Редактор отношений",
+    //Узлы
+    "TitleActionNodeConstructorWindow": "Конструктор узла действия",
+    "TitleActionNodeEditorWindow": "Редактор узла действия",
+    "TitleBranchResultNodeConstructorWindow": 'Конструктор узлов "Истина"/"Ложь"',
+    "TitleBranchResultNodeEditorWindow": 'Редактор узлов "Истина"/"Ложь"',
+    "TitleConditionNodeConstructorWindow": "Конструктор узла вопроса",
+    "TitleConditionNodeEditorWindow": "Редактор узла вопроса",
+    "TitleCycleNodeConstructorWindow": 'Конструктор узла "Цикл"',
+    "TitleCycleNodeEditorWindow": 'Редактор узла "Цикл"',
+    "TitleEditTextInNodeWindow": "Редактор текста в узле",
+    "TitleEditValueInOutcomeWindow": "Редактор значений в ветке",
+    "TitleLogicNodeConstructorWindow": "Конструктор логическего узла",
+    "TitleLogicNodeEditorWindow": "Редактор логическего узла",
+    "TitlePredeterminingFactorsNodeConstructorWindow": 'Конструктор узла "Независимое ветвление"',
+    "TitlePredeterminingFactorsNodeEditorWindow": 'Редактор узла "Независимое ветвление"',
+    "TitleEditQuestionInfoInNodeWindow": "Редактор информации для вопросов в узле",
+    "TitleEditQuestionInfoInOutcomeWindow": "Редактор информации для вопросов в ветке",
+    "TitleStartConstructorWindow": "Конструктор начального узла",
+    "TitleStartEditorWindow": "Редактор начального узла",
+    "TitleSwitchCaseNodeConstructorWindow": 'Конструктор узла "Switch case"',
+    "TitleSwitchCaseNodeEditorWindow": 'Редактор узла "Switch case"',
+
+    //Кнопки
+    "Create": "Создать",
+    "Apply": "Принять",
+    "Delete": "Удалить",
+    "AddClass": "Добавить класс",
+    "OpenBlockly": "Открыть Blockly",
+    "toСode": "Перевод в код",
+    "AddPropertyClass": "Добавить свойство",
+    "AddEnum": "Добавить enum",
+    "AddRelationship": "Добавить отношение",
+    "SwitchBlockly": "Переключиться на Blockly",
+    "SwitchText": "Переключиться на текст",
+    "Save": "Сохранить",
+    "Generate": "Сгенерировать текст",
+    "AddVariable": 'Добавить переменную',
+
+    //Текст в окне
+    "ExpressionInNode": "Выражение в узле: ",
+    "HumanReadableText": "Человекочитаемый текст",
+    "value": "Значение",
+    "type": "Тип",
+    "asNextStep": "Шаблон формулировки данного узла как следующего шага.",
+    "descriptionQuestion": "Шаблон описания результата данного узла.",
+    "questionQuestion": "Шаблон вопроса про данный узел.",
+    "endingCause": "Шаблон формулировки конечности данного узла.",
+    "descriptionOutcome": "Шаблон описания результата ветки.",
+    "nextStepQuestion": "Шаблон вопроса о том, с чего надо начать в ветке.",
+    "nextStepExplanation": "Шаблон объяснения того, с чего на самом деле нужно начать в ветке.",
+    "textQuestion": "Шаблон текста данного варианта ответа.",
+    "explanation": "Шаблон объяснения, почему данный ответ правильный.",
+    "nextStepQuestionOutcome": "Шаблон вопроса о том, что делать дальше при данном ответе.",
+    "nextStepBranchResult": "Шаблон формулировок для красных/зеленых узлов при данном ответе.",
+    "nextStepExplanationOutcome": "Шаблон объяснения того, что на самом деле делать дальше при данном ответе.",
+
+    //Текста ошибок
+    "nameIsMissing": "В строке №%i отсутствует название; ",
+    "nameIsIncorrect": "В строке №%i название некорректно; ",
+    "extendClassIsIncorrect": "В строке №%i название наследуемого класса некорректно; ",
+    "nonUniqueClassName": "В словаре содержатся неуникальные названия классов!",
+    "ClassExists": "Словарь классов уже существует!",
+    "startValueIsMissing": "В строке №%i отсутствует начальное значение; ",
+    "endValueIsMissing": "В строке №%i отсутствует конечное значение; ",
+    "classesIsMissing": "В строке №%i отсутствуют классы; ",
+    "nonUniquePropertyName": "В словаре содержатся неуникальные названия свойств!",
+    "PropertyExists": "Словарь свойств уже существует",
+    "valueIsMissing": "В строке №%i отсутствует значение; ",
+    "valueIsIncorrect": "В строке №%i значение некорректно; ",
+    "nameRDFIsMissing": "В строке №%i отсутствует название в RDF; ",
+    "nameRDFIsIncorrect": "В строке №%i название в RDF некорректно; ",
+    "nonUniqueEnumName": "В словаре содержатся неуникальные названия enum!",
+    "EnumExists": "Словарь enum уже существует",
+    "extendRelationshipIsIncorrect": "В строке №%i название наследуемого отношения некорректно; ",
+    "nameRelationshipsIsMissing": "В строке №%i отсутствуют имена отношений; ",
+    "nameRelationshipsIsIncorrect": "В строке №%i имя отношения некорректно; ",
+    "nonUniqueRelationshipName": "В словаре содержатся неуникальные названия отношений!",
+    "RelationshipExists": "Словарь отношений уже существует",
+    "ExpressionIsMissing": "Отсутствует выражение",
+    "NameVariableIsMissing": "Отсутствует имя переменной!\n",
+    "NameVariableIsIncorrect": "Имя переменной некорректно!\n",
+    "TypeVariableIsMissing": "Отсутствует тип переменной!\n",
+    "sourceNodeIsMissing": "Исходный узел отсутствует!",
+    "EnumIsMissing": "Отсутствует enum в словаре",
+    "HumanReadableTextIsMissing": "Отсутствует человеко-читаемый текст \n",
+    "ValueOutcomeIsMissing": "Отсутствует значение для ветки \n",
+    "ValueInOutcomeIsMissing": "Ветке не задано значение!",
+    "invalidAssign": 'Недопустимый тип в ASSIGN: слева от "=" ожидается TREE VAR или GET PROPERTY',
+    "InvalidType": "Недопустимый тип в %type: ожидается %inputCheck; актуальный %outputCheck",
+    "StartNodeOnlyOne": "Начальный узел должен быть один!",
+    "typeOutcomeStartNodeIsMissing": 'Отсутствует тип у ветки после начального узла',
+    "typeOutcomeCycleIsMissing": 'Отсутствует тип у ветки после узла цикла',
+    "bodyOnlyOne": "Ветка тела для узла цикла должна быть одна!\n",
+    "trueCycleOnlyOne": "Истинная ветка для узла цикла должна быть одна!\n",
+    "falseCycleOnlyOne": "Ложная ветка для узла цикла должна быть одна!\n",
+    "typeOutcomeLogicNodeIsMissing": 'Отсутствует тип у ветки после логического узла',
+    "OutcomeLogicNodeOnlyTwo": "Веток для логического узла должно быть 2 и более!\n",
+    "trueLogicNodeOnlyOne": "Истинная ветка для логического узла должна быть одна!\n",
+    "falseLogicNodeOnlyOne": "Ложная ветка для логического узла должна быть одна!\n",
+    "typeOutcomePredIsMissing": 'Отсутствует тип у ветки после независимого ветвления',
+    "predOutcomeIsMissing": "Отсутствует предрешающая ветка для узла независимое ветвление!\n",
+    "undeterminedOnlyOne": "Ветка undetermined для узла независимое ветвление должна быть одна!\n",
+    "valueInOutcomeIsMissing": 'Отсутствует значение у ветки',
+    "valueEnumIsMissing": 'Значение enum отсутствует в словаре',
+    "ClassInDictIsMissing": 'Класс отсутствует в словаре',
+    "TypesDontMatch": 'Тип ветки не совпадает с типом возвращаемого значения выражения узла',
+    "OutcomesHasSameValues": 'Ветка имеет повторяющееся значение',
+    "ResultOutcomeForPredNode": "Результативный узел (Ложь/Истина) для предрешающей ветки должен быть один!",
+    "moreBlocksInWorkspace": 'В рабочей области имеется более одного блока',
+    "propertyIsMissingInDict": 'Свойство %propertyName не существует в словаре',
+    "hasCycleInTree": "В графе присутствуют циклы!",
+};
+
+const EN_TEXT = {
+    //Разделы меню
+    "menuItemDictionaryConstructors": "Dictionary constructors",
+    "menuItemNodeConstructors": "Node constructors",
+    "menuItemExport": "Export",
+    "menuItemEdit": "Edit",
+
+    //Элементы меню
+    "classesConstructor": "Classes constructor",
+    "classPropertiesConstructor": "Class and Object properties constructor",
+    "relationshipsConstructor": "Relationships constructor",
+    "enumConstructor": "Enum constructor",
+    "startNodeConstructor": "Create start node",
+    "TrueNodeCreate": "Create true node",
+    "FalseNodeCreate": "Create false node",
+    "LogicNodeCreate": "Create logic node",
+    "PredeterminingFactorsNodeCreate": "Create predetermining factors node",
+    "UncertaintyNodeCreate": "Create node uncertainty",
+    "actionNodeConstructor": "Action Node Constructor",
+    "cycleNodeConstructor": "Cycle Node Constructor",
+    "conditionNodeConstructor": "Condition Node Constructor",
+    "switchCaseNodeConstructor": "Switch case Node Constructor",
+    "exportClass": "Export class",
+    "exportProperty": "Export property",
+    "exportRelationship": "Export relationship",
+    "exportEnum": "Export enum",
+    "exportTree": "Export tree",
+    "editValue": "Edit value",
+    "editTextInNode": "Edit text in node",
+    "editQuestionInfo": "Edit question info",
+
+    //Текст окон (названия, кнопки)
+    //Словари
+    "TitleClassConstructorWindow": "Classes constructor",
+    "TitleClassEditorWindow": "Classes editor",
+    "TitleClassPropertiesConstructorWindow": "Class and Object properties constructor",
+    "TitleClassPropertiesEditorWindow": "Class and Object properties editor",
+    "TitleEnumConstructorWindow": "Enum constructor",
+    "TitleEnumEditorWindow": "Enum editor",
+    "TitleRelationshipsConstructorWindow": "Relationships constructor",
+    "TitleRelationshipsEditorWindow": "Relationships editor",
+    //Узлы
+    "TitleActionNodeConstructorWindow": "Action node constructor",
+    "TitleActionNodeEditorWindow": "Action node editor",
+    "TitleBranchResultNodeConstructorWindow": "Branch result node constructor",
+    "TitleBranchResultNodeEditorWindow": "Branch result node editor",
+    "TitleConditionNodeConstructorWindow": "Condition node constructor",
+    "TitleConditionNodeEditorWindow": "Condition node editor",
+    "TitleCycleNodeConstructorWindow": "Cycle node constructor",
+    "TitleCycleNodeEditorWindow": "Cycle node editor",
+    "TitleEditTextInNodeWindow": "Edit text in node",
+    "TitleEditValueInOutcomeWindow": "Edit value in outcome",
+    "TitleLogicNodeConstructorWindow": "Logic node constructor",
+    "TitleLogicNodeEditorWindow": "Logic node editor",
+    "TitlePredeterminingFactorsNodeConstructorWindow": "Predetermining factors node constructor",
+    "TitlePredeterminingFactorsNodeEditorWindow": "Predetermining factors node editor",
+    "TitleEditQuestionInfoInNodeWindow": "Edit question info in node",
+    "TitleEditQuestionInfoInOutcomeWindow": "Edit question info in outcome",
+    "TitleStartConstructorWindow": "Start node constructor",
+    "TitleStartEditorWindow": "Start node editor",
+    "TitleSwitchCaseNodeConstructorWindow": "Switch case node constructor",
+    "TitleSwitchCaseNodeEditorWindow": "Switch case node editor",
+
+    //Кнопки
+    "Create": "Create",
+    "Apply": "Apply",
+    "Delete": "Delete",
+    "AddClass": "Add Class",
+    "OpenBlockly": "Open Blockly",
+    "toСode": "Translation into code",
+    "AddPropertyClass": "Add property",
+    "AddEnum": "Add Enum",
+    "AddRelationship": "Add relationship",
+    "SwitchBlockly": "Switch to blockly",
+    "SwitchText": "Switch to text",
+    "Save": "Save",
+    "Generate": "Generate",
+    "AddVariable": 'Add Variable',
+
+    //Текст в окне
+    "ExpressionInNode": "Expression in node: ",
+    "HumanReadableText": "Human-readable text",
+    "value": "Value",
+    "type": "Type",
+    "asNextStep": "Template formulation of this node as the next step.",
+    "descriptionQuestion": "Template for describing the result of this node.",
+    "questionQuestion": "Template question about this node.",
+    "endingCause": "Template formulation of the end of a particular node.",
+    "descriptionOutcome": "Template for describing the result of a branch.",
+    "nextStepQuestion": "Template question about where to start in a branch.",
+    "nextStepExplanation": "Template for explaining where you really need to start in a branch.",
+    "textQuestion": "Template the text of this answer choice.",
+    "explanation": "Template an explanation of why this answer is correct.",
+    "nextStepQuestionOutcome": "Template a question about what to do next for a given answer.",
+    "nextStepBranchResult": "Template wording for red/green nodes in this answer.",
+    "nextStepExplanationOutcome": "Template an explanation of what to actually do next for a given answer.",
+
+    //Текста ошибок
+    "nameIsMissing": "In line №%i there is no name; ",
+    "nameIsIncorrect": "In line №%i the name is incorrect; ",
+    "extendClassIsIncorrect": "In line №%i the name of the extended class is incorrect; ",
+    "nonUniqueClassName": "The dictionary contains non-unique class names!",
+    "ClassExists": "Class dictionary already exists",
+    "startValueIsMissing": "In line №%i there is no start value; ",
+    "endValueIsMissing": "In line №%i there is no end value; ",
+    "classesIsMissing": "In line №%i there are no classes; ",
+    "nonUniquePropertyName": "The dictionary contains non-unique property names!",
+    "PropertyExists": "Class and Object properties dictionary already exists",
+    "valueIsMissing": "In line №%i there is no value; ",
+    "valueIsIncorrect": "In line №%i the value is incorrect; ",
+    "nameRDFIsMissing": "In line №%i there is no name in RDF; ",
+    "nameRDFIsIncorrect": "In line №%i the name in RDF is incorrect; ",
+    "nonUniqueEnumName": "The dictionary contains non-unique names of enum!",
+    "EnumExists": "Enum dictionary already exists",
+    "extendRelationshipIsIncorrect": "In line №%i the name of the inherited relationship is incorrect; ",
+    "nameRelationshipsIsMissing": "In line №%i there are no relationship names; ",
+    "nameRelationshipsIsIncorrect": "In line №%i the name of the relationship is incorrect; ",
+    "nonUniqueRelationshipName": "The dictionary contains non-unique relationship names!",
+    "RelationshipExists": "Relationships dictionary already exists",
+    "ExpressionIsMissing": "There is no expression",
+    "NameVariableIsMissing": "No variable name!\n",
+    "NameVariableIsIncorrect": "The variable name is incorrect!\n",
+    "TypeVariableIsMissing": "No variable type!\n",
+    "sourceNodeIsMissing": "Source node is missing!",
+    "EnumIsMissing": "No enum in the dictionary",
+    "HumanReadableTextIsMissing": "No human-readable text \n",
+    "ValueOutcomeIsMissing": "No value for the branch \n",
+    "ValueInOutcomeIsMissing": "The branch has no value!",
+    "invalidAssign": 'Invalid type in ASSIGN: to the left of "=" is expected TREE VAR or GET PROPERTY',
+    "InvalidType": "Invalid type in %type: expected %inputCheck; actual %outputCheck",
+    "StartNodeOnlyOne": "The starting node must be one!",
+    "typeOutcomeStartNodeIsMissing": 'There is no branch type after the start node',
+    "typeOutcomeCycleIsMissing": 'A branch after a cycle node has no type',
+    "bodyOnlyOne": "The true branch for a cycle node must be one!\n",
+    "trueCycleOnlyOne": "There must be only one true branch for the cycle node!\n",
+    "falseCycleOnlyOne": "There must be only one false branch for the cycle node!\n",
+    "typeOutcomeLogicNodeIsMissing": 'The branch after the logical node has no type',
+    "OutcomeLogicNodeOnlyTwo": "There must be 2 or more branches for the logical node!\n",
+    "trueLogicNodeOnlyOne": "The true branch for a logical node must be one!\n",
+    "falseLogicNodeOnlyOne": "The false branch for a logical node must be one!\n",
+    "typeOutcomePredIsMissing": 'No branch type after an independent branch',
+    "predOutcomeIsMissing": "There is no predetermined branch for the independent branch node!\n",
+    "undeterminedOnlyOne": "The undetermined branch for an independent branch node must be one!\n",
+    "valueInOutcomeIsMissing": 'The branch has no value',
+    "valueEnumIsMissing": 'The value of enum is not in the dictionary',
+    "ClassInDictIsMissing": 'The class is not in the dictionary',
+    "TypesDontMatch": 'The branch type does not match the type of the return value of the node expression',
+    "OutcomesHasSameValues": 'The branch has a repeating value',
+    "ResultOutcomeForPredNode": "The result node (False/True) for the predetermined branch must be one!",
+    "moreBlocksInWorkspace": 'There is more than one block in the workspace',
+    "propertyIsMissingInDict": 'Property %propertyName does not exist in the dictionary',
+    "hasCycleInTree": "There are cycles in the graph!",
+};
 // Окно коструктора блока со свойствами классов
 var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
 
@@ -18,7 +333,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
         checkAllInputsProperty(table);
         var theGraph = editorUi.editor.graph;
 
@@ -40,11 +355,11 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового свойства класса
-    var addProperty = mxUtils.button('Add property class', function () {
+    var addProperty = mxUtils.button(getTextByLocale("AddPropertyClass"), function () {
         var newRowProperty = addRowProperty(editorUi);
         var tdDelRow = document.createElement('td');
         tdDelRow.classList = 'delete';
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -62,7 +377,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Class and Object properties constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleClassPropertiesConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -213,9 +528,9 @@ function checkAllInputsProperty(table) {
         .item(0).getElementsByTagName("input").item(0).value;
         arrayNames.push(checkValue);
         if(checkValue == "") {
-            errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
 
         var typeSelect = table.rows.item(i).getElementsByTagName("td")
@@ -226,11 +541,11 @@ function checkAllInputsProperty(table) {
         if(type == "Integer" || type == "Double") {
             if(table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(0).value == "") {
-                errors += "В строке №" + (i+1) + " отсутствует начальное значение; ";
+                errors += getTextByLocale("startValueIsMissing").replace("%i", (i+1));
             }
             if(table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(1).value == "") {
-                errors += "В строке №" + (i+1) + " отсутствует конечное значение; ";
+                errors += getTextByLocale("endValueIsMissing").replace("%i", (i+1));
             }
             lastIndex++;
         }
@@ -240,7 +555,7 @@ function checkAllInputsProperty(table) {
             .item(lastIndex).getElementsByTagName("select").item(0);
         while(currentSelect != null) {
             if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
-                errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+                errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
                 break;
             }
             lastIndex++;
@@ -249,7 +564,7 @@ function checkAllInputsProperty(table) {
         }
     }
     if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
-        errors += "В словаре содержатся неуникальные названия свойств!";
+        errors += getTextByLocale("nonUniquePropertyName");
     }
     if(errors != "") {
         throw new Error(errors);
@@ -323,7 +638,7 @@ function checkExistClassPropertiesDictionary(graph) {
     Object.keys(cells).forEach(function (key) {
         var cellValue = cells[key].value;
         if (typeof cellValue == "string" && cellValue.startsWith('<b><font color="#000000">Class and Object properties</font></b>')) {
-            throw new Error("Class and Object properties dictionary already exists");
+            throw new Error(getTextByLocale("PropertyExists"));
         }
     });
 }
@@ -349,7 +664,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
         
         checkAllInputsEnum(tbody);
 
@@ -372,10 +687,10 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addEnum = mxUtils.button('Add Enum', function () {
+    var addEnum = mxUtils.button(getTextByLocale("AddEnum"), function () {
         var newRow = addRowEnum();
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -393,7 +708,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Enum constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEnumConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -481,9 +796,9 @@ function checkAllInputsEnum(table) {
         .item(0).getElementsByTagName("input").item(0).value;
         arrayNames.push(checkValue);
         if(checkValue == "") {
-                errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
 
         let lastIndex = 1;
@@ -492,10 +807,10 @@ function checkAllInputsEnum(table) {
         let isErrorValue = false;
         while(currentInput != null) {
             if(currentInput.value == "" && !isErrorValue) {
-                errors += "В строке №" + (i+1) + " отсутствует значение; ";
+                errors += getTextByLocale("valueIsMissing").replace("%i", (i+1));
                 isErrorValue = true;
             } else if(!checkValidID(currentInput.value) && !isErrorValue) {
-                errors += "В строке №" + (i+1) + " значение некорректно; ";
+                errors += getTextByLocale("valueIsIncorrect").replace("%i", (i+1));
                 isErrorValue = true;
             }
             lastIndex++;
@@ -512,13 +827,13 @@ function checkAllInputsEnum(table) {
                 .item(lastIndex+1).getElementsByTagName("input").item(0).value;
         }
         if(Islinear && checkRdfName == "") {
-                errors += "В строке №" + (i+1) + " отсутствует название в RDF; ";
+            errors += getTextByLocale("nameRDFIsMissing").replace("%i", (i+1));
         } else if(Islinear && !checkValidID(checkRdfName)) {
-            errors += "В строке №" + (i+1) + " название в RDF некорректно; ";
+            errors += getTextByLocale("nameRDFIsIncorrect").replace("%i", (i+1));
         }
     }
     if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
-        errors += "В словаре содержатся неуникальные названия перечислений!";
+        errors += getTextByLocale("nonUniqueEnumName");
     }
     if(errors != "") {
         throw new Error(errors);
@@ -635,14 +950,14 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     text.style.height = "90%";
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Create', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         
         var theGraph = editorUi.editor.graph;
@@ -662,7 +977,7 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -702,10 +1017,10 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nestedDiv.style.height = h*0.90+'px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         
         var theGraph = editorUi.editor.graph;
@@ -722,7 +1037,7 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -747,7 +1062,7 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Condition node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleConditionNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
@@ -776,7 +1091,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
         checkAllInputsRelationship(table);
         var theGraph = editorUi.editor.graph;
 
@@ -801,11 +1116,11 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового отношения между классами
-    var addRelationship = mxUtils.button('Add relationship', function () {
+    var addRelationship = mxUtils.button(getTextByLocale("AddRelationship"), function () {
         var newRowRelationship = addRowRelationship(editorUi);
         var tdDelRow = document.createElement('td');
         tdDelRow.classList = 'delete';
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -823,7 +1138,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Relationships constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleRelationshipsConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -1064,12 +1379,12 @@ function checkAllInputsRelationship(table) {
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
-            errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
         if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
-            errors += "В строке №" + (i+1) + " название наследуемого отношения некорректно; ";
+            errors += getTextByLocale("extendRelationshipIsIncorrect").replace("%i", (i+1));
         }
 
         let lastIndex = 2;
@@ -1078,7 +1393,7 @@ function checkAllInputsRelationship(table) {
         let hasntClass = false;
         while(currentSelect != null) {
             if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined" && !hasntClass) {
-                errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+                errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
                 hasntClass = true;
             }
             lastIndex++;
@@ -1095,10 +1410,10 @@ function checkAllInputsRelationship(table) {
                 .item(lastIndex).getElementsByTagName("input").item(0);
             while(currentInputName != null) {
                 if(currentInputName.value == "") {
-                    errors += "В строке №" + (i+1) + " отсутствуют имена отношений; ";
+                    errors += getTextByLocale("nameRelationshipsIsMissing").replace("%i", (i+1));
                     break;
                 } else if(!checkValidID(currentInputName.value)) {
-                    errors += "В строке №" + (i+1) + " имя отношения некорректно; ";
+                    errors += getTextByLocale("nameRelationshipsIsIncorrect").replace("%i", (i+1));
                     break;
                 }
                 lastIndex++;
@@ -1108,7 +1423,7 @@ function checkAllInputsRelationship(table) {
         }
     }
     if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
-        errors += "В словаре содержатся неуникальные названия отношений!";
+        errors += getTextByLocale("nonUniqueRelationshipName");
     }
     if(errors != "") {
         throw new Error(errors);
@@ -1201,7 +1516,7 @@ function checkExistRelationshipsDictionary(graph) {
     Object.keys(cells).forEach(function (key) {
         var cellValue = cells[key].value;
         if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')) {
-            throw new Error("Relationships dictionary already exists");
+            throw new Error(getTextByLocale("RelationshipExists"));
         }
     });
 }
@@ -1511,7 +1826,7 @@ function stmtNodeToBlock(stmtNode, workspace) {
         assignment.getInput("new_value").connection.connect(valueBlock.outputConnection);
     } else if(stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY 
         && stmtNode.firstExpr.type != ExprType.TREE_VAR) {
-            throw new Error('Invalid type in ASSIGN: to the left of "=" is expected TREE VAR or GET PROPERTY');
+            throw new Error(getTextByLocale("invalidAssign"));
         }
 }
 
@@ -1870,7 +2185,8 @@ function checkTypeBlocks(blockInput, blockOutput, input) {
     let outputCheck = blockOutput.outputConnection.check_;
     let inputCheck = blockInput.getInput(input).connection.check_;
     if(outputCheck.filter(x => inputCheck.includes(x)).length == 0) {
-        throw new Error("Invalid type in " + blockInput.type + ": expected " + inputCheck +"; actual " + outputCheck)
+        throw new Error(getTextByLocale("InvalidType").replace("%type", blockInput.type)
+            .replace("%inputCheck", inputCheck).replace("%outputCheck", outputCheck))
     }
 }
 var LASTID = 0;
@@ -2864,23 +3180,23 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     text.style.height = "80%";
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Create', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInText.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInText.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -2906,7 +3222,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -2968,19 +3284,19 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nestedDiv.style.height = h*0.80+'px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInBlockly.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInBlockly.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -3003,7 +3319,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -3048,7 +3364,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Action node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleActionNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
@@ -3078,7 +3394,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
 
         checkAllInputsClass(table);
 
@@ -3115,10 +3431,10 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addClass = mxUtils.button('Add Class', function () {
+    var addClass = mxUtils.button(getTextByLocale("AddClass"), function () {
         var newRow = addRowClass();
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -3127,7 +3443,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка открытия окна с блокли для выражений
-    var openBlockly = mxUtils.button('Open blockly', function () {
+    var openBlockly = mxUtils.button(getTextByLocale("OpenBlockly"), function () {
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
         divBlockly.id = 'classCreateBlocklyDiv'
@@ -3144,7 +3460,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         divInput.appendChild(codeInput);
         mainDivBlockly.appendChild(divInput);
 
-        var toCodeBtn = mxUtils.button('to code', function () {
+        var toCodeBtn = mxUtils.button(getTextByLocale("toСode"), function () {
             let code = Blockly.JavaScript.workspaceToCode(workspaceInWindow);
             codeInput.value = code;
         });
@@ -3171,7 +3487,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Classes constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleClassConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -3220,16 +3536,16 @@ function checkAllInputsClass(table) {
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
-            errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
         if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
-            errors += "В строке №" + (i+1) + " название наследуемого класса некорректно; ";
+            errors += getTextByLocale("extendClassIsIncorrect").replace("%i", (i+1));
         }
     }
     if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
-        errors += "В словаре содержатся неуникальные названия классов!";
+        errors += getTextByLocale("nonUniqueClassName");
     }
     if(errors != "") {
         throw new Error(errors);
@@ -3259,7 +3575,7 @@ function checkExistClassDictionary(graph) {
     Object.keys(cells).forEach(function (key) {
         var cellValue = cells[key].value;
         if (cellValue && typeof cellValue == "object" && cellValue.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')) { //TODO: Возможно это кал способ надо протестировать
-            throw new Error("Class dictionary already exists");
+            throw new Error(getTextByLocale("ClassExists"));
         }
     });
 }
@@ -3283,7 +3599,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка сохранения блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
 
         checkAllInputsClass(table);
 
@@ -3314,10 +3630,10 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addClass = mxUtils.button('Add Class', function () {
+    var addClass = mxUtils.button(getTextByLocale("AddClass"), function () {
         var newRow = addRowClass();
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -3326,7 +3642,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка открытия окна с блокли для выражений
-    var openBlockly = mxUtils.button('Open blockly', function () {
+    var openBlockly = mxUtils.button(getTextByLocale("OpenBlockly"), function () {
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
         divBlockly.id = 'classUpdateBlocklyDiv'
@@ -3343,7 +3659,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
         divInput.appendChild(codeInput);
         mainDivBlockly.appendChild(divInput);
 
-        var toCodeBtn = mxUtils.button('to code', function () {
+        var toCodeBtn = mxUtils.button(getTextByLocale("toСode"), function () {
             let code = Blockly.JavaScript.workspaceToCode(workspaceInWindow);
             codeInput.value = code;
         });
@@ -3370,7 +3686,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Classes editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleClassEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -3409,7 +3725,7 @@ function fillDataClass(tbody, cell) {
         
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);
@@ -3440,7 +3756,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(divTable);
 
     // Кнопка сохранения блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
         
         checkAllInputsEnum(tbody);
 
@@ -3456,10 +3772,10 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addEnum = mxUtils.button('Add Enum', function () {
+    var addEnum = mxUtils.button(getTextByLocale("AddEnum"), function () {
         var newRow = addRowEnum();
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -3477,7 +3793,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Enum editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEnumEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -3576,7 +3892,7 @@ function fillDataEnum(tbody, cell) {
 
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);
@@ -3605,7 +3921,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
         checkAllInputsProperty(table);
 
         strValue = generateStrValueForProperties(table);
@@ -3620,11 +3936,11 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового свойства класса
-    var addProperty = mxUtils.button('Add property class', function () {
+    var addProperty = mxUtils.button(getTextByLocale("AddPropertyClass"), function () {
         var newRowProperty = addRowProperty(editorUi);
         var tdDelRow = document.createElement('td');
         tdDelRow.classList = 'delete';
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -3642,7 +3958,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Class and Object properties editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleClassPropertiesEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -3741,7 +4057,7 @@ function fillDataProperties(tbody, cell, editorUi) {
 
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);
@@ -3771,7 +4087,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
         checkAllInputsRelationship(table);
 
         let valuesRels = generateStrValueForRelationships(table);
@@ -3790,11 +4106,11 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового отношения между классами
-    var addRelationship = mxUtils.button('Add relationship', function () {
+    var addRelationship = mxUtils.button(getTextByLocale("AddRelationship"), function () {
         var newRowRelationship = addRowRelationship(editorUi);
         var tdDelRow = document.createElement('td');
         tdDelRow.classList = 'delete';
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -3812,7 +4128,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Relationships editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleRelationshipsEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -4006,7 +4322,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);
@@ -8067,7 +8383,7 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(btnCreateORNode);
 
     // Настройки окна
-    var win = new mxWindow('Logic node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleLogicNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -8098,7 +8414,7 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
     div.appendChild(table);
 
     // Кнопка создания узла
-    var btnCreateNode = mxUtils.button('Create', function () {
+    var btnCreateNode = mxUtils.button(getTextByLocale("Create"), function () {
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
@@ -8117,7 +8433,7 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
     div.appendChild(btnCreateNode);
 
     // Настройки окна
-    var win = new mxWindow('Predetermining factors node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitlePredeterminingFactorsNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -8142,14 +8458,14 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     text.style.height = "480px";
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Create', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         
         var theGraph = editorUi.editor.graph;
@@ -8169,7 +8485,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -8198,10 +8514,10 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         
         var theGraph = editorUi.editor.graph;
@@ -8218,7 +8534,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -8232,7 +8548,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Switch case node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleSwitchCaseNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -8258,23 +8574,23 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     text.style.height = "480px";
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Create', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInText.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInText.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -8304,7 +8620,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -8361,19 +8677,19 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInBlockly.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInBlockly.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -8398,7 +8714,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -8438,7 +8754,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Cycle node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleCycleNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -8462,7 +8778,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Create', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
 
         checkAllInputsStartNode(table);
 
@@ -8483,10 +8799,10 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addClass = mxUtils.button('Add Variable', function () {
+    var addClass = mxUtils.button(getTextByLocale("AddVariable"), function () {
         var newRow = addRowStartNode(editorUi);
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -8500,7 +8816,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(applyBtn);
 
     // Настройки окна
-    var win = new mxWindow('Start node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleStartConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -8540,14 +8856,14 @@ function checkAllInputsStartNode(table) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
         .item(0).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
-            errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
         var classSelect = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("select").item(0);
         if(typeof (classSelect.options[classSelect.options.selectedIndex]) == "undefined") {
-            errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+            errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
         }
     }
     if(errors != "") {
@@ -8589,7 +8905,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var expr = cell.value.getAttribute("expression");
 
     // Кнопка создания узла
-    var btnSaveTextInNode = mxUtils.button('Save', function () {
+    var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         var textInNode = divText.getElementsByTagName("textarea").item(0).value;
         graph.getModel().beginUpdate();
         if(typeof cell.value == "object") {
@@ -8603,7 +8919,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка генерации человекочитаемого текста
-    var btnGenerateTextInNode = mxUtils.button('Generate', function () {
+    var btnGenerateTextInNode = mxUtils.button(getTextByLocale("Generate"), function () {
         let code = "";
         if(typeof cell.value == "object") {
             code = cell.value.getAttribute("expression");
@@ -8615,7 +8931,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     var divExprText = document.createElement('div');
-    divExprText.innerHTML = "Expression in node: " + expr;
+    divExprText.innerHTML = getTextByLocale("ExpressionInNode") + expr;
     divExprText.style.height = "50px";
     divText.appendChild(divExprText);
     divText.appendChild(text);
@@ -8624,7 +8940,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(divText);
 
     // Настройки окна
-    var win = new mxWindow('Edit text in node', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEditTextInNodeWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -8649,14 +8965,14 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         
         var theGraph = editorUi.editor.graph;
@@ -8672,7 +8988,7 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -8701,10 +9017,10 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         
         var theGraph = editorUi.editor.graph;
@@ -8718,7 +9034,7 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -8732,7 +9048,7 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Condition node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleConditionNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -8757,23 +9073,23 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInText.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInText.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -8796,7 +9112,7 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -8850,19 +9166,19 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInBlockly.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInBlockly.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -8882,7 +9198,7 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -8912,7 +9228,7 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Action node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleActionNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -8939,23 +9255,23 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInText.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInText.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -8981,7 +9297,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -9051,19 +9367,19 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
         if(!nameVarInBlockly.value) {
-            error += "Отсутствует имя переменной!\n";
+            error += getTextByLocale("NameVariableIsMissing");
         } else if(!checkValidID(nameVarInBlockly.value)) {
-            error += "Имя переменной некорректно!\n";
+            error += getTextByLocale("NameVariableIsIncorrect");
         }
         if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
-            error += "Отсутствует тип переменной!\n";
+            error += getTextByLocale("TypeVariableIsMissing");
         }
         if(error) {
             throw new Error(error);
@@ -9085,7 +9401,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -9125,7 +9441,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Cycle node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleCycleNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -9151,14 +9467,14 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         
         var theGraph = editorUi.editor.graph;
@@ -9174,7 +9490,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -9203,10 +9519,10 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
         if(!code) {
-            throw new Error('Отсутствует выражение');
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         
         var theGraph = editorUi.editor.graph;
@@ -9220,7 +9536,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -9234,7 +9550,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Switch case node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleSwitchCaseNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -9257,7 +9573,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Apply', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
 
         checkAllInputsStartNode(table);
 
@@ -9273,10 +9589,10 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addClass = mxUtils.button('Add Variable', function () {
+    var addClass = mxUtils.button(getTextByLocale("AddVariable"), function () {
         var newRow = addRowStartNode(editorUi);
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -9290,7 +9606,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(applyBtn);
 
     // Настройки окна
-    var win = new mxWindow('Start node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleStartEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -9322,7 +9638,7 @@ function fillDataStart(tbody, cell, editorUi) {
         
         if(index != 0) {
             var tdDelRow = document.createElement('td');
-            var btnDelRow = mxUtils.button('Delete', function (evt) {
+            var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
             tdDelRow.appendChild(btnDelRow);
@@ -9356,7 +9672,7 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
     div.appendChild(table);
 
     // Кнопка создания узла
-    var btnCreateNode = mxUtils.button('Apply', function () {
+    var btnCreateNode = mxUtils.button(getTextByLocale("Apply"), function () {
         var theGraph = editorUi.editor.graph;
         var strValue = table.rows.item(0).getElementsByTagName("td")
         .item(0).getElementsByTagName("input").item(0).value;
@@ -9371,7 +9687,7 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
     div.appendChild(btnCreateNode);
 
     // Настройки окна
-    var win = new mxWindow('Predetermining factors node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitlePredeterminingFactorsNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -9415,7 +9731,7 @@ var LogicNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnCreateORNode);
 
     // Настройки окна
-    var win = new mxWindow('Logic node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleLogicNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -9432,7 +9748,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     var div = document.createElement('div');
     var divText = document.createElement('div');
     var labelText = document.createElement('label');
-    labelText.innerHTML = "Human-readable text";
+    labelText.innerHTML = getTextByLocale("HumanReadableText");
     var text = document.createElement('input');
     text.type = "text";
     text.style.width = '100%';
@@ -9442,7 +9758,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
     let outNode = cell.source;
     if(outNode == null) {
-        throw new Error("Error: Source node is missing!");
+        throw new Error(getTextByLocale("sourceNodeIsMissing"));
     }
     let typeValue = "";
     if(typeof outNode.value == "object" && outNode.value.getAttribute('expression')) {
@@ -9450,7 +9766,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         if(typeNode.type == "int") {
             typeValue = "int";
             var labelType = document.createElement('label');
-            labelType.innerHTML = "value";
+            labelType.innerHTML = getTextByLocale("value");
             var numberInt = document.createElement('input');
             numberInt.id = "value_input";
             numberInt.type = "number";
@@ -9463,7 +9779,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         } else if(typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "bool";
             let labelValue = document.createElement('label');
-            labelValue.innerHTML = "value";
+            labelValue.innerHTML = getTextByLocale("value");
             let selectValue = document.createElement('select');
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
@@ -9476,7 +9792,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         } else if(typeNode.type == "class") {
             typeValue = "class";
             let labelValue = document.createElement('label');
-            labelValue.innerHTML = "value";
+            labelValue.innerHTML = getTextByLocale("value");
             let selectValue = document.createElement('select');
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
@@ -9490,7 +9806,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         } else if(typeNode.type == "double") {
             typeValue = "double";
             var labelType = document.createElement('label');
-            labelType.innerHTML = "value";
+            labelType.innerHTML = getTextByLocale("value");
             var numberInt = document.createElement('input');
             numberInt.id = "value_input";
             numberInt.type = "number";
@@ -9504,7 +9820,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         } else if(typeNode.type == "string") {
             typeValue = "string";
             var labelType = document.createElement('label');
-            labelType.innerHTML = "value";
+            labelType.innerHTML = getTextByLocale("value");
             var text = document.createElement('input');
             text.id = "value_input";
             text.type = "text";
@@ -9515,7 +9831,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         } else if(typeNode.type == "enum") {
             typeValue = "enum";
             let labelValue = document.createElement('label');
-            labelValue.innerHTML = "value";
+            labelValue.innerHTML = getTextByLocale("value");
             let selectValue = document.createElement('select');
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
@@ -9527,13 +9843,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
                     selectValue.options[selectValue.options.length] = newOption;
                 });
             } else {
-                throw new Error("Отсутствует enum в словаре");
+                throw new Error(getTextByLocale("EnumIsMissing"));
             }
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
         } else if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
             let labelValue = document.createElement('label');
-            labelValue.innerHTML = "value";
+            labelValue.innerHTML = getTextByLocale("value");
             let selectValue = document.createElement('select');
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
@@ -9549,7 +9865,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
     if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "START") {
         let labelType = document.createElement('label');
-        labelType.innerHTML = "type";
+        labelType.innerHTML = getTextByLocale("type");
         let selectTypes = document.createElement('select');
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
@@ -9562,7 +9878,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         divText.appendChild(labelType);
     } else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
         let labelType = document.createElement('label');
-        labelType.innerHTML = "type";
+        labelType.innerHTML = getTextByLocale("type");
         let selectTypes = document.createElement('select');
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
@@ -9575,7 +9891,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         divText.appendChild(labelType);
     } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")) {
         let labelType = document.createElement('label');
-        labelType.innerHTML = "type";
+        labelType.innerHTML = getTextByLocale("type");
         let selectTypes = document.createElement('select');
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
@@ -9588,7 +9904,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         divText.appendChild(labelType);
     } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR")) {
         let labelType = document.createElement('label');
-        labelType.innerHTML = "type";
+        labelType.innerHTML = getTextByLocale("type");
         let selectTypes = document.createElement('select');
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
@@ -9602,7 +9918,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     }
 
     // Кнопка сохранения значений в ветке
-    var btnSaveValueInOutcome = mxUtils.button('Save', function () {
+    var btnSaveValueInOutcome = mxUtils.button(getTextByLocale("Save"), function () {
         checkAllInputsOutcome(divText, cell.source.value);
         var textInOutcome = text.value;
         graph.getModel().beginUpdate();
@@ -9635,7 +9951,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     // Кнопка генерации человекочитаемого текста
-    var btnGenerateTextInOutcome = mxUtils.button('Generate', function () {
+    var btnGenerateTextInOutcome = mxUtils.button(getTextByLocale("Generate"), function () {
         let vin = document.getElementById("value_input");
         let typeSelect = document.getElementById("type_input");
         var humanStr = "";
@@ -9655,7 +9971,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(divText);
 
     // Настройки окна
-    var win = new mxWindow('Edit value in outcome', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEditValueInOutcomeWindow"), div, x, y, w, h, true, true);
     this.window = win
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -9691,11 +10007,11 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 function checkAllInputsOutcome(div, outNodeValue) {
     errors = "";
     if(div.getElementsByTagName("input").item(0).value == "" && typeof outNodeValue == "object" && outNodeValue.getAttribute('type') != "START") {
-        errors += "Отсутствует человеко-читаемый текст \n";
+        errors += getTextByLocale("HumanReadableTextIsMissing");
     }
     if(document.getElementById("value_input") != null 
     && document.getElementById("value_input").value == "") {
-        errors += "Отсутствует значение для ветки \n";
+        errors += getTextByLocale("ValueOutcomeIsMissing");
     }
     if(errors != "") {
         throw new Error(errors);
@@ -9722,7 +10038,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     text.style.height = "90%";
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Create', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
@@ -9752,7 +10068,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -9792,7 +10108,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     nestedDiv.style.height = h*0.90+'px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
         
         var theGraph = editorUi.editor.graph;
@@ -9814,7 +10130,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -9839,7 +10155,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
 
     // Настройки окна
-    var win = new mxWindow('Branch result node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleBranchResultNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
@@ -9865,7 +10181,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Apply', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
@@ -9886,7 +10202,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -9915,7 +10231,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     nestedDiv.style.height = '500px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Apply', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
         
         var theGraph = editorUi.editor.graph;
@@ -9929,7 +10245,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -9943,7 +10259,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 
     // Настройки окна
-    var win = new mxWindow('Branch result node editor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleBranchResultNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -9974,7 +10290,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
         asNextStep.value = cell.value.getAttribute("_asNextStep");
     }
     var divAsNextStep = document.createElement('div');
-    divAsNextStep.innerHTML = "Шаблон формулировки данного узла как следующего шага.";
+    divAsNextStep.innerHTML = getTextByLocale("asNextStep");
     divAsNextStep.style.fontSize = "20px";
     divText.appendChild(divAsNextStep);
     divText.appendChild(asNextStep);
@@ -9992,9 +10308,9 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     }
     var divQuestion = document.createElement('div');
     if(isLogicAggreg) {
-        divQuestion.innerHTML = "Шаблон описания результата данного узла.";
+        divQuestion.innerHTML = getTextByLocale("descriptionQuestion");
     } else {
-        divQuestion.innerHTML = "Шаблон вопроса про данный узел.";
+        divQuestion.innerHTML = getTextByLocale("questionQuestion");
     }
     divQuestion.style.fontSize = "20px";
     divText.appendChild(divQuestion);
@@ -10010,13 +10326,13 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
         endingCause.value = cell.value.getAttribute("_endingCause");
     }
     var divEndingCause = document.createElement('div');
-    divEndingCause.innerHTML = "Шаблон формулировки конечности данного узла.";
+    divEndingCause.innerHTML = getTextByLocale("endingCause");
     divEndingCause.style.fontSize = "20px";
     divText.appendChild(divEndingCause);
     divText.appendChild(endingCause);
 
     // Кнопка сохранение узла
-    var btnSaveTextInNode = mxUtils.button('Save', function () {
+    var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         graph.getModel().beginUpdate();
         cell.value.setAttribute("_asNextStep", asNextStep.value);
         if(isLogicAggreg) {
@@ -10045,7 +10361,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Edit question info in node', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEditQuestionInfoInNodeWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -10060,10 +10376,10 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
     let outNode = cell.source;
     if(outNode == null) {
-        throw new Error("Error: Source node is missing!");
+        throw new Error(getTextByLocale("sourceNodeIsMissing"));
     }
     if(!cell.value || typeof cell.value != "object") {
-        throw new Error("Error: Ветке не задано значение!");
+        throw new Error(getTextByLocale("ValueInOutcomeIsMissing"));
     }
 
     // Верстка окна
@@ -10091,7 +10407,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             description.value = cell.value.getAttribute("_description");
         }
         var divDescription = document.createElement('div');
-        divDescription.innerHTML = "Шаблон описания результата ветки.";
+        divDescription.innerHTML = getTextByLocale("descriptionOutcome");
         divDescription.style.fontSize = "20px";
         divText.appendChild(divDescription);
         divText.appendChild(description);
@@ -10107,7 +10423,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepQuestion.value = cell.value.getAttribute("_nextStepQuestion");
         }
         var divNextStepQuestion = document.createElement('div');
-        divNextStepQuestion.innerHTML = "Шаблон вопроса о том, с чего надо начать в ветке.";
+        divNextStepQuestion.innerHTML = getTextByLocale("nextStepQuestion");
         divNextStepQuestion.style.fontSize = "20px";
         divText.appendChild(divNextStepQuestion);
         divText.appendChild(nextStepQuestion);
@@ -10123,7 +10439,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepExplanation.value = cell.value.getAttribute("_nextStepExplanation");
         }
         var divNextStepExplanation = document.createElement('div');
-        divNextStepExplanation.innerHTML = "Шаблон объяснения того, с чего на самом деле нужно начать в ветке.";
+        divNextStepExplanation.innerHTML = getTextByLocale("nextStepExplanation");
         divNextStepExplanation.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanation);
         divText.appendChild(nextStepExplanation);
@@ -10139,7 +10455,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             text.value = cell.value.getAttribute("_text");
         }
         var divTextO = document.createElement('div');
-        divTextO.innerHTML = "Шаблон текста данного варианта ответа.";
+        divTextO.innerHTML = getTextByLocale("textQuestion");
         divTextO.style.fontSize = "20px";
         divText.appendChild(divTextO);
         divText.appendChild(text);
@@ -10155,7 +10471,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             explanation.value = cell.value.getAttribute("_explanation");
         }
         var divExplanation = document.createElement('div');
-        divExplanation.innerHTML = "Шаблон объяснения, почему данный ответ правильный.";
+        divExplanation.innerHTML = getTextByLocale("explanation");
         divExplanation.style.fontSize = "20px";
         divText.appendChild(divExplanation);
         divText.appendChild(explanation);
@@ -10171,7 +10487,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepQuestionOutcome.value = cell.value.getAttribute("_nextStepQuestionOutcome");
         }
         var divNextStepQuestionOutcome = document.createElement('div');
-        divNextStepQuestionOutcome.innerHTML = "Шаблон вопроса о том, что делать дальше при данном ответе.";
+        divNextStepQuestionOutcome.innerHTML = getTextByLocale("nextStepQuestionOutcome");
         divNextStepQuestionOutcome.style.fontSize = "20px";
         divText.appendChild(divNextStepQuestionOutcome);
         divText.appendChild(nextStepQuestionOutcome);
@@ -10187,7 +10503,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepBranchResult.value = cell.value.getAttribute("_nextStepBranchResult");
         }
         var divNextStepBranchResult = document.createElement('div');
-        divNextStepBranchResult.innerHTML = "Шаблон формулировок для красных/зеленых узлов при данном ответе.";
+        divNextStepBranchResult.innerHTML = getTextByLocale("nextStepBranchResult");
         divNextStepBranchResult.style.fontSize = "20px";
         divText.appendChild(divNextStepBranchResult);
         divText.appendChild(nextStepBranchResult);
@@ -10203,7 +10519,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepExplanationOutcome.value = cell.value.getAttribute("_nextStepExplanationOutcome");
         }
         var divNextStepExplanationOutcome = document.createElement('div');
-        divNextStepExplanationOutcome.innerHTML = "Шаблон объяснения того, что на самом деле делать дальше при данном ответе.";
+        divNextStepExplanationOutcome.innerHTML = getTextByLocale("nextStepExplanationOutcome");
         divNextStepExplanationOutcome.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanationOutcome);
         divText.appendChild(nextStepExplanationOutcome);
@@ -10219,7 +10535,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             description.value = cell.value.getAttribute("_description");
         }
         var divDescription = document.createElement('div');
-        divDescription.innerHTML = "Шаблон описания результата ветки.";
+        divDescription.innerHTML = getTextByLocale("descriptionOutcome");
         divDescription.style.fontSize = "20px";
         divText.appendChild(divDescription);
         divText.appendChild(description);
@@ -10235,7 +10551,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepQuestionThoughtBranch.value = cell.value.getAttribute("_nextStepQuestionThoughtBranch");
         }
         var divNextStepQuestionThoughtBranch = document.createElement('div');
-        divNextStepQuestionThoughtBranch.innerHTML = "Шаблон вопроса о том, с чего надо начать в ветке.";
+        divNextStepQuestionThoughtBranch.innerHTML = getTextByLocale("nextStepQuestion");
         divNextStepQuestionThoughtBranch.style.fontSize = "20px";
         divText.appendChild(divNextStepQuestionThoughtBranch);
         divText.appendChild(nextStepQuestionThoughtBranch);
@@ -10251,7 +10567,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepExplanationThoughtBranch.value = cell.value.getAttribute("_nextStepExplanationThoughtBranch");
         }
         var divNextStepExplanationThoughtBranch = document.createElement('div');
-        divNextStepExplanationThoughtBranch.innerHTML = "Шаблон объяснения того, с чего на самом деле нужно начать в ветке.";
+        divNextStepExplanationThoughtBranch.innerHTML = getTextByLocale("nextStepExplanation");
         divNextStepExplanationThoughtBranch.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanationThoughtBranch);
         divText.appendChild(nextStepExplanationThoughtBranch);
@@ -10267,7 +10583,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             text.value = cell.value.getAttribute("_text");
         }
         var divTextO = document.createElement('div');
-        divTextO.innerHTML = "Шаблон текста данного варианта ответа.";
+        divTextO.innerHTML = getTextByLocale("textQuestion");
         divTextO.style.fontSize = "20px";
         divText.appendChild(divTextO);
         divText.appendChild(text);
@@ -10283,7 +10599,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             explanation.value = cell.value.getAttribute("_explanation");
         }
         var divExplanation = document.createElement('div');
-        divExplanation.innerHTML = "Шаблон объяснения, почему данный ответ правильный.";
+        divExplanation.innerHTML = getTextByLocale("explanation");
         divExplanation.style.fontSize = "20px";
         divText.appendChild(divExplanation);
         divText.appendChild(explanation);
@@ -10299,7 +10615,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepQuestion.value = cell.value.getAttribute("_nextStepQuestion");
         }
         var divNextStepQuestion = document.createElement('div');
-        divNextStepQuestion.innerHTML = "Шаблон вопроса о том, что делать дальше при данном ответе.";
+        divNextStepQuestion.innerHTML = getTextByLocale("nextStepQuestionOutcome");
         divNextStepQuestion.style.fontSize = "20px";
         divText.appendChild(divNextStepQuestion);
         divText.appendChild(nextStepQuestion);
@@ -10315,7 +10631,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepBranchResult.value = cell.value.getAttribute("_nextStepBranchResult");
         }
         var divNextStepBranchResult = document.createElement('div');
-        divNextStepBranchResult.innerHTML = "Шаблон формулировок для красных/зеленых узлов при данном ответе.";
+        divNextStepBranchResult.innerHTML = getTextByLocale("nextStepBranchResult");
         divNextStepBranchResult.style.fontSize = "20px";
         divText.appendChild(divNextStepBranchResult);
         divText.appendChild(nextStepBranchResult);
@@ -10331,14 +10647,14 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             nextStepExplanation.value = cell.value.getAttribute("_nextStepExplanation");
         }
         var divNextStepExplanation = document.createElement('div');
-        divNextStepExplanation.innerHTML = "Шаблон объяснения того, что на самом деле делать дальше при данном ответе.";
+        divNextStepExplanation.innerHTML = getTextByLocale("nextStepExplanationOutcome");
         divNextStepExplanation.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanation);
         divText.appendChild(nextStepExplanation);
     }
 
     // Кнопка сохранение узла
-    var btnSaveTextInNode = mxUtils.button('Save', function () {
+    var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         graph.getModel().beginUpdate();
         if(isThoughtBranch && !isPredeterminingBranch) {
             cell.value.setAttribute("_description", divText.querySelector("#_description").value);
@@ -10381,7 +10697,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Edit question info in outcome', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEditQuestionInfoInOutcomeWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -10408,7 +10724,7 @@ function treeToXml(editorUi)
         }
     });
     if(countStartNode != 1) {
-        throw new Error("Начальный узел должен быть один!");
+        throw new Error(getTextByLocale("StartNodeOnlyOne"));
     }
     return result;
 }
@@ -10422,7 +10738,7 @@ function startNodeToXml(startNode, editorUi)
         for(let i = 0; i < startNode.edges.length; i++) {
             if(startNode.edges[i].value == null || typeof startNode.edges[i].value != "object" || !startNode.edges[i].value.getAttribute("type")) {
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
-                throw new Error('Отсутствует тип у ветки после начального узла');
+                throw new Error(getTextByLocale("typeOutcomeStartNodeIsMissing"));
             }
             let questionInfo = getQuestionInfoThoughtBranch(startNode.edges[i]);
             result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'"'+ questionInfo +'>\n';
@@ -10570,7 +10886,7 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
                 && valueEdge.getAttribute("type") != "False" 
                 && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Отсутствует тип у ветки после узла цикла');
+                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing"));
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     if(valueEdge.getAttribute("type") == "True") {
@@ -10594,13 +10910,13 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
     }
     let errorCycle = "";
     if(bodyCount != 1) {
-        errorCycle += "Ветка тела для узла цикла должна быть одна!\n";
+        errorCycle += getTextByLocale("bodyOnlyOne");
     }
     if(trueCount != 1) {
-        errorCycle += "Истинная ветка для узла цикла должна быть одна!\n";
+        errorCycle += getTextByLocale("trueCycleOnlyOne");
     }
     if(falseCount != 1) {
-        errorCycle += "Ложная ветка для узла цикла должна быть одна!\n";
+        errorCycle += getTextByLocale("falseCycleOnlyOne");
     }
     if(errorCycle) {
         throw new Error(errorCycle);
@@ -10629,7 +10945,7 @@ function logicNodeToXml(node, editorUi, isPredetermining)
                 && valueEdge.getAttribute("type") != "False" 
                 && valueEdge.getAttribute("type") != "Branch")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Отсутствует тип у ветки после логического узла');
+                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing"));
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     if(valueEdge.getAttribute("type") == "True") {
@@ -10653,13 +10969,13 @@ function logicNodeToXml(node, editorUi, isPredetermining)
     }
     let errorLogic = "";
     if(branchCount < 2) {
-        errorLogic += "Веток для логического узла должно быть 2 и более!\n";
+        errorLogic += getTextByLocale("OutcomeLogicNodeOnlyTwo");
     }
     if(trueCount != 1) {
-        errorLogic += "Истинная ветка для логического узла должна быть одна!\n";
+        errorLogic += getTextByLocale("trueLogicNodeOnlyOne");
     }
     if(falseCount != 1) {
-        errorLogic += "Ложная ветка для логического узла должна быть одна!\n";
+        errorLogic += getTextByLocale("falseLogicNodeOnlyOne");
     }
     if(errorLogic) {
         throw new Error(errorLogic);
@@ -10685,7 +11001,7 @@ function predeterminingNodeToXml(node, editorUi)
             || (valueEdge.getAttribute("type") != "predeterminingBranch" 
             && valueEdge.getAttribute("type") != "undetermined"))) {
                 markOutcome(editorUi.editor.graph, node.edges[i])
-                throw new Error('Отсутствует тип у ветки после независимого ветвления');
+                throw new Error(getTextByLocale("typeOutcomePredIsMissing"));
             }
 
             if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
@@ -10718,10 +11034,10 @@ function predeterminingNodeToXml(node, editorUi)
     }
     let errorPred = "";
     if(predCount == 0) {
-        errorPred += "Отсутствует предрешающая ветка для узла независимое ветвление!\n";
+        errorPred += getTextByLocale("predOutcomeIsMissing");
     }
     if(undertermCount != 1) {
-        errorPred += "Ветка undetermined для узла независимое ветвление должна быть одна!\n";
+        errorPred += getTextByLocale("undeterminedOnlyOne");
     }
     if(errorPred) {
         throw new Error(errorPred);
@@ -10741,7 +11057,7 @@ function outcomeToXml(node, editorUi, isPredetermining)
                 valueEdge = node.edges[i].value;
                 if(valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Отсутствует значение у ветки');
+                    throw new Error(getTextByLocale("valueInOutcomeIsMissing"));
                 }
                 let typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
                 if(typeNode.type == valueEdge.getAttribute("typeValue")) {
@@ -10752,26 +11068,26 @@ function outcomeToXml(node, editorUi, isPredetermining)
                         if(findEnum[0] != undefined) {
                             if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
                                 markOutcome(editorUi.editor.graph, node.edges[i])
-                                throw new Error('Значение enum отсутствует в словаре');
+                                throw new Error(getTextByLocale("valueEnumIsMissing"));
                             }
                         } else {
-                            throw new Error("Отсутствует enum в словаре");
+                            throw new Error(getTextByLocale("EnumIsMissing"));
                         }
                     } else if(valueEdge.getAttribute("typeValue") == "class") {
                         let jsonClasses = getClasses(editorUi);
                         let findClass = jsonClasses.filter(el => el.name == valueEdge.getAttribute("value"));
                         if(findClass.length == 0) {
                             markOutcome(editorUi.editor.graph, node.edges[i])
-                            throw new Error('Класс отсутствует в словаре');
+                            throw new Error(getTextByLocale("ClassInDictIsMissing"));
                         }
                     }
                 } else if(valueEdge.getAttribute("typeValue") && typeNode.type != valueEdge.getAttribute("typeValue")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Тип ветки не совпадает с типом возвращаемого значения выражения узла');
+                    throw new Error(getTextByLocale("TypesDontMatch"));
                 }
                 if(prevValues.has(valueEdge.getAttribute("value"))) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error('Ветка имеет повторяющееся значение');
+                    throw new Error(getTextByLocale("OutcomesHasSameValues"));
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
                 let questionInfo = getQuestionInfoOutcome(node.edges[i]);
@@ -10914,7 +11230,7 @@ function checkCorrectPredeterminingBranch(node) {
     }
     branchBypass(node);
     if(countResultNode != 1) {
-        throw new Error("Результативный узел (Ложь/Истина) для предрешающей ветки должен быть один!");
+        throw new Error(getTextByLocale("ResultOutcomeForPredNode"));
     }
     return resultNode;
 }
@@ -10982,7 +11298,7 @@ function getType(root) {
 
 function generateCode(workspace) {
     if(workspace.getTopBlocks().length > 1) {
-        throw new Error('Error: There is more than one block in the workspace');
+        throw new Error(getTextByLocale("moreBlocksInWorkspace"));
     }
     let code = Blockly.JavaScript.workspaceToCode(workspace);
     if(code.slice(-1) == "\n") {
@@ -11000,7 +11316,7 @@ function getTypeFromCode(code, editorUi) {
         let properties = getProperties(editorUi);
         let foundProp = properties.filter(el => el.name == propertyName);
         if(typeof foundProp[0] == "undefined") {
-            throw new Error('Error: property "'+propertyName+'" does not exist in the dictionary')
+            throw new Error(getTextByLocale("propertyIsMissingInDict").replace("%propertyName", propertyName));
         }
         obj = foundProp[0];
         let propType = obj.type;
@@ -11056,7 +11372,7 @@ function getTextFromValueInOutcome(value) {
 
 function CheckCycleInTree(startNode) {
     if(hasCycle(startNode)) {
-        throw new Error("В графе присутствуют циклы!");
+        throw new Error(getTextByLocale("hasCycleInTree"));
     }
 }
 
@@ -11114,14 +11430,14 @@ Draw.loadPlugin(function (ui) {
 
 
     // Добавление нового раздела меню с подразделами
-    ui.menubar.addMenu('Dictionary constructors', function (menu, parent) {
+    ui.menubar.addMenu(getTextByLocale("menuItemDictionaryConstructors"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'classesConstructor');
         ui.menus.addMenuItem(menu, 'classPropertiesConstructor');
         ui.menus.addMenuItem(menu, 'relationshipsConstructor');
         ui.menus.addMenuItem(menu, 'enumConstructor');
     });
 
-    ui.menubar.addMenu('Node constructors', function (menu, parent) {
+    ui.menubar.addMenu(getTextByLocale("menuItemNodeConstructors"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'startNodeConstructor');
         ui.menus.addMenuItem(menu, 'TrueNodeCreate');
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
@@ -11134,7 +11450,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'switchCaseNodeConstructor');
     });
 
-    ui.menubar.addMenu('Export', function (menu, parent) {
+    ui.menubar.addMenu(getTextByLocale("menuItemExport"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'exportClass');
         ui.menus.addMenuItem(menu, 'exportProperty');
         ui.menus.addMenuItem(menu, 'exportRelationship');
@@ -11142,7 +11458,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'exportTree');
     });
 
-    ui.menubar.addMenu('Edit', function (menu, parent) {
+    ui.menubar.addMenu(getTextByLocale("menuItemEdit"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'editValue');
         ui.menus.addMenuItem(menu, 'editTextInNode');
         ui.menus.addMenuItem(menu, 'editQuestionInfo');
@@ -11150,49 +11466,49 @@ Draw.loadPlugin(function (ui) {
 
 
     // Привязывание действий к разделам меню
-    mxResources.parse('classesConstructor=Classes constructor');
+    mxResources.parse('classesConstructor='+getTextByLocale("classesConstructor"));
 
-    mxResources.parse('classPropertiesConstructor=Class and Object properties constructor');
+    mxResources.parse('classPropertiesConstructor='+getTextByLocale("classPropertiesConstructor"));
 
-    mxResources.parse('relationshipsConstructor=Relationships constructor');
+    mxResources.parse('relationshipsConstructor='+getTextByLocale("relationshipsConstructor"));
 
-    mxResources.parse('enumConstructor=Enum constructor');
+    mxResources.parse('enumConstructor='+getTextByLocale("enumConstructor"));
 
-    mxResources.parse('actionNodeConstructor=Action Node Constructor');
+    mxResources.parse('actionNodeConstructor='+getTextByLocale("actionNodeConstructor"));
 
-    mxResources.parse('cycleNodeConstructor=Cycle Node Constructor');
+    mxResources.parse('cycleNodeConstructor='+getTextByLocale("cycleNodeConstructor"));
 
-    mxResources.parse('conditionNodeConstructor=Condition Node Constructor');
+    mxResources.parse('conditionNodeConstructor='+getTextByLocale("conditionNodeConstructor"));
 
-    mxResources.parse('switchCaseNodeConstructor=Switch case Node Constructor');
+    mxResources.parse('switchCaseNodeConstructor='+getTextByLocale("switchCaseNodeConstructor"));
 
-    mxResources.parse('exportEnum=Export enum');
+    mxResources.parse('exportEnum='+getTextByLocale("exportEnum"));
 
-    mxResources.parse('exportClass=Export class');
+    mxResources.parse('exportClass='+getTextByLocale("exportClass"));
 
-    mxResources.parse('exportProperty=Export property');
+    mxResources.parse('exportProperty='+getTextByLocale("exportProperty"));
 
-    mxResources.parse('exportRelationship=Export relationship');
+    mxResources.parse('exportRelationship='+getTextByLocale("exportRelationship"));
 
-    mxResources.parse('TrueNodeCreate=Create true node');
+    mxResources.parse('TrueNodeCreate='+getTextByLocale("TrueNodeCreate"));
 
-    mxResources.parse('FalseNodeCreate=Create false node');
+    mxResources.parse('FalseNodeCreate='+getTextByLocale("FalseNodeCreate"));
 
-    mxResources.parse('LogicNodeCreate=Create logic node');
+    mxResources.parse('LogicNodeCreate='+getTextByLocale("LogicNodeCreate"));
 
-    mxResources.parse('PredeterminingFactorsNodeCreate=Create predetermining factors node');
+    mxResources.parse('PredeterminingFactorsNodeCreate='+getTextByLocale("PredeterminingFactorsNodeCreate"));
 
-    mxResources.parse('UncertaintyNodeCreate=Create node uncertainty');
+    mxResources.parse('UncertaintyNodeCreate='+getTextByLocale("UncertaintyNodeCreate"));
 
-    mxResources.parse('startNodeConstructor=Create start node');
+    mxResources.parse('startNodeConstructor='+getTextByLocale("startNodeConstructor"));
 
-    mxResources.parse('exportTree=Export tree');
+    mxResources.parse('exportTree='+getTextByLocale("exportTree"));
 
-    mxResources.parse('editValue=Edit value');
+    mxResources.parse('editValue='+getTextByLocale("editValue"));
 
-    mxResources.parse('editTextInNode=Edit text in node');
+    mxResources.parse('editTextInNode='+getTextByLocale("editTextInNode"));
 
-    mxResources.parse('editQuestionInfo=Edit question info');
+    mxResources.parse('editQuestionInfo='+getTextByLocale("editQuestionInfo"));
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами

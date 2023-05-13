@@ -21,7 +21,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
         asNextStep.value = cell.value.getAttribute("_asNextStep");
     }
     var divAsNextStep = document.createElement('div');
-    divAsNextStep.innerHTML = "Шаблон формулировки данного узла как следующего шага.";
+    divAsNextStep.innerHTML = getTextByLocale("asNextStep");
     divAsNextStep.style.fontSize = "20px";
     divText.appendChild(divAsNextStep);
     divText.appendChild(asNextStep);
@@ -39,9 +39,9 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     }
     var divQuestion = document.createElement('div');
     if(isLogicAggreg) {
-        divQuestion.innerHTML = "Шаблон описания результата данного узла.";
+        divQuestion.innerHTML = getTextByLocale("descriptionQuestion");
     } else {
-        divQuestion.innerHTML = "Шаблон вопроса про данный узел.";
+        divQuestion.innerHTML = getTextByLocale("questionQuestion");
     }
     divQuestion.style.fontSize = "20px";
     divText.appendChild(divQuestion);
@@ -57,13 +57,13 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
         endingCause.value = cell.value.getAttribute("_endingCause");
     }
     var divEndingCause = document.createElement('div');
-    divEndingCause.innerHTML = "Шаблон формулировки конечности данного узла.";
+    divEndingCause.innerHTML = getTextByLocale("endingCause");
     divEndingCause.style.fontSize = "20px";
     divText.appendChild(divEndingCause);
     divText.appendChild(endingCause);
 
     // Кнопка сохранение узла
-    var btnSaveTextInNode = mxUtils.button('Save', function () {
+    var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         graph.getModel().beginUpdate();
         cell.value.setAttribute("_asNextStep", asNextStep.value);
         if(isLogicAggreg) {
@@ -92,7 +92,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     div.appendChild(btnDiv);
 
     // Настройки окна
-    var win = new mxWindow('Edit question info in node', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleEditQuestionInfoInNodeWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);

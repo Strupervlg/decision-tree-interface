@@ -12,14 +12,14 @@ Draw.loadPlugin(function (ui) {
 
 
     // Добавление нового раздела меню с подразделами
-    ui.menubar.addMenu('Dictionary constructors', function (menu, parent) {
+    ui.menubar.addMenu(getTextByLocale("menuItemDictionaryConstructors"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'classesConstructor');
         ui.menus.addMenuItem(menu, 'classPropertiesConstructor');
         ui.menus.addMenuItem(menu, 'relationshipsConstructor');
         ui.menus.addMenuItem(menu, 'enumConstructor');
     });
 
-    ui.menubar.addMenu('Node constructors', function (menu, parent) {
+    ui.menubar.addMenu(getTextByLocale("menuItemNodeConstructors"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'startNodeConstructor');
         ui.menus.addMenuItem(menu, 'TrueNodeCreate');
         ui.menus.addMenuItem(menu, 'FalseNodeCreate');
@@ -32,7 +32,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'switchCaseNodeConstructor');
     });
 
-    ui.menubar.addMenu('Export', function (menu, parent) {
+    ui.menubar.addMenu(getTextByLocale("menuItemExport"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'exportClass');
         ui.menus.addMenuItem(menu, 'exportProperty');
         ui.menus.addMenuItem(menu, 'exportRelationship');
@@ -40,7 +40,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'exportTree');
     });
 
-    ui.menubar.addMenu('Edit', function (menu, parent) {
+    ui.menubar.addMenu(getTextByLocale("menuItemEdit"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'editValue');
         ui.menus.addMenuItem(menu, 'editTextInNode');
         ui.menus.addMenuItem(menu, 'editQuestionInfo');
@@ -48,49 +48,49 @@ Draw.loadPlugin(function (ui) {
 
 
     // Привязывание действий к разделам меню
-    mxResources.parse('classesConstructor=Classes constructor');
+    mxResources.parse('classesConstructor='+getTextByLocale("classesConstructor"));
 
-    mxResources.parse('classPropertiesConstructor=Class and Object properties constructor');
+    mxResources.parse('classPropertiesConstructor='+getTextByLocale("classPropertiesConstructor"));
 
-    mxResources.parse('relationshipsConstructor=Relationships constructor');
+    mxResources.parse('relationshipsConstructor='+getTextByLocale("relationshipsConstructor"));
 
-    mxResources.parse('enumConstructor=Enum constructor');
+    mxResources.parse('enumConstructor='+getTextByLocale("enumConstructor"));
 
-    mxResources.parse('actionNodeConstructor=Action Node Constructor');
+    mxResources.parse('actionNodeConstructor='+getTextByLocale("actionNodeConstructor"));
 
-    mxResources.parse('cycleNodeConstructor=Cycle Node Constructor');
+    mxResources.parse('cycleNodeConstructor='+getTextByLocale("cycleNodeConstructor"));
 
-    mxResources.parse('conditionNodeConstructor=Condition Node Constructor');
+    mxResources.parse('conditionNodeConstructor='+getTextByLocale("conditionNodeConstructor"));
 
-    mxResources.parse('switchCaseNodeConstructor=Switch case Node Constructor');
+    mxResources.parse('switchCaseNodeConstructor='+getTextByLocale("switchCaseNodeConstructor"));
 
-    mxResources.parse('exportEnum=Export enum');
+    mxResources.parse('exportEnum='+getTextByLocale("exportEnum"));
 
-    mxResources.parse('exportClass=Export class');
+    mxResources.parse('exportClass='+getTextByLocale("exportClass"));
 
-    mxResources.parse('exportProperty=Export property');
+    mxResources.parse('exportProperty='+getTextByLocale("exportProperty"));
 
-    mxResources.parse('exportRelationship=Export relationship');
+    mxResources.parse('exportRelationship='+getTextByLocale("exportRelationship"));
 
-    mxResources.parse('TrueNodeCreate=Create true node');
+    mxResources.parse('TrueNodeCreate='+getTextByLocale("TrueNodeCreate"));
 
-    mxResources.parse('FalseNodeCreate=Create false node');
+    mxResources.parse('FalseNodeCreate='+getTextByLocale("FalseNodeCreate"));
 
-    mxResources.parse('LogicNodeCreate=Create logic node');
+    mxResources.parse('LogicNodeCreate='+getTextByLocale("LogicNodeCreate"));
 
-    mxResources.parse('PredeterminingFactorsNodeCreate=Create predetermining factors node');
+    mxResources.parse('PredeterminingFactorsNodeCreate='+getTextByLocale("PredeterminingFactorsNodeCreate"));
 
-    mxResources.parse('UncertaintyNodeCreate=Create node uncertainty');
+    mxResources.parse('UncertaintyNodeCreate='+getTextByLocale("UncertaintyNodeCreate"));
 
-    mxResources.parse('startNodeConstructor=Create start node');
+    mxResources.parse('startNodeConstructor='+getTextByLocale("startNodeConstructor"));
 
-    mxResources.parse('exportTree=Export tree');
+    mxResources.parse('exportTree='+getTextByLocale("exportTree"));
 
-    mxResources.parse('editValue=Edit value');
+    mxResources.parse('editValue='+getTextByLocale("editValue"));
 
-    mxResources.parse('editTextInNode=Edit text in node');
+    mxResources.parse('editTextInNode='+getTextByLocale("editTextInNode"));
 
-    mxResources.parse('editQuestionInfo=Edit question info');
+    mxResources.parse('editQuestionInfo='+getTextByLocale("editQuestionInfo"));
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами

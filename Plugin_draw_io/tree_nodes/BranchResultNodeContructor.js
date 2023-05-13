@@ -19,7 +19,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     text.style.height = "90%";
 
     // Кнопка создания узла
-    var btnCreateNodeInText = mxUtils.button('Create', function () {
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
@@ -49,7 +49,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     var workspace;
 
     // Кнопка переключение на Blockly
-    var btnSwitchToBlockly = mxUtils.button('Switch to blockly', function () {
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
         if(expression) {
             parser.parse(expression)
@@ -89,7 +89,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     nestedDiv.style.height = h*0.90+'px';
 
     // Кнопка создания узла
-    var btnCreateNodeInBlockly = mxUtils.button('Create', function () {
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
         
         var theGraph = editorUi.editor.graph;
@@ -111,7 +111,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     });
 
     //кнопка переключения на текстовый вариант
-    var btnSwitchToText = mxUtils.button('Switch to text', function () {
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
         divBlockly.style.display = "none";
         divText.style.display = "block";
@@ -136,7 +136,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
 
     // Настройки окна
-    var win = new mxWindow('Branch result node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleBranchResultNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;

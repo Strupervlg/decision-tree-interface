@@ -14,7 +14,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(table);
 
     // Кнопка создания блока
-    var applyBtn = mxUtils.button('Create', function () {
+    var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
 
         checkAllInputsStartNode(table);
 
@@ -35,10 +35,10 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     // Кнопка добавления полей для нового класса
-    var addClass = mxUtils.button('Add Variable', function () {
+    var addClass = mxUtils.button(getTextByLocale("AddVariable"), function () {
         var newRow = addRowStartNode(editorUi);
         var tdDelRow = document.createElement('td');
-        var btnDelRow = mxUtils.button('Delete', function (evt) {
+        var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
         tdDelRow.appendChild(btnDelRow);
@@ -52,7 +52,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     div.appendChild(applyBtn);
 
     // Настройки окна
-    var win = new mxWindow('Start node constructor', div, x, y, w, h, true, true);
+    var win = new mxWindow(getTextByLocale("TitleStartConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
@@ -92,14 +92,14 @@ function checkAllInputsStartNode(table) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
         .item(0).getElementsByTagName("input").item(0).value;
         if(checkValue == "") {
-            errors += "В строке №" + (i+1) + " отсутствует название; ";
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
         } else if(!checkValidID(checkValue)) {
-            errors += "В строке №" + (i+1) + " название некорректно; ";
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
         }
         var classSelect = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("select").item(0);
         if(typeof (classSelect.options[classSelect.options.selectedIndex]) == "undefined") {
-            errors += "В строке №" + (i+1) + " отсутствуют классы; ";
+            errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
         }
     }
     if(errors != "") {
