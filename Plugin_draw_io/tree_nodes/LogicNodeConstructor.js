@@ -5,6 +5,10 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.width = '300px';
     div.style.height = '150px';
+    div.style.display = "flex";
+    div.style.alignItems = "center";
+    div.style.gap = "5px";
+    div.style.justifyContent = "center";
 
     // Кнопка создания узла "AND"
     var btnCreateANDNode = mxUtils.button('And', function () {
@@ -33,16 +37,20 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
         }
         win.destroy();
     });
-
+    btnCreateANDNode = styleBtn(btnCreateANDNode);
+    btnCreateANDNode.style.minWidth = "50%";
+    btnCreateORNode = styleBtn(btnCreateORNode);
+    btnCreateORNode.style.minWidth = "50%";
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleLogicNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
-    this.window.setResizable(true);
+    this.window.setResizable(false);
     this.window.setClosable(true);
     this.window.setVisible(true);
 };

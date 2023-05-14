@@ -6,10 +6,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.style.height = "100%";
     div.style.width = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
@@ -55,6 +52,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         tbody.appendChild(newRow);
@@ -96,9 +94,10 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    addClass = styleBtn(addClass);
+    applyBtn = styleBtn(applyBtn);
+    openBlockly = styleBtn(openBlockly);
     btnDiv.appendChild(addClass);
     btnDiv.appendChild(applyBtn);
     btnDiv.appendChild(openBlockly);
@@ -147,6 +146,7 @@ function fillDataClass(tbody, cell) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }

@@ -8,7 +8,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     var divText = document.createElement('div');
-    divText.style.height = "500px";
+    divText.style.height = "450px";
     divText.style.overflow = "scroll";
 
     //_asNextStep
@@ -84,8 +84,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     btnDiv.style.alignItems = "center";
     btnDiv.style.justifyContent = "center";
 
-    btnSaveTextInNode.style.height = "50%";
-    btnSaveTextInNode.style.width = "50px";
+    btnSaveTextInNode = styleBtn(btnSaveTextInNode);
     btnDiv.appendChild(btnSaveTextInNode);
 
     div.appendChild(divText);

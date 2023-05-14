@@ -6,10 +6,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     div.style.height = "100%";
     div.style.width = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
@@ -62,6 +59,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         tbody.appendChild(newRow);
@@ -103,9 +101,10 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    addClass = styleBtn(addClass);
+    applyBtn = styleBtn(applyBtn);
+    openBlockly = styleBtn(openBlockly);
     btnDiv.appendChild(addClass);
     btnDiv.appendChild(applyBtn);
     btnDiv.appendChild(openBlockly);
@@ -128,20 +127,20 @@ function addRowClass() {
     td1.style.width = '25%';
     var name = document.createElement('input');
     name.type = "text";
-    name.style.width = '100%';
+    name = styleInput(name);
     name.placeholder = "Class name";
     td1.appendChild(name);
     var td2 = document.createElement('td');
     td2.style.width = '25%';
     var extend = document.createElement('input');
     extend.type = "text";
-    extend.style.width = '100%';
+    extend = styleInput(extend);
     extend.placeholder = "Extend";
     td2.appendChild(extend);
     var td3 = document.createElement('td');
     td3.style.width = '25%';
     var expression = document.createElement('textarea');
-    expression.style.width = '100%';
+    expression = styleInput(expression);
     expression.style.resize = 'vertical';
     expression.placeholder = "Expression";
     td3.appendChild(expression);

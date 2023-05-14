@@ -5,10 +5,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
 
@@ -43,6 +40,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRowRelationship.appendChild(tdDelRow);
         tbody.appendChild(newRowRelationship);
@@ -50,9 +48,9 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addRelationship = styleBtn(addRelationship);
     btnDiv.appendChild(addRelationship);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -122,6 +120,8 @@ function fillDataRelationships(tbody, cell, editorUi) {
                 let newTdClass = document.createElement('td');
                 newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
+                newSelectClass = styleSelect(newSelectClass);
+                newSelectClass.style.marginRight = "4px";
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
                 var jsonClasses = getClasses(editorUi);
@@ -132,6 +132,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
                 var btnDelClass = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDelClass = styleBtn(btnDelClass);
                 btnDelClass.style.float = 'left';
                 btnDelClass.style.width = '10%';
                 newTdClass.appendChild(newSelectClass);
@@ -165,7 +166,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             tdInputNames.style.minWidth = "150px";
             var nameInput = document.createElement('input');
             nameInput.type = "text";
-            nameInput.style.width = '100%';
+            nameInput = styleInput(nameInput);
             nameInput.placeholder = "Name";
             tdInputNames.appendChild(nameInput);
 
@@ -177,19 +178,22 @@ function fillDataRelationships(tbody, cell, editorUi) {
                 newTdName.style.minWidth = "200px";
                 var newNameInput = document.createElement('input');
                 newNameInput.type = "text";
+                newNameInput = styleInput(newNameInput);
+                newNameInput.style.marginRight = "4px";
                 newNameInput.style.width = '85%';
                 newNameInput.style.float = 'left';
                 newNameInput.placeholder = "Name";
                 var btnDelName = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDelName = styleBtn(btnDelName);
                 btnDelName.style.float = 'left';
                 btnDelName.style.width = '10%';
                 newTdName.appendChild(newNameInput);
                 newTdName.appendChild(btnDelName);
                 evt.target.parentElement.parentElement.insertBefore(newTdName, evt.target.parentElement)
             });
-
+            btnAddName = styleBtn(btnAddName);
             tdAddName.appendChild(btnAddName);
 
             row.insertBefore(tdAddName, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
@@ -202,12 +206,15 @@ function fillDataRelationships(tbody, cell, editorUi) {
                     newTdName.style.minWidth = "200px";
                     var newNameInput = document.createElement('input');
                     newNameInput.type = "text";
+                    newNameInput = styleInput(newNameInput);
+                    newNameInput.style.marginRight = "4px";
                     newNameInput.style.width = '85%';
                     newNameInput.style.float = 'left';
                     newNameInput.placeholder = "Name";
                     var btnDelName = mxUtils.button('-', function (evt) {
                         evt.target.parentElement.remove();
                     });
+                    btnDelName = styleBtn(btnDelName);
                     btnDelName.style.float = 'left';
                     btnDelName.style.width = '10%';
                     newTdName.appendChild(newNameInput);
@@ -230,6 +237,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             var tdType = document.createElement('td');
             tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
+            selectType = styleSelect(selectType);
             selectType.style.width = '100%';
             var scales = ["One to one", "One to many"];
             scales.forEach(element => {
@@ -255,6 +263,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }

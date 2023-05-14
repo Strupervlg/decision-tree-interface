@@ -5,10 +5,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     var rowProperty = addRowProperty(editorUi);
@@ -47,6 +44,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRowProperty.appendChild(tdDelRow);
         tbody.appendChild(newRowProperty);
@@ -54,9 +52,9 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addProperty = styleBtn(addProperty);
     btnDiv.appendChild(addProperty);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -75,11 +73,11 @@ function addRowProperty(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
-    td1.style.minWidth = "150px";
+    td1.style.minWidth = "200px";
     var text = document.createElement('input');
     text.type = "text";
     text.placeholder = "Name";
-    text.style.width = '100%';
+    text = styleInput(text);
     td1.appendChild(text);
     tr1.appendChild(td1);
 
@@ -87,7 +85,7 @@ function addRowProperty(editorUi) {
     var td2 = document.createElement('td');
     td2.style.minWidth = "150px";
     var selectType = document.createElement('select');
-    selectType.style.width = '100%';
+    selectType = styleSelect(selectType);
     var types = ["Integer", "Double", "Boolean", "String"];
     var jsonEnums = getEnums(editorUi);
     jsonEnums.forEach(enumItem => {
@@ -107,17 +105,20 @@ function addRowProperty(editorUi) {
                 var startInput = document.createElement('input');
                 startInput.type = "number";
                 startInput.placeholder = "0";
+                startInput = styleInput(startInput);
                 startInput.style.width = '45%';
                 tdRange.appendChild(startInput);
                 
                 var dash = document.createElement('span');
                 dash.innerText = "-";
+                dash = styleSpan(dash);
                 dash.style.width = '30%';
                 tdRange.appendChild(dash);
 
                 var endInput = document.createElement('input');
                 endInput.type = "number";
                 endInput.placeholder = "9";
+                endInput = styleInput(endInput);
                 endInput.style.width = '45%';
                 tdRange.appendChild(endInput);
 
@@ -137,17 +138,20 @@ function addRowProperty(editorUi) {
     var startInput = document.createElement('input');
     startInput.type = "number";
     startInput.placeholder = "0";
+    startInput = styleInput(startInput);
     startInput.style.width = '45%';
     tdRange.appendChild(startInput);
                 
     var dash = document.createElement('span');
     dash.innerText = "-";
+    dash = styleSpan(dash);
     dash.style.width = '30%';
     tdRange.appendChild(dash);
 
     var endInput = document.createElement('input');
     endInput.type = "number";
     endInput.placeholder = "9";
+    endInput = styleInput(endInput);
     endInput.style.width = '45%';
     tdRange.appendChild(endInput);
     tr1.appendChild(td2);
@@ -156,8 +160,9 @@ function addRowProperty(editorUi) {
 
     // Создание checkbox isStatic
     var td3 = document.createElement('td');
-    td3.style.minWidth = "70px";
+    td3.style.minWidth = "120px";
     var span = document.createElement('span');
+    span = styleSpan(span);
     span.innerText = "is static";
     var checkbox = document.createElement('input');
     checkbox.type = "checkbox";
@@ -168,7 +173,7 @@ function addRowProperty(editorUi) {
     var tdInputClass = document.createElement('td');
     tdInputClass.style.minWidth = "150px";
     var selectClass = document.createElement('select');
-    selectClass.style.width = '100%';
+    selectClass = styleSelect(selectClass);
     var jsonClasses = getClasses(editorUi);
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
@@ -179,9 +184,11 @@ function addRowProperty(editorUi) {
     var tdAddClass = document.createElement('td');
     tdAddClass.style.minWidth = "50px";
     var btnAddClass = mxUtils.button('+', function (evt) {
-        let newTdClass = document.createElement('td');
+        let newTdClass = document.createElement('td'); 
         newTdClass.style.minWidth = "200px";
         var newSelectClass = document.createElement('select');
+        newSelectClass = styleSelect(newSelectClass);
+        newSelectClass.style.marginRight = "4px";
         newSelectClass.style.width = '85%';
         newSelectClass.style.float = 'left';
         var jsonClasses = getClasses(editorUi);
@@ -192,13 +199,14 @@ function addRowProperty(editorUi) {
         var btnDelClass = mxUtils.button('-', function (evt) {
             evt.target.parentElement.remove();
         });
+        btnDelClass = styleBtn(btnDelClass);
         btnDelClass.style.float = 'left';
         btnDelClass.style.width = '10%';
         newTdClass.appendChild(newSelectClass);
         newTdClass.appendChild(btnDelClass);
         evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
     });
-
+    btnAddClass = styleBtn(btnAddClass);
     tdAddClass.appendChild(btnAddClass);
     tr1.appendChild(tdInputClass);
     tr1.appendChild(tdAddClass);

@@ -3,16 +3,18 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
+    text.style.height = "90%";
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
@@ -56,16 +58,22 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     divText.appendChild(text);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "switchCaseUpdateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
+    nestedDiv.style.height = h*0.88+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -93,14 +101,21 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     divBlockly.appendChild(nestedDiv);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleSwitchCaseNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);

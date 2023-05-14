@@ -3,10 +3,12 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
+    div.style.width = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '100%';
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
+    tbody.style.height = "100%";
     
     fillDataStart(tbody, cell, editorUi);
     table.appendChild(tbody);
@@ -35,6 +37,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         table.appendChild(newRow);
@@ -42,8 +45,13 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 
     // Добавление кнопок в окно
-    div.appendChild(addClass);
-    div.appendChild(applyBtn);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    addClass = styleBtn(addClass);
+    applyBtn = styleBtn(applyBtn);
+    btnDiv.appendChild(addClass);
+    btnDiv.appendChild(applyBtn);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleStartEditorWindow"), div, x, y, w, h, true, true);
@@ -81,6 +89,7 @@ function fillDataStart(tbody, cell, editorUi) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }

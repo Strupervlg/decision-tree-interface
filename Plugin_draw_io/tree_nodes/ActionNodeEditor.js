@@ -3,15 +3,16 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
@@ -74,14 +75,16 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
-    nameVarInText.style.width = '100%';
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
     nameVarInText.placeholder = "New variable";
     nameVarInText.value = cell.value.getAttribute('nameVar');
 
     var jsonClasses = getClasses(editorUi);
 
     var selectClassInText = document.createElement('select');
-    selectClassInText.style.width = '100%';
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInText.options[selectClassInText.options.length] = newOption;
@@ -94,18 +97,23 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     }
 
     divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     divText.appendChild(nameVarInText);
     divText.appendChild(selectClassInText);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "actionUpdateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -151,27 +159,36 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
-    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
     nameVarInBlockly.placeholder = "New variable";
 
     var selectClassInBlockly = document.createElement('select');
-    selectClassInBlockly.style.width = '100%';
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
     });
 
     divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     divBlockly.appendChild(nameVarInBlockly);
     divBlockly.appendChild(selectClassInBlockly);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleActionNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);

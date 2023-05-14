@@ -4,19 +4,14 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     div.style.height = "100%";
-    var divTable = document.createElement('div');
     var table = document.createElement('table');
-    divTable.style.width = '100%';
-    divTable.style.height = '80%';
-    divTable.style.overflowX = "auto";
-    divTable.style.overflowY = "auto";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
     fillDataEnum(tbody, cell);
     table.appendChild(tbody);
-    divTable.appendChild(table);
-    div.appendChild(divTable);
+    div.appendChild(table);
 
     // Кнопка сохранения блока
     var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -41,6 +36,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         tbody.appendChild(newRow);
@@ -48,9 +44,9 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addEnum = styleBtn(addEnum);
     btnDiv.appendChild(addEnum);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -103,12 +99,15 @@ function fillDataEnum(tbody, cell) {
                 newTd.style.minWidth = "200px";
                 let newInput = document.createElement('input');
                 newInput.type = "text";
+                newInput = styleInput(newInput);
+                newInput.style.marginRight = "4px";
                 newInput.style.width = '85%';
                 newInput.style.float = 'left';
                 newInput.placeholder = "Value";
                 var btnDel = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDel = styleBtn(btnDel);
                 btnDel.style.float = 'left';
                 btnDel.style.width = '10%';
                 newTd.appendChild(newInput);
@@ -141,8 +140,9 @@ function fillDataEnum(tbody, cell) {
         }
         if(Islinear == 'true') {
             var tdNameRDF = document.createElement('td');
-            tdNameRDF.style.minWidth = "100px";
+            tdNameRDF.style.minWidth = "150px";
             var inputNameRDF = document.createElement('input');
+            inputNameRDF = styleInput(inputNameRDF);
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';
             inputNameRDF.placeholder = "Name in RDF";
@@ -158,6 +158,7 @@ function fillDataEnum(tbody, cell) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }

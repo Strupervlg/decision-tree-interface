@@ -5,10 +5,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
 
@@ -50,6 +47,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRowRelationship.appendChild(tdDelRow);
         tbody.appendChild(newRowRelationship);
@@ -57,9 +55,9 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addRelationship = styleBtn(addRelationship);
     btnDiv.appendChild(addRelationship);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -78,19 +76,20 @@ function addRowRelationship(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
-    td1.style.minWidth = "150px";
+    td1.style.minWidth = "200px";
     var text = document.createElement('input');
     text.type = "text";
+    text = styleInput(text);
     text.placeholder = "Relationship name";
     text.style.width = '100%';
     td1.appendChild(text);
     tr1.appendChild(td1);
 
     var td2 = document.createElement('td');
-    td2.style.minWidth = "150px";
+    td2.style.minWidth = "200px";
     var extend = document.createElement('input');
     extend.type = "text";
-    extend.style.width = '100%';
+    extend = styleInput(extend);
     extend.placeholder = "Extend";
     td2.appendChild(extend);
     tr1.appendChild(td2);
@@ -99,7 +98,7 @@ function addRowRelationship(editorUi) {
     var td3 = document.createElement('td');
     td3.style.minWidth = "150px";
     var selectClass = document.createElement('select');
-    selectClass.style.width = '100%';
+    selectClass = styleSelect(selectClass);
     var jsonClasses = getClasses(editorUi);
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
@@ -113,6 +112,8 @@ function addRowRelationship(editorUi) {
         let newTdClass = document.createElement('td');
         newTdClass.style.minWidth = "200px";
         var newSelectClass = document.createElement('select');
+        newSelectClass = styleSelect(newSelectClass);
+        newSelectClass.style.marginRight = "4px";
         newSelectClass.style.width = '85%';
         newSelectClass.style.float = 'left';
         var jsonClasses = getClasses(editorUi);
@@ -123,13 +124,14 @@ function addRowRelationship(editorUi) {
         var btnDelClass = mxUtils.button('-', function (evt) {
             evt.target.parentElement.remove();
         });
+        btnDelClass = styleBtn(btnDelClass);
         btnDelClass.style.float = 'left';
         btnDelClass.style.width = '10%';
         newTdClass.appendChild(newSelectClass);
         newTdClass.appendChild(btnDelClass);
         evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
     });
-
+    btnAddClass = styleBtn(btnAddClass);
     tdAddClass.appendChild(btnAddClass);
     tr1.appendChild(td3);
     tr1.appendChild(tdAddClass);
@@ -138,7 +140,7 @@ function addRowRelationship(editorUi) {
     var td5 = document.createElement('td');
     td5.style.minWidth = "150px";
     var selectScale = document.createElement('select');
-    selectScale.style.width = '100%';
+    selectScale = styleSelect(selectScale);
     var scales = ["None", "Linear", "Partially linear"]; //"NONE" "LINEAR" "PARTIALLY_LINEAR"
     scales.forEach(element => {
         var newOption = new Option(element, element);
@@ -156,7 +158,7 @@ function addRowRelationship(editorUi) {
             tdInputNames.style.minWidth = "150px";
             var nameInput = document.createElement('input');
             nameInput.type = "text";
-            nameInput.style.width = '100%';
+            nameInput = styleInput(nameInput);
             nameInput.placeholder = "Name";
             tdInputNames.appendChild(nameInput);
 
@@ -168,19 +170,22 @@ function addRowRelationship(editorUi) {
                 newTdName.style.minWidth = "200px";
                 var newNameInput = document.createElement('input');
                 newNameInput.type = "text";
+                newNameInput = styleInput(newNameInput);
+                newNameInput.style.marginRight = "4px";
                 newNameInput.style.width = '85%';
                 newNameInput.style.float = 'left';
                 newNameInput.placeholder = "Name";
                 var btnDelName = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDelName = styleBtn(btnDelName);
                 btnDelName.style.float = 'left';
                 btnDelName.style.width = '10%';
                 newTdName.appendChild(newNameInput);
                 newTdName.appendChild(btnDelName);
                 evt.target.parentElement.parentElement.insertBefore(newTdName, evt.target.parentElement)
             });
-
+            btnAddName = styleBtn(btnAddName);
             tdAddName.appendChild(btnAddName);
 
             event.currentTarget.parentElement.parentElement.insertBefore(tdAddName, event.currentTarget.parentElement.nextElementSibling);
@@ -200,7 +205,9 @@ function addRowRelationship(editorUi) {
 
     var td6 = document.createElement('td');
     td6.style.minWidth = "200px";
+    td6.style.display = "flex";
     var span = document.createElement('span');
+    span = styleSpan(span);
     span.innerText = "is relationship between classes";
     var checkbox = document.createElement('input');
     checkbox.type = "checkbox";
@@ -210,7 +217,7 @@ function addRowRelationship(editorUi) {
             var tdType = document.createElement('td');
             tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
-            selectType.style.width = '100%';
+            selectType = styleSelect(selectType);
             var scales = ["One to one", "One to many"]; // "ONE_TO_ONE", "ONE_TO_MANY"
             scales.forEach(element => {
                 var newOption = new Option(element, element);
@@ -228,9 +235,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td6);
 
     var td7 = document.createElement('td');
-    td7.style.minWidth = "80px";
+    td7.style.minWidth = "120px";
     td7.classList = "symmetry";
     var span1 = document.createElement('span');
+    span1 = styleSpan(span1);
     span1.innerText = "symmetry";
     var checkbox1 = document.createElement('input');
     checkbox1.type = "checkbox";
@@ -239,9 +247,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td7);
 
     var td8 = document.createElement('td');
-    td8.style.minWidth = "90px";
+    td8.style.minWidth = "140px";
     td8.classList = "antisymmetry";
     var span2 = document.createElement('span');
+    span2 = styleSpan(span2);
     span2.innerText = "antisymmetry";
     var checkbox2 = document.createElement('input');
     checkbox2.type = "checkbox";
@@ -250,9 +259,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td8);
 
     var td9 = document.createElement('td');
-    td9.style.minWidth = "80px";
+    td9.style.minWidth = "120px";
     td9.classList = "reflexivity";
     var span3 = document.createElement('span');
+    span3 = styleSpan(span3);
     span3.innerText = "reflexivity";
     var checkbox3 = document.createElement('input');
     checkbox3.type = "checkbox";
@@ -261,9 +271,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td9);
 
     var td10 = document.createElement('td');
-    td10.style.minWidth = "100px";
+    td10.style.minWidth = "160px";
     td10.classList = "antireflexivity";
     var span4 = document.createElement('span');
+    span4 = styleSpan(span4);
     span4.innerText = "anti - reflexivity";
     var checkbox4 = document.createElement('input');
     checkbox4.type = "checkbox";
@@ -272,9 +283,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td10);
 
     var td11 = document.createElement('td');
-    td11.style.minWidth = "80px";
+    td11.style.minWidth = "120px";
     td11.classList = "transitivity";
     var span5 = document.createElement('span');
+    span5 = styleSpan(span5);
     span5.innerText = "transitivity";
     var checkbox5 = document.createElement('input');
     checkbox5.type = "checkbox";
@@ -283,9 +295,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td11);
 
     var td12 = document.createElement('td');
-    td12.style.minWidth = "80px";
+    td12.style.minWidth = "140px";
     td12.classList = "antitransivity";
     var span6 = document.createElement('span');
+    span6 = styleSpan(span6);
     span6.innerText = "antitransivity";
     var checkbox6 = document.createElement('input');
     checkbox6.type = "checkbox";

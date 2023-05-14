@@ -5,10 +5,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
@@ -49,6 +46,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         tbody.appendChild(newRow);
@@ -56,9 +54,9 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addEnum = styleBtn(addEnum);
     btnDiv.appendChild(addEnum);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -76,10 +74,10 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 function addRowEnum() {
     var tr1 = document.createElement('tr');
     var td1 = document.createElement('td');
-    td1.style.minWidth = "150px";
+    td1.style.minWidth = "200px";
     var text = document.createElement('input');
     text.type = "text";
-    text.style.width = '100%';
+    text = styleInput(text);
     text.placeholder = "Name enum";
     td1.appendChild(text);
     tr1.appendChild(td1);
@@ -88,7 +86,7 @@ function addRowEnum() {
     td2.style.minWidth = "150px";
     var text2 = document.createElement('input');
     text2.type = "text";
-    text2.style.width = '100%';
+    text2 = styleInput(text2);
     text2.placeholder = "Value";
     td2.appendChild(text2);
     tr1.appendChild(td2);
@@ -100,12 +98,15 @@ function addRowEnum() {
         newTd.style.minWidth = "200px";
         let newInput = document.createElement('input');
         newInput.type = "text";
+        newInput = styleInput(newInput);
+        newInput.style.marginRight = "4px";
         newInput.style.width = '85%';
         newInput.style.float = 'left';
         newInput.placeholder = "Value";
         var btnDel = mxUtils.button('-', function (evt) {
             evt.target.parentElement.remove();
         });
+        btnDel = styleBtn(btnDel);
         btnDel.style.float = 'left';
         btnDel.style.width = '10%';
         newTd.appendChild(newInput);
@@ -113,21 +114,23 @@ function addRowEnum() {
         evt.target.parentElement.parentElement.insertBefore(newTd, evt.target.parentElement)
         
     });
-
+    btnAdd = styleBtn(btnAdd);
     tdAdd.appendChild(btnAdd);
     tr1.appendChild(tdAdd);
 
     var td3 = document.createElement('td');
     td3.style.minWidth = "100px";
     var span = document.createElement('span');
+    span = styleSpan(span);
     span.innerText = "is linear";
     var checkbox = document.createElement('input');
     checkbox.type = "checkbox";
     checkbox.addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
             var tdNameRDF = document.createElement('td');
-            tdNameRDF.style.minWidth = "100px";
+            tdNameRDF.style.minWidth = "150px";
             var inputNameRDF = document.createElement('input');
+            inputNameRDF = styleInput(inputNameRDF);
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';
             inputNameRDF.placeholder = "Name in RDF";
@@ -265,6 +268,7 @@ function addComparisonResult(row) {
             newTd.style.minWidth = "200px";
             let newInput = document.createElement('input');
             newInput.type = "text";
+            newInput = styleInput(newInput);
             newInput.style.width = '100%';
             newInput.style.float = 'left';
             newInput.placeholder = "Value";

@@ -5,10 +5,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
 
@@ -39,6 +36,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRowProperty.appendChild(tdDelRow);
         tbody.appendChild(newRowProperty);
@@ -46,9 +44,9 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addProperty = styleBtn(addProperty);
     btnDiv.appendChild(addProperty);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -125,6 +123,8 @@ function fillDataProperties(tbody, cell, editorUi) {
                 let newTdClass = document.createElement('td');
                 newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
+                newSelectClass = styleSelect(newSelectClass);
+                newSelectClass.style.marginRight = "4px"
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
                 var jsonClasses = getClasses(editorUi);
@@ -135,6 +135,7 @@ function fillDataProperties(tbody, cell, editorUi) {
                 var btnDelClass = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDelClass = styleBtn(btnDelClass);
                 btnDelClass.style.float = 'left';
                 btnDelClass.style.width = '10%';
                 newTdClass.appendChild(newSelectClass);
@@ -156,6 +157,7 @@ function fillDataProperties(tbody, cell, editorUi) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }

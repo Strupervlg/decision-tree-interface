@@ -8,8 +8,9 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var divText = document.createElement('div');
     var text = document.createElement('textarea');
     text.style.width = "100%";
-    text.style.resize = "vertical";
+    text.style.resize = "none";
     text.style.height = "400px";
+    text.style.fontSize = "30px";
     if(typeof cell.value == "object") {
         text.value = cell.value.getAttribute("label");
     } else {
@@ -45,12 +46,20 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
 
     var divExprText = document.createElement('div');
     divExprText.innerHTML = getTextByLocale("ExpressionInNode") + expr;
-    divExprText.style.height = "50px";
+    divExprText.style.height = "60px";
+    divExprText.style.overflow = "scroll";
+    divExprText.style.fontSize = "20px";
     divText.appendChild(divExprText);
     divText.appendChild(text);
-    divText.appendChild(btnSaveTextInNode);
-    divText.appendChild(btnGenerateTextInNode);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    btnDiv.style.marginTop = "10px";
+    btnSaveTextInNode = styleBtn(btnSaveTextInNode);
+    btnGenerateTextInNode = styleBtn(btnGenerateTextInNode);
+    btnDiv.appendChild(btnSaveTextInNode);
+    btnDiv.appendChild(btnGenerateTextInNode);
     div.appendChild(divText);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleEditTextInNodeWindow"), div, x, y, w, h, true, true);

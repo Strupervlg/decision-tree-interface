@@ -313,6 +313,61 @@ const EN_TEXT = {
     "propertyIsMissingInDict": 'Property %propertyName does not exist in the dictionary',
     "hasCycleInTree": "There are cycles in the graph!",
 };
+function styleTable(table) {
+    table.style.width = '100%';
+    table.style.height = '80%';
+    table.style.overflow = "scroll";
+    table.style.display = "block";
+    table.style.borderCollapse = "separate";
+    table.style.borderSpacing = "10px 0";
+    return table;
+}
+
+function styleDivBtn(divBtn) {
+    divBtn.style.display = "flex";
+    divBtn.style.height = "20%";
+    divBtn.style.alignItems = "center";
+    divBtn.style.gap = "5px";
+    divBtn.style.justifyContent = "center";
+    return divBtn;
+}
+
+function styleBtn(btn) {
+    btn.style.minHeight = "50%";
+    btn.style.fontSize = "18px";
+    return btn;
+}
+
+function styleInput(input) {
+    input.style.width = '100%';
+    input.style.fontSize = '20px';
+    return input;
+}
+
+function styleSelect(select) {
+    select.style.width = '100%';
+    select.style.fontSize = '20px';
+    return select;
+}
+
+function styleSpan(span) {
+    span.style.fontSize = '20px';
+    return span;
+}
+
+function styleTextAreaExp(textarea) {
+    textarea.style.fontSize = "30px";
+    textarea.style.width = "100%";
+    textarea.style.resize = "none";
+    textarea.style.height = "80%";
+    return textarea;
+}
+
+function styleBlocklyAreaExp(blocklyDiv, w, h) {
+    blocklyDiv.style.width = w+'px';
+    blocklyDiv.style.height = h*0.78+'px';
+    return blocklyDiv;
+}
 // Окно коструктора блока со свойствами классов
 var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
 
@@ -320,10 +375,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     var rowProperty = addRowProperty(editorUi);
@@ -362,6 +414,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRowProperty.appendChild(tdDelRow);
         tbody.appendChild(newRowProperty);
@@ -369,9 +422,9 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addProperty = styleBtn(addProperty);
     btnDiv.appendChild(addProperty);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -390,11 +443,11 @@ function addRowProperty(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
-    td1.style.minWidth = "150px";
+    td1.style.minWidth = "200px";
     var text = document.createElement('input');
     text.type = "text";
     text.placeholder = "Name";
-    text.style.width = '100%';
+    text = styleInput(text);
     td1.appendChild(text);
     tr1.appendChild(td1);
 
@@ -402,7 +455,7 @@ function addRowProperty(editorUi) {
     var td2 = document.createElement('td');
     td2.style.minWidth = "150px";
     var selectType = document.createElement('select');
-    selectType.style.width = '100%';
+    selectType = styleSelect(selectType);
     var types = ["Integer", "Double", "Boolean", "String"];
     var jsonEnums = getEnums(editorUi);
     jsonEnums.forEach(enumItem => {
@@ -422,17 +475,20 @@ function addRowProperty(editorUi) {
                 var startInput = document.createElement('input');
                 startInput.type = "number";
                 startInput.placeholder = "0";
+                startInput = styleInput(startInput);
                 startInput.style.width = '45%';
                 tdRange.appendChild(startInput);
                 
                 var dash = document.createElement('span');
                 dash.innerText = "-";
+                dash = styleSpan(dash);
                 dash.style.width = '30%';
                 tdRange.appendChild(dash);
 
                 var endInput = document.createElement('input');
                 endInput.type = "number";
                 endInput.placeholder = "9";
+                endInput = styleInput(endInput);
                 endInput.style.width = '45%';
                 tdRange.appendChild(endInput);
 
@@ -452,17 +508,20 @@ function addRowProperty(editorUi) {
     var startInput = document.createElement('input');
     startInput.type = "number";
     startInput.placeholder = "0";
+    startInput = styleInput(startInput);
     startInput.style.width = '45%';
     tdRange.appendChild(startInput);
                 
     var dash = document.createElement('span');
     dash.innerText = "-";
+    dash = styleSpan(dash);
     dash.style.width = '30%';
     tdRange.appendChild(dash);
 
     var endInput = document.createElement('input');
     endInput.type = "number";
     endInput.placeholder = "9";
+    endInput = styleInput(endInput);
     endInput.style.width = '45%';
     tdRange.appendChild(endInput);
     tr1.appendChild(td2);
@@ -471,8 +530,9 @@ function addRowProperty(editorUi) {
 
     // Создание checkbox isStatic
     var td3 = document.createElement('td');
-    td3.style.minWidth = "70px";
+    td3.style.minWidth = "120px";
     var span = document.createElement('span');
+    span = styleSpan(span);
     span.innerText = "is static";
     var checkbox = document.createElement('input');
     checkbox.type = "checkbox";
@@ -483,7 +543,7 @@ function addRowProperty(editorUi) {
     var tdInputClass = document.createElement('td');
     tdInputClass.style.minWidth = "150px";
     var selectClass = document.createElement('select');
-    selectClass.style.width = '100%';
+    selectClass = styleSelect(selectClass);
     var jsonClasses = getClasses(editorUi);
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
@@ -494,9 +554,11 @@ function addRowProperty(editorUi) {
     var tdAddClass = document.createElement('td');
     tdAddClass.style.minWidth = "50px";
     var btnAddClass = mxUtils.button('+', function (evt) {
-        let newTdClass = document.createElement('td');
+        let newTdClass = document.createElement('td'); 
         newTdClass.style.minWidth = "200px";
         var newSelectClass = document.createElement('select');
+        newSelectClass = styleSelect(newSelectClass);
+        newSelectClass.style.marginRight = "4px";
         newSelectClass.style.width = '85%';
         newSelectClass.style.float = 'left';
         var jsonClasses = getClasses(editorUi);
@@ -507,13 +569,14 @@ function addRowProperty(editorUi) {
         var btnDelClass = mxUtils.button('-', function (evt) {
             evt.target.parentElement.remove();
         });
+        btnDelClass = styleBtn(btnDelClass);
         btnDelClass.style.float = 'left';
         btnDelClass.style.width = '10%';
         newTdClass.appendChild(newSelectClass);
         newTdClass.appendChild(btnDelClass);
         evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
     });
-
+    btnAddClass = styleBtn(btnAddClass);
     tdAddClass.appendChild(btnAddClass);
     tr1.appendChild(tdInputClass);
     tr1.appendChild(tdAddClass);
@@ -649,10 +712,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
@@ -693,6 +753,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         tbody.appendChild(newRow);
@@ -700,9 +761,9 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addEnum = styleBtn(addEnum);
     btnDiv.appendChild(addEnum);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -720,10 +781,10 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 function addRowEnum() {
     var tr1 = document.createElement('tr');
     var td1 = document.createElement('td');
-    td1.style.minWidth = "150px";
+    td1.style.minWidth = "200px";
     var text = document.createElement('input');
     text.type = "text";
-    text.style.width = '100%';
+    text = styleInput(text);
     text.placeholder = "Name enum";
     td1.appendChild(text);
     tr1.appendChild(td1);
@@ -732,7 +793,7 @@ function addRowEnum() {
     td2.style.minWidth = "150px";
     var text2 = document.createElement('input');
     text2.type = "text";
-    text2.style.width = '100%';
+    text2 = styleInput(text2);
     text2.placeholder = "Value";
     td2.appendChild(text2);
     tr1.appendChild(td2);
@@ -744,12 +805,15 @@ function addRowEnum() {
         newTd.style.minWidth = "200px";
         let newInput = document.createElement('input');
         newInput.type = "text";
+        newInput = styleInput(newInput);
+        newInput.style.marginRight = "4px";
         newInput.style.width = '85%';
         newInput.style.float = 'left';
         newInput.placeholder = "Value";
         var btnDel = mxUtils.button('-', function (evt) {
             evt.target.parentElement.remove();
         });
+        btnDel = styleBtn(btnDel);
         btnDel.style.float = 'left';
         btnDel.style.width = '10%';
         newTd.appendChild(newInput);
@@ -757,21 +821,23 @@ function addRowEnum() {
         evt.target.parentElement.parentElement.insertBefore(newTd, evt.target.parentElement)
         
     });
-
+    btnAdd = styleBtn(btnAdd);
     tdAdd.appendChild(btnAdd);
     tr1.appendChild(tdAdd);
 
     var td3 = document.createElement('td');
     td3.style.minWidth = "100px";
     var span = document.createElement('span');
+    span = styleSpan(span);
     span.innerText = "is linear";
     var checkbox = document.createElement('input');
     checkbox.type = "checkbox";
     checkbox.addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
             var tdNameRDF = document.createElement('td');
-            tdNameRDF.style.minWidth = "100px";
+            tdNameRDF.style.minWidth = "150px";
             var inputNameRDF = document.createElement('input');
+            inputNameRDF = styleInput(inputNameRDF);
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';
             inputNameRDF.placeholder = "Name in RDF";
@@ -909,6 +975,7 @@ function addComparisonResult(row) {
             newTd.style.minWidth = "200px";
             let newInput = document.createElement('input');
             newInput.type = "text";
+            newInput = styleInput(newInput);
             newInput.style.width = '100%';
             newInput.style.float = 'left';
             newInput.placeholder = "Value";
@@ -938,15 +1005,12 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     divText.style.height = "100%";
     var divBlockly = document.createElement('div');
     divBlockly.style.height = "100%";
-
     divBlockly.style.display = "none";
 
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.fontSize = "30px";
-    text.style.width = "100%";
-    text.style.resize = "none";
+    text = styleTextAreaExp(text);
     text.style.height = "90%";
 
     // Кнопка создания узла
@@ -995,15 +1059,10 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divText.appendChild(text);
     var btnTextDiv = document.createElement('div');
-    btnTextDiv.style.display = "flex";
-    btnTextDiv.style.gap = "5px";
+    btnTextDiv = styleDivBtn(btnTextDiv);
     btnTextDiv.style.height = "10%";
-    btnTextDiv.style.alignItems = "center";
-    btnTextDiv.style.justifyContent = "center";
-    btnCreateNodeInText.style.height = "50%";
-    btnCreateNodeInText.style.width = "50px";
-    btnSwitchToBlockly.style.height = "50%";
-    btnSwitchToBlockly.style.width = "150px";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     btnTextDiv.appendChild(btnCreateNodeInText);
     btnTextDiv.appendChild(btnSwitchToBlockly);
     divText.appendChild(btnTextDiv);
@@ -1013,8 +1072,8 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "conditionCreateBlocklyDiv";
-    nestedDiv.style.width = w+'px';
-    nestedDiv.style.height = h*0.90+'px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
+    nestedDiv.style.height = h*0.88+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
@@ -1046,15 +1105,10 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divBlockly.appendChild(nestedDiv);
     var btnBlockDiv = document.createElement('div');
-    btnBlockDiv.style.display = "flex";
-    btnBlockDiv.style.gap = "5px";
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
     btnBlockDiv.style.height = "8%";
-    btnBlockDiv.style.alignItems = "center";
-    btnBlockDiv.style.justifyContent = "center";
-    btnCreateNodeInBlockly.style.height = "50%";
-    btnCreateNodeInBlockly.style.width = "50px";
-    btnSwitchToText.style.height = "50%";
-    btnSwitchToText.style.width = "150px";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     btnBlockDiv.appendChild(btnCreateNodeInBlockly);
     btnBlockDiv.appendChild(btnSwitchToText);
     divBlockly.appendChild(btnBlockDiv);
@@ -1078,10 +1132,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
 
@@ -1123,6 +1174,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRowRelationship.appendChild(tdDelRow);
         tbody.appendChild(newRowRelationship);
@@ -1130,9 +1182,9 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addRelationship = styleBtn(addRelationship);
     btnDiv.appendChild(addRelationship);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -1151,19 +1203,20 @@ function addRowRelationship(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
-    td1.style.minWidth = "150px";
+    td1.style.minWidth = "200px";
     var text = document.createElement('input');
     text.type = "text";
+    text = styleInput(text);
     text.placeholder = "Relationship name";
     text.style.width = '100%';
     td1.appendChild(text);
     tr1.appendChild(td1);
 
     var td2 = document.createElement('td');
-    td2.style.minWidth = "150px";
+    td2.style.minWidth = "200px";
     var extend = document.createElement('input');
     extend.type = "text";
-    extend.style.width = '100%';
+    extend = styleInput(extend);
     extend.placeholder = "Extend";
     td2.appendChild(extend);
     tr1.appendChild(td2);
@@ -1172,7 +1225,7 @@ function addRowRelationship(editorUi) {
     var td3 = document.createElement('td');
     td3.style.minWidth = "150px";
     var selectClass = document.createElement('select');
-    selectClass.style.width = '100%';
+    selectClass = styleSelect(selectClass);
     var jsonClasses = getClasses(editorUi);
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
@@ -1186,6 +1239,8 @@ function addRowRelationship(editorUi) {
         let newTdClass = document.createElement('td');
         newTdClass.style.minWidth = "200px";
         var newSelectClass = document.createElement('select');
+        newSelectClass = styleSelect(newSelectClass);
+        newSelectClass.style.marginRight = "4px";
         newSelectClass.style.width = '85%';
         newSelectClass.style.float = 'left';
         var jsonClasses = getClasses(editorUi);
@@ -1196,13 +1251,14 @@ function addRowRelationship(editorUi) {
         var btnDelClass = mxUtils.button('-', function (evt) {
             evt.target.parentElement.remove();
         });
+        btnDelClass = styleBtn(btnDelClass);
         btnDelClass.style.float = 'left';
         btnDelClass.style.width = '10%';
         newTdClass.appendChild(newSelectClass);
         newTdClass.appendChild(btnDelClass);
         evt.target.parentElement.parentElement.insertBefore(newTdClass, evt.target.parentElement)
     });
-
+    btnAddClass = styleBtn(btnAddClass);
     tdAddClass.appendChild(btnAddClass);
     tr1.appendChild(td3);
     tr1.appendChild(tdAddClass);
@@ -1211,7 +1267,7 @@ function addRowRelationship(editorUi) {
     var td5 = document.createElement('td');
     td5.style.minWidth = "150px";
     var selectScale = document.createElement('select');
-    selectScale.style.width = '100%';
+    selectScale = styleSelect(selectScale);
     var scales = ["None", "Linear", "Partially linear"]; //"NONE" "LINEAR" "PARTIALLY_LINEAR"
     scales.forEach(element => {
         var newOption = new Option(element, element);
@@ -1229,7 +1285,7 @@ function addRowRelationship(editorUi) {
             tdInputNames.style.minWidth = "150px";
             var nameInput = document.createElement('input');
             nameInput.type = "text";
-            nameInput.style.width = '100%';
+            nameInput = styleInput(nameInput);
             nameInput.placeholder = "Name";
             tdInputNames.appendChild(nameInput);
 
@@ -1241,19 +1297,22 @@ function addRowRelationship(editorUi) {
                 newTdName.style.minWidth = "200px";
                 var newNameInput = document.createElement('input');
                 newNameInput.type = "text";
+                newNameInput = styleInput(newNameInput);
+                newNameInput.style.marginRight = "4px";
                 newNameInput.style.width = '85%';
                 newNameInput.style.float = 'left';
                 newNameInput.placeholder = "Name";
                 var btnDelName = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDelName = styleBtn(btnDelName);
                 btnDelName.style.float = 'left';
                 btnDelName.style.width = '10%';
                 newTdName.appendChild(newNameInput);
                 newTdName.appendChild(btnDelName);
                 evt.target.parentElement.parentElement.insertBefore(newTdName, evt.target.parentElement)
             });
-
+            btnAddName = styleBtn(btnAddName);
             tdAddName.appendChild(btnAddName);
 
             event.currentTarget.parentElement.parentElement.insertBefore(tdAddName, event.currentTarget.parentElement.nextElementSibling);
@@ -1273,7 +1332,9 @@ function addRowRelationship(editorUi) {
 
     var td6 = document.createElement('td');
     td6.style.minWidth = "200px";
+    td6.style.display = "flex";
     var span = document.createElement('span');
+    span = styleSpan(span);
     span.innerText = "is relationship between classes";
     var checkbox = document.createElement('input');
     checkbox.type = "checkbox";
@@ -1283,7 +1344,7 @@ function addRowRelationship(editorUi) {
             var tdType = document.createElement('td');
             tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
-            selectType.style.width = '100%';
+            selectType = styleSelect(selectType);
             var scales = ["One to one", "One to many"]; // "ONE_TO_ONE", "ONE_TO_MANY"
             scales.forEach(element => {
                 var newOption = new Option(element, element);
@@ -1301,9 +1362,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td6);
 
     var td7 = document.createElement('td');
-    td7.style.minWidth = "80px";
+    td7.style.minWidth = "120px";
     td7.classList = "symmetry";
     var span1 = document.createElement('span');
+    span1 = styleSpan(span1);
     span1.innerText = "symmetry";
     var checkbox1 = document.createElement('input');
     checkbox1.type = "checkbox";
@@ -1312,9 +1374,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td7);
 
     var td8 = document.createElement('td');
-    td8.style.minWidth = "90px";
+    td8.style.minWidth = "140px";
     td8.classList = "antisymmetry";
     var span2 = document.createElement('span');
+    span2 = styleSpan(span2);
     span2.innerText = "antisymmetry";
     var checkbox2 = document.createElement('input');
     checkbox2.type = "checkbox";
@@ -1323,9 +1386,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td8);
 
     var td9 = document.createElement('td');
-    td9.style.minWidth = "80px";
+    td9.style.minWidth = "120px";
     td9.classList = "reflexivity";
     var span3 = document.createElement('span');
+    span3 = styleSpan(span3);
     span3.innerText = "reflexivity";
     var checkbox3 = document.createElement('input');
     checkbox3.type = "checkbox";
@@ -1334,9 +1398,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td9);
 
     var td10 = document.createElement('td');
-    td10.style.minWidth = "100px";
+    td10.style.minWidth = "160px";
     td10.classList = "antireflexivity";
     var span4 = document.createElement('span');
+    span4 = styleSpan(span4);
     span4.innerText = "anti - reflexivity";
     var checkbox4 = document.createElement('input');
     checkbox4.type = "checkbox";
@@ -1345,9 +1410,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td10);
 
     var td11 = document.createElement('td');
-    td11.style.minWidth = "80px";
+    td11.style.minWidth = "120px";
     td11.classList = "transitivity";
     var span5 = document.createElement('span');
+    span5 = styleSpan(span5);
     span5.innerText = "transitivity";
     var checkbox5 = document.createElement('input');
     checkbox5.type = "checkbox";
@@ -1356,9 +1422,10 @@ function addRowRelationship(editorUi) {
     tr1.appendChild(td11);
 
     var td12 = document.createElement('td');
-    td12.style.minWidth = "80px";
+    td12.style.minWidth = "140px";
     td12.classList = "antitransivity";
     var span6 = document.createElement('span');
+    span6 = styleSpan(span6);
     span6.innerText = "antitransivity";
     var checkbox6 = document.createElement('input');
     checkbox6.type = "checkbox";
@@ -3168,16 +3235,11 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     divText.style.height = "100%";
     var divBlockly = document.createElement('div');
     divBlockly.style.height = "100%";
-
     divBlockly.style.display = "none";
-
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.fontSize = "30px";
-    text.style.width = "100%";
-    text.style.resize = "none";
-    text.style.height = "80%";
+    text = styleTextAreaExp(text);
 
     // Кнопка создания узла
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
@@ -3242,17 +3304,15 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
-    nameVarInText.style.width = '100%';
+    nameVarInText = styleInput(nameVarInText);
     nameVarInText.style.height = '5%';
-    nameVarInText.style.fontSize = '20px';
     nameVarInText.placeholder = "New variable";
 
     var jsonClasses = getClasses(editorUi);
 
     var selectClassInText = document.createElement('select');
-    selectClassInText.style.width = '100%';
+    selectClassInText = styleSelect(selectClassInText);
     selectClassInText.style.height = '5%';
-    selectClassInText.style.fontSize = '20px';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInText.options[selectClassInText.options.length] = newOption;
@@ -3260,15 +3320,10 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divText.appendChild(text);
     var btnTextDiv = document.createElement('div');
-    btnTextDiv.style.display = "flex";
-    btnTextDiv.style.gap = "5px";
+    btnTextDiv = styleDivBtn(btnTextDiv);
     btnTextDiv.style.height = "10%";
-    btnTextDiv.style.alignItems = "center";
-    btnTextDiv.style.justifyContent = "center";
-    btnCreateNodeInText.style.height = "50%";
-    btnCreateNodeInText.style.width = "50px";
-    btnSwitchToBlockly.style.height = "50%";
-    btnSwitchToBlockly.style.width = "150px";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     divText.appendChild(nameVarInText);
     divText.appendChild(selectClassInText);
     btnTextDiv.appendChild(btnCreateNodeInText);
@@ -3280,8 +3335,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "actionCreateBlocklyDiv";
-    nestedDiv.style.width = w+'px';
-    nestedDiv.style.height = h*0.80+'px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
@@ -3330,15 +3384,13 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
-    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly = styleInput(nameVarInBlockly);
     nameVarInBlockly.style.height = '5%';
-    nameVarInBlockly.style.fontSize = '20px';
     nameVarInBlockly.placeholder = "New variable";
 
     var selectClassInBlockly = document.createElement('select');
-    selectClassInBlockly.style.width = '100%';
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
     selectClassInBlockly.style.height = '5%';
-    selectClassInBlockly.style.fontSize = '20px';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
@@ -3346,15 +3398,10 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divBlockly.appendChild(nestedDiv);
     var btnBlockDiv = document.createElement('div');
-    btnBlockDiv.style.display = "flex";
-    btnBlockDiv.style.gap = "5px";
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
     btnBlockDiv.style.height = "8%";
-    btnBlockDiv.style.alignItems = "center";
-    btnBlockDiv.style.justifyContent = "center";
-    btnCreateNodeInBlockly.style.height = "50%";
-    btnCreateNodeInBlockly.style.width = "50px";
-    btnSwitchToText.style.height = "50%";
-    btnSwitchToText.style.width = "150px";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     divBlockly.appendChild(nameVarInBlockly);
     divBlockly.appendChild(selectClassInBlockly);
     btnBlockDiv.appendChild(btnCreateNodeInBlockly);
@@ -3381,10 +3428,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     div.style.height = "100%";
     div.style.width = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
@@ -3437,6 +3481,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         tbody.appendChild(newRow);
@@ -3478,9 +3523,10 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    addClass = styleBtn(addClass);
+    applyBtn = styleBtn(applyBtn);
+    openBlockly = styleBtn(openBlockly);
     btnDiv.appendChild(addClass);
     btnDiv.appendChild(applyBtn);
     btnDiv.appendChild(openBlockly);
@@ -3503,20 +3549,20 @@ function addRowClass() {
     td1.style.width = '25%';
     var name = document.createElement('input');
     name.type = "text";
-    name.style.width = '100%';
+    name = styleInput(name);
     name.placeholder = "Class name";
     td1.appendChild(name);
     var td2 = document.createElement('td');
     td2.style.width = '25%';
     var extend = document.createElement('input');
     extend.type = "text";
-    extend.style.width = '100%';
+    extend = styleInput(extend);
     extend.placeholder = "Extend";
     td2.appendChild(extend);
     var td3 = document.createElement('td');
     td3.style.width = '25%';
     var expression = document.createElement('textarea');
-    expression.style.width = '100%';
+    expression = styleInput(expression);
     expression.style.resize = 'vertical';
     expression.placeholder = "Expression";
     td3.appendChild(expression);
@@ -3587,10 +3633,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     div.style.height = "100%";
     div.style.width = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
@@ -3636,6 +3679,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         tbody.appendChild(newRow);
@@ -3677,9 +3721,10 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    addClass = styleBtn(addClass);
+    applyBtn = styleBtn(applyBtn);
+    openBlockly = styleBtn(openBlockly);
     btnDiv.appendChild(addClass);
     btnDiv.appendChild(applyBtn);
     btnDiv.appendChild(openBlockly);
@@ -3728,6 +3773,7 @@ function fillDataClass(tbody, cell) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }
@@ -3741,19 +3787,14 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     div.style.height = "100%";
-    var divTable = document.createElement('div');
     var table = document.createElement('table');
-    divTable.style.width = '100%';
-    divTable.style.height = '80%';
-    divTable.style.overflowX = "auto";
-    divTable.style.overflowY = "auto";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
     
     fillDataEnum(tbody, cell);
     table.appendChild(tbody);
-    divTable.appendChild(table);
-    div.appendChild(divTable);
+    div.appendChild(table);
 
     // Кнопка сохранения блока
     var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -3778,6 +3819,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         tbody.appendChild(newRow);
@@ -3785,9 +3827,9 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addEnum = styleBtn(addEnum);
     btnDiv.appendChild(addEnum);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -3840,12 +3882,15 @@ function fillDataEnum(tbody, cell) {
                 newTd.style.minWidth = "200px";
                 let newInput = document.createElement('input');
                 newInput.type = "text";
+                newInput = styleInput(newInput);
+                newInput.style.marginRight = "4px";
                 newInput.style.width = '85%';
                 newInput.style.float = 'left';
                 newInput.placeholder = "Value";
                 var btnDel = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDel = styleBtn(btnDel);
                 btnDel.style.float = 'left';
                 btnDel.style.width = '10%';
                 newTd.appendChild(newInput);
@@ -3878,8 +3923,9 @@ function fillDataEnum(tbody, cell) {
         }
         if(Islinear == 'true') {
             var tdNameRDF = document.createElement('td');
-            tdNameRDF.style.minWidth = "100px";
+            tdNameRDF.style.minWidth = "150px";
             var inputNameRDF = document.createElement('input');
+            inputNameRDF = styleInput(inputNameRDF);
             inputNameRDF.type = "text";
             inputNameRDF.style.width = '90%';
             inputNameRDF.placeholder = "Name in RDF";
@@ -3895,6 +3941,7 @@ function fillDataEnum(tbody, cell) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }
@@ -3909,10 +3956,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
 
@@ -3943,6 +3987,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRowProperty.appendChild(tdDelRow);
         tbody.appendChild(newRowProperty);
@@ -3950,9 +3995,9 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addProperty = styleBtn(addProperty);
     btnDiv.appendChild(addProperty);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -4029,6 +4074,8 @@ function fillDataProperties(tbody, cell, editorUi) {
                 let newTdClass = document.createElement('td');
                 newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
+                newSelectClass = styleSelect(newSelectClass);
+                newSelectClass.style.marginRight = "4px"
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
                 var jsonClasses = getClasses(editorUi);
@@ -4039,6 +4086,7 @@ function fillDataProperties(tbody, cell, editorUi) {
                 var btnDelClass = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDelClass = styleBtn(btnDelClass);
                 btnDelClass.style.float = 'left';
                 btnDelClass.style.width = '10%';
                 newTdClass.appendChild(newSelectClass);
@@ -4060,6 +4108,7 @@ function fillDataProperties(tbody, cell, editorUi) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }
@@ -4075,10 +4124,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.height = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '80%';
-    table.style.overflow = "scroll";
-    table.style.display = "block";
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
 
@@ -4113,6 +4159,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRowRelationship.appendChild(tdDelRow);
         tbody.appendChild(newRowRelationship);
@@ -4120,9 +4167,9 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Добавление кнопок в окно
     var btnDiv = document.createElement('div');
-    btnDiv.style.display = "flex";
-    btnDiv.style.height = "20%";
-    btnDiv.style.alignItems = "center";
+    btnDiv = styleDivBtn(btnDiv);
+    applyBtn = styleBtn(applyBtn);
+    addRelationship = styleBtn(addRelationship);
     btnDiv.appendChild(addRelationship);
     btnDiv.appendChild(applyBtn);
     div.appendChild(btnDiv);
@@ -4192,6 +4239,8 @@ function fillDataRelationships(tbody, cell, editorUi) {
                 let newTdClass = document.createElement('td');
                 newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
+                newSelectClass = styleSelect(newSelectClass);
+                newSelectClass.style.marginRight = "4px";
                 newSelectClass.style.width = '85%';
                 newSelectClass.style.float = 'left';
                 var jsonClasses = getClasses(editorUi);
@@ -4202,6 +4251,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
                 var btnDelClass = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDelClass = styleBtn(btnDelClass);
                 btnDelClass.style.float = 'left';
                 btnDelClass.style.width = '10%';
                 newTdClass.appendChild(newSelectClass);
@@ -4235,7 +4285,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             tdInputNames.style.minWidth = "150px";
             var nameInput = document.createElement('input');
             nameInput.type = "text";
-            nameInput.style.width = '100%';
+            nameInput = styleInput(nameInput);
             nameInput.placeholder = "Name";
             tdInputNames.appendChild(nameInput);
 
@@ -4247,19 +4297,22 @@ function fillDataRelationships(tbody, cell, editorUi) {
                 newTdName.style.minWidth = "200px";
                 var newNameInput = document.createElement('input');
                 newNameInput.type = "text";
+                newNameInput = styleInput(newNameInput);
+                newNameInput.style.marginRight = "4px";
                 newNameInput.style.width = '85%';
                 newNameInput.style.float = 'left';
                 newNameInput.placeholder = "Name";
                 var btnDelName = mxUtils.button('-', function (evt) {
                     evt.target.parentElement.remove();
                 });
+                btnDelName = styleBtn(btnDelName);
                 btnDelName.style.float = 'left';
                 btnDelName.style.width = '10%';
                 newTdName.appendChild(newNameInput);
                 newTdName.appendChild(btnDelName);
                 evt.target.parentElement.parentElement.insertBefore(newTdName, evt.target.parentElement)
             });
-
+            btnAddName = styleBtn(btnAddName);
             tdAddName.appendChild(btnAddName);
 
             row.insertBefore(tdAddName, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
@@ -4272,12 +4325,15 @@ function fillDataRelationships(tbody, cell, editorUi) {
                     newTdName.style.minWidth = "200px";
                     var newNameInput = document.createElement('input');
                     newNameInput.type = "text";
+                    newNameInput = styleInput(newNameInput);
+                    newNameInput.style.marginRight = "4px";
                     newNameInput.style.width = '85%';
                     newNameInput.style.float = 'left';
                     newNameInput.placeholder = "Name";
                     var btnDelName = mxUtils.button('-', function (evt) {
                         evt.target.parentElement.remove();
                     });
+                    btnDelName = styleBtn(btnDelName);
                     btnDelName.style.float = 'left';
                     btnDelName.style.width = '10%';
                     newTdName.appendChild(newNameInput);
@@ -4300,6 +4356,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             var tdType = document.createElement('td');
             tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
+            selectType = styleSelect(selectType);
             selectType.style.width = '100%';
             var scales = ["One to one", "One to many"];
             scales.forEach(element => {
@@ -4325,6 +4382,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }
@@ -8350,6 +8408,10 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.width = '300px';
     div.style.height = '150px';
+    div.style.display = "flex";
+    div.style.alignItems = "center";
+    div.style.gap = "5px";
+    div.style.justifyContent = "center";
 
     // Кнопка создания узла "AND"
     var btnCreateANDNode = mxUtils.button('And', function () {
@@ -8378,16 +8440,20 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
         }
         win.destroy();
     });
-
+    btnCreateANDNode = styleBtn(btnCreateANDNode);
+    btnCreateANDNode.style.minWidth = "50%";
+    btnCreateORNode = styleBtn(btnCreateORNode);
+    btnCreateORNode.style.minWidth = "50%";
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleLogicNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
-    this.window.setResizable(true);
+    this.window.setResizable(false);
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
@@ -8405,7 +8471,7 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
     var tdName = document.createElement('td');
     var name = document.createElement('input');
     name.type = "text";
-    name.style.width = '100%';
+    name = styleInput(name);
     name.placeholder = "Value";
     tdName.appendChild(name);
     row.appendChild(tdName);
@@ -8430,14 +8496,18 @@ var PredeterminingFactorsNodeConstructorWindow = function (editorUi, x, y, w, h)
         win.destroy();
     });
 
-    div.appendChild(btnCreateNode);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    btnCreateNode = styleBtn(btnCreateNode);
+    btnDiv.appendChild(btnCreateNode);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitlePredeterminingFactorsNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
-    this.window.setResizable(true);
+    this.window.setResizable(false);
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
@@ -8446,16 +8516,18 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
+    text.style.height = "90%";
 
     // Кнопка создания узла
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
@@ -8502,16 +8574,22 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     divText.appendChild(text);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "switchCaseCreateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
+    nestedDiv.style.height = h*0.88+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
@@ -8542,14 +8620,21 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     });
 
     divBlockly.appendChild(nestedDiv);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleSwitchCaseNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -8561,17 +8646,19 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
     var operators = [ "And", "Or" ];
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
+    text.style.height = "74%";
 
     // Кнопка создания узла
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
@@ -8641,40 +8728,48 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
-    nameVarInText.style.width = '100%';
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
     nameVarInText.placeholder = "New variable";
 
     var jsonClasses = getClasses(editorUi);
 
     var selectClassInText = document.createElement('select');
-    selectClassInText.style.width = '100%';
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInText.options[selectClassInText.options.length] = newOption;
     });
 
     var selectOperatorInText = document.createElement('select');
-    selectOperatorInText.style.width = '30%';
-    selectOperatorInText.style.display = 'block';
+    selectOperatorInText = styleSelect(selectOperatorInText);
+    selectOperatorInText.style.height = '5%';
     operators.forEach(item => {
         var newOption = new Option(item, item.toUpperCase());
         selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
     });
 
     divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     divText.appendChild(nameVarInText);
     divText.appendChild(selectClassInText);
     divText.appendChild(selectOperatorInText);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "cycleCreateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
+    nestedDiv.style.height = h*0.72+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
@@ -8726,36 +8821,45 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
-    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
     nameVarInBlockly.placeholder = "New variable";
 
     var selectClassInBlockly = document.createElement('select');
-    selectClassInBlockly.style.width = '100%';
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
     });
 
     var selectOperatorInBlockly = document.createElement('select');
-    selectOperatorInBlockly.style.width = '30%';
-    selectOperatorInBlockly.style.display = 'block';
+    selectOperatorInBlockly = styleSelect(selectOperatorInBlockly);
+    selectOperatorInBlockly.style.height = '5%';
     operators.forEach(item => {
         var newOption = new Option(item, item.toUpperCase());
         selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
     });
 
     divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     divBlockly.appendChild(nameVarInBlockly);
     divBlockly.appendChild(selectClassInBlockly);
     divBlockly.appendChild(selectOperatorInBlockly);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleCycleNodeConstructorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -8767,10 +8871,12 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
+    div.style.width = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '100%';
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
+    tbody.style.height = "100%";
     
     var row = addRowStartNode(editorUi);
     tbody.appendChild(row);
@@ -8805,6 +8911,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         table.appendChild(newRow);
@@ -8812,8 +8919,13 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Добавление кнопок в окно
-    div.appendChild(addClass);
-    div.appendChild(applyBtn);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    addClass = styleBtn(addClass);
+    applyBtn = styleBtn(applyBtn);
+    btnDiv.appendChild(addClass);
+    btnDiv.appendChild(applyBtn);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleStartConstructorWindow"), div, x, y, w, h, true, true);
@@ -8831,13 +8943,13 @@ function addRowStartNode(editorUi) {
     var td1 = document.createElement('td');
     var name = document.createElement('input');
     name.type = "text";
-    name.style.width = '100%';
+    name = styleInput(name);
     name.placeholder = "Variable name";
     td1.appendChild(name);
 
     var td2 = document.createElement('td');
     var selectClass = document.createElement('select');
-    selectClass.style.width = '100%';
+    selectClass = styleSelect(selectClass);
     var jsonClasses = getClasses(editorUi);
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
@@ -8895,8 +9007,9 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var divText = document.createElement('div');
     var text = document.createElement('textarea');
     text.style.width = "100%";
-    text.style.resize = "vertical";
+    text.style.resize = "none";
     text.style.height = "400px";
+    text.style.fontSize = "30px";
     if(typeof cell.value == "object") {
         text.value = cell.value.getAttribute("label");
     } else {
@@ -8932,12 +9045,20 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
 
     var divExprText = document.createElement('div');
     divExprText.innerHTML = getTextByLocale("ExpressionInNode") + expr;
-    divExprText.style.height = "50px";
+    divExprText.style.height = "60px";
+    divExprText.style.overflow = "scroll";
+    divExprText.style.fontSize = "20px";
     divText.appendChild(divExprText);
     divText.appendChild(text);
-    divText.appendChild(btnSaveTextInNode);
-    divText.appendChild(btnGenerateTextInNode);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    btnDiv.style.marginTop = "10px";
+    btnSaveTextInNode = styleBtn(btnSaveTextInNode);
+    btnGenerateTextInNode = styleBtn(btnGenerateTextInNode);
+    btnDiv.appendChild(btnSaveTextInNode);
+    btnDiv.appendChild(btnGenerateTextInNode);
     div.appendChild(divText);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleEditTextInNodeWindow"), div, x, y, w, h, true, true);
@@ -8953,15 +9074,17 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
+    text.style.height = "90%";
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
@@ -9005,16 +9128,22 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     divText.appendChild(text);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "conditionUpdateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
+    nestedDiv.style.height = h*0.88+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -9042,14 +9171,21 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     divBlockly.appendChild(nestedDiv);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleConditionNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -9061,15 +9197,16 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
@@ -9132,14 +9269,16 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
-    nameVarInText.style.width = '100%';
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
     nameVarInText.placeholder = "New variable";
     nameVarInText.value = cell.value.getAttribute('nameVar');
 
     var jsonClasses = getClasses(editorUi);
 
     var selectClassInText = document.createElement('select');
-    selectClassInText.style.width = '100%';
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInText.options[selectClassInText.options.length] = newOption;
@@ -9152,18 +9291,23 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     }
 
     divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     divText.appendChild(nameVarInText);
     divText.appendChild(selectClassInText);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "actionUpdateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -9209,27 +9353,36 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
-    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
     nameVarInBlockly.placeholder = "New variable";
 
     var selectClassInBlockly = document.createElement('select');
-    selectClassInBlockly.style.width = '100%';
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
     });
 
     divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     divBlockly.appendChild(nameVarInBlockly);
     divBlockly.appendChild(selectClassInBlockly);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleActionNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -9241,17 +9394,19 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
     var operators = [ "And", "Or" ];
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
+    text.style.height = "74%";
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
@@ -9318,14 +9473,16 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
-    nameVarInText.style.width = '100%';
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
     nameVarInText.placeholder = "New variable";
     nameVarInText.value = cell.value.getAttribute('nameVar');
 
     var jsonClasses = getClasses(editorUi);
 
     var selectClassInText = document.createElement('select');
-    selectClassInText.style.width = '100%';
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInText.options[selectClassInText.options.length] = newOption;
@@ -9338,8 +9495,8 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     }
 
     var selectOperatorInText = document.createElement('select');
-    selectOperatorInText.style.width = '30%';
-    selectOperatorInText.style.display = 'block';
+    selectOperatorInText = styleSelect(selectOperatorInText);
+    selectOperatorInText.style.height = '5%';
     operators.forEach(item => {
         var newOption = new Option(item, item.toUpperCase());
         selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
@@ -9352,19 +9509,25 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     }
 
     divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     divText.appendChild(nameVarInText);
     divText.appendChild(selectClassInText);
     divText.appendChild(selectOperatorInText);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "cycleUpdateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
+    nestedDiv.style.height = h*0.72+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -9413,36 +9576,45 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
-    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
     nameVarInBlockly.placeholder = "New variable";
 
     var selectClassInBlockly = document.createElement('select');
-    selectClassInBlockly.style.width = '100%';
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
     });
 
     var selectOperatorInBlockly = document.createElement('select');
-    selectOperatorInBlockly.style.width = '30%';
-    selectOperatorInBlockly.style.display = 'block';
+    selectOperatorInBlockly = styleSelect(selectOperatorInBlockly);
+    selectOperatorInBlockly.style.height = '5%';
     operators.forEach(item => {
         var newOption = new Option(item, item.toUpperCase());
         selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
     });
 
     divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     divBlockly.appendChild(nameVarInBlockly);
     divBlockly.appendChild(selectClassInBlockly);
     divBlockly.appendChild(selectOperatorInBlockly);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleCycleNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -9454,16 +9626,18 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
+    text.style.height = "90%";
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
@@ -9507,16 +9681,22 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     divText.appendChild(text);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "switchCaseUpdateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
+    nestedDiv.style.height = h*0.88+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -9544,14 +9724,21 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     divBlockly.appendChild(nestedDiv);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleSwitchCaseNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -9563,10 +9750,12 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
+    div.style.width = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '100%';
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
+    tbody.style.height = "100%";
     
     fillDataStart(tbody, cell, editorUi);
     table.appendChild(tbody);
@@ -9595,6 +9784,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         table.appendChild(newRow);
@@ -9602,8 +9792,13 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
 
 
     // Добавление кнопок в окно
-    div.appendChild(addClass);
-    div.appendChild(applyBtn);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    addClass = styleBtn(addClass);
+    applyBtn = styleBtn(applyBtn);
+    btnDiv.appendChild(addClass);
+    btnDiv.appendChild(applyBtn);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleStartEditorWindow"), div, x, y, w, h, true, true);
@@ -9641,6 +9836,7 @@ function fillDataStart(tbody, cell, editorUi) {
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
             });
+            btnDelRow = styleBtn(btnDelRow);
             tdDelRow.appendChild(btnDelRow);
             row.appendChild(tdDelRow);
         }
@@ -9662,7 +9858,7 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
     var tdName = document.createElement('td');
     var name = document.createElement('input');
     name.type = "text";
-    name.style.width = '100%';
+    name = styleInput(name);
     name.placeholder = "Value";
     name.value = cell.value.getAttribute('label');
     tdName.appendChild(name);
@@ -9684,14 +9880,18 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
         win.destroy();
     });
 
-    div.appendChild(btnCreateNode);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    btnCreateNode = styleBtn(btnCreateNode);
+    btnDiv.appendChild(btnCreateNode);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitlePredeterminingFactorsNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
-    this.window.setResizable(true);
+    this.window.setResizable(false);
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
@@ -9702,6 +9902,10 @@ var LogicNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var div = document.createElement('div');
     div.style.width = '300px';
     div.style.height = '150px';
+    div.style.display = "flex";
+    div.style.alignItems = "center";
+    div.style.gap = "5px";
+    div.style.justifyContent = "center";
 
     // Кнопка создания узла "AND"
     var btnCreateANDNode = mxUtils.button('And', function () {
@@ -9726,16 +9930,20 @@ var LogicNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         theGraph.refresh(); // update the graph
         win.destroy();
     });
-
+    btnCreateANDNode = styleBtn(btnCreateANDNode);
+    btnCreateANDNode.style.minWidth = "50%";
+    btnCreateORNode = styleBtn(btnCreateORNode);
+    btnCreateORNode.style.minWidth = "50%";
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleLogicNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
-    this.window.setResizable(true);
+    this.window.setResizable(false);
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
@@ -9749,9 +9957,10 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     var divText = document.createElement('div');
     var labelText = document.createElement('label');
     labelText.innerHTML = getTextByLocale("HumanReadableText");
+    labelText.style.fontSize = '20px';
     var text = document.createElement('input');
     text.type = "text";
-    text.style.width = '100%';
+    text = styleInput(text);
     text.placeholder = "Human-readable text";
     labelText.appendChild(text);
     divText.appendChild(labelText);
@@ -9763,11 +9972,28 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     let typeValue = "";
     if(typeof outNode.value == "object" && outNode.value.getAttribute('expression')) {
         let typeNode = getTypeFromCode(outNode.value.getAttribute('expression'), editorUi);
-        if(typeNode.type == "int") {
+        if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
+            let labelValue = document.createElement('label');
+            labelValue.innerHTML = getTextByLocale("value");
+            labelValue.style.fontSize = '20px';
+            let selectValue = document.createElement('select');
+            selectValue = styleSelect(selectValue);
+            selectValue.id = "value_input";
+            selectValue.style.width = '100%';
+            let values = ["Found", "Not found"];
+            values.forEach(item => {
+                var newOption = new Option(item, item);
+                selectValue.options[selectValue.options.length] = newOption;
+            });
+            labelValue.appendChild(selectValue);
+            divText.appendChild(labelValue);
+        } else if(typeNode.type == "int" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "int";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
+            labelType.style.fontSize = '20px';
             var numberInt = document.createElement('input');
+            numberInt = styleInput(numberInt);
             numberInt.id = "value_input";
             numberInt.type = "number";
             numberInt.style.width = '100%';
@@ -9780,7 +10006,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             typeValue = "bool";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
+            labelValue.style.fontSize = '20px';
             let selectValue = document.createElement('select');
+            selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
             let optionTrue = new Option("True", "True");
@@ -9789,11 +10017,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue.options[selectValue.options.length] = optionFalse;
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(typeNode.type == "class") {
+        } else if(typeNode.type == "class" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "class";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
+            labelValue.style.fontSize = '20px';
             let selectValue = document.createElement('select');
+            selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
             let jsonClasses = getClasses(editorUi);
@@ -9803,11 +10033,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             });
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(typeNode.type == "double") {
+        } else if(typeNode.type == "double" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "double";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
+            labelType.style.fontSize = '20px';
             var numberInt = document.createElement('input');
+            numberInt = styleInput(numberInt);
             numberInt.id = "value_input";
             numberInt.type = "number";
             numberInt.step = "0.01";
@@ -9817,22 +10049,26 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.style.width = '100%';
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
-        } else if(typeNode.type == "string") {
+        } else if(typeNode.type == "string" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "string";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
+            labelType.style.fontSize = '20px';
             var text = document.createElement('input');
+            text = styleInput(text);
             text.id = "value_input";
             text.type = "text";
             text.style.width = '100%';
             text.placeholder = "value string";
             labelType.appendChild(text);
             divText.appendChild(labelType);
-        } else if(typeNode.type == "enum") {
+        } else if(typeNode.type == "enum" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "enum";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
+            labelValue.style.fontSize = '20px';
             let selectValue = document.createElement('select');
+            selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
             let enumsList = getEnums(editorUi);
@@ -9847,26 +10083,15 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             }
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
-            let labelValue = document.createElement('label');
-            labelValue.innerHTML = getTextByLocale("value");
-            let selectValue = document.createElement('select');
-            selectValue.id = "value_input";
-            selectValue.style.width = '100%';
-            let values = ["Found", "Not found"];
-            values.forEach(item => {
-                var newOption = new Option(item, item);
-                selectValue.options[selectValue.options.length] = newOption;
-            });
-            labelValue.appendChild(selectValue);
-            divText.appendChild(labelValue);
         }
     }
 
     if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "START") {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
+        labelType.style.fontSize = '20px';
         let selectTypes = document.createElement('select');
+        selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
         let types = ["int", "bool", "double", "object", "enum"];
@@ -9879,7 +10104,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     } else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
+        labelType.style.fontSize = '20px';
         let selectTypes = document.createElement('select');
+        selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
         let types = ["predeterminingBranch", "undetermined"];
@@ -9892,7 +10119,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
+        labelType.style.fontSize = '20px';
         let selectTypes = document.createElement('select');
+        selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
         let types = ["Branch", "True", "False"];
@@ -9905,7 +10134,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
+        labelType.style.fontSize = '20px';
         let selectTypes = document.createElement('select');
+        selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
         let types = ["Body", "True", "False"];
@@ -9966,9 +10197,15 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         text.value = humanStr;
     });
 
-    divText.appendChild(btnSaveValueInOutcome);
-    divText.appendChild(btnGenerateTextInOutcome);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    btnDiv.style.marginTop = "10px";
+    addClass = styleBtn(btnSaveValueInOutcome);
+    applyBtn = styleBtn(btnGenerateTextInOutcome);
+    btnDiv.appendChild(btnSaveValueInOutcome);
+    btnDiv.appendChild(btnGenerateTextInOutcome);
     div.appendChild(divText);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleEditValueInOutcomeWindow"), div, x, y, w, h, true, true);
@@ -10032,9 +10269,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.fontSize = "30px";
-    text.style.width = "100%";
-    text.style.resize = "none";
+    text = styleTextAreaExp(text);
     text.style.height = "90%";
 
     // Кнопка создания узла
@@ -10086,15 +10321,10 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
     divText.appendChild(text);
     var btnTextDiv = document.createElement('div');
-    btnTextDiv.style.display = "flex";
-    btnTextDiv.style.gap = "5px";
+    btnTextDiv = styleDivBtn(btnTextDiv);
     btnTextDiv.style.height = "10%";
-    btnTextDiv.style.alignItems = "center";
-    btnTextDiv.style.justifyContent = "center";
-    btnCreateNodeInText.style.height = "50%";
-    btnCreateNodeInText.style.width = "50px";
-    btnSwitchToBlockly.style.height = "50%";
-    btnSwitchToBlockly.style.width = "150px";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     btnTextDiv.appendChild(btnCreateNodeInText);
     btnTextDiv.appendChild(btnSwitchToBlockly);
     divText.appendChild(btnTextDiv);
@@ -10104,8 +10334,8 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "branchResultCreateBlocklyDiv";
-    nestedDiv.style.width = w+'px';
-    nestedDiv.style.height = h*0.90+'px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
+    nestedDiv.style.height = h*0.88+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
@@ -10139,15 +10369,10 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
     divBlockly.appendChild(nestedDiv);
     var btnBlockDiv = document.createElement('div');
-    btnBlockDiv.style.display = "flex";
-    btnBlockDiv.style.gap = "5px";
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
     btnBlockDiv.style.height = "8%";
-    btnBlockDiv.style.alignItems = "center";
-    btnBlockDiv.style.justifyContent = "center";
-    btnCreateNodeInBlockly.style.height = "50%";
-    btnCreateNodeInBlockly.style.width = "50px";
-    btnSwitchToText.style.height = "50%";
-    btnSwitchToText.style.width = "150px";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     btnBlockDiv.appendChild(btnCreateNodeInBlockly);
     btnBlockDiv.appendChild(btnSwitchToText);
     divBlockly.appendChild(btnBlockDiv);
@@ -10169,15 +10394,17 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
+    text.style.height = "90%";
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
@@ -10219,16 +10446,22 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     divText.appendChild(text);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "branchResultUpdateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
+    nestedDiv.style.height = h*0.88+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -10253,14 +10486,21 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     });
 
     divBlockly.appendChild(nestedDiv);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleBranchResultNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);
@@ -10277,7 +10517,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     var divText = document.createElement('div');
-    divText.style.height = "500px";
+    divText.style.height = "450px";
     divText.style.overflow = "scroll";
 
     //_asNextStep
@@ -10353,8 +10593,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     btnDiv.style.alignItems = "center";
     btnDiv.style.justifyContent = "center";
 
-    btnSaveTextInNode.style.height = "50%";
-    btnSaveTextInNode.style.width = "50px";
+    btnSaveTextInNode = styleBtn(btnSaveTextInNode);
     btnDiv.appendChild(btnSaveTextInNode);
 
     div.appendChild(divText);
@@ -10385,7 +10624,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     // Верстка окна
     var div = document.createElement('div');
     var divText = document.createElement('div');
-    divText.style.height = "500px";
+    divText.style.height = "450px";
     divText.style.overflow = "scroll";
     let isThoughtBranch = typeof outNode.value == "object"
     && (outNode.value.getAttribute('type') == "START" 
@@ -10689,8 +10928,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     btnDiv.style.alignItems = "center";
     btnDiv.style.justifyContent = "center";
 
-    btnSaveTextInNode.style.height = "50%";
-    btnSaveTextInNode.style.width = "50px";
+    btnSaveTextInNode = styleBtn(btnSaveTextInNode);
     btnDiv.appendChild(btnSaveTextInNode);
 
     div.appendChild(divText);
@@ -11514,7 +11752,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
         if(!this.classConstructorWindow || !this.classConstructorWindow.window.content) {
-            this.classConstructorWindow = new ClassConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.classConstructorWindow = new ClassConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.classConstructorWindow.window.setVisible(true);
         }
     });
@@ -11522,7 +11760,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора блока со свойствами классов
     ui.actions.addAction('classPropertiesConstructor', function () {
         if(!this.classPropertiesConstructorWindow || !this.classPropertiesConstructorWindow.window.content) {
-            this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.classPropertiesConstructorWindow.window.setVisible(true);
         }
     });
@@ -11530,7 +11768,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора enum
     ui.actions.addAction('enumConstructor', function () {
         if(!this.enumConstructorWindow || !this.enumConstructorWindow.window.content) {
-            this.enumConstructorWindow = new EnumConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.enumConstructorWindow = new EnumConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.enumConstructorWindow.window.setVisible(true);
         }
     });
@@ -11538,7 +11776,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора блока с отношениями для классов
     ui.actions.addAction('relationshipsConstructor', function () {
         if(!this.relationshipsConstructorWindow || !this.relationshipsConstructorWindow.window.content) {
-            this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
+            this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.relationshipsConstructorWindow.window.setVisible(true);
         }
     });
@@ -11554,7 +11792,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на создание узла ИСТИНА
     ui.actions.addAction('TrueNodeCreate', function () {
         if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
-            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, true, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, true, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -11562,7 +11800,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на создание узла ЛОЖЬ
     ui.actions.addAction('FalseNodeCreate', function () {
         if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
-            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, false, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, false, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -11578,7 +11816,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на создание узла "Предрешающий фактор"
     ui.actions.addAction('PredeterminingFactorsNodeCreate', function () {
         if(!this.predeterminingFactorsNodeConstructorWindow || !this.predeterminingFactorsNodeConstructorWindow.window.content) {
-            this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
+            this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 150);
             this.predeterminingFactorsNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -11597,7 +11835,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов действия
     ui.actions.addAction('actionNodeConstructor', function () {
         if(!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
-            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.actionNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -11605,7 +11843,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов цикла
     ui.actions.addAction('cycleNodeConstructor', function () {
         if(!this.cycleNodeConstructorWindow || !this.cycleNodeConstructorWindow.window.content) {
-            this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
+            this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.cycleNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -11613,7 +11851,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов условия
     ui.actions.addAction('conditionNodeConstructor', function () {
         if(!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
-            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.conditionNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -11621,7 +11859,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов "switch case"
     ui.actions.addAction('switchCaseNodeConstructor', function () {
         if(!this.switchCaseNodeConstructorWindow || !this.switchCaseNodeConstructorWindow.window.content) {
-            this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.switchCaseNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -11701,22 +11939,22 @@ Draw.loadPlugin(function (ui) {
             if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
             && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
-                this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.conditionNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;"
             && (!this.actionNodeEditorWindow || !this.actionNodeEditorWindow.window.content)) {
-                this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
+                this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.actionNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('operator')
             && (!this.cycleNodeEditorWindow || !this.cycleNodeEditorWindow.window.content)) {
-                this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
+                this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.cycleNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;"
             && (!this.switchCaseNodeEditorWindow || !this.switchCaseNodeEditorWindow.window.content)) {
-                this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.switchCaseNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('type') == "START"
@@ -11726,45 +11964,45 @@ Draw.loadPlugin(function (ui) {
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('type') == "predetermining"
             && (!this.predeterminingFactorsNodeEditorWindow || !this.predeterminingFactorsNodeEditorWindow.window.content)) {
-                this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 600, 150);
                 this.predeterminingFactorsNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")
             && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
-                this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
                 this.logicNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
             && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
-                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
             && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
-                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
             && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
-                this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.classEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "string"
             && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
             && (!this.enumEditorWindow || !this.enumEditorWindow.window.content)) {
-                this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.enumEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "string"
             && selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
             && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
-                this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.classPropertiesEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
-                this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.relationshipsEditorWindow.window.setVisible(true);
             } else if(selectedcell.edge) {
-                this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 200);
                 this.editValueInOutcomeWindow.window.setVisible(true);
             }
         }

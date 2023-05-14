@@ -3,17 +3,19 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
     var divText = document.createElement('div');
+    divText.style.height = "100%";
     var divBlockly = document.createElement('div');
-
+    divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
     var operators = [ "And", "Or" ];
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.width = "100%";
-    text.style.height = "480px";
+    text = styleTextAreaExp(text);
+    text.style.height = "74%";
     text.value = cell.value.getAttribute('expression');
 
     // Кнопка создания узла
@@ -80,14 +82,16 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
-    nameVarInText.style.width = '100%';
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
     nameVarInText.placeholder = "New variable";
     nameVarInText.value = cell.value.getAttribute('nameVar');
 
     var jsonClasses = getClasses(editorUi);
 
     var selectClassInText = document.createElement('select');
-    selectClassInText.style.width = '100%';
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInText.options[selectClassInText.options.length] = newOption;
@@ -100,8 +104,8 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     }
 
     var selectOperatorInText = document.createElement('select');
-    selectOperatorInText.style.width = '30%';
-    selectOperatorInText.style.display = 'block';
+    selectOperatorInText = styleSelect(selectOperatorInText);
+    selectOperatorInText.style.height = '5%';
     operators.forEach(item => {
         var newOption = new Option(item, item.toUpperCase());
         selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
@@ -114,19 +118,25 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     }
 
     divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     divText.appendChild(nameVarInText);
     divText.appendChild(selectClassInText);
     divText.appendChild(selectOperatorInText);
-    divText.appendChild(btnCreateNodeInText);
-    divText.appendChild(btnSwitchToBlockly);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "cycleUpdateBlocklyDiv";
-    nestedDiv.style.width = '890px';
-    nestedDiv.style.height = '500px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
+    nestedDiv.style.height = h*0.72+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
@@ -175,36 +185,45 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
-    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
     nameVarInBlockly.placeholder = "New variable";
 
     var selectClassInBlockly = document.createElement('select');
-    selectClassInBlockly.style.width = '100%';
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
     });
 
     var selectOperatorInBlockly = document.createElement('select');
-    selectOperatorInBlockly.style.width = '30%';
-    selectOperatorInBlockly.style.display = 'block';
+    selectOperatorInBlockly = styleSelect(selectOperatorInBlockly);
+    selectOperatorInBlockly.style.height = '5%';
     operators.forEach(item => {
         var newOption = new Option(item, item.toUpperCase());
         selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
     });
 
     divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     divBlockly.appendChild(nameVarInBlockly);
     divBlockly.appendChild(selectClassInBlockly);
     divBlockly.appendChild(selectOperatorInBlockly);
-    divBlockly.appendChild(btnCreateNodeInBlockly);
-    divBlockly.appendChild(btnSwitchToText);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleCycleNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
+    this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
     this.window.setResizable(false);

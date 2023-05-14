@@ -12,7 +12,7 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
     var tdName = document.createElement('td');
     var name = document.createElement('input');
     name.type = "text";
-    name.style.width = '100%';
+    name = styleInput(name);
     name.placeholder = "Value";
     name.value = cell.value.getAttribute('label');
     tdName.appendChild(name);
@@ -34,14 +34,18 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
         win.destroy();
     });
 
-    div.appendChild(btnCreateNode);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    btnCreateNode = styleBtn(btnCreateNode);
+    btnDiv.appendChild(btnCreateNode);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitlePredeterminingFactorsNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.destroyOnClose = true;
     this.window.setMaximizable(false);
-    this.window.setResizable(true);
+    this.window.setResizable(false);
     this.window.setClosable(true);
     this.window.setVisible(true);
 };

@@ -3,10 +3,12 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
+    div.style.height = "100%";
+    div.style.width = "100%";
     var table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.height = '100%';
+    table = styleTable(table);
     var tbody = document.createElement('tbody');
+    tbody.style.height = "100%";
     
     var row = addRowStartNode(editorUi);
     tbody.appendChild(row);
@@ -41,6 +43,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
         var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
             evt.target.parentElement.parentElement.remove();
         });
+        btnDelRow = styleBtn(btnDelRow);
         tdDelRow.appendChild(btnDelRow);
         newRow.appendChild(tdDelRow);
         table.appendChild(newRow);
@@ -48,8 +51,13 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
 
     // Добавление кнопок в окно
-    div.appendChild(addClass);
-    div.appendChild(applyBtn);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    addClass = styleBtn(addClass);
+    applyBtn = styleBtn(applyBtn);
+    btnDiv.appendChild(addClass);
+    btnDiv.appendChild(applyBtn);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleStartConstructorWindow"), div, x, y, w, h, true, true);
@@ -67,13 +75,13 @@ function addRowStartNode(editorUi) {
     var td1 = document.createElement('td');
     var name = document.createElement('input');
     name.type = "text";
-    name.style.width = '100%';
+    name = styleInput(name);
     name.placeholder = "Variable name";
     td1.appendChild(name);
 
     var td2 = document.createElement('td');
     var selectClass = document.createElement('select');
-    selectClass.style.width = '100%';
+    selectClass = styleSelect(selectClass);
     var jsonClasses = getClasses(editorUi);
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);

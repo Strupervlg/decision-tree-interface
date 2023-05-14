@@ -13,9 +13,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.fontSize = "30px";
-    text.style.width = "100%";
-    text.style.resize = "none";
+    text = styleTextAreaExp(text);
     text.style.height = "90%";
 
     // Кнопка создания узла
@@ -67,15 +65,10 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
     divText.appendChild(text);
     var btnTextDiv = document.createElement('div');
-    btnTextDiv.style.display = "flex";
-    btnTextDiv.style.gap = "5px";
+    btnTextDiv = styleDivBtn(btnTextDiv);
     btnTextDiv.style.height = "10%";
-    btnTextDiv.style.alignItems = "center";
-    btnTextDiv.style.justifyContent = "center";
-    btnCreateNodeInText.style.height = "50%";
-    btnCreateNodeInText.style.width = "50px";
-    btnSwitchToBlockly.style.height = "50%";
-    btnSwitchToBlockly.style.width = "150px";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     btnTextDiv.appendChild(btnCreateNodeInText);
     btnTextDiv.appendChild(btnSwitchToBlockly);
     divText.appendChild(btnTextDiv);
@@ -85,8 +78,8 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "branchResultCreateBlocklyDiv";
-    nestedDiv.style.width = w+'px';
-    nestedDiv.style.height = h*0.90+'px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
+    nestedDiv.style.height = h*0.88+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
@@ -120,15 +113,10 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
 
     divBlockly.appendChild(nestedDiv);
     var btnBlockDiv = document.createElement('div');
-    btnBlockDiv.style.display = "flex";
-    btnBlockDiv.style.gap = "5px";
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
     btnBlockDiv.style.height = "8%";
-    btnBlockDiv.style.alignItems = "center";
-    btnBlockDiv.style.justifyContent = "center";
-    btnCreateNodeInBlockly.style.height = "50%";
-    btnCreateNodeInBlockly.style.width = "50px";
-    btnSwitchToText.style.height = "50%";
-    btnSwitchToText.style.width = "150px";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     btnBlockDiv.appendChild(btnCreateNodeInBlockly);
     btnBlockDiv.appendChild(btnSwitchToText);
     divBlockly.appendChild(btnBlockDiv);

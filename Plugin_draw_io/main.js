@@ -96,7 +96,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
         if(!this.classConstructorWindow || !this.classConstructorWindow.window.content) {
-            this.classConstructorWindow = new ClassConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.classConstructorWindow = new ClassConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.classConstructorWindow.window.setVisible(true);
         }
     });
@@ -104,7 +104,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора блока со свойствами классов
     ui.actions.addAction('classPropertiesConstructor', function () {
         if(!this.classPropertiesConstructorWindow || !this.classPropertiesConstructorWindow.window.content) {
-            this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.classPropertiesConstructorWindow.window.setVisible(true);
         }
     });
@@ -112,7 +112,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора enum
     ui.actions.addAction('enumConstructor', function () {
         if(!this.enumConstructorWindow || !this.enumConstructorWindow.window.content) {
-            this.enumConstructorWindow = new EnumConstructorWindow(ui, (document.body.offsetWidth - 480) / 2, 120, 420, 340);
+            this.enumConstructorWindow = new EnumConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.enumConstructorWindow.window.setVisible(true);
         }
     });
@@ -120,7 +120,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора блока с отношениями для классов
     ui.actions.addAction('relationshipsConstructor', function () {
         if(!this.relationshipsConstructorWindow || !this.relationshipsConstructorWindow.window.content) {
-            this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 820, 340);
+            this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.relationshipsConstructorWindow.window.setVisible(true);
         }
     });
@@ -136,7 +136,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на создание узла ИСТИНА
     ui.actions.addAction('TrueNodeCreate', function () {
         if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
-            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, true, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, true, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -144,7 +144,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на создание узла ЛОЖЬ
     ui.actions.addAction('FalseNodeCreate', function () {
         if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
-            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, false, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, false, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -160,7 +160,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на создание узла "Предрешающий фактор"
     ui.actions.addAction('PredeterminingFactorsNodeCreate', function () {
         if(!this.predeterminingFactorsNodeConstructorWindow || !this.predeterminingFactorsNodeConstructorWindow.window.content) {
-            this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 300);
+            this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 150);
             this.predeterminingFactorsNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -179,7 +179,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов действия
     ui.actions.addAction('actionNodeConstructor', function () {
         if(!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
-            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.actionNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -187,7 +187,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов цикла
     ui.actions.addAction('cycleNodeConstructor', function () {
         if(!this.cycleNodeConstructorWindow || !this.cycleNodeConstructorWindow.window.content) {
-            this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
+            this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.cycleNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -195,7 +195,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов условия
     ui.actions.addAction('conditionNodeConstructor', function () {
         if(!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
-            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+            this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.conditionNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -203,7 +203,7 @@ Draw.loadPlugin(function (ui) {
     // Действие на отоброжение конструктора узлов "switch case"
     ui.actions.addAction('switchCaseNodeConstructor', function () {
         if(!this.switchCaseNodeConstructorWindow || !this.switchCaseNodeConstructorWindow.window.content) {
-            this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+            this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.switchCaseNodeConstructorWindow.window.setVisible(true);
         }
     });
@@ -283,22 +283,22 @@ Draw.loadPlugin(function (ui) {
             if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
             && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
-                this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.conditionNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;"
             && (!this.actionNodeEditorWindow || !this.actionNodeEditorWindow.window.content)) {
-                this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 570);
+                this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.actionNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('operator')
             && (!this.cycleNodeEditorWindow || !this.cycleNodeEditorWindow.window.content)) {
-                this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 590);
+                this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.cycleNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;"
             && (!this.switchCaseNodeEditorWindow || !this.switchCaseNodeEditorWindow.window.content)) {
-                this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.switchCaseNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('type') == "START"
@@ -308,45 +308,45 @@ Draw.loadPlugin(function (ui) {
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('type') == "predetermining"
             && (!this.predeterminingFactorsNodeEditorWindow || !this.predeterminingFactorsNodeEditorWindow.window.content)) {
-                this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 600, 150);
                 this.predeterminingFactorsNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")
             && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
-                this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
                 this.logicNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
             && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
-                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
             && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
-                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft, document.body.offsetTop, window.screen.width - 100, window.screen.height - 200);
+                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
             && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
-                this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.classEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "string"
             && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
             && (!this.enumEditorWindow || !this.enumEditorWindow.window.content)) {
-                this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.enumEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "string"
             && selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
             && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
-                this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.classPropertiesEditorWindow.window.setVisible(true);
             } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
             && selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
             && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
-                this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.relationshipsEditorWindow.window.setVisible(true);
             } else if(selectedcell.edge) {
-                this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+                this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 200);
                 this.editValueInOutcomeWindow.window.setVisible(true);
             }
         }

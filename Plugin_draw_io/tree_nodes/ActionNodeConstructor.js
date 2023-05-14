@@ -8,16 +8,11 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     divText.style.height = "100%";
     var divBlockly = document.createElement('div');
     divBlockly.style.height = "100%";
-
     divBlockly.style.display = "none";
-
 
     //Экран с текстом
     var text = document.createElement('textarea');
-    text.style.fontSize = "30px";
-    text.style.width = "100%";
-    text.style.resize = "none";
-    text.style.height = "80%";
+    text = styleTextAreaExp(text);
 
     // Кнопка создания узла
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
@@ -82,17 +77,15 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     var nameVarInText = document.createElement('input');
     nameVarInText.type = "text";
-    nameVarInText.style.width = '100%';
+    nameVarInText = styleInput(nameVarInText);
     nameVarInText.style.height = '5%';
-    nameVarInText.style.fontSize = '20px';
     nameVarInText.placeholder = "New variable";
 
     var jsonClasses = getClasses(editorUi);
 
     var selectClassInText = document.createElement('select');
-    selectClassInText.style.width = '100%';
+    selectClassInText = styleSelect(selectClassInText);
     selectClassInText.style.height = '5%';
-    selectClassInText.style.fontSize = '20px';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInText.options[selectClassInText.options.length] = newOption;
@@ -100,15 +93,10 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divText.appendChild(text);
     var btnTextDiv = document.createElement('div');
-    btnTextDiv.style.display = "flex";
-    btnTextDiv.style.gap = "5px";
+    btnTextDiv = styleDivBtn(btnTextDiv);
     btnTextDiv.style.height = "10%";
-    btnTextDiv.style.alignItems = "center";
-    btnTextDiv.style.justifyContent = "center";
-    btnCreateNodeInText.style.height = "50%";
-    btnCreateNodeInText.style.width = "50px";
-    btnSwitchToBlockly.style.height = "50%";
-    btnSwitchToBlockly.style.width = "150px";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     divText.appendChild(nameVarInText);
     divText.appendChild(selectClassInText);
     btnTextDiv.appendChild(btnCreateNodeInText);
@@ -120,8 +108,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "actionCreateBlocklyDiv";
-    nestedDiv.style.width = w+'px';
-    nestedDiv.style.height = h*0.80+'px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
@@ -170,15 +157,13 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     var nameVarInBlockly = document.createElement('input');
     nameVarInBlockly.type = "text";
-    nameVarInBlockly.style.width = '100%';
+    nameVarInBlockly = styleInput(nameVarInBlockly);
     nameVarInBlockly.style.height = '5%';
-    nameVarInBlockly.style.fontSize = '20px';
     nameVarInBlockly.placeholder = "New variable";
 
     var selectClassInBlockly = document.createElement('select');
-    selectClassInBlockly.style.width = '100%';
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
     selectClassInBlockly.style.height = '5%';
-    selectClassInBlockly.style.fontSize = '20px';
     jsonClasses.forEach(classItem => {
         var newOption = new Option(classItem.name, classItem.name);
         selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
@@ -186,15 +171,10 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     divBlockly.appendChild(nestedDiv);
     var btnBlockDiv = document.createElement('div');
-    btnBlockDiv.style.display = "flex";
-    btnBlockDiv.style.gap = "5px";
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
     btnBlockDiv.style.height = "8%";
-    btnBlockDiv.style.alignItems = "center";
-    btnBlockDiv.style.justifyContent = "center";
-    btnCreateNodeInBlockly.style.height = "50%";
-    btnCreateNodeInBlockly.style.width = "50px";
-    btnSwitchToText.style.height = "50%";
-    btnSwitchToText.style.width = "150px";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
     divBlockly.appendChild(nameVarInBlockly);
     divBlockly.appendChild(selectClassInBlockly);
     btnBlockDiv.appendChild(btnCreateNodeInBlockly);

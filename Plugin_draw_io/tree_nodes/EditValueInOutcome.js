@@ -8,9 +8,10 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     var divText = document.createElement('div');
     var labelText = document.createElement('label');
     labelText.innerHTML = getTextByLocale("HumanReadableText");
+    labelText.style.fontSize = '20px';
     var text = document.createElement('input');
     text.type = "text";
-    text.style.width = '100%';
+    text = styleInput(text);
     text.placeholder = "Human-readable text";
     labelText.appendChild(text);
     divText.appendChild(labelText);
@@ -22,11 +23,28 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     let typeValue = "";
     if(typeof outNode.value == "object" && outNode.value.getAttribute('expression')) {
         let typeNode = getTypeFromCode(outNode.value.getAttribute('expression'), editorUi);
-        if(typeNode.type == "int") {
+        if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
+            let labelValue = document.createElement('label');
+            labelValue.innerHTML = getTextByLocale("value");
+            labelValue.style.fontSize = '20px';
+            let selectValue = document.createElement('select');
+            selectValue = styleSelect(selectValue);
+            selectValue.id = "value_input";
+            selectValue.style.width = '100%';
+            let values = ["Found", "Not found"];
+            values.forEach(item => {
+                var newOption = new Option(item, item);
+                selectValue.options[selectValue.options.length] = newOption;
+            });
+            labelValue.appendChild(selectValue);
+            divText.appendChild(labelValue);
+        } else if(typeNode.type == "int" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "int";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
+            labelType.style.fontSize = '20px';
             var numberInt = document.createElement('input');
+            numberInt = styleInput(numberInt);
             numberInt.id = "value_input";
             numberInt.type = "number";
             numberInt.style.width = '100%';
@@ -39,7 +57,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             typeValue = "bool";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
+            labelValue.style.fontSize = '20px';
             let selectValue = document.createElement('select');
+            selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
             let optionTrue = new Option("True", "True");
@@ -48,11 +68,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue.options[selectValue.options.length] = optionFalse;
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(typeNode.type == "class") {
+        } else if(typeNode.type == "class" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "class";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
+            labelValue.style.fontSize = '20px';
             let selectValue = document.createElement('select');
+            selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
             let jsonClasses = getClasses(editorUi);
@@ -62,11 +84,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             });
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(typeNode.type == "double") {
+        } else if(typeNode.type == "double" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "double";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
+            labelType.style.fontSize = '20px';
             var numberInt = document.createElement('input');
+            numberInt = styleInput(numberInt);
             numberInt.id = "value_input";
             numberInt.type = "number";
             numberInt.step = "0.01";
@@ -76,22 +100,26 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.style.width = '100%';
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
-        } else if(typeNode.type == "string") {
+        } else if(typeNode.type == "string" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "string";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
+            labelType.style.fontSize = '20px';
             var text = document.createElement('input');
+            text = styleInput(text);
             text.id = "value_input";
             text.type = "text";
             text.style.width = '100%';
             text.placeholder = "value string";
             labelType.appendChild(text);
             divText.appendChild(labelType);
-        } else if(typeNode.type == "enum") {
+        } else if(typeNode.type == "enum" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "enum";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
+            labelValue.style.fontSize = '20px';
             let selectValue = document.createElement('select');
+            selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
             let enumsList = getEnums(editorUi);
@@ -106,26 +134,15 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             }
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
-            let labelValue = document.createElement('label');
-            labelValue.innerHTML = getTextByLocale("value");
-            let selectValue = document.createElement('select');
-            selectValue.id = "value_input";
-            selectValue.style.width = '100%';
-            let values = ["Found", "Not found"];
-            values.forEach(item => {
-                var newOption = new Option(item, item);
-                selectValue.options[selectValue.options.length] = newOption;
-            });
-            labelValue.appendChild(selectValue);
-            divText.appendChild(labelValue);
         }
     }
 
     if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "START") {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
+        labelType.style.fontSize = '20px';
         let selectTypes = document.createElement('select');
+        selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
         let types = ["int", "bool", "double", "object", "enum"];
@@ -138,7 +155,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     } else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
+        labelType.style.fontSize = '20px';
         let selectTypes = document.createElement('select');
+        selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
         let types = ["predeterminingBranch", "undetermined"];
@@ -151,7 +170,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
+        labelType.style.fontSize = '20px';
         let selectTypes = document.createElement('select');
+        selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
         let types = ["Branch", "True", "False"];
@@ -164,7 +185,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
+        labelType.style.fontSize = '20px';
         let selectTypes = document.createElement('select');
+        selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
         let types = ["Body", "True", "False"];
@@ -225,9 +248,15 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         text.value = humanStr;
     });
 
-    divText.appendChild(btnSaveValueInOutcome);
-    divText.appendChild(btnGenerateTextInOutcome);
+    var btnDiv = document.createElement('div');
+    btnDiv = styleDivBtn(btnDiv);
+    btnDiv.style.marginTop = "10px";
+    addClass = styleBtn(btnSaveValueInOutcome);
+    applyBtn = styleBtn(btnGenerateTextInOutcome);
+    btnDiv.appendChild(btnSaveValueInOutcome);
+    btnDiv.appendChild(btnGenerateTextInOutcome);
     div.appendChild(divText);
+    div.appendChild(btnDiv);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleEditValueInOutcomeWindow"), div, x, y, w, h, true, true);
