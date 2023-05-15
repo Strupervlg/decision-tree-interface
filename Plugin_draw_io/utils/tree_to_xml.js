@@ -113,7 +113,11 @@ function switchCaseNodes(node, editorUi, isPredetermining)
 }
 
 function branchResultNodeToXml(node, resultBranch) {
-    let result = '<BranchResultNode value="'+resultBranch+'">\n';
+    let alias = "";
+    if(node.value.getAttribute("label")) {
+        alias = 'alias="'+node.value.getAttribute("label")+'"';
+    }
+    let result = '<BranchResultNode '+alias+' value="'+resultBranch+'">\n';
 
     if(node.value.getAttribute("expression") != "") {
         result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
@@ -125,8 +129,12 @@ function branchResultNodeToXml(node, resultBranch) {
 
 function questionNodeToXml(node, isSwitch, editorUi, isPredetermining)
 {
+    let alias = "";
+    if(node.value.getAttribute("label")) {
+        alias = 'alias="'+node.value.getAttribute("label")+'"';
+    }
     let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<QuestionNode type="'+specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type)+'" isSwitch="'+isSwitch+'"'+questionInfo+'>\n';
+    let result = '<QuestionNode '+alias+' type="'+specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type)+'" isSwitch="'+isSwitch+'"'+questionInfo+'>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
@@ -139,8 +147,12 @@ function questionNodeToXml(node, isSwitch, editorUi, isPredetermining)
 
 function actionNodeToXml(node, editorUi, isPredetermining)
 {
+    let alias = "";
+    if(node.value.getAttribute("label")) {
+        alias = 'alias="'+node.value.getAttribute("label")+'"';
+    }
     let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<FindActionNode'+questionInfo+'>\n';
+    let result = '<FindActionNode '+alias+''+questionInfo+'>\n';
 
     result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
 
@@ -158,8 +170,12 @@ function actionNodeToXml(node, editorUi, isPredetermining)
 
 function cycleNodeToXml(node, editorUi, isPredetermining)
 {
+    let alias = "";
+    if(node.value.getAttribute("label")) {
+        alias = 'alias="'+node.value.getAttribute("label")+'"';
+    }
     let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<CycleAggregationNode operator="'+node.value.getAttribute("operator")+'"'+questionInfo+'>\n';
+    let result = '<CycleAggregationNode '+alias+' operator="'+node.value.getAttribute("operator")+'"'+questionInfo+'>\n';
 
     result += "<SelectorExpression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</SelectorExpression>\n";
 
@@ -222,8 +238,12 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
 
 function logicNodeToXml(node, editorUi, isPredetermining)
 {
+    let alias = "";
+    if(node.value.getAttribute("label")) {
+        alias = 'alias="'+node.value.getAttribute("label")+'"';
+    }
     let questionInfo = getQuestionInfoNode(node, true);
-    let result = '<LogicAggregationNode operator="'+node.value.getAttribute("type").toLowerCase()+'"'+questionInfo+'>\n';
+    let result = '<LogicAggregationNode '+alias+' operator="'+node.value.getAttribute("type").toLowerCase()+'"'+questionInfo+'>\n';
 
     let branchCount = 0;
     let trueCount = 0;
@@ -280,8 +300,12 @@ function logicNodeToXml(node, editorUi, isPredetermining)
 
 function predeterminingNodeToXml(node, editorUi)
 {
+    let alias = "";
+    if(node.value.getAttribute("label")) {
+        alias = 'alias="'+node.value.getAttribute("label")+'"';
+    }
     let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<PredeterminingFactorsNode'+questionInfo+'>\n';
+    let result = '<PredeterminingFactorsNode '+alias+''+questionInfo+'>\n';
 
     //Следующие ветки
     let predCount = 0;
