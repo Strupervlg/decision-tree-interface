@@ -115,6 +115,7 @@
             </xsl:attribute>
             <xsl:apply-templates select="value[@name='object']" />
             <xsl:apply-templates select="value[@name='relationship']" />
+            <xsl:apply-templates select="value[@name='boolean']" />
         </GetByRelationship>
     </xsl:template>
 
