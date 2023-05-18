@@ -117,7 +117,11 @@ function branchResultNodeToXml(node, resultBranch) {
     if(node.value.getAttribute("label")) {
         alias = 'alias="'+node.value.getAttribute("label")+'"';
     }
-    let result = '<BranchResultNode '+alias+' value="'+resultBranch+'">\n';
+    let pattern = "";
+    if(node.value.getAttribute("pattern")) {
+        pattern = '_pattern="'+node.value.getAttribute("pattern")+'"';
+    }
+    let result = '<BranchResultNode '+alias+pattern+' value="'+resultBranch+'">\n';
 
     if(node.value.getAttribute("expression") != "") {
         result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";

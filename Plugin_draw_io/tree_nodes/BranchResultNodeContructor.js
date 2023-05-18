@@ -14,12 +14,13 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     //Экран с текстом
     var text = document.createElement('textarea');
     text = styleTextAreaExp(text);
-    text.style.height = "90%";
+    text.style.height = "85%";
 
     // Кнопка создания узла
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
+        var pattern = patternVarInText.value;
         if(expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
@@ -40,6 +41,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', expression);
+            theGraph.setAttributeForCell(newElement, 'pattern', pattern);
         }
         win.destroy();
     });
@@ -52,6 +54,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
         if(expression) {
             parser.parse(expression)
         }
+        patternVarInBlockly.value = patternVarInText.value;
         divText.style.display = "none";
         divBlockly.style.display = "block";
         nestedDiv.innerHTML = "";
@@ -63,6 +66,12 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
         }
     });
 
+    var patternVarInText = document.createElement('input');
+    patternVarInText.type = "text";
+    patternVarInText = styleInput(patternVarInText);
+    patternVarInText.style.height = '5%';
+    patternVarInText.placeholder = "Pattern";
+
     divText.appendChild(text);
     var btnTextDiv = document.createElement('div');
     btnTextDiv = styleDivBtn(btnTextDiv);
@@ -71,6 +80,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
     btnTextDiv.appendChild(btnCreateNodeInText);
     btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(patternVarInText);
     divText.appendChild(btnTextDiv);
     div.appendChild(divText);
 
@@ -78,13 +88,13 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     //Экран с blockly
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "branchResultCreateBlocklyDiv";
-    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
-    nestedDiv.style.height = h*0.88+'px';
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
+    nestedDiv.style.height = h*0.83+'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
-        
+        var pattern = patternVarInBlockly.value;
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
@@ -99,6 +109,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
             theGraph.setAttributeForCell(newElement, 'expression', code);
+            theGraph.setAttributeForCell(newElement, 'pattern', pattern);
         }
         win.destroy();
     });
@@ -106,10 +117,17 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     //кнопка переключения на текстовый вариант
     var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
         var code = generateCode(workspace);
+        patternVarInText.value = patternVarInBlockly.value;
         divBlockly.style.display = "none";
         divText.style.display = "block";
         divText.getElementsByTagName("textarea").item(0).value = code;
     });
+
+    var patternVarInBlockly = document.createElement('input');
+    patternVarInBlockly.type = "text";
+    patternVarInBlockly = styleInput(patternVarInBlockly);
+    patternVarInBlockly.style.height = '5%';
+    patternVarInBlockly.placeholder = "Pattern";
 
     divBlockly.appendChild(nestedDiv);
     var btnBlockDiv = document.createElement('div');
@@ -119,6 +137,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     btnSwitchToText = styleBtn(btnSwitchToText);
     btnBlockDiv.appendChild(btnCreateNodeInBlockly);
     btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(patternVarInBlockly);
     divBlockly.appendChild(btnBlockDiv);
     div.appendChild(divBlockly);
 
