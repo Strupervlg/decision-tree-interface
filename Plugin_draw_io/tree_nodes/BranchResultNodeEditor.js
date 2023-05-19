@@ -88,6 +88,13 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
         var pattern = patternVarInBlockly.value;
+        if(code) {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
+        }
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();

@@ -47,10 +47,12 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt = styleInput(numberInt);
             numberInt.id = "value_input";
             numberInt.type = "number";
+            if(typeNode.range) {
+                let ranges = typeNode.range.split('-')
+                numberInt.min = ranges[0];
+                numberInt.max = ranges[1];
+            }
             numberInt.style.width = '100%';
-            let ranges = typeNode.range.split('-')
-            numberInt.min = ranges[0];
-            numberInt.max = ranges[1];
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
         } else if(typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
@@ -94,9 +96,11 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.id = "value_input";
             numberInt.type = "number";
             numberInt.step = "0.01";
-            let ranges = typeNode.range.split('-')
-            numberInt.min = ranges[0];
-            numberInt.max = ranges[1];
+            if(typeNode.range) {
+                let ranges = typeNode.range.split('-')
+                numberInt.min = ranges[0];
+                numberInt.max = ranges[1];
+            }
             numberInt.style.width = '100%';
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
@@ -105,13 +109,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
             labelType.style.fontSize = '20px';
-            var text = document.createElement('input');
-            text = styleInput(text);
-            text.id = "value_input";
-            text.type = "text";
-            text.style.width = '100%';
-            text.placeholder = "value string";
-            labelType.appendChild(text);
+            var textValue = document.createElement('input');
+            textValue = styleInput(textValue);
+            textValue.id = "value_input";
+            textValue.type = "text";
+            textValue.style.width = '100%';
+            textValue.placeholder = "value string";
+            labelType.appendChild(textValue);
             divText.appendChild(labelType);
         } else if(typeNode.type == "enum" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "enum";
@@ -134,6 +138,8 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             }
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
+        } else if(typeNode.type == "assign" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+            throw new Error(getTextByLocale("AssignInNode"));
         }
     }
 
@@ -242,7 +248,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             humanStr = getTextFromValueInOutcome(valSelect);
         } else if(vin != null && vin.tagName == "INPUT") {
             humanStr = getTextFromValueInOutcome(vin.value);
-        } else if(vin == null && typeof cell.source.value == "object" && cell.source.value.getAttribute('type') != "START") {
+        } else if(vin == null && typeof cell.source.value == "object" && cell.source.value.getAttribute('type') != "START" && typeSelect) {
             humanStr = typeSelect.options[typeSelect.options.selectedIndex].value;
         }
         text.value = humanStr;

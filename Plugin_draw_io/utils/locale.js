@@ -158,6 +158,8 @@ const RU_TEXT = {
     "moreBlocksInWorkspace": 'В рабочей области имеется более одного блока',
     "propertyIsMissingInDict": 'Свойство %propertyName не существует в словаре',
     "hasCycleInTree": "В графе присутствуют циклы!",
+    "AssignInNode": "В исходном узле не может содержаться присвоение!",
+    "EmptyConnection": "Имеются пустые отверстия!",
 };
 
 const EN_TEXT = {
@@ -312,4 +314,6 @@ const EN_TEXT = {
     "moreBlocksInWorkspace": 'There is more than one block in the workspace',
     "propertyIsMissingInDict": 'Property %propertyName does not exist in the dictionary',
     "hasCycleInTree": "There are cycles in the graph!",
+    "AssignInNode": "The source node cannot contain an assignment!",
+    "EmptyConnection": "There are empty connection!",
 };
