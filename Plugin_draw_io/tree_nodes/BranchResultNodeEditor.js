@@ -75,7 +75,13 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
-        
+        if(code) {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
+        }
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();

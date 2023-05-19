@@ -133,6 +133,12 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         error = "";
         if(!nameVarInBlockly.value) {

@@ -159,6 +159,7 @@ const RU_TEXT = {
     "propertyIsMissingInDict": 'Свойство %propertyName не существует в словаре',
     "hasCycleInTree": "В графе присутствуют циклы!",
     "AssignInNode": "В исходном узле не может содержаться присвоение!",
+    "EmptyConnection": "Имеются пустые отверстия!",
 };
 
 const EN_TEXT = {
@@ -314,6 +315,7 @@ const EN_TEXT = {
     "propertyIsMissingInDict": 'Property %propertyName does not exist in the dictionary',
     "hasCycleInTree": "There are cycles in the graph!",
     "AssignInNode": "The source node cannot contain an assignment!",
+    "EmptyConnection": "There are empty connection!",
 };
 function styleTable(table) {
     table.style.width = '100%';
@@ -1082,6 +1084,12 @@ var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         
         var theGraph = editorUi.editor.graph;
@@ -3344,6 +3352,12 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         error = "";
         if(!nameVarInBlockly.value) {
@@ -8599,6 +8613,12 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         
         var theGraph = editorUi.editor.graph;
@@ -8779,6 +8799,12 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         error = "";
         if(!nameVarInBlockly.value) {
@@ -9153,6 +9179,12 @@ var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         
         var theGraph = editorUi.editor.graph;
@@ -9317,6 +9349,12 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         error = "";
         if(!nameVarInBlockly.value) {
@@ -9537,6 +9575,12 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         error = "";
         if(!nameVarInBlockly.value) {
@@ -9706,6 +9750,12 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         var code = generateCode(workspace);
         if(!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
         }
         
         var theGraph = editorUi.editor.graph;
@@ -10349,7 +10399,13 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
-        
+        if(code) {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
+        }
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
@@ -10475,7 +10531,13 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
-        
+        if(code) {
+            try { 
+                parser.parse(code);
+            } catch(e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
+        }
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
