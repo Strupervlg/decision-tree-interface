@@ -9997,10 +9997,12 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt = styleInput(numberInt);
             numberInt.id = "value_input";
             numberInt.type = "number";
+            if(typeNode.range) {
+                let ranges = typeNode.range.split('-')
+                numberInt.min = ranges[0];
+                numberInt.max = ranges[1];
+            }
             numberInt.style.width = '100%';
-            let ranges = typeNode.range.split('-')
-            numberInt.min = ranges[0];
-            numberInt.max = ranges[1];
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
         } else if(typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
@@ -10044,9 +10046,11 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.id = "value_input";
             numberInt.type = "number";
             numberInt.step = "0.01";
-            let ranges = typeNode.range.split('-')
-            numberInt.min = ranges[0];
-            numberInt.max = ranges[1];
+            if(typeNode.range) {
+                let ranges = typeNode.range.split('-')
+                numberInt.min = ranges[0];
+                numberInt.max = ranges[1];
+            }
             numberInt.style.width = '100%';
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
