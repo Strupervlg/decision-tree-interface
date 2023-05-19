@@ -100,6 +100,8 @@ function getTypeFromCode(code, editorUi) {
     } else if(obj.type == SemanticType.COMPARISON_RESULT) {
         obj.enum = "comparisonResult";
         obj.type = "enum";
+    } else if(obj.type == SemanticType.ENUM && root.stmt.firstExpr.type == ExprType.ENUM) {
+        obj.enum = root.stmt.firstExpr.ident;
     }
     return obj;
 }
