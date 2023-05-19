@@ -115,7 +115,7 @@ function switchCaseNodes(node, editorUi, isPredetermining)
 function branchResultNodeToXml(node, resultBranch) {
     let alias = "";
     if(node.value.getAttribute("label")) {
-        alias = 'alias="'+node.value.getAttribute("label")+'"';
+        alias = '_alias="'+node.value.getAttribute("label")+'"';
     }
     let result = '<BranchResultNode '+alias+' value="'+resultBranch+'">\n';
 
@@ -131,7 +131,7 @@ function questionNodeToXml(node, isSwitch, editorUi, isPredetermining)
 {
     let alias = "";
     if(node.value.getAttribute("label")) {
-        alias = 'alias="'+node.value.getAttribute("label")+'"';
+        alias = '_alias="'+node.value.getAttribute("label")+'"';
     }
     let questionInfo = getQuestionInfoNode(node, false);
     let result = '<QuestionNode '+alias+' type="'+specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type)+'" isSwitch="'+isSwitch+'"'+questionInfo+'>\n';
@@ -149,7 +149,7 @@ function actionNodeToXml(node, editorUi, isPredetermining)
 {
     let alias = "";
     if(node.value.getAttribute("label")) {
-        alias = 'alias="'+node.value.getAttribute("label")+'"';
+        alias = '_alias="'+node.value.getAttribute("label")+'"';
     }
     let questionInfo = getQuestionInfoNode(node, false);
     let result = '<FindActionNode '+alias+''+questionInfo+'>\n';
@@ -172,7 +172,7 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
 {
     let alias = "";
     if(node.value.getAttribute("label")) {
-        alias = 'alias="'+node.value.getAttribute("label")+'"';
+        alias = '_alias="'+node.value.getAttribute("label")+'"';
     }
     let questionInfo = getQuestionInfoNode(node, false);
     let result = '<CycleAggregationNode '+alias+' operator="'+node.value.getAttribute("operator")+'"'+questionInfo+'>\n';
@@ -240,7 +240,7 @@ function logicNodeToXml(node, editorUi, isPredetermining)
 {
     let alias = "";
     if(node.value.getAttribute("label")) {
-        alias = 'alias="'+node.value.getAttribute("label")+'"';
+        alias = '_alias="'+node.value.getAttribute("label")+'"';
     }
     let questionInfo = getQuestionInfoNode(node, true);
     let result = '<LogicAggregationNode '+alias+' operator="'+node.value.getAttribute("type").toLowerCase()+'"'+questionInfo+'>\n';
@@ -302,7 +302,7 @@ function predeterminingNodeToXml(node, editorUi)
 {
     let alias = "";
     if(node.value.getAttribute("label")) {
-        alias = 'alias="'+node.value.getAttribute("label")+'"';
+        alias = '_alias="'+node.value.getAttribute("label")+'"';
     }
     let questionInfo = getQuestionInfoNode(node, false);
     let result = '<PredeterminingFactorsNode '+alias+''+questionInfo+'>\n';
