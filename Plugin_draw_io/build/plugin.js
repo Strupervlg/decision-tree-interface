@@ -10055,13 +10055,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
             labelType.style.fontSize = '20px';
-            var text = document.createElement('input');
-            text = styleInput(text);
-            text.id = "value_input";
-            text.type = "text";
-            text.style.width = '100%';
-            text.placeholder = "value string";
-            labelType.appendChild(text);
+            var textValue = document.createElement('input');
+            textValue = styleInput(textValue);
+            textValue.id = "value_input";
+            textValue.type = "text";
+            textValue.style.width = '100%';
+            textValue.placeholder = "value string";
+            labelType.appendChild(textValue);
             divText.appendChild(labelType);
         } else if(typeNode.type == "enum" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
             typeValue = "enum";
