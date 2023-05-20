@@ -161,6 +161,7 @@ const RU_TEXT = {
     "AssignInNode": "В исходном узле не может содержаться присвоение!",
     "EmptyConnection": "Имеются пустые отверстия!",
     "StartNodeIsTarget": "В начальный узел входит ветка!",
+    "TargetNodeIsMissing": "Отсутствует конечный узел!",
 };
 
 const EN_TEXT = {
@@ -318,4 +319,5 @@ const EN_TEXT = {
     "AssignInNode": "The source node cannot contain an assignment!",
     "EmptyConnection": "There are empty connection!",
     "StartNodeIsTarget": "The starting node consists of a branch!",
+    "TargetNodeIsMissing": "There is no target node!",
 };

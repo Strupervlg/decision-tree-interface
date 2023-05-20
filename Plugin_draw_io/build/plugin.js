@@ -161,6 +161,7 @@ const RU_TEXT = {
     "AssignInNode": "В исходном узле не может содержаться присвоение!",
     "EmptyConnection": "Имеются пустые отверстия!",
     "StartNodeIsTarget": "В начальный узел входит ветка!",
+    "TargetNodeIsMissing": "Отсутствует конечный узел!",
 };
 
 const EN_TEXT = {
@@ -318,6 +319,7 @@ const EN_TEXT = {
     "AssignInNode": "The source node cannot contain an assignment!",
     "EmptyConnection": "There are empty connection!",
     "StartNodeIsTarget": "The starting node consists of a branch!",
+    "TargetNodeIsMissing": "There is no target node!",
 };
 function styleTable(table) {
     table.style.width = '100%';
@@ -11035,7 +11037,7 @@ function treeToXml(editorUi)
         
         if (node.value != null && typeof node.value == "object" && node.value.getAttribute("type") == "START") {
             countStartNode++;
-            CheckCycleInTree(node);
+            CheckCycleInTree(node, editorUi);
             result += startNodeToXml(node, editorUi);
             return;
         }
@@ -11716,13 +11718,13 @@ function getTextFromValueInOutcome(value) {
     }
 }
 
-function CheckCycleInTree(startNode) {
-    if(hasCycle(startNode)) {
+function CheckCycleInTree(startNode, editorUi) {
+    if(hasCycle(startNode, editorUi)) {
         throw new Error(getTextByLocale("hasCycleInTree"));
     }
 }
 
-function hasCycle(root) {
+function hasCycle(root, editorUi) {
     const visited = new Set(); // Список посещенных узлов
   
     function dfs(node) {
@@ -11734,6 +11736,10 @@ function hasCycle(root) {
       // Рекурсивно обходим потомков текущего узла
       for(let i = 0; i < node.edges.length; i++) {
         let child = node.edges[i].target;
+        if(!child) {
+            markOutcome(editorUi.editor.graph, node.edges[i])
+            throw new Error(getTextByLocale("TargetNodeIsMissing"));
+        }
         if (child != node && dfs(child)) {
             return true; // Найден цикл
         }
