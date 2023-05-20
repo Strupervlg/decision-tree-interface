@@ -29,6 +29,9 @@ function startNodeToXml(startNode, editorUi)
     result += '</InputVariables>\n';
     if(startNode.edges) {
         for(let i = 0; i < startNode.edges.length; i++) {
+            if(startNode.edges[i].target == startNode) {
+                throw new Error(getTextByLocale("StartNodeIsTarget"));
+            }
             if(startNode.edges[i].value == null || typeof startNode.edges[i].value != "object" || !startNode.edges[i].value.getAttribute("type")) {
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
                 throw new Error(getTextByLocale("typeOutcomeStartNodeIsMissing"));

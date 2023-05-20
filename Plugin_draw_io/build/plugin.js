@@ -160,6 +160,8 @@ const RU_TEXT = {
     "hasCycleInTree": "В графе присутствуют циклы!",
     "AssignInNode": "В исходном узле не может содержаться присвоение!",
     "EmptyConnection": "Имеются пустые отверстия!",
+    "StartNodeIsTarget": "В начальный узел входит ветка!",
+    "TargetNodeIsMissing": "Отсутствует конечный узел!",
 };
 
 const EN_TEXT = {
@@ -316,6 +318,8 @@ const EN_TEXT = {
     "hasCycleInTree": "There are cycles in the graph!",
     "AssignInNode": "The source node cannot contain an assignment!",
     "EmptyConnection": "There are empty connection!",
+    "StartNodeIsTarget": "The starting node consists of a branch!",
+    "TargetNodeIsMissing": "There is no target node!",
 };
 function styleTable(table) {
     table.style.width = '100%';
@@ -3505,17 +3509,19 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка открытия окна с блокли для выражений
     var openBlockly = mxUtils.button(getTextByLocale("OpenBlockly"), function () {
+        var widthBlockly = window.screen.width - 400;
+        var heightBlockly = window.screen.height - 300
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
         divBlockly.id = 'classCreateBlocklyDiv'
-        divBlockly.style.width = '850px';
-        divBlockly.style.height = '500px';
+        divBlockly.style.width = widthBlockly+'px';
+        divBlockly.style.height = heightBlockly*0.83+'px';
         mainDivBlockly.appendChild(divBlockly);
         
         var divInput = document.createElement('div');
-        divInput.style.width = '850px';
+        divInput.style.width = '100%';
         var codeInput = document.createElement('input');
-        codeInput.style.width = '100%';
+        codeInput = styleInput(codeInput);
         codeInput.id = 'outputCode';
 
         divInput.appendChild(codeInput);
@@ -3525,10 +3531,14 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
             let code = Blockly.JavaScript.workspaceToCode(workspaceInWindow);
             codeInput.value = code;
         });
+        var btnDivBlockly = document.createElement('div');
+        btnDivBlockly = styleDivBtn(btnDivBlockly);
+        toCodeBtn = styleBtn(toCodeBtn);
+        toCodeBtn.style.marginTop = "5px";
+        btnDivBlockly.appendChild(toCodeBtn);
+        mainDivBlockly.appendChild(btnDivBlockly);
 
-        mainDivBlockly.appendChild(toCodeBtn);  
-
-        this.window2 = new mxWindow('Blockly', mainDivBlockly, (document.body.offsetWidth - 880) / 2, 120, 900, 580, true, true);
+        this.window2 = new mxWindow('Blockly', mainDivBlockly, document.body.offsetLeft + 100, document.body.offsetTop + 100, widthBlockly, heightBlockly, true, true);
         this.window2.destroyOnClose = true;
         this.window2.setMaximizable(false);
         this.window2.setResizable(false);
@@ -11087,6 +11097,9 @@ function startNodeToXml(startNode, editorUi)
     result += '</InputVariables>\n';
     if(startNode.edges) {
         for(let i = 0; i < startNode.edges.length; i++) {
+            if(startNode.edges[i].target == startNode) {
+                throw new Error(getTextByLocale("StartNodeIsTarget"));
+            }
             if(startNode.edges[i].value == null || typeof startNode.edges[i].value != "object" || !startNode.edges[i].value.getAttribute("type")) {
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
                 throw new Error(getTextByLocale("typeOutcomeStartNodeIsMissing"));
@@ -11751,13 +11764,13 @@ function getTextFromValueInOutcome(value) {
     }
 }
 
-function CheckCycleInTree(startNode) {
-    if(hasCycle(startNode)) {
+function CheckCycleInTree(startNode, editorUi) {
+    if(hasCycle(startNode, editorUi)) {
         throw new Error(getTextByLocale("hasCycleInTree"));
     }
 }
 
-function hasCycle(root) {
+function hasCycle(root, editorUi) {
     const visited = new Set(); // Список посещенных узлов
   
     function dfs(node) {
@@ -11769,6 +11782,10 @@ function hasCycle(root) {
       // Рекурсивно обходим потомков текущего узла
       for(let i = 0; i < node.edges.length; i++) {
         let child = node.edges[i].target;
+        if(!child) {
+            markOutcome(editorUi.editor.graph, node.edges[i])
+            throw new Error(getTextByLocale("TargetNodeIsMissing"));
+        }
         if (child != node && dfs(child)) {
             return true; // Найден цикл
         }

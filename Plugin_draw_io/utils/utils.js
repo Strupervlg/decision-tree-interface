@@ -136,13 +136,13 @@ function getTextFromValueInOutcome(value) {
     }
 }
 
-function CheckCycleInTree(startNode) {
-    if(hasCycle(startNode)) {
+function CheckCycleInTree(startNode, editorUi) {
+    if(hasCycle(startNode, editorUi)) {
         throw new Error(getTextByLocale("hasCycleInTree"));
     }
 }
 
-function hasCycle(root) {
+function hasCycle(root, editorUi) {
     const visited = new Set(); // Список посещенных узлов
   
     function dfs(node) {
@@ -154,6 +154,10 @@ function hasCycle(root) {
       // Рекурсивно обходим потомков текущего узла
       for(let i = 0; i < node.edges.length; i++) {
         let child = node.edges[i].target;
+        if(!child) {
+            markOutcome(editorUi.editor.graph, node.edges[i])
+            throw new Error(getTextByLocale("TargetNodeIsMissing"));
+        }
         if (child != node && dfs(child)) {
             return true; // Найден цикл
         }
