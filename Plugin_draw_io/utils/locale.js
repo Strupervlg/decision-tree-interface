@@ -160,6 +160,7 @@ const RU_TEXT = {
     "hasCycleInTree": "В графе присутствуют циклы!",
     "AssignInNode": "В исходном узле не может содержаться присвоение!",
     "EmptyConnection": "Имеются пустые отверстия!",
+    "StartNodeIsTarget": "В начальный узел входит ветка!",
 };
 
 const EN_TEXT = {
@@ -316,4 +317,5 @@ const EN_TEXT = {
     "hasCycleInTree": "There are cycles in the graph!",
     "AssignInNode": "The source node cannot contain an assignment!",
     "EmptyConnection": "There are empty connection!",
+    "StartNodeIsTarget": "The starting node consists of a branch!",
 };

@@ -160,6 +160,7 @@ const RU_TEXT = {
     "hasCycleInTree": "В графе присутствуют циклы!",
     "AssignInNode": "В исходном узле не может содержаться присвоение!",
     "EmptyConnection": "Имеются пустые отверстия!",
+    "StartNodeIsTarget": "В начальный узел входит ветка!",
 };
 
 const EN_TEXT = {
@@ -316,6 +317,7 @@ const EN_TEXT = {
     "hasCycleInTree": "There are cycles in the graph!",
     "AssignInNode": "The source node cannot contain an assignment!",
     "EmptyConnection": "There are empty connection!",
+    "StartNodeIsTarget": "The starting node consists of a branch!",
 };
 function styleTable(table) {
     table.style.width = '100%';
@@ -11045,6 +11047,9 @@ function startNodeToXml(startNode, editorUi)
     result += '</InputVariables>\n';
     if(startNode.edges) {
         for(let i = 0; i < startNode.edges.length; i++) {
+            if(startNode.edges[i].target == startNode) {
+                throw new Error(getTextByLocale("StartNodeIsTarget"));
+            }
             if(startNode.edges[i].value == null || typeof startNode.edges[i].value != "object" || !startNode.edges[i].value.getAttribute("type")) {
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
                 throw new Error(getTextByLocale("typeOutcomeStartNodeIsMissing"));
