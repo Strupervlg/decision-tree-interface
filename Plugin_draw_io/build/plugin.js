@@ -3507,17 +3507,19 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка открытия окна с блокли для выражений
     var openBlockly = mxUtils.button(getTextByLocale("OpenBlockly"), function () {
+        var widthBlockly = window.screen.width - 400;
+        var heightBlockly = window.screen.height - 300
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
         divBlockly.id = 'classCreateBlocklyDiv'
-        divBlockly.style.width = '850px';
-        divBlockly.style.height = '500px';
+        divBlockly.style.width = widthBlockly+'px';
+        divBlockly.style.height = heightBlockly*0.83+'px';
         mainDivBlockly.appendChild(divBlockly);
         
         var divInput = document.createElement('div');
-        divInput.style.width = '850px';
+        divInput.style.width = '100%';
         var codeInput = document.createElement('input');
-        codeInput.style.width = '100%';
+        codeInput = styleInput(codeInput);
         codeInput.id = 'outputCode';
 
         divInput.appendChild(codeInput);
@@ -3527,10 +3529,14 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
             let code = Blockly.JavaScript.workspaceToCode(workspaceInWindow);
             codeInput.value = code;
         });
+        var btnDivBlockly = document.createElement('div');
+        btnDivBlockly = styleDivBtn(btnDivBlockly);
+        toCodeBtn = styleBtn(toCodeBtn);
+        toCodeBtn.style.marginTop = "5px";
+        btnDivBlockly.appendChild(toCodeBtn);
+        mainDivBlockly.appendChild(btnDivBlockly);
 
-        mainDivBlockly.appendChild(toCodeBtn);  
-
-        this.window2 = new mxWindow('Blockly', mainDivBlockly, (document.body.offsetWidth - 880) / 2, 120, 900, 580, true, true);
+        this.window2 = new mxWindow('Blockly', mainDivBlockly, document.body.offsetLeft + 100, document.body.offsetTop + 100, widthBlockly, heightBlockly, true, true);
         this.window2.destroyOnClose = true;
         this.window2.setMaximizable(false);
         this.window2.setResizable(false);
