@@ -12,6 +12,7 @@ const RU_TEXT = {
     "menuItemNodeConstructors": "Конструкторы узлов",
     "menuItemExport": "Экспорт",
     "menuItemEdit": "Изменить",
+    "menuItemConverNode": "Конвертация узлов",
 
     //Элементы меню
     "classesConstructor": "Конструктор классов",
@@ -36,6 +37,16 @@ const RU_TEXT = {
     "editValue": "Изменить значение",
     "editTextInNode": "Изменить текстовое значение узла",
     "editQuestionInfo": "Изменить информацию для вопросов",
+    "convertStartNode": "Конвертировать в стартовый узел",
+    "convertTrueNode": "Конвертировать в узел Истина",
+    "convertFalseNode": "Конвертировать в узел Ложь",
+    "convertLogicNode": "Конвертировать в логический узел",
+    "convertPredeterminingFactorsNode": 'Конвертировать в узел "Независимое ветвление"',
+    "convertUncertaintyNode": 'Конвертировать в узел "Неопределенность"',
+    "convertActionNode": "Конвертировать в узел действия",
+    "convertCycleNode": 'Конвертировать в узел "Цикл"',
+    "convertConditionNode": "Конвертировать в вопросительный узел",
+    "convertSwitchCaseNode": 'Конвертировать в узел "Switch case"',
 
     //Текст окон (названия, кнопки)
     //Словари
@@ -170,6 +181,7 @@ const EN_TEXT = {
     "menuItemNodeConstructors": "Node constructors",
     "menuItemExport": "Export",
     "menuItemEdit": "Edit",
+    "menuItemConverNode": "Convert Node",
 
     //Элементы меню
     "classesConstructor": "Classes constructor",
@@ -194,6 +206,16 @@ const EN_TEXT = {
     "editValue": "Edit value",
     "editTextInNode": "Edit text in node",
     "editQuestionInfo": "Edit question info",
+    "convertStartNode": "Convert to a Start node",
+    "convertTrueNode": "Convert to True Node",
+    "convertFalseNode": "Convert to Node False",
+    "convertLogicNode": "Convert to a logical node",
+    "convertPredeterminingFactorsNode": 'Convert to an "Independent Branching" node',
+    "convertUncertaintyNode": 'Convert to node "Uncertainty"',
+    "convertActionNode": "Convert to Action Node",
+    "convertCycleNode": 'Convert to a "Cycle" node',
+    "convertConditionNode": "Convert node in condition node",
+    "convertSwitchCaseNode": 'Convert to a "Switch case" node',
 
     //Текст окон (названия, кнопки)
     //Словари
@@ -11024,9 +11046,510 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
+// Окно редактирования значений в ветке
+var ConvertToQuestionNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.setAttributeForCell(newElement, 'expression', "");
+        theGraph.setAttributeForCell(newElement, 'label', text);
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToActionNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.setAttributeForCell(newElement, 'expression', "");
+        theGraph.setAttributeForCell(newElement, 'typeVar', "");
+        theGraph.setAttributeForCell(newElement, 'nameVar', "");
+        theGraph.setAttributeForCell(newElement, 'label', text);
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToTrueNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.setAttributeForCell(newElement, 'expression', "");
+        theGraph.setAttributeForCell(newElement, 'label', text);
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToFalseNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.setAttributeForCell(newElement, 'expression', "");
+        theGraph.setAttributeForCell(newElement, 'label', text);
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToLogicNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        if(text == "OR") {
+            theGraph.setAttributeForCell(newElement, 'type', "OR");
+            theGraph.setAttributeForCell(newElement, 'label', "OR");
+        } else {
+            theGraph.setAttributeForCell(newElement, 'type', "AND");
+            theGraph.setAttributeForCell(newElement, 'label', "AND");
+        }
+        
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToStartNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.setAttributeForCell(newElement, 'type', "START");
+        theGraph.setAttributeForCell(newElement, 'label', text);
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToPredeterminingFactorsNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.setAttributeForCell(newElement, 'type', "predetermining");
+        theGraph.setAttributeForCell(newElement, 'label', text);
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToUncertaintyNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
+        
+        newElement.vertex = !0;
+        newElement.value = text
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToSwitchCaseNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "rhombus;whiteSpace=wrap;html=1;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.setAttributeForCell(newElement, 'expression', "");
+        theGraph.setAttributeForCell(newElement, 'label', text);
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
+// Окно редактирования значений в ветке
+var ConvertToCycleNode = function (cell, editorUi, x, y, w, h) {
+    var theGraph = editorUi.editor.graph;
+
+    if(typeof cell.value == "object") {
+        var text = cell.value.getAttribute("label");
+    } else {
+        var text = cell.value;
+    }
+
+    if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+        var pos = theGraph.getInsertPoint();
+        var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
+        
+        newElement.vertex = !0;
+        theGraph.setSelectionCell(theGraph.addCell(newElement));
+        theGraph.setAttributeForCell(newElement, 'expression', "");
+        theGraph.setAttributeForCell(newElement, 'typeVar', "");
+        theGraph.setAttributeForCell(newElement, 'nameVar', "");
+        theGraph.setAttributeForCell(newElement, 'operator', "AND");
+        theGraph.setAttributeForCell(newElement, 'label', text);
+        theGraph.getModel().beginUpdate();
+        var edgesNode = cell.edges;
+        if(edgesNode) {
+            edgesNode.forEach((element, index) => {
+                var trgt = null;
+                var src = null;
+                if(element.source == cell) {
+                    element.source = newElement;
+                    trgt = element.target;
+                } else {
+                    element.target = newElement;
+                    src = element.source;
+                }
+                if(!newElement.edges) {
+                    newElement.edges = [element];
+                } else {
+                    newElement.edges.push(element);
+                }
+                if(trgt) {
+                    newElement.edges[index].target = trgt;
+                } else {
+                    newElement.edges[index].source = src;
+                }
+            });
+        }
+        cell.edges = null;
+        theGraph.removeCells([cell]);
+        theGraph.getModel().endUpdate();
+        theGraph.refresh();
+    }
+};
 function treeToXml(editorUi)
 {
-    let result = '<?xml version="1.0"?>\n';
+    var serializer = new XMLSerializer();
+    const resultDoc = document.implementation.createDocument("", "", null);
 
     var graph = editorUi.editor.graph;
     var cells = graph.getModel().cells;
@@ -11038,21 +11561,20 @@ function treeToXml(editorUi)
         if (node.value != null && typeof node.value == "object" && node.value.getAttribute("type") == "START") {
             countStartNode++;
             CheckCycleInTree(node, editorUi);
-            result += startNodeToXml(node, editorUi);
+            resultDoc.appendChild(startNodeToXml(resultDoc, node, editorUi));
             return;
         }
     });
     if(countStartNode != 1) {
         throw new Error(getTextByLocale("StartNodeOnlyOne"));
     }
-    return result;
+    return '<?xml version="1.0"?>' + serializer.serializeToString(resultDoc);
 }
 
-function startNodeToXml(startNode, editorUi)
+function startNodeToXml(doc, startNode, editorUi)
 {
-    let result = "<StartNode>\n<InputVariables>\n";
-    result += getVariables(startNode.value.getAttribute("label"));
-    result += '</InputVariables>\n';
+    let resultNode = doc.createElement("StartNode");
+    resultNode.appendChild(getVariables(doc, startNode.value.getAttribute("label")));
     if(startNode.edges) {
         for(let i = 0; i < startNode.edges.length; i++) {
             if(startNode.edges[i].target == startNode) {
@@ -11062,154 +11584,173 @@ function startNodeToXml(startNode, editorUi)
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
                 throw new Error(getTextByLocale("typeOutcomeStartNodeIsMissing"));
             }
-            let questionInfo = getQuestionInfoThoughtBranch(startNode.edges[i]);
-            result += '<ThoughtBranch type="'+startNode.edges[i].value.getAttribute("type")+'"'+ questionInfo +'>\n';
+            let thoughtBranchNode = doc.createElement("ThoughtBranch");
+            thoughtBranchNode.setAttribute("type", startNode.edges[i].value.getAttribute("type"));
+            thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, startNode.edges[i]); //TODO: проверить мб присваивать не нужно
             if(startNode.edges[i].target != startNode) {
-                result += switchCaseNodes(startNode.edges[i].target, editorUi, false);
+                thoughtBranchNode.appendChild(switchCaseNodes(doc, startNode.edges[i].target, editorUi, false));
             }
-            result += '</ThoughtBranch>\n';
+            resultNode.appendChild(thoughtBranchNode);
         }
     }
-    result += "</StartNode>\n";
-    return result;
+    return resultNode;
 }
 
-function getVariables(nodeValue)
+function getVariables(doc, nodeValue)
 {
-    let variables = "";
+    let inputVariablesNode = doc.createElement("InputVariables");
     let vars = nodeValue.split("\n");
     vars.forEach(element => {
         let varWithClass = element.split(" - ");
-        variables += '<DecisionTreeVarDecl name="'+specialChars(varWithClass[0])+'" type="'+specialChars(varWithClass[1])+'"/>\n';
+        let decisionTreeVarDeclNode = doc.createElement("DecisionTreeVarDecl");
+        decisionTreeVarDeclNode.setAttribute("name", specialChars(varWithClass[0]));
+        decisionTreeVarDeclNode.setAttribute("type", specialChars(varWithClass[1]));
+        inputVariablesNode.appendChild(decisionTreeVarDeclNode);
     });
-    return variables;
+    return inputVariablesNode;
 }
 
-function switchCaseNodes(node, editorUi, isPredetermining)
+function switchCaseNodes(doc, node, editorUi, isPredetermining)
 {
-    let result = "";
+    let resultNode = null;
     //Узел истина
     if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;") {
         if(isPredetermining) {
-            result = '<BranchResultNode value="true">\n</BranchResultNode>\n';
+            //TODO: возможно тут лучше вызывать функцию создания узла результата
+            resultNode = doc.createElement("BranchResultNode");
+            resultNode.setAttribute("value", "true");
         } else {
-            result = branchResultNodeToXml(node, true);
+            resultNode = branchResultNodeToXml(doc, node, true);
         }
     }
     //Узел ложь
     else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;") {
         if(isPredetermining) {
-            result = '<BranchResultNode value="true">\n</BranchResultNode>\n';
+            //TODO: возможно тут лучше вызывать функцию создания узла результата
+            resultNode = doc.createElement("BranchResultNode");
+            resultNode.setAttribute("value", "true");
         } else {
-            result = branchResultNodeToXml(node, false);
+            resultNode = branchResultNodeToXml(doc, node, false);
         }
     }
     //Узел вопрос
     else if(node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
-        result = questionNodeToXml(node, false, editorUi, isPredetermining);
+        resultNode = questionNodeToXml(doc, node, false, editorUi, isPredetermining);
     }
     //Узел свитч кейс
     else if(node.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
-        result = questionNodeToXml(node, true, editorUi, isPredetermining);
+        resultNode = questionNodeToXml(doc, node, true, editorUi, isPredetermining);
     }
     //Узел действия
     else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
-        result = actionNodeToXml(node, editorUi, isPredetermining);
+        resultNode = actionNodeToXml(doc, node, editorUi, isPredetermining);
     }
     //Узел логическая агрегация
     else if(typeof node.value == "object" 
     && (node.value.getAttribute("type") == "AND" || node.value.getAttribute("type") == "OR")) {
-        result = logicNodeToXml(node, editorUi, isPredetermining);
+        resultNode = logicNodeToXml(doc, node, editorUi, isPredetermining);
     }
     //Узел предрешающий фактор
     else if(typeof node.value == "object" && node.value.getAttribute("type") == "predetermining") {
-        result = predeterminingNodeToXml(node, editorUi);
+        resultNode = predeterminingNodeToXml(doc, node, editorUi);
     }
     //Узел цикла
     else if(typeof node.value == "object" 
     && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")) {
-        result = cycleNodeToXml(node, editorUi, isPredetermining);
+        resultNode = cycleNodeToXml(doc, node, editorUi, isPredetermining);
     }
     //Узел неопределенность предрешающего фактора
     else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
         if(isPredetermining) {
-            result = '<BranchResultNode value="false">\n</BranchResultNode>\n';
+            resultNode = doc.createElement("BranchResultNode");
+            resultNode.setAttribute("value", "false");
         } else {
-            result = '<UndeterminedNode/>\n';
+            resultNode = doc.createElement("UndeterminedNode");
         }
     }
-    return result;
+    return resultNode;
 }
 
-function branchResultNodeToXml(node, resultBranch) {
-    let alias = "";
+function branchResultNodeToXml(doc, node, resultBranch) {
+    let resultNode = doc.createElement("BranchResultNode");
+
     if(node.value.getAttribute("label")) {
-        alias = '_alias="'+node.value.getAttribute("label")+'"';
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    let result = '<BranchResultNode '+alias+' value="'+resultBranch+'">\n';
+    resultNode.setAttribute("value", resultBranch)
 
     if(node.value.getAttribute("expression") != "") {
-        result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
+        let expressionNode = doc.createElement("Expression");
+        expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+        resultNode.appendChild(expressionNode);
     }
-
-    result += '</BranchResultNode>\n';
-    return result;
+    return resultNode;
 }
 
-function questionNodeToXml(node, isSwitch, editorUi, isPredetermining)
+function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining)
 {
-    let alias = "";
+    let resultNode = doc.createElement("QuestionNode");
     if(node.value.getAttribute("label")) {
-        alias = '_alias="'+node.value.getAttribute("label")+'"';
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"))
     }
-    let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<QuestionNode '+alias+' type="'+specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type)+'" isSwitch="'+isSwitch+'"'+questionInfo+'>\n';
+    resultNode.setAttribute("type", specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type));
+    resultNode.setAttribute("isSwitch", isSwitch);
+    resultNode = getQuestionInfoNode(resultNode, node, false); //TODO: проверить мб присваивать не нужно
 
-    result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
+    let expressionNode = doc.createElement("Expression");
+    expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    resultNode.appendChild(expressionNode);
 
     //Следующие ветки
-    result += outcomeToXml(node, editorUi, isPredetermining);
+    resultNode = outcomeToXml(doc, resultNode, node, editorUi, isPredetermining);
 
-    result += '</QuestionNode>\n';
-    return result;
+    return resultNode;
 }
 
-function actionNodeToXml(node, editorUi, isPredetermining)
+function actionNodeToXml(doc, node, editorUi, isPredetermining)
 {
-    let alias = "";
+    let resultNode = doc.createElement("FindActionNode");
     if(node.value.getAttribute("label")) {
-        alias = '_alias="'+node.value.getAttribute("label")+'"';
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<FindActionNode '+alias+''+questionInfo+'>\n';
+    resultNode = getQuestionInfoNode(resultNode, node, false);
 
-    result += "<Expression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</Expression>\n";
+    let expressionNode = doc.createElement("Expression");
+    expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    resultNode.appendChild(expressionNode);
 
     let typeVar = node.value.getAttribute("typeVar");
 
-    result += '<DecisionTreeVarDecl name="'+specialChars(node.value.getAttribute("nameVar"))+'" type="'+specialChars(typeVar)+'"/>\n';
+    let decisionTreeVarDeclNode = doc.createElement("DecisionTreeVarDecl");
+    decisionTreeVarDeclNode.setAttribute("name", specialChars(node.value.getAttribute("nameVar")));
+    decisionTreeVarDeclNode.setAttribute("type", specialChars(typeVar));
+    resultNode.appendChild(decisionTreeVarDeclNode);
 
     //Следующие ветки
-    result += outcomeToXml(node, editorUi, isPredetermining)
+    resultNode = outcomeToXml(doc, resultNode, node, editorUi, isPredetermining);
 
-
-    result += '</FindActionNode>\n';
-    return result;
+    return resultNode;
 }
 
-function cycleNodeToXml(node, editorUi, isPredetermining)
+function cycleNodeToXml(doc, node, editorUi, isPredetermining)
 {
-    let alias = "";
+    let resultNode = doc.createElement("CycleAggregationNode");
     if(node.value.getAttribute("label")) {
-        alias = '_alias="'+node.value.getAttribute("label")+'"';
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<CycleAggregationNode '+alias+' operator="'+node.value.getAttribute("operator")+'"'+questionInfo+'>\n';
+    resultNode.setAttribute("operator", node.value.getAttribute("operator"));
+    resultNode = getQuestionInfoNode(resultNode, node, false);
 
-    result += "<SelectorExpression>\n" + codeToXML(globalWS, node.value.getAttribute("expression")) + "\n</SelectorExpression>\n";
+    let selectorExpressionNode = doc.createElement("SelectorExpression");
+    selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    resultNode.appendChild(selectorExpressionNode);
 
     let typeVar = node.value.getAttribute("typeVar");
-    result += '<DecisionTreeVarDecl name="'+specialChars(node.value.getAttribute("nameVar"))+'" type="'+specialChars(typeVar)+'"/>\n';
+
+    let decisionTreeVarDeclNode = doc.createElement("DecisionTreeVarDecl");
+    decisionTreeVarDeclNode.setAttribute("name", specialChars(node.value.getAttribute("nameVar")));
+    decisionTreeVarDeclNode.setAttribute("type", specialChars(typeVar));
+    resultNode.appendChild(decisionTreeVarDeclNode);
 
     let bodyCount = 0;
     let trueCount = 0;
@@ -11232,16 +11773,23 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
                     } else {
                         falseCount++;
                     }
-                    let questionInfo = getQuestionInfoOutcome(node.edges[i]);
-                    result += '<Outcome value="'+specialChars(valueEdge.getAttribute("type"))+'"'+questionInfo+'>\n';
-                    result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
-                    result += "</Outcome>\n";
+
+                    let outcomeNode = doc.createElement("Outcome");
+                    outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
+                    outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(outcomeNode);
+
                 } else if(valueEdge.getAttribute("type") == "Body") {
-                    let questionInfo = getQuestionInfoThoughtBranch(node.edges[i]);
+
+                    let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("type", "bool");
+                    thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
+                    thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(thoughtBranchNode);
+
                     bodyCount++;
-                    result += '<ThoughtBranch type="bool" paramName="'+specialChars(node.value.getAttribute("nameVar"))+'"'+ questionInfo +'>\n';
-                    result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
-                    result += "</ThoughtBranch>\n";
                 }
             }
         }
@@ -11261,18 +11809,17 @@ function cycleNodeToXml(node, editorUi, isPredetermining)
     }
 
 
-    result += '</CycleAggregationNode>\n';
-    return result;
+    return resultNode;
 }
 
-function logicNodeToXml(node, editorUi, isPredetermining)
+function logicNodeToXml(doc, node, editorUi, isPredetermining)
 {
-    let alias = "";
+    let resultNode = doc.createElement("LogicAggregationNode");
     if(node.value.getAttribute("label")) {
-        alias = '_alias="'+node.value.getAttribute("label")+'"';
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    let questionInfo = getQuestionInfoNode(node, true);
-    let result = '<LogicAggregationNode '+alias+' operator="'+node.value.getAttribute("type").toLowerCase()+'"'+questionInfo+'>\n';
+    resultNode.setAttribute("operator", node.value.getAttribute("type").toLowerCase());
+    resultNode = getQuestionInfoNode(resultNode, node, true);
 
     let branchCount = 0;
     let trueCount = 0;
@@ -11295,16 +11842,19 @@ function logicNodeToXml(node, editorUi, isPredetermining)
                     } else {
                         falseCount++;
                     }
-                    let questionInfo = getQuestionInfoOutcome(node.edges[i]);
-                    result += '<Outcome value="'+specialChars(valueEdge.getAttribute("type"))+'"'+questionInfo+'>\n';
-                    result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
-                    result += "</Outcome>\n";
+                    let outcomeNode = doc.createElement("Outcome");
+                    outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
+                    outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(outcomeNode);
+
                 } else if(valueEdge.getAttribute("type") == "Branch") {
-                    let questionInfo = getQuestionInfoThoughtBranch(node.edges[i]);
+                    let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("type", "bool");
+                    thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(thoughtBranchNode);
                     branchCount++;
-                    result += '<ThoughtBranch type="bool"'+ questionInfo +'>\n';
-                    result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
-                    result += "</ThoughtBranch>\n";
                 }
             }
         }
@@ -11323,18 +11873,16 @@ function logicNodeToXml(node, editorUi, isPredetermining)
         throw new Error(errorLogic);
     }
 
-    result += '</LogicAggregationNode>\n';
-    return result;
+    return resultNode;
 }
 
-function predeterminingNodeToXml(node, editorUi)
+function predeterminingNodeToXml(doc, node, editorUi)
 {
-    let alias = "";
+    let resultNode = doc.createElement("PredeterminingFactorsNode");
     if(node.value.getAttribute("label")) {
-        alias = '_alias="'+node.value.getAttribute("label")+'"';
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    let questionInfo = getQuestionInfoNode(node, false);
-    let result = '<PredeterminingFactorsNode '+alias+''+questionInfo+'>\n';
+    resultNode = getQuestionInfoNode(resultNode, node, false);
 
     //Следующие ветки
     let predCount = 0;
@@ -11351,19 +11899,25 @@ function predeterminingNodeToXml(node, editorUi)
             }
 
             if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
-                let resultNode = checkCorrectPredeterminingBranch(node.edges[i].target);
+                let correctNode = checkCorrectPredeterminingBranch(node.edges[i].target);
                 predCount++;
-                let questionInfo = getQuestionInfoPredetermining(node.edges[i]);
-                result += '<Outcome value="'+specialChars(node.edges[i].value.getAttribute("label"))+'"'+questionInfo[0]+'>\n';
+                let outcomeNode = doc.createElement("Outcome");
+                outcomeNode.setAttribute("value", specialChars(node.edges[i].value.getAttribute("label")));
+                let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                thoughtBranchNode.setAttribute("type", "bool");
+
+                let questionInfo = getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, node.edges[i]);
+                outcomeNode = questionInfo[0];
+                thoughtBranchNode = questionInfo[1];
+
+                outcomeNode.appendChild(switchCaseNodes(doc, correctNode, editorUi, false));
                 
-                result += switchCaseNodes(resultNode, editorUi, false);
                 
-                result += '<ThoughtBranch type="bool"'+questionInfo[1]+'>\n';
+                thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, true));
                 
-                result += switchCaseNodes(node.edges[i].target, editorUi, true);
-                result += "</ThoughtBranch>\n";
+                outcomeNode.appendChild(thoughtBranchNode);
                 
-                result += "</Outcome>\n";
+                resultNode.appendChild(outcomeNode);
             }
         }
     }
@@ -11372,9 +11926,10 @@ function predeterminingNodeToXml(node, editorUi)
         for(let i = 0; i < node.edges.length; i++) {
             if(node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
                 undertermCount++;
-                result += '<Outcome value="undetermined">\n';
-                result += switchCaseNodes(node.edges[i].target, editorUi, false);
-                result += "</Outcome>\n";
+                let outcomeNode = doc.createElement("Outcome");
+                outcomeNode.setAttribute("value", "undetermined");
+                outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, false));
+                resultNode.appendChild(outcomeNode);
             }
         }
     }
@@ -11389,13 +11944,11 @@ function predeterminingNodeToXml(node, editorUi)
         throw new Error(errorPred);
     }
 
-    result += '</PredeterminingFactorsNode>\n';
-    return result;
+    return resultNode;
 }
 
-function outcomeToXml(node, editorUi, isPredetermining)
+function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining)
 {
-    let result = "";
     let prevValues = new Set();
     if(node.edges) {
         for(let i = 0; i < node.edges.length; i++) {
@@ -11436,14 +11989,17 @@ function outcomeToXml(node, editorUi, isPredetermining)
                     throw new Error(getTextByLocale("OutcomesHasSameValues"));
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
-                let questionInfo = getQuestionInfoOutcome(node.edges[i]);
-                result += '<Outcome value="'+specialChars(valueEdge.getAttribute("value"))+'"'+questionInfo+'>\n';
-                result += switchCaseNodes(node.edges[i].target, editorUi, isPredetermining);
-                result += "</Outcome>\n";
+                let resultNode = doc.createElement("Outcome");
+
+                resultNode = getQuestionInfoOutcome(resultNode, node.edges[i]);
+                
+                resultNode.setAttribute("value", specialChars(valueEdge.getAttribute("value")));
+                resultNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                parentNode.appendChild(resultNode);
             }
         }
     }
-    return result;
+    return parentNode;
 }
 
 function markOutcome(graph, cell) {
@@ -11455,91 +12011,86 @@ function markOutcome(graph, cell) {
     graph.refresh(); // update the graph
 }
 
-function getQuestionInfoThoughtBranch(edge) {
-    let resultInfo = "";
+function getQuestionInfoThoughtBranch(thoughtBranchNode, edge) {
     if(edge.value.getAttribute("_description")) {
-        resultInfo += ` _description="`+specialChars(edge.value.getAttribute("_description"))+`"`;
+        thoughtBranchNode.setAttribute("_description", specialChars(edge.value.getAttribute("_description")));
     }
     if(edge.value.getAttribute("_nextStepQuestion")) {
-        resultInfo += ` _nextStepQuestion="`+specialChars(edge.value.getAttribute("_nextStepQuestion"))+`"`;
+        thoughtBranchNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestion")));
     }
     if(edge.value.getAttribute("_nextStepExplanation")) {
-        resultInfo += ` _nextStepExplanation="`+specialChars(edge.value.getAttribute("_nextStepExplanation"))+`"`;
+        thoughtBranchNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanation")));
     }
-    return resultInfo + " ";
+    return thoughtBranchNode;
 }
 
-function getQuestionInfoOutcome(edge) {
-    let resultInfo = "";
+function getQuestionInfoOutcome(resultNode, edge) {
     if(edge.value.getAttribute("_text")) {
-        resultInfo += ` _text="`+specialChars(edge.value.getAttribute("_text"))+`"`;
+        resultNode.setAttribute("_text", specialChars(edge.value.getAttribute("_text")));
     }
     if(edge.value.getAttribute("_explanation")) {
-        resultInfo += ` _explanation="`+specialChars(edge.value.getAttribute("_explanation"))+`"`;
+        resultNode.setAttribute("_explanation", specialChars(edge.value.getAttribute("_explanation")));
     }
     if(edge.value.getAttribute("_nextStepBranchResult")) {
-        resultInfo += ` _nextStepBranchResult="`+specialChars(edge.value.getAttribute("_nextStepBranchResult"))+`"`;
+        resultNode.setAttribute("_nextStepBranchResult", specialChars(edge.value.getAttribute("_nextStepBranchResult")));
     }
     if(edge.value.getAttribute("_nextStepQuestion")) {
-        resultInfo += ` _nextStepQuestion="`+specialChars(edge.value.getAttribute("_nextStepQuestion"))+`"`;
+        resultNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestion")));
     }
     if(edge.value.getAttribute("_nextStepExplanation")) {
-        resultInfo += ` _nextStepExplanation="`+specialChars(edge.value.getAttribute("_nextStepExplanation"))+`"`;
+        resultNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanation")));
     }
-    return resultInfo + " ";
+    return resultNode;
 }
 
-function getQuestionInfoNode(node, isLogic) {
-    let resultInfo = "";
+function getQuestionInfoNode(resultNode, node, isLogic) {
     if(isLogic) {
         if(node.value.getAttribute("_description")) {
-            resultInfo += ` _description="`+specialChars(node.value.getAttribute("_description"))+`"`;
+            resultNode.setAttribute("_description", specialChars(node.value.getAttribute("_description")));
         }
     } else {
         if(node.value.getAttribute("_question")) {
-            resultInfo += ` _question="`+specialChars(node.value.getAttribute("_question"))+`"`;
+            resultNode.setAttribute("_question", specialChars(node.value.getAttribute("_question")));
         }
     }
     if(node.value.getAttribute("_asNextStep")) {
-        resultInfo += ` _asNextStep="`+specialChars(node.value.getAttribute("_asNextStep"))+`"`;
+        resultNode.setAttribute("_asNextStep", specialChars(node.value.getAttribute("_asNextStep")));
     }
     if(node.value.getAttribute("_endingCause")) {
-        resultInfo += ` _endingCause="`+specialChars(node.value.getAttribute("_endingCause"))+`"`;
+        resultNode.setAttribute("_endingCause", specialChars(node.value.getAttribute("_endingCause")));
     }
-    return resultInfo + " ";
+    return resultNode;
 }
 
-function getQuestionInfoPredetermining(edge) {
-    let resultInfoOutcome = "";
-    let resultInfothoughtBranch = "";
+function getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, edge) {
     
     if(edge.value.getAttribute("_text")) {
-        resultInfoOutcome += ` _text="`+specialChars(edge.value.getAttribute("_text"))+`"`;
+        outcomeNode.setAttribute("_text", specialChars(edge.value.getAttribute("_text")));
     }
     if(edge.value.getAttribute("_explanation")) {
-        resultInfoOutcome += ` _explanation="`+specialChars(edge.value.getAttribute("_explanation"))+`"`;
+        outcomeNode.setAttribute("_explanation", specialChars(edge.value.getAttribute("_explanation")));
     }
     if(edge.value.getAttribute("_nextStepBranchResult")) {
-        resultInfoOutcome += ` _nextStepBranchResult="`+specialChars(edge.value.getAttribute("_nextStepBranchResult"))+`"`;
+        outcomeNode.setAttribute("_nextStepBranchResult", specialChars(edge.value.getAttribute("_nextStepBranchResult")));
     }
     if(edge.value.getAttribute("_nextStepQuestionOutcome")) {
-        resultInfoOutcome += ` _nextStepQuestion="`+specialChars(edge.value.getAttribute("_nextStepQuestionOutcome"))+`"`;
+        outcomeNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestionOutcome")));
     }
     if(edge.value.getAttribute("_nextStepExplanationOutcome")) {
-        resultInfoOutcome += ` _nextStepExplanation="`+specialChars(edge.value.getAttribute("_nextStepExplanationOutcome"))+`"`;
+        outcomeNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanationOutcome")));
     }
 
     if(edge.value.getAttribute("_description")) {
-        resultInfothoughtBranch += ` _description="`+specialChars(edge.value.getAttribute("_description"))+`"`;
+        thoughtBranchNode.setAttribute("_description", specialChars(edge.value.getAttribute("_description")));
     }
     if(edge.value.getAttribute("_nextStepQuestionThoughtBranch")) {
-        resultInfothoughtBranch += ` _nextStepQuestion="`+specialChars(edge.value.getAttribute("_nextStepQuestionThoughtBranch"))+`"`;
+        thoughtBranchNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestionThoughtBranch")));
     }
     if(edge.value.getAttribute("_nextStepExplanationThoughtBranch")) {
-        resultInfothoughtBranch += ` _nextStepExplanation="`+specialChars(edge.value.getAttribute("_nextStepExplanationThoughtBranch"))+`"`;
+        thoughtBranchNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanationThoughtBranch")));
     }
 
-    return [resultInfoOutcome + " ", resultInfothoughtBranch + " "];
+    return [outcomeNode, thoughtBranchNode];
 }
 
 function checkCorrectPredeterminingBranch(node) {
@@ -11816,6 +12367,19 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'editQuestionInfo');
     });
 
+    ui.menubar.addMenu(getTextByLocale("menuItemConverNode"), function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'convertStartNode');
+        ui.menus.addMenuItem(menu, 'convertTrueNode');
+        ui.menus.addMenuItem(menu, 'convertFalseNode');
+        ui.menus.addMenuItem(menu, 'convertLogicNode');
+        ui.menus.addMenuItem(menu, 'convertPredeterminingFactorsNode');
+        ui.menus.addMenuItem(menu, 'convertUncertaintyNode');
+        ui.menus.addMenuItem(menu, 'convertActionNode');
+        ui.menus.addMenuItem(menu, 'convertCycleNode');
+        ui.menus.addMenuItem(menu, 'convertConditionNode');
+        ui.menus.addMenuItem(menu, 'convertSwitchCaseNode');
+    });
+
 
     // Привязывание действий к разделам меню
     mxResources.parse('classesConstructor='+getTextByLocale("classesConstructor"));
@@ -11861,6 +12425,26 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('editTextInNode='+getTextByLocale("editTextInNode"));
 
     mxResources.parse('editQuestionInfo='+getTextByLocale("editQuestionInfo"));
+
+    mxResources.parse('convertStartNode='+getTextByLocale("convertStartNode"));
+
+    mxResources.parse('convertTrueNode='+getTextByLocale("convertTrueNode"));
+
+    mxResources.parse('convertFalseNode='+getTextByLocale("convertFalseNode"));
+
+    mxResources.parse('convertLogicNode='+getTextByLocale("convertLogicNode"));
+
+    mxResources.parse('convertPredeterminingFactorsNode='+getTextByLocale("convertPredeterminingFactorsNode"));
+
+    mxResources.parse('convertUncertaintyNode='+getTextByLocale("convertUncertaintyNode"));
+
+    mxResources.parse('convertActionNode='+getTextByLocale("convertActionNode"));
+
+    mxResources.parse('convertCycleNode='+getTextByLocale("convertCycleNode"));
+
+    mxResources.parse('convertConditionNode='+getTextByLocale("convertConditionNode"));
+
+    mxResources.parse('convertSwitchCaseNode='+getTextByLocale("convertSwitchCaseNode"));
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -12161,6 +12745,79 @@ Draw.loadPlugin(function (ui) {
                 this.editQuestionInfoInOutcomeWindow = new EditQuestionInfoInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editQuestionInfoInOutcomeWindow.window.setVisible(true);
             }
+        }
+    });
+
+
+    //--------------------------Convert-----------------------------
+
+    ui.actions.addAction('convertStartNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToStartNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertTrueNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToTrueNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertFalseNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToFalseNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertLogicNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToLogicNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertPredeterminingFactorsNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToPredeterminingFactorsNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertUncertaintyNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToUncertaintyNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertActionNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToActionNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertCycleNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToCycleNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertConditionNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToQuestionNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertSwitchCaseNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToSwitchCaseNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
         }
     });
 });
