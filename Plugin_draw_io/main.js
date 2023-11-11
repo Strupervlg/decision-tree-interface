@@ -17,7 +17,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'classPropertiesConstructor');
         ui.menus.addMenuItem(menu, 'relationshipsConstructor');
         ui.menus.addMenuItem(menu, 'enumConstructor');
-    });
+    }, ui.menubar.editorUi.statusContainer);
 
     ui.menubar.addMenu(getTextByLocale("menuItemNodeConstructors"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'startNodeConstructor');
@@ -30,7 +30,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'cycleNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
         ui.menus.addMenuItem(menu, 'switchCaseNodeConstructor');
-    });
+    }, ui.menubar.editorUi.statusContainer);
 
     ui.menubar.addMenu(getTextByLocale("menuItemExport"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'exportClass');
@@ -38,13 +38,13 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'exportRelationship');
         ui.menus.addMenuItem(menu, 'exportEnum');
         ui.menus.addMenuItem(menu, 'exportTree');
-    });
+    }, ui.menubar.editorUi.statusContainer);
 
     ui.menubar.addMenu(getTextByLocale("menuItemEdit"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'editValue');
         ui.menus.addMenuItem(menu, 'editTextInNode');
         ui.menus.addMenuItem(menu, 'editQuestionInfo');
-    });
+    }, ui.menubar.editorUi.statusContainer);
 
     ui.menubar.addMenu(getTextByLocale("menuItemConverNode"), function (menu, parent) {
         ui.menus.addMenuItem(menu, 'convertStartNode');
@@ -57,7 +57,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'convertCycleNode');
         ui.menus.addMenuItem(menu, 'convertConditionNode');
         ui.menus.addMenuItem(menu, 'convertSwitchCaseNode');
-    });
+    }, ui.menubar.editorUi.statusContainer);
 
 
     // Привязывание действий к разделам меню
