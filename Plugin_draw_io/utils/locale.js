@@ -12,6 +12,7 @@ const RU_TEXT = {
     "menuItemNodeConstructors": "Конструкторы узлов",
     "menuItemExport": "Экспорт",
     "menuItemEdit": "Изменить",
+    "menuItemConverNode": "Конвертация узлов",
 
     //Элементы меню
     "classesConstructor": "Конструктор классов",
@@ -36,6 +37,16 @@ const RU_TEXT = {
     "editValue": "Изменить значение",
     "editTextInNode": "Изменить текстовое значение узла",
     "editQuestionInfo": "Изменить информацию для вопросов",
+    "convertStartNode": "Конвертировать в стартовый узел",
+    "convertTrueNode": "Конвертировать в узел Истина",
+    "convertFalseNode": "Конвертировать в узел Ложь",
+    "convertLogicNode": "Конвертировать в логический узел",
+    "convertPredeterminingFactorsNode": 'Конвертировать в узел "Независимое ветвление"',
+    "convertUncertaintyNode": 'Конвертировать в узел "Неопределенность"',
+    "convertActionNode": "Конвертировать в узел действия",
+    "convertCycleNode": 'Конвертировать в узел "Цикл"',
+    "convertConditionNode": "Конвертировать в вопросительный узел",
+    "convertSwitchCaseNode": 'Конвертировать в узел "Switch case"',
 
     //Текст окон (названия, кнопки)
     //Словари
@@ -170,6 +181,7 @@ const EN_TEXT = {
     "menuItemNodeConstructors": "Node constructors",
     "menuItemExport": "Export",
     "menuItemEdit": "Edit",
+    "menuItemConverNode": "Convert Node",
 
     //Элементы меню
     "classesConstructor": "Classes constructor",
@@ -194,6 +206,16 @@ const EN_TEXT = {
     "editValue": "Edit value",
     "editTextInNode": "Edit text in node",
     "editQuestionInfo": "Edit question info",
+    "convertStartNode": "Convert to a Start node",
+    "convertTrueNode": "Convert to True Node",
+    "convertFalseNode": "Convert to Node False",
+    "convertLogicNode": "Convert to a logical node",
+    "convertPredeterminingFactorsNode": 'Convert to an "Independent Branching" node',
+    "convertUncertaintyNode": 'Convert to node "Uncertainty"',
+    "convertActionNode": "Convert to Action Node",
+    "convertCycleNode": 'Convert to a "Cycle" node',
+    "convertConditionNode": "Convert node in condition node",
+    "convertSwitchCaseNode": 'Convert to a "Switch case" node',
 
     //Текст окон (названия, кнопки)
     //Словари

@@ -46,6 +46,19 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'editQuestionInfo');
     });
 
+    ui.menubar.addMenu(getTextByLocale("menuItemConverNode"), function (menu, parent) {
+        ui.menus.addMenuItem(menu, 'convertStartNode');
+        ui.menus.addMenuItem(menu, 'convertTrueNode');
+        ui.menus.addMenuItem(menu, 'convertFalseNode');
+        ui.menus.addMenuItem(menu, 'convertLogicNode');
+        ui.menus.addMenuItem(menu, 'convertPredeterminingFactorsNode');
+        ui.menus.addMenuItem(menu, 'convertUncertaintyNode');
+        ui.menus.addMenuItem(menu, 'convertActionNode');
+        ui.menus.addMenuItem(menu, 'convertCycleNode');
+        ui.menus.addMenuItem(menu, 'convertConditionNode');
+        ui.menus.addMenuItem(menu, 'convertSwitchCaseNode');
+    });
+
 
     // Привязывание действий к разделам меню
     mxResources.parse('classesConstructor='+getTextByLocale("classesConstructor"));
@@ -91,6 +104,26 @@ Draw.loadPlugin(function (ui) {
     mxResources.parse('editTextInNode='+getTextByLocale("editTextInNode"));
 
     mxResources.parse('editQuestionInfo='+getTextByLocale("editQuestionInfo"));
+
+    mxResources.parse('convertStartNode='+getTextByLocale("convertStartNode"));
+
+    mxResources.parse('convertTrueNode='+getTextByLocale("convertTrueNode"));
+
+    mxResources.parse('convertFalseNode='+getTextByLocale("convertFalseNode"));
+
+    mxResources.parse('convertLogicNode='+getTextByLocale("convertLogicNode"));
+
+    mxResources.parse('convertPredeterminingFactorsNode='+getTextByLocale("convertPredeterminingFactorsNode"));
+
+    mxResources.parse('convertUncertaintyNode='+getTextByLocale("convertUncertaintyNode"));
+
+    mxResources.parse('convertActionNode='+getTextByLocale("convertActionNode"));
+
+    mxResources.parse('convertCycleNode='+getTextByLocale("convertCycleNode"));
+
+    mxResources.parse('convertConditionNode='+getTextByLocale("convertConditionNode"));
+
+    mxResources.parse('convertSwitchCaseNode='+getTextByLocale("convertSwitchCaseNode"));
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
@@ -391,6 +424,79 @@ Draw.loadPlugin(function (ui) {
                 this.editQuestionInfoInOutcomeWindow = new EditQuestionInfoInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editQuestionInfoInOutcomeWindow.window.setVisible(true);
             }
+        }
+    });
+
+
+    //--------------------------Convert-----------------------------
+
+    ui.actions.addAction('convertStartNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToStartNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertTrueNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToTrueNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertFalseNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToFalseNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertLogicNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToLogicNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertPredeterminingFactorsNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToPredeterminingFactorsNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertUncertaintyNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToUncertaintyNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertActionNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToActionNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertCycleNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToCycleNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertConditionNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToQuestionNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
+        }
+    });
+
+    ui.actions.addAction('convertSwitchCaseNode', function () {
+        if (graph.isEnabled() && graph.getSelectionCount() == 1) {
+            var selectedcell = graph.getSelectionCell();
+            this.convertToQuestionNode = new ConvertToSwitchCaseNode(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
         }
     });
 });
