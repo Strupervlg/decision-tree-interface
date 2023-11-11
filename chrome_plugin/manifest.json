@@ -1,0 +1,19 @@
+{
+    "name": "Plugin Drawio",
+    "description": "Plugin for Drawio",
+    "version": "1.0",
+    "manifest_version": 3,
+    "icons": {},
+    "action": {},
+    "permissions": [],
+    "background":{},
+    "content_scripts": [
+        {
+          "matches": ["https://app.diagrams.net/*"],
+          "js": ["plugin.js" ],
+          "run_at": "document_end",
+          "world": "MAIN",
+          "all_frames": true
+        }
+      ]
+}
