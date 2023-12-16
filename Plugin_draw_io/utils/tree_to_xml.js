@@ -12,7 +12,7 @@ function treeToXml(editorUi)
         
         if (node.value != null && typeof node.value == "object" && node.value.getAttribute("type") == "START") {
             countStartNode++;
-            CheckCycleInTree(node, editorUi);
+            // CheckCycleInTree(node, editorUi);
             resultDoc.appendChild(startNodeToXml(resultDoc, node, editorUi));
             return;
         }
