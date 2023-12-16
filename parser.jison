@@ -99,7 +99,7 @@ exp
     | TREE_VAR { $$ = createLiteral(ExprType.TREE_VAR, $1); }
     | VAR { $$ = createLiteral(ExprType.VAR, $1); }
     | ID "::" ID { $$ = createEnum($1, $3); }
-    | exp "->" ID ID "{" exp "}" { $$ = createGetObjectByRel($1, $3, $4, $6); }
+    | exp "->" ID { $$ = createGetObjectByRel($1, $3); }
     | exp "." ID { $$ = createBinExprNode(ExprType.PROPERTY, $1, $3); }
     | exp IS exp { $$ = createBinExprNode(ExprType.IS, $1, $3); }
     | exp ">" exp { $$ = createBinExprNode(ExprType.GREATER, $1, $3); }

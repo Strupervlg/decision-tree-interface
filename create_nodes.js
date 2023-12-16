@@ -74,14 +74,12 @@ function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
     return newNode;
 }
 
-function createGetObjectByRel(firstExprOperand, relationship, id, secondExprOperand) {
+function createGetObjectByRel(firstExprOperand, relationship) {
     newNode = new ExpressionNode();
     newNode.type = ExprType.GET_BY_RELATIONSHIP;
-    newNode.ident = id;
     newNode.rel = relationship;
 
     newNode.firstOperand = firstExprOperand;
-    newNode.secondOperand = secondExprOperand;
     
     return newNode;
 }
