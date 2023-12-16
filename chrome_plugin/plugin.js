@@ -1988,7 +1988,6 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "get_relationship_object");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
 
             relBlock = new Blockly.BlockSvg(workspace, "relationship");
             relBlock.initSvg();
@@ -2000,10 +1999,6 @@ function printExprNode(exprNode, workspace) {
             objBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
-
-            boolBlock = printExprNode(exprNode.secondOperand, workspace);
-            checkTypeBlocks(resBlock, boolBlock, "boolean");
-            resBlock.getInput("boolean").connection.connect(boolBlock.outputConnection);
 
             return resBlock
         case ExprType.PROPERTY:
@@ -2368,14 +2363,12 @@ function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
     return newNode;
 }
 
-function createGetObjectByRel(firstExprOperand, relationship, id, secondExprOperand) {
+function createGetObjectByRel(firstExprOperand, relationship) {
     newNode = new ExpressionNode();
     newNode.type = ExprType.GET_BY_RELATIONSHIP;
-    newNode.ident = id;
     newNode.rel = relationship;
 
     newNode.firstOperand = firstExprOperand;
-    newNode.secondOperand = secondExprOperand;
     
     return newNode;
 }
@@ -2544,12 +2537,12 @@ var string;
   }
 */
 var parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[1,9],$V6=[1,10],$V7=[1,11],$V8=[1,12],$V9=[1,13],$Va=[1,14],$Vb=[1,15],$Vc=[1,16],$Vd=[1,17],$Ve=[1,19],$Vf=[1,20],$Vg=[1,21],$Vh=[1,22],$Vi=[1,23],$Vj=[1,24],$Vk=[1,25],$Vl=[1,26],$Vm=[1,27],$Vn=[1,28],$Vo=[1,29],$Vp=[1,6,16,18,19,20,21,22,23,24,25,26,29,30,31,38,42],$Vq=[1,6,18,20,21,22,23,24,25,26,29,30,31,38,42],$Vr=[29,42];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[1,9],$V6=[1,10],$V7=[1,11],$V8=[1,12],$V9=[1,13],$Va=[1,14],$Vb=[1,15],$Vc=[1,16],$Vd=[1,17],$Ve=[1,19],$Vf=[1,20],$Vg=[1,21],$Vh=[1,22],$Vi=[1,23],$Vj=[1,24],$Vk=[1,25],$Vl=[1,26],$Vm=[1,27],$Vn=[1,28],$Vo=[1,29],$Vp=[1,6,16,17,18,19,20,21,22,23,24,27,28,29,35,38,42],$Vq=[1,6,18,19,20,21,22,23,24,27,28,29,35,38,42],$Vr=[27,42];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"program":3,"stmt":4,"exp":5,"=":6,"ID":7,"STRING":8,"INT":9,"DOUBLE":10,"TRUE":11,"FALSE":12,"TREE_VAR":13,"VAR":14,"::":15,"->":16,"{":17,"}":18,".":19,"IS":20,">":21,"<":22,"==":23,"!=":24,">=":25,"<=":26,"COMPARE":27,"(":28,")":29,"AND":30,"OR":31,"NOT":32,"object_seq":33,"CLASS":34,"FIND":35,"FIND_EXTREM":36,"[":37,"]":38,"WHERE":39,"EXIST":40,"FORALL":41,",":42,"$accept":0,"$end":1},
-terminals_: {2:"error",6:"=",7:"ID",8:"STRING",9:"INT",10:"DOUBLE",11:"TRUE",12:"FALSE",13:"TREE_VAR",14:"VAR",15:"::",16:"->",17:"{",18:"}",19:".",20:"IS",21:">",22:"<",23:"==",24:"!=",25:">=",26:"<=",27:"COMPARE",28:"(",29:")",30:"AND",31:"OR",32:"NOT",34:"CLASS",35:"FIND",36:"FIND_EXTREM",37:"[",38:"]",39:"WHERE",40:"EXIST",41:"FORALL",42:","},
-productions_: [0,[3,1],[4,1],[4,3],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,3],[5,7],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,6],[5,3],[5,3],[5,3],[5,2],[5,6],[5,5],[5,5],[5,10],[5,8],[5,8],[33,1],[33,3]],
+symbols_: {"error":2,"program":3,"stmt":4,"exp":5,"=":6,"ID":7,"STRING":8,"INT":9,"DOUBLE":10,"TRUE":11,"FALSE":12,"TREE_VAR":13,"VAR":14,"::":15,"->":16,".":17,"IS":18,">":19,"<":20,"==":21,"!=":22,">=":23,"<=":24,"COMPARE":25,"(":26,")":27,"AND":28,"OR":29,"NOT":30,"object_seq":31,"CLASS":32,"FIND":33,"{":34,"}":35,"FIND_EXTREM":36,"[":37,"]":38,"WHERE":39,"EXIST":40,"FORALL":41,",":42,"$accept":0,"$end":1},
+terminals_: {2:"error",6:"=",7:"ID",8:"STRING",9:"INT",10:"DOUBLE",11:"TRUE",12:"FALSE",13:"TREE_VAR",14:"VAR",15:"::",16:"->",17:".",18:"IS",19:">",20:"<",21:"==",22:"!=",23:">=",24:"<=",25:"COMPARE",26:"(",27:")",28:"AND",29:"OR",30:"NOT",32:"CLASS",33:"FIND",34:"{",35:"}",36:"FIND_EXTREM",37:"[",38:"]",39:"WHERE",40:"EXIST",41:"FORALL",42:","},
+productions_: [0,[3,1],[4,1],[4,3],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,6],[5,3],[5,3],[5,3],[5,2],[5,6],[5,5],[5,5],[5,10],[5,8],[5,8],[31,1],[31,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -2592,7 +2585,7 @@ case 12:
  this.$ = createEnum($$[$0-2], $$[$0]); 
 break;
 case 13:
- this.$ = createGetObjectByRel($$[$0-6], $$[$0-4], $$[$0-3], $$[$0-1]); 
+ this.$ = createGetObjectByRel($$[$0-2], $$[$0]); 
 break;
 case 14:
  this.$ = createBinExprNode(ExprType.PROPERTY, $$[$0-2], $$[$0]); 
@@ -2659,7 +2652,7 @@ case 34:
 break;
 }
 },
-table: [{3:1,4:2,5:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{1:[3]},{1:[2,1]},{1:[2,2],6:[1,18],16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,4],{15:[1,30]}),o($Vp,[2,5]),o($Vp,[2,6]),o($Vp,[2,7]),o($Vp,[2,8]),o($Vp,[2,9]),o($Vp,[2,10]),o($Vp,[2,11]),{5:31,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:32,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,33]},{7:[1,34]},{7:[1,35]},{7:[1,36]},{5:37,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,38]},{7:[1,39],27:[1,40],34:[1,41]},{5:42,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:43,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:44,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:45,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:46,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:47,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:48,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:49,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:50,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,51]},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,29:[1,52],30:$Vn,31:$Vo},o($Vq,[2,26],{16:$Ve,19:$Vf}),{17:[1,53]},{37:[1,54]},{37:[1,55]},{37:[1,56]},{1:[2,3],16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{7:[1,57],28:[1,58]},o($Vp,[2,14]),{28:[1,59]},{28:[1,60]},o([1,6,18,20,29,30,31,38,42],[2,15],{16:$Ve,19:$Vf,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm}),o($Vq,[2,16],{16:$Ve,19:$Vf}),o($Vq,[2,17],{16:$Ve,19:$Vf}),o($Vq,[2,18],{16:$Ve,19:$Vf}),o($Vq,[2,19],{16:$Ve,19:$Vf}),o($Vq,[2,20],{16:$Ve,19:$Vf}),o($Vq,[2,21],{16:$Ve,19:$Vf}),o([1,6,18,29,30,31,38,42],[2,24],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm}),o([1,6,18,29,31,38,42],[2,25],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn}),o($Vp,[2,12]),o($Vp,[2,23]),{5:61,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:62,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:63,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:64,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{17:[1,65]},{5:67,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,33:66,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:68,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{29:[1,69]},{16:$Ve,18:[1,70],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo,38:[1,71]},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo,38:[1,72]},{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo,38:[1,73]},{5:74,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{29:[1,75],42:[1,76]},o($Vr,[2,33],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo}),{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,29:[1,77],30:$Vn,31:$Vo},o($Vp,[2,28]),o($Vp,[2,29]),{39:[1,78]},{17:[1,79]},{17:[1,80]},{16:$Ve,18:[1,81],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,27]),{5:82,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,22]),{7:[1,83]},{5:84,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},{5:85,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,13]),o($Vr,[2,34],{16:$Ve,19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo}),{17:[1,86]},{16:$Ve,18:[1,87],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{16:$Ve,18:[1,88],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},{5:89,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,28:$V8,32:$V9,35:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,31]),o($Vp,[2,32]),{16:$Ve,18:[1,90],19:$Vf,20:$Vg,21:$Vh,22:$Vi,23:$Vj,24:$Vk,25:$Vl,26:$Vm,30:$Vn,31:$Vo},o($Vp,[2,30])],
+table: [{3:1,4:2,5:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{1:[3]},{1:[2,1]},{1:[2,2],6:[1,18],16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo},o($Vp,[2,4],{15:[1,30]}),o($Vp,[2,5]),o($Vp,[2,6]),o($Vp,[2,7]),o($Vp,[2,8]),o($Vp,[2,9]),o($Vp,[2,10]),o($Vp,[2,11]),{5:31,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:32,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,33]},{7:[1,34]},{7:[1,35]},{7:[1,36]},{5:37,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,38]},{7:[1,39],25:[1,40],32:[1,41]},{5:42,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:43,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:44,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:45,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:46,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:47,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:48,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:49,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:50,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,51]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,27:[1,52],28:$Vn,29:$Vo},o($Vq,[2,26],{16:$Ve,17:$Vf}),{34:[1,53]},{37:[1,54]},{37:[1,55]},{37:[1,56]},{1:[2,3],16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo},o($Vp,[2,13],{26:[1,57]}),o($Vp,[2,14]),{26:[1,58]},{26:[1,59]},o([1,6,18,27,28,29,35,38,42],[2,15],{16:$Ve,17:$Vf,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm}),o($Vq,[2,16],{16:$Ve,17:$Vf}),o($Vq,[2,17],{16:$Ve,17:$Vf}),o($Vq,[2,18],{16:$Ve,17:$Vf}),o($Vq,[2,19],{16:$Ve,17:$Vf}),o($Vq,[2,20],{16:$Ve,17:$Vf}),o($Vq,[2,21],{16:$Ve,17:$Vf}),o([1,6,27,28,29,35,38,42],[2,24],{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm}),o([1,6,27,29,35,38,42],[2,25],{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn}),o($Vp,[2,12]),o($Vp,[2,23]),{5:60,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:61,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:62,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:63,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:65,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,31:64,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:66,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{27:[1,67]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,35:[1,68]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,38:[1,69]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,38:[1,70]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,38:[1,71]},{27:[1,72],42:[1,73]},o($Vr,[2,33],{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo}),{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,27:[1,74],28:$Vn,29:$Vo},o($Vp,[2,28]),o($Vp,[2,29]),{39:[1,75]},{34:[1,76]},{34:[1,77]},o($Vp,[2,27]),{5:78,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,22]),{7:[1,79]},{5:80,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:81,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vr,[2,34],{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo}),{34:[1,82]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,35:[1,83]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,35:[1,84]},{5:85,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,31]),o($Vp,[2,32]),{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,35:[1,86]},o($Vp,[2,30])],
 defaultActions: {2:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -3139,21 +3132,21 @@ case 0:return 11;
 break;
 case 1:return 12;
 break;
-case 2:return 34;
+case 2:return 32;
 break;
-case 3:return 35;
+case 3:return 33;
 break;
 case 4:return 36;
 break;
-case 5:return 20;
+case 5:return 18;
 break;
-case 6:return 30;
+case 6:return 28;
 break;
-case 7:return 31;
+case 7:return 29;
 break;
-case 8:return 32;
+case 8:return 30;
 break;
-case 9:return 27;
+case 9:return 25;
 break;
 case 10:return 40;
 break;
@@ -3163,33 +3156,33 @@ case 12:return 39;
 break;
 case 13:return 16;
 break;
-case 14:return 17;
+case 14:return 34;
 break;
-case 15:return 18;
+case 15:return 35;
 break;
 case 16:return 37;
 break;
 case 17:return 38;
 break;
-case 18:return 23;
+case 18:return 21;
 break;
-case 19:return 24;
+case 19:return 22;
 break;
-case 20:return 25;
+case 20:return 23;
 break;
-case 21:return 26;
+case 21:return 24;
 break;
 case 22:return 6;
 break;
-case 23:return 28;
+case 23:return 26;
 break;
-case 24:return 29;
+case 24:return 27;
 break;
 case 25:return 42;
 break;
-case 26:return 21;
+case 26:return 19;
 break;
-case 27:return 22;
+case 27:return 20;
 break;
 case 28:return 15;
 break;
@@ -3225,7 +3218,7 @@ case 43:return 10;
 break;
 case 44:return 9;
 break;
-case 45:return 19;
+case 45:return 17;
 break;
 case 46:/* skip whitespace */
 break;
@@ -7845,15 +7838,10 @@ Blockly.Blocks['get_relationship_object'] = {
         .appendField("get relationship object");
     this.appendValueInput("object")
         .setCheck("Object")
-        .appendField("object");
+        .appendField("subject");
     this.appendValueInput("relationship")
         .setCheck("Relationship")
         .appendField("relationship");
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
-    this.appendValueInput("boolean")
-        .setCheck("Boolean")
-        .appendField("boolean");
     this.setInputsInline(false);
     this.setOutput(true, ["Object"]);
     this.setColour(240);
@@ -7963,7 +7951,7 @@ Blockly.Blocks['check_relationship'] = {
         .appendField("relationship");
     this.appendValueInput("object")
         .setCheck("Object")
-        .appendField("object");
+        .appendField("subject");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setMutator(new Blockly.Mutator(['check_relationship_item']));
@@ -8246,8 +8234,7 @@ Blockly.Blocks['enum'] = {
  this.setTooltip("");
  this.setHelpUrl("");
   }
-};
-Blockly.JavaScript['object'] = function(block) {
+};Blockly.JavaScript['object'] = function(block) {
   var text_object_name = block.getFieldValue('object_name');
   var code = text_object_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
@@ -8316,9 +8303,7 @@ Blockly.JavaScript['get_property_value'] = function(block) {
 Blockly.JavaScript['get_relationship_object'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
-  var text_name_var = block.getFieldValue('name_var');
-  var value_boolean = Blockly.JavaScript.valueToCode(block, 'boolean', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + "->" + value_relationship + " " + text_name_var + " { " + value_boolean + " } ";
+  var code = value_object + "->" + value_relationship;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -8449,8 +8434,7 @@ Blockly.JavaScript['enum'] = function(block) {
   var text_value = block.getFieldValue('value');
   var code = text_owner_name + "::" + text_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};
-// Окно создание логических узлов
+};// Окно создание логических узлов
 var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окнаx
@@ -11560,7 +11544,7 @@ function treeToXml(editorUi)
         
         if (node.value != null && typeof node.value == "object" && node.value.getAttribute("type") == "START") {
             countStartNode++;
-            CheckCycleInTree(node, editorUi);
+            // CheckCycleInTree(node, editorUi);
             resultDoc.appendChild(startNodeToXml(resultDoc, node, editorUi));
             return;
         }
@@ -11681,7 +11665,11 @@ function branchResultNodeToXml(doc, node, resultBranch) {
 
     if(node.value.getAttribute("expression") != "") {
         let expressionNode = doc.createElement("Expression");
-        expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+        try {
+            expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+        } catch(e) {
+            throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+        }
         resultNode.appendChild(expressionNode);
     }
     return resultNode;
@@ -11693,12 +11681,20 @@ function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining)
     if(node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"))
     }
-    resultNode.setAttribute("type", specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type));
+    try {
+        resultNode.setAttribute("type", specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type));
+    } catch(e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
     resultNode.setAttribute("isSwitch", isSwitch);
     resultNode = getQuestionInfoNode(resultNode, node, false); //TODO: проверить мб присваивать не нужно
 
     let expressionNode = doc.createElement("Expression");
-    expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    try {
+        expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch(e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
     resultNode.appendChild(expressionNode);
 
     //Следующие ветки
@@ -11716,7 +11712,11 @@ function actionNodeToXml(doc, node, editorUi, isPredetermining)
     resultNode = getQuestionInfoNode(resultNode, node, false);
 
     let expressionNode = doc.createElement("Expression");
-    expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    try {
+        expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch(e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
     resultNode.appendChild(expressionNode);
 
     let typeVar = node.value.getAttribute("typeVar");
@@ -11742,7 +11742,11 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
     resultNode = getQuestionInfoNode(resultNode, node, false);
 
     let selectorExpressionNode = doc.createElement("SelectorExpression");
-    selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    try {
+        selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch(e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
     resultNode.appendChild(selectorExpressionNode);
 
     let typeVar = node.value.getAttribute("typeVar");
@@ -11765,7 +11769,8 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
                 && valueEdge.getAttribute("type") != "False" 
                 && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing"));
+                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing") 
+                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     if(valueEdge.getAttribute("type") == "True") {
@@ -11805,7 +11810,7 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
         errorCycle += getTextByLocale("falseCycleOnlyOne");
     }
     if(errorCycle) {
-        throw new Error(errorCycle);
+        throw new Error(errorCycle + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
 
@@ -11834,7 +11839,8 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining)
                 && valueEdge.getAttribute("type") != "False" 
                 && valueEdge.getAttribute("type") != "Branch")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing"));
+                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing") 
+                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     if(valueEdge.getAttribute("type") == "True") {
@@ -11870,7 +11876,7 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining)
         errorLogic += getTextByLocale("falseLogicNodeOnlyOne");
     }
     if(errorLogic) {
-        throw new Error(errorLogic);
+        throw new Error(errorLogic + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
     return resultNode;
@@ -11895,7 +11901,8 @@ function predeterminingNodeToXml(doc, node, editorUi)
             || (valueEdge.getAttribute("type") != "predeterminingBranch" 
             && valueEdge.getAttribute("type") != "undetermined"))) {
                 markOutcome(editorUi.editor.graph, node.edges[i])
-                throw new Error(getTextByLocale("typeOutcomePredIsMissing"));
+                throw new Error(getTextByLocale("typeOutcomePredIsMissing") 
+                + "\nУзел с текстом: " + node.value.getAttribute("label"));
             }
 
             if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
@@ -11941,7 +11948,7 @@ function predeterminingNodeToXml(doc, node, editorUi)
         errorPred += getTextByLocale("undeterminedOnlyOne");
     }
     if(errorPred) {
-        throw new Error(errorPred);
+        throw new Error(errorPred + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
     return resultNode;
@@ -11956,9 +11963,16 @@ function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining)
                 valueEdge = node.edges[i].value;
                 if(valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("valueInOutcomeIsMissing"));
+                    throw new Error(getTextByLocale("valueInOutcomeIsMissing") 
+                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
-                let typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
+                let typeNode;
+                try {
+                    typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
+                } catch(e) {
+                    throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label") 
+                    + "\nСтрелка с текстом: " + valueEdge.getAttribute("value"))
+                }
                 if(typeNode.type == valueEdge.getAttribute("typeValue")) {
                     if(valueEdge.getAttribute("typeValue") == "enum") {
                         let enumsList = getEnums(editorUi);
@@ -11967,26 +11981,31 @@ function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining)
                         if(findEnum[0] != undefined) {
                             if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
                                 markOutcome(editorUi.editor.graph, node.edges[i])
-                                throw new Error(getTextByLocale("valueEnumIsMissing"));
+                                throw new Error(getTextByLocale("valueEnumIsMissing")
+                                + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                             }
                         } else {
-                            throw new Error(getTextByLocale("EnumIsMissing"));
+                            throw new Error(getTextByLocale("EnumIsMissing")
+                            + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                         }
                     } else if(valueEdge.getAttribute("typeValue") == "class") {
                         let jsonClasses = getClasses(editorUi);
                         let findClass = jsonClasses.filter(el => el.name == valueEdge.getAttribute("value"));
                         if(findClass.length == 0) {
                             markOutcome(editorUi.editor.graph, node.edges[i])
-                            throw new Error(getTextByLocale("ClassInDictIsMissing"));
+                            throw new Error(getTextByLocale("ClassInDictIsMissing")
+                            + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                         }
                     }
                 } else if(valueEdge.getAttribute("typeValue") && typeNode.type != valueEdge.getAttribute("typeValue")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("TypesDontMatch"));
+                    throw new Error(getTextByLocale("TypesDontMatch")
+                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
                 if(prevValues.has(valueEdge.getAttribute("value"))) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("OutcomesHasSameValues"));
+                    throw new Error(getTextByLocale("OutcomesHasSameValues")
+                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
                 let resultNode = doc.createElement("Outcome");
