@@ -67,9 +67,7 @@ Blockly.JavaScript['get_property_value'] = function(block) {
 Blockly.JavaScript['get_relationship_object'] = function(block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
-  var text_name_var = block.getFieldValue('name_var');
-  var value_boolean = Blockly.JavaScript.valueToCode(block, 'boolean', Blockly.JavaScript.ORDER_NONE);
-  var code = value_object + "->" + value_relationship + " " + text_name_var + " { " + value_boolean + " } ";
+  var code = value_object + "->" + value_relationship;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

@@ -100,7 +100,6 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "get_relationship_object");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
 
             relBlock = new Blockly.BlockSvg(workspace, "relationship");
             relBlock.initSvg();
@@ -112,10 +111,6 @@ function printExprNode(exprNode, workspace) {
             objBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
-
-            boolBlock = printExprNode(exprNode.secondOperand, workspace);
-            checkTypeBlocks(resBlock, boolBlock, "boolean");
-            resBlock.getInput("boolean").connection.connect(boolBlock.outputConnection);
 
             return resBlock
         case ExprType.PROPERTY:

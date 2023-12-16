@@ -128,15 +128,10 @@ Blockly.Blocks['get_relationship_object'] = {
         .appendField("get relationship object");
     this.appendValueInput("object")
         .setCheck("Object")
-        .appendField("object");
+        .appendField("subject");
     this.appendValueInput("relationship")
         .setCheck("Relationship")
         .appendField("relationship");
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
-    this.appendValueInput("boolean")
-        .setCheck("Boolean")
-        .appendField("boolean");
     this.setInputsInline(false);
     this.setOutput(true, ["Object"]);
     this.setColour(240);
@@ -246,7 +241,7 @@ Blockly.Blocks['check_relationship'] = {
         .appendField("relationship");
     this.appendValueInput("object")
         .setCheck("Object")
-        .appendField("object");
+        .appendField("subject");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setMutator(new Blockly.Mutator(['check_relationship_item']));
