@@ -133,7 +133,11 @@ function branchResultNodeToXml(doc, node, resultBranch) {
 
     if(node.value.getAttribute("expression") != "") {
         let expressionNode = doc.createElement("Expression");
-        expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+        try {
+            expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+        } catch(e) {
+            throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+        }
         resultNode.appendChild(expressionNode);
     }
     return resultNode;
@@ -145,12 +149,20 @@ function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining)
     if(node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"))
     }
-    resultNode.setAttribute("type", specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type));
+    try {
+        resultNode.setAttribute("type", specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type));
+    } catch(e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
     resultNode.setAttribute("isSwitch", isSwitch);
     resultNode = getQuestionInfoNode(resultNode, node, false); //TODO: проверить мб присваивать не нужно
 
     let expressionNode = doc.createElement("Expression");
-    expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    try {
+        expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch(e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
     resultNode.appendChild(expressionNode);
 
     //Следующие ветки
@@ -168,7 +180,11 @@ function actionNodeToXml(doc, node, editorUi, isPredetermining)
     resultNode = getQuestionInfoNode(resultNode, node, false);
 
     let expressionNode = doc.createElement("Expression");
-    expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    try {
+        expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch(e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
     resultNode.appendChild(expressionNode);
 
     let typeVar = node.value.getAttribute("typeVar");
@@ -194,7 +210,11 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
     resultNode = getQuestionInfoNode(resultNode, node, false);
 
     let selectorExpressionNode = doc.createElement("SelectorExpression");
-    selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    try {
+        selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch(e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
     resultNode.appendChild(selectorExpressionNode);
 
     let typeVar = node.value.getAttribute("typeVar");
@@ -217,7 +237,8 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
                 && valueEdge.getAttribute("type") != "False" 
                 && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing"));
+                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing") 
+                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     if(valueEdge.getAttribute("type") == "True") {
@@ -257,7 +278,7 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
         errorCycle += getTextByLocale("falseCycleOnlyOne");
     }
     if(errorCycle) {
-        throw new Error(errorCycle);
+        throw new Error(errorCycle + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
 
@@ -286,7 +307,8 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining)
                 && valueEdge.getAttribute("type") != "False" 
                 && valueEdge.getAttribute("type") != "Branch")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing"));
+                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing") 
+                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
                 if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
                     if(valueEdge.getAttribute("type") == "True") {
@@ -322,7 +344,7 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining)
         errorLogic += getTextByLocale("falseLogicNodeOnlyOne");
     }
     if(errorLogic) {
-        throw new Error(errorLogic);
+        throw new Error(errorLogic + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
     return resultNode;
@@ -347,7 +369,8 @@ function predeterminingNodeToXml(doc, node, editorUi)
             || (valueEdge.getAttribute("type") != "predeterminingBranch" 
             && valueEdge.getAttribute("type") != "undetermined"))) {
                 markOutcome(editorUi.editor.graph, node.edges[i])
-                throw new Error(getTextByLocale("typeOutcomePredIsMissing"));
+                throw new Error(getTextByLocale("typeOutcomePredIsMissing") 
+                + "\nУзел с текстом: " + node.value.getAttribute("label"));
             }
 
             if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
@@ -393,7 +416,7 @@ function predeterminingNodeToXml(doc, node, editorUi)
         errorPred += getTextByLocale("undeterminedOnlyOne");
     }
     if(errorPred) {
-        throw new Error(errorPred);
+        throw new Error(errorPred + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
     return resultNode;
@@ -408,9 +431,16 @@ function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining)
                 valueEdge = node.edges[i].value;
                 if(valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("valueInOutcomeIsMissing"));
+                    throw new Error(getTextByLocale("valueInOutcomeIsMissing") 
+                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
-                let typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
+                let typeNode;
+                try {
+                    typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
+                } catch(e) {
+                    throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label") 
+                    + "\nСтрелка с текстом: " + valueEdge.getAttribute("value"))
+                }
                 if(typeNode.type == valueEdge.getAttribute("typeValue")) {
                     if(valueEdge.getAttribute("typeValue") == "enum") {
                         let enumsList = getEnums(editorUi);
@@ -419,26 +449,31 @@ function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining)
                         if(findEnum[0] != undefined) {
                             if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
                                 markOutcome(editorUi.editor.graph, node.edges[i])
-                                throw new Error(getTextByLocale("valueEnumIsMissing"));
+                                throw new Error(getTextByLocale("valueEnumIsMissing")
+                                + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                             }
                         } else {
-                            throw new Error(getTextByLocale("EnumIsMissing"));
+                            throw new Error(getTextByLocale("EnumIsMissing")
+                            + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                         }
                     } else if(valueEdge.getAttribute("typeValue") == "class") {
                         let jsonClasses = getClasses(editorUi);
                         let findClass = jsonClasses.filter(el => el.name == valueEdge.getAttribute("value"));
                         if(findClass.length == 0) {
                             markOutcome(editorUi.editor.graph, node.edges[i])
-                            throw new Error(getTextByLocale("ClassInDictIsMissing"));
+                            throw new Error(getTextByLocale("ClassInDictIsMissing")
+                            + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                         }
                     }
                 } else if(valueEdge.getAttribute("typeValue") && typeNode.type != valueEdge.getAttribute("typeValue")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("TypesDontMatch"));
+                    throw new Error(getTextByLocale("TypesDontMatch")
+                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
                 if(prevValues.has(valueEdge.getAttribute("value"))) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("OutcomesHasSameValues"));
+                    throw new Error(getTextByLocale("OutcomesHasSameValues")
+                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
                 let resultNode = doc.createElement("Outcome");
