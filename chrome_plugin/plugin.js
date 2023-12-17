@@ -7390,7 +7390,7 @@ function exportEnums(jsonEnums) {
         if(enumItem.isLinear == 'true') {
             result += "|TRUE|" + enumItem.nameRDF + "\n";
         } else {
-            result += "||" + enumItem.nameRDF + "\n";
+            result += "|FALSE|" + enumItem.nameRDF + "\n";
         }
     });
     return result;
@@ -7452,7 +7452,7 @@ function exportRelastionships(jsonRelationships) {
         if(relationshipItem.isBetween == "true") {
             result += "TRUE" + "|" + relationshipItem.type + "|";
         } else {
-            result += "||";
+            result += "FALSE||";
         }
         result += relationshipItem.namesRels + "|" + relationshipItem.decFlags + "\n";
     });
