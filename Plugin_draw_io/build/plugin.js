@@ -7427,7 +7427,11 @@ function exportProperties(jsonProperties) {
             }
             result += "|";
         } else {
-            result += "||";
+            result += "FALSE|" + propertyItem.classes[0];
+            for(var i = 1; i < propertyItem.classes.length; i++) {
+                result += ";" + propertyItem.classes[i];
+            }
+            result += "|";
         }
 
         result += propertyItem.range + "\n";
