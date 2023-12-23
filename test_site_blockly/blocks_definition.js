@@ -419,12 +419,12 @@ Blockly.Blocks['comparison'] = {
     this.appendDummyInput()
         .appendField("comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
         .appendField("operand1");
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["not equal","NOT_EQUAL"], ["greater or equal","GE"], ["less or equal","LE"]]), "operator");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
         .appendField("operand1");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
@@ -439,10 +439,10 @@ Blockly.Blocks['three_digit_comparison'] = {
     this.appendDummyInput()
         .appendField("three-digit comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
         .appendField("operand1");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double", "Enum", "Object"])
+        .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
         .appendField("operand2");
     this.setOutput(true, "Enum");
     this.setColour(240);
