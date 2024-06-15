@@ -1,5 +1,5 @@
 function getTextByLocale(type) {
-    if(mxClient.language == "ru") {
+    if (mxClient.language == "ru") {
         return RU_TEXT[type];
     } else {
         return EN_TEXT[type];
@@ -27,6 +27,7 @@ const RU_TEXT = {
     "UncertaintyNodeCreate": 'Создать узел "Неопределенность"',
     "actionNodeConstructor": "Создать узел действия",
     "cycleNodeConstructor": 'Создать узел "Цикл"',
+    "whileNodeConstructor": 'Создать узел "While"',
     "conditionNodeConstructor": "Создать узел вопроса",
     "switchCaseNodeConstructor": 'Создать узел "Switch case"',
     "exportClass": "Экспорт словаря классов",
@@ -67,6 +68,8 @@ const RU_TEXT = {
     "TitleConditionNodeEditorWindow": "Редактор узла вопроса",
     "TitleCycleNodeConstructorWindow": 'Конструктор узла "Цикл"',
     "TitleCycleNodeEditorWindow": 'Редактор узла "Цикл"',
+    "TitleWhileNodeConstructorWindow": 'Конструктор узла "Пока"',
+    "TitleWhileNodeEditorWindow": 'Редактор узла "Пока"',
     "TitleEditTextInNodeWindow": "Редактор текста в узле",
     "TitleEditValueInOutcomeWindow": "Редактор значений в ветке",
     "TitleLogicNodeConstructorWindow": "Конструктор логическего узла",
@@ -196,6 +199,7 @@ const EN_TEXT = {
     "UncertaintyNodeCreate": "Create node uncertainty",
     "actionNodeConstructor": "Action Node Constructor",
     "cycleNodeConstructor": "Cycle Node Constructor",
+    "whileNodeConstructor": "While Node Constructor",
     "conditionNodeConstructor": "Condition Node Constructor",
     "switchCaseNodeConstructor": "Switch case Node Constructor",
     "exportClass": "Export class",
@@ -236,6 +240,8 @@ const EN_TEXT = {
     "TitleConditionNodeEditorWindow": "Condition node editor",
     "TitleCycleNodeConstructorWindow": "Cycle node constructor",
     "TitleCycleNodeEditorWindow": "Cycle node editor",
+    "TitleWhileNodeConstructorWindow": "While node constructor",
+    "TitleWhileNodeEditorWindow": "While node editor",
     "TitleEditTextInNodeWindow": "Edit text in node",
     "TitleEditValueInOutcomeWindow": "Edit value in outcome",
     "TitleLogicNodeConstructorWindow": "Logic node constructor",
@@ -8915,6 +8921,239 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
+// Окно коструктора узлов действия
+var WhileNodeConstructorWindow = function (editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    div.style.height = "100%";
+    var divText = document.createElement('div');
+    divText.style.height = "100%";
+    var divBlockly = document.createElement('div');
+    divBlockly.style.height = "100%";
+    divBlockly.style.display = "none";
+
+    var operators = ["And", "Or"];
+
+    //Экран с текстом
+    var text = document.createElement('textarea');
+    text = styleTextAreaExp(text);
+    text.style.height = "74%";
+
+    // Кнопка создания узла
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
+
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if (expression) {
+            //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
+            parser.parse(expression)
+        } else {
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
+        }
+        error = "";
+        if (!nameVarInText.value) {
+            error += getTextByLocale("NameVariableIsMissing");
+        } else if (!checkValidID(nameVarInText.value)) {
+            error += getTextByLocale("NameVariableIsIncorrect");
+        }
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+            error += getTextByLocale("TypeVariableIsMissing");
+        }
+        if (error) {
+            throw new Error(error);
+        }
+
+        var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
+
+
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
+
+            //TODO: Возможно сделать подсветку в самом узле 
+
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+            var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'expression', expression);
+            theGraph.setAttributeForCell(newElement, 'typeVar', typeInText);
+            theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInText.value);
+            theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInText);
+            theGraph.setAttributeForCell(newElement, 'typeCycle', 'while');
+        }
+        win.destroy();
+    });
+
+    var workspace;
+
+    // Кнопка переключение на Blockly
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if (expression) {
+            parser.parse(expression)
+        }
+        divText.style.display = "none";
+        divBlockly.style.display = "block";
+        nestedDiv.innerHTML = "";
+        workspace = Blockly.inject('cycleCreateBlocklyDiv', { toolbox: toolbox });
+        workspace.clear();
+        if (expression) {
+            parser.parse(expression)
+            toBlock(root, workspace);
+        }
+        nameVarInBlockly.value = nameVarInText.value;
+        selectOperatorInBlockly.options.selectedIndex = selectOperatorInText.options.selectedIndex;
+        selectClassInBlockly.options.selectedIndex = selectClassInText.options.selectedIndex;
+    });
+
+    var nameVarInText = document.createElement('input');
+    nameVarInText.type = "text";
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
+    nameVarInText.placeholder = "New variable";
+
+    var jsonClasses = getClasses(editorUi);
+
+    var selectClassInText = document.createElement('select');
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInText.options[selectClassInText.options.length] = newOption;
+    });
+
+    var selectOperatorInText = document.createElement('select');
+    selectOperatorInText = styleSelect(selectOperatorInText);
+    selectOperatorInText.style.height = '5%';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
+    });
+
+    divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    divText.appendChild(nameVarInText);
+    divText.appendChild(selectClassInText);
+    divText.appendChild(selectOperatorInText);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
+    div.appendChild(divText);
+
+
+    //Экран с blockly
+    var nestedDiv = document.createElement('div');
+    nestedDiv.id = "cycleCreateBlocklyDiv";
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
+    nestedDiv.style.height = h * 0.72 + 'px';
+
+    // Кнопка создания узла
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
+        var code = generateCode(workspace);
+        if (!code) {
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try {
+                parser.parse(code);
+            } catch (e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
+        }
+        error = "";
+        if (!nameVarInBlockly.value) {
+            error += getTextByLocale("NameVariableIsMissing");
+        } else if (!checkValidID(nameVarInBlockly.value)) {
+            error += getTextByLocale("NameVariableIsIncorrect");
+        }
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+            error += getTextByLocale("TypeVariableIsMissing");
+        }
+        if (error) {
+            throw new Error(error);
+        }
+        var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
+
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
+
+
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+            var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'expression', code);
+            theGraph.setAttributeForCell(newElement, 'typeVar', typeInBlockly);
+            theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInBlockly.value);
+            theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInBlockly);
+            theGraph.setAttributeForCell(newElement, 'typeCycle', 'while');
+        }
+        win.destroy();
+    });
+
+    //кнопка переключения на текстовый вариант
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
+        var code = generateCode(workspace);
+        divBlockly.style.display = "none";
+        divText.style.display = "block";
+        divText.getElementsByTagName("textarea").item(0).value = code;
+        nameVarInText.value = nameVarInBlockly.value;
+        selectOperatorInText.options.selectedIndex = selectOperatorInBlockly.options.selectedIndex;
+        selectClassInText.options.selectedIndex = selectClassInBlockly.options.selectedIndex;
+    });
+
+    var nameVarInBlockly = document.createElement('input');
+    nameVarInBlockly.type = "text";
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
+    nameVarInBlockly.placeholder = "New variable";
+
+    var selectClassInBlockly = document.createElement('select');
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
+    });
+
+    var selectOperatorInBlockly = document.createElement('select');
+    selectOperatorInBlockly = styleSelect(selectOperatorInBlockly);
+    selectOperatorInBlockly.style.height = '5%';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
+    });
+
+    divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectClassInBlockly);
+    divBlockly.appendChild(selectOperatorInBlockly);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
+    div.appendChild(divBlockly);
+
+
+    // Настройки окна
+    var win = new mxWindow(getTextByLocale("TitleWhileNodeConstructorWindow"), div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.contentWrapper.style.height = "100%";
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
 // Окно коструктора начального узла
 var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
@@ -9680,6 +9919,244 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleCycleNodeEditorWindow"), div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.contentWrapper.style.height = "100%";
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+// Окно редактирования узлов действия
+var WhileNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    div.style.height = "100%";
+    var divText = document.createElement('div');
+    divText.style.height = "100%";
+    var divBlockly = document.createElement('div');
+    divBlockly.style.height = "100%";
+    divBlockly.style.display = "none";
+
+    var operators = ["And", "Or"];
+
+    //Экран с текстом
+    var text = document.createElement('textarea');
+    text = styleTextAreaExp(text);
+    text.style.height = "74%";
+    text.value = cell.value.getAttribute('expression');
+
+    // Кнопка создания узла
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
+
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if (expression) {
+            //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
+            parser.parse(expression)
+        } else {
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
+        }
+        error = "";
+        if (!nameVarInText.value) {
+            error += getTextByLocale("NameVariableIsMissing");
+        } else if (!checkValidID(nameVarInText.value)) {
+            error += getTextByLocale("NameVariableIsIncorrect");
+        }
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+            error += getTextByLocale("TypeVariableIsMissing");
+        }
+        if (error) {
+            throw new Error(error);
+        }
+
+        var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
+        var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+
+
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", expression);
+        cell.value.setAttribute("typeVar", typeInText);
+        cell.value.setAttribute("nameVar", nameVarInText.value);
+        cell.value.setAttribute("operator", selectedOperatorInText);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    var workspace;
+
+    // Кнопка переключение на Blockly
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if (expression) {
+            parser.parse(expression)
+        }
+        divText.style.display = "none";
+        divBlockly.style.display = "block";
+        nestedDiv.innerHTML = "";
+        workspace = Blockly.inject('cycleUpdateBlocklyDiv', { toolbox: toolbox });
+        workspace.clear();
+        if (expression) {
+            parser.parse(expression)
+            toBlock(root, workspace);
+        }
+        nameVarInBlockly.value = nameVarInText.value;
+        selectOperatorInBlockly.options.selectedIndex = selectOperatorInText.options.selectedIndex;
+        selectClassInBlockly.options.selectedIndex = selectClassInText.options.selectedIndex;
+    });
+
+    var nameVarInText = document.createElement('input');
+    nameVarInText.type = "text";
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
+    nameVarInText.placeholder = "New variable";
+    nameVarInText.value = cell.value.getAttribute('nameVar');
+
+    var jsonClasses = getClasses(editorUi);
+
+    var selectClassInText = document.createElement('select');
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInText.options[selectClassInText.options.length] = newOption;
+    });
+    let type = cell.value.getAttribute('typeVar');
+    for (let index = 0; index < selectClassInText.options.length; ++index) {
+        if (selectClassInText.options[index].value == type) {
+            selectClassInText.options[index].selected = true;
+        }
+    }
+
+    var selectOperatorInText = document.createElement('select');
+    selectOperatorInText = styleSelect(selectOperatorInText);
+    selectOperatorInText.style.height = '5%';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
+    });
+    let operator = cell.value.getAttribute('operator');
+    for (let index = 0; index < selectOperatorInText.options.length; ++index) {
+        if (selectOperatorInText.options[index].value == operator) {
+            selectOperatorInText.options[index].selected = true;
+        }
+    }
+
+    divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    divText.appendChild(nameVarInText);
+    divText.appendChild(selectClassInText);
+    divText.appendChild(selectOperatorInText);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
+    div.appendChild(divText);
+
+
+    //Экран с blockly
+    var nestedDiv = document.createElement('div');
+    nestedDiv.id = "cycleUpdateBlocklyDiv";
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
+    nestedDiv.style.height = h * 0.72 + 'px';
+
+    // Кнопка создания узла
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
+        var code = generateCode(workspace);
+        if (!code) {
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try {
+                parser.parse(code);
+            } catch (e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
+        }
+        error = "";
+        if (!nameVarInBlockly.value) {
+            error += getTextByLocale("NameVariableIsMissing");
+        } else if (!checkValidID(nameVarInBlockly.value)) {
+            error += getTextByLocale("NameVariableIsIncorrect");
+        }
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+            error += getTextByLocale("TypeVariableIsMissing");
+        }
+        if (error) {
+            throw new Error(error);
+        }
+        var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
+        var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", code);
+        cell.value.setAttribute("typeVar", typeInBlockly);
+        cell.value.setAttribute("nameVar", nameVarInBlockly.value);
+        cell.value.setAttribute("operator", selectedOperatorInBlockly);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    //кнопка переключения на текстовый вариант
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
+        var code = generateCode(workspace);
+        divBlockly.style.display = "none";
+        divText.style.display = "block";
+        divText.getElementsByTagName("textarea").item(0).value = code;
+        nameVarInText.value = nameVarInBlockly.value;
+        selectOperatorInText.options.selectedIndex = selectOperatorInBlockly.options.selectedIndex;
+        selectClassInText.options.selectedIndex = selectClassInBlockly.options.selectedIndex;
+    });
+
+    var nameVarInBlockly = document.createElement('input');
+    nameVarInBlockly.type = "text";
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
+    nameVarInBlockly.placeholder = "New variable";
+
+    var selectClassInBlockly = document.createElement('select');
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
+    });
+
+    var selectOperatorInBlockly = document.createElement('select');
+    selectOperatorInBlockly = styleSelect(selectOperatorInBlockly);
+    selectOperatorInBlockly.style.height = '5%';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
+    });
+
+    divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectClassInBlockly);
+    divBlockly.appendChild(selectOperatorInBlockly);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
+    div.appendChild(divBlockly);
+
+
+    // Настройки окна
+    var win = new mxWindow(getTextByLocale("TitleWhileNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
@@ -11534,8 +12011,7 @@ var ConvertToCycleNode = function (cell, editorUi, x, y, w, h) {
         theGraph.refresh();
     }
 };
-function treeToXml(editorUi)
-{
+function treeToXml(editorUi) {
     var serializer = new XMLSerializer();
     const resultDoc = document.implementation.createDocument("", "", null);
 
@@ -11545,7 +12021,7 @@ function treeToXml(editorUi)
     Object.keys(cells).forEach(function (key) {
 
         var node = cells[key];
-        
+
         if (node.value != null && typeof node.value == "object" && node.value.getAttribute("type") == "START") {
             countStartNode++;
             // CheckCycleInTree(node, editorUi);
@@ -11553,29 +12029,28 @@ function treeToXml(editorUi)
             return;
         }
     });
-    if(countStartNode != 1) {
+    if (countStartNode != 1) {
         throw new Error(getTextByLocale("StartNodeOnlyOne"));
     }
     return '<?xml version="1.0"?>' + serializer.serializeToString(resultDoc);
 }
 
-function startNodeToXml(doc, startNode, editorUi)
-{
+function startNodeToXml(doc, startNode, editorUi) {
     let resultNode = doc.createElement("StartNode");
     resultNode.appendChild(getVariables(doc, startNode.value.getAttribute("label")));
-    if(startNode.edges) {
-        for(let i = 0; i < startNode.edges.length; i++) {
-            if(startNode.edges[i].target == startNode) {
+    if (startNode.edges) {
+        for (let i = 0; i < startNode.edges.length; i++) {
+            if (startNode.edges[i].target == startNode) {
                 throw new Error(getTextByLocale("StartNodeIsTarget"));
             }
-            if(startNode.edges[i].value == null || typeof startNode.edges[i].value != "object" || !startNode.edges[i].value.getAttribute("type")) {
+            if (startNode.edges[i].value == null || typeof startNode.edges[i].value != "object" || !startNode.edges[i].value.getAttribute("type")) {
                 markOutcome(editorUi.editor.graph, startNode.edges[i])
                 throw new Error(getTextByLocale("typeOutcomeStartNodeIsMissing"));
             }
             let thoughtBranchNode = doc.createElement("ThoughtBranch");
             thoughtBranchNode.setAttribute("type", startNode.edges[i].value.getAttribute("type"));
             thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, startNode.edges[i]); //TODO: проверить мб присваивать не нужно
-            if(startNode.edges[i].target != startNode) {
+            if (startNode.edges[i].target != startNode) {
                 thoughtBranchNode.appendChild(switchCaseNodes(doc, startNode.edges[i].target, editorUi, false));
             }
             resultNode.appendChild(thoughtBranchNode);
@@ -11584,8 +12059,7 @@ function startNodeToXml(doc, startNode, editorUi)
     return resultNode;
 }
 
-function getVariables(doc, nodeValue)
-{
+function getVariables(doc, nodeValue) {
     let inputVariablesNode = doc.createElement("InputVariables");
     let vars = nodeValue.split("\n");
     vars.forEach(element => {
@@ -11598,12 +12072,11 @@ function getVariables(doc, nodeValue)
     return inputVariablesNode;
 }
 
-function switchCaseNodes(doc, node, editorUi, isPredetermining)
-{
+function switchCaseNodes(doc, node, editorUi, isPredetermining) {
     let resultNode = null;
     //Узел истина
-    if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;") {
-        if(isPredetermining) {
+    if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;") {
+        if (isPredetermining) {
             //TODO: возможно тут лучше вызывать функцию создания узла результата
             resultNode = doc.createElement("BranchResultNode");
             resultNode.setAttribute("value", "true");
@@ -11612,8 +12085,8 @@ function switchCaseNodes(doc, node, editorUi, isPredetermining)
         }
     }
     //Узел ложь
-    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;") {
-        if(isPredetermining) {
+    else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;") {
+        if (isPredetermining) {
             //TODO: возможно тут лучше вызывать функцию создания узла результата
             resultNode = doc.createElement("BranchResultNode");
             resultNode.setAttribute("value", "true");
@@ -11622,34 +12095,41 @@ function switchCaseNodes(doc, node, editorUi, isPredetermining)
         }
     }
     //Узел вопрос
-    else if(node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
+    else if (node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
         resultNode = questionNodeToXml(doc, node, false, editorUi, isPredetermining);
     }
     //Узел свитч кейс
-    else if(node.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
+    else if (node.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
         resultNode = questionNodeToXml(doc, node, true, editorUi, isPredetermining);
     }
     //Узел действия
-    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
+    else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
         resultNode = actionNodeToXml(doc, node, editorUi, isPredetermining);
     }
     //Узел логическая агрегация
-    else if(typeof node.value == "object" 
-    && (node.value.getAttribute("type") == "AND" || node.value.getAttribute("type") == "OR")) {
+    else if (typeof node.value == "object"
+        && (node.value.getAttribute("type") == "AND" || node.value.getAttribute("type") == "OR")) {
         resultNode = logicNodeToXml(doc, node, editorUi, isPredetermining);
     }
     //Узел предрешающий фактор
-    else if(typeof node.value == "object" && node.value.getAttribute("type") == "predetermining") {
+    else if (typeof node.value == "object" && node.value.getAttribute("type") == "predetermining") {
         resultNode = predeterminingNodeToXml(doc, node, editorUi);
     }
+    //Узел "пока"
+    else if (typeof node.value == "object"
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && node.value.getAttribute("typeCycle") == "while") {
+        resultNode = whileNodeToXml(doc, node, editorUi, isPredetermining);
+    }
     //Узел цикла
-    else if(typeof node.value == "object" 
-    && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")) {
+    else if (typeof node.value == "object"
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && node.value.getAttribute("typeCycle") == null) {
         resultNode = cycleNodeToXml(doc, node, editorUi, isPredetermining);
     }
     //Узел неопределенность предрешающего фактора
-    else if(node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
-        if(isPredetermining) {
+    else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
+        if (isPredetermining) {
             resultNode = doc.createElement("BranchResultNode");
             resultNode.setAttribute("value", "false");
         } else {
@@ -11662,16 +12142,16 @@ function switchCaseNodes(doc, node, editorUi, isPredetermining)
 function branchResultNodeToXml(doc, node, resultBranch) {
     let resultNode = doc.createElement("BranchResultNode");
 
-    if(node.value.getAttribute("label")) {
+    if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
     resultNode.setAttribute("value", resultBranch)
 
-    if(node.value.getAttribute("expression") != "") {
+    if (node.value.getAttribute("expression") != "") {
         let expressionNode = doc.createElement("Expression");
         try {
             expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
-        } catch(e) {
+        } catch (e) {
             throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
         }
         resultNode.appendChild(expressionNode);
@@ -11679,15 +12159,14 @@ function branchResultNodeToXml(doc, node, resultBranch) {
     return resultNode;
 }
 
-function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining)
-{
+function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining) {
     let resultNode = doc.createElement("QuestionNode");
-    if(node.value.getAttribute("label")) {
+    if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"))
     }
     try {
         resultNode.setAttribute("type", specialChars(getTypeFromCode(node.value.getAttribute("expression"), editorUi).type));
-    } catch(e) {
+    } catch (e) {
         throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
     }
     resultNode.setAttribute("isSwitch", isSwitch);
@@ -11696,7 +12175,7 @@ function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining)
     let expressionNode = doc.createElement("Expression");
     try {
         expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
-    } catch(e) {
+    } catch (e) {
         throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
     }
     resultNode.appendChild(expressionNode);
@@ -11707,10 +12186,9 @@ function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining)
     return resultNode;
 }
 
-function actionNodeToXml(doc, node, editorUi, isPredetermining)
-{
+function actionNodeToXml(doc, node, editorUi, isPredetermining) {
     let resultNode = doc.createElement("FindActionNode");
-    if(node.value.getAttribute("label")) {
+    if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
     resultNode = getQuestionInfoNode(resultNode, node, false);
@@ -11718,7 +12196,7 @@ function actionNodeToXml(doc, node, editorUi, isPredetermining)
     let expressionNode = doc.createElement("Expression");
     try {
         expressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
-    } catch(e) {
+    } catch (e) {
         throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
     }
     resultNode.appendChild(expressionNode);
@@ -11736,10 +12214,9 @@ function actionNodeToXml(doc, node, editorUi, isPredetermining)
     return resultNode;
 }
 
-function cycleNodeToXml(doc, node, editorUi, isPredetermining)
-{
-    let resultNode = doc.createElement("CycleAggregationNode");
-    if(node.value.getAttribute("label")) {
+function whileNodeToXml(doc, node, editorUi, isPredetermining) {
+    let resultNode = doc.createElement("WhileAggregationNode");
+    if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
     resultNode.setAttribute("operator", node.value.getAttribute("operator"));
@@ -11748,7 +12225,7 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
     let selectorExpressionNode = doc.createElement("SelectorExpression");
     try {
         selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
-    } catch(e) {
+    } catch (e) {
         throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
     }
     resultNode.appendChild(selectorExpressionNode);
@@ -11763,21 +12240,21 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
     let bodyCount = 0;
     let trueCount = 0;
     let falseCount = 0;
-    if(node.edges) {
-        for(let i = 0; i < node.edges.length; i++) {
-            if(node.edges[i].target != node) {
+    if (node.edges) {
+        for (let i = 0; i < node.edges.length; i++) {
+            if (node.edges[i].target != node) {
                 valueEdge = node.edges[i].value;
-                if(valueEdge == null || typeof valueEdge != "object" 
-                || !valueEdge.getAttribute("type") 
-                || (valueEdge.getAttribute("type") != "True" 
-                && valueEdge.getAttribute("type") != "False" 
-                && valueEdge.getAttribute("type") != "Body")) {
+                if (valueEdge == null || typeof valueEdge != "object"
+                    || !valueEdge.getAttribute("type")
+                    || (valueEdge.getAttribute("type") != "True"
+                        && valueEdge.getAttribute("type") != "False"
+                        && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing") 
-                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
+                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing")
+                        + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
-                if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
-                    if(valueEdge.getAttribute("type") == "True") {
+                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    if (valueEdge.getAttribute("type") == "True") {
                         trueCount++;
                     } else {
                         falseCount++;
@@ -11789,7 +12266,7 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
                     outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
                     resultNode.appendChild(outcomeNode);
 
-                } else if(valueEdge.getAttribute("type") == "Body") {
+                } else if (valueEdge.getAttribute("type") == "Body") {
 
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
                     thoughtBranchNode.setAttribute("type", "bool");
@@ -11804,16 +12281,16 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
         }
     }
     let errorCycle = "";
-    if(bodyCount != 1) {
+    if (bodyCount > 1) {
         errorCycle += getTextByLocale("bodyOnlyOne");
     }
-    if(trueCount != 1) {
+    if (trueCount > 1) {
         errorCycle += getTextByLocale("trueCycleOnlyOne");
     }
-    if(falseCount != 1) {
+    if (falseCount > 1) {
         errorCycle += getTextByLocale("falseCycleOnlyOne");
     }
-    if(errorCycle) {
+    if (errorCycle) {
         throw new Error(errorCycle + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
@@ -11821,10 +12298,93 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining)
     return resultNode;
 }
 
-function logicNodeToXml(doc, node, editorUi, isPredetermining)
-{
+function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
+    let resultNode = doc.createElement("CycleAggregationNode");
+    if (node.value.getAttribute("label")) {
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"));
+    }
+    resultNode.setAttribute("operator", node.value.getAttribute("operator"));
+    resultNode = getQuestionInfoNode(resultNode, node, false);
+
+    let selectorExpressionNode = doc.createElement("SelectorExpression");
+    try {
+        selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch (e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
+    resultNode.appendChild(selectorExpressionNode);
+
+    let typeVar = node.value.getAttribute("typeVar");
+
+    let decisionTreeVarDeclNode = doc.createElement("DecisionTreeVarDecl");
+    decisionTreeVarDeclNode.setAttribute("name", specialChars(node.value.getAttribute("nameVar")));
+    decisionTreeVarDeclNode.setAttribute("type", specialChars(typeVar));
+    resultNode.appendChild(decisionTreeVarDeclNode);
+
+    let bodyCount = 0;
+    let trueCount = 0;
+    let falseCount = 0;
+    if (node.edges) {
+        for (let i = 0; i < node.edges.length; i++) {
+            if (node.edges[i].target != node) {
+                valueEdge = node.edges[i].value;
+                if (valueEdge == null || typeof valueEdge != "object"
+                    || !valueEdge.getAttribute("type")
+                    || (valueEdge.getAttribute("type") != "True"
+                        && valueEdge.getAttribute("type") != "False"
+                        && valueEdge.getAttribute("type") != "Body")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing")
+                        + "\nУзел с текстом: " + node.value.getAttribute("label"));
+                }
+                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    if (valueEdge.getAttribute("type") == "True") {
+                        trueCount++;
+                    } else {
+                        falseCount++;
+                    }
+
+                    let outcomeNode = doc.createElement("Outcome");
+                    outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
+                    outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(outcomeNode);
+
+                } else if (valueEdge.getAttribute("type") == "Body") {
+
+                    let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("type", "bool");
+                    thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
+                    thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(thoughtBranchNode);
+
+                    bodyCount++;
+                }
+            }
+        }
+    }
+    let errorCycle = "";
+    if (bodyCount > 1) {
+        errorCycle += getTextByLocale("bodyOnlyOne");
+    }
+    if (trueCount > 1) {
+        errorCycle += getTextByLocale("trueCycleOnlyOne");
+    }
+    if (falseCount > 1) {
+        errorCycle += getTextByLocale("falseCycleOnlyOne");
+    }
+    if (errorCycle) {
+        throw new Error(errorCycle + "\nУзел с текстом: " + node.value.getAttribute("label"));
+    }
+
+
+    return resultNode;
+}
+
+function logicNodeToXml(doc, node, editorUi, isPredetermining) {
     let resultNode = doc.createElement("LogicAggregationNode");
-    if(node.value.getAttribute("label")) {
+    if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
     resultNode.setAttribute("operator", node.value.getAttribute("type").toLowerCase());
@@ -11833,21 +12393,21 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining)
     let branchCount = 0;
     let trueCount = 0;
     let falseCount = 0;
-    if(node.edges) {
-        for(let i = 0; i < node.edges.length; i++) {
-            if(node.edges[i].target != node) {
+    if (node.edges) {
+        for (let i = 0; i < node.edges.length; i++) {
+            if (node.edges[i].target != node) {
                 valueEdge = node.edges[i].value;
-                if(valueEdge == null || typeof valueEdge != "object" 
-                || !valueEdge.getAttribute("type") 
-                || (valueEdge.getAttribute("type") != "True" 
-                && valueEdge.getAttribute("type") != "False" 
-                && valueEdge.getAttribute("type") != "Branch")) {
+                if (valueEdge == null || typeof valueEdge != "object"
+                    || !valueEdge.getAttribute("type")
+                    || (valueEdge.getAttribute("type") != "True"
+                        && valueEdge.getAttribute("type") != "False"
+                        && valueEdge.getAttribute("type") != "Branch")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing") 
-                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
+                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing")
+                        + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
-                if(valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
-                    if(valueEdge.getAttribute("type") == "True") {
+                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    if (valueEdge.getAttribute("type") == "True") {
                         trueCount++;
                     } else {
                         falseCount++;
@@ -11858,7 +12418,7 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining)
                     outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
                     resultNode.appendChild(outcomeNode);
 
-                } else if(valueEdge.getAttribute("type") == "Branch") {
+                } else if (valueEdge.getAttribute("type") == "Branch") {
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
@@ -11870,26 +12430,25 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining)
         }
     }
     let errorLogic = "";
-    if(branchCount < 2) {
+    if (branchCount < 2) {
         errorLogic += getTextByLocale("OutcomeLogicNodeOnlyTwo");
     }
-    if(trueCount != 1) {
+    if (trueCount > 1) {
         errorLogic += getTextByLocale("trueLogicNodeOnlyOne");
     }
-    if(falseCount != 1) {
+    if (falseCount > 1) {
         errorLogic += getTextByLocale("falseLogicNodeOnlyOne");
     }
-    if(errorLogic) {
+    if (errorLogic) {
         throw new Error(errorLogic + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
     return resultNode;
 }
 
-function predeterminingNodeToXml(doc, node, editorUi)
-{
+function predeterminingNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("PredeterminingFactorsNode");
-    if(node.value.getAttribute("label")) {
+    if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
     resultNode = getQuestionInfoNode(resultNode, node, false);
@@ -11897,19 +12456,19 @@ function predeterminingNodeToXml(doc, node, editorUi)
     //Следующие ветки
     let predCount = 0;
     let undertermCount = 0;
-    if(node.edges) {
-        for(let i = 0; i < node.edges.length; i++) {
+    if (node.edges) {
+        for (let i = 0; i < node.edges.length; i++) {
             valueEdge = node.edges[i].value;
-            if(node.edges[i].target != node && (valueEdge == null || typeof valueEdge != "object" 
-            || !valueEdge.getAttribute("type") 
-            || (valueEdge.getAttribute("type") != "predeterminingBranch" 
-            && valueEdge.getAttribute("type") != "undetermined"))) {
+            if (node.edges[i].target != node && (valueEdge == null || typeof valueEdge != "object"
+                || !valueEdge.getAttribute("type")
+                || (valueEdge.getAttribute("type") != "predeterminingBranch"
+                    && valueEdge.getAttribute("type") != "undetermined"))) {
                 markOutcome(editorUi.editor.graph, node.edges[i])
-                throw new Error(getTextByLocale("typeOutcomePredIsMissing") 
-                + "\nУзел с текстом: " + node.value.getAttribute("label"));
+                throw new Error(getTextByLocale("typeOutcomePredIsMissing")
+                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
             }
 
-            if(node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
+            if (node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
                 let correctNode = checkCorrectPredeterminingBranch(node.edges[i].target);
                 predCount++;
                 let outcomeNode = doc.createElement("Outcome");
@@ -11922,20 +12481,20 @@ function predeterminingNodeToXml(doc, node, editorUi)
                 thoughtBranchNode = questionInfo[1];
 
                 outcomeNode.appendChild(switchCaseNodes(doc, correctNode, editorUi, false));
-                
-                
+
+
                 thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, true));
-                
+
                 outcomeNode.appendChild(thoughtBranchNode);
-                
+
                 resultNode.appendChild(outcomeNode);
             }
         }
     }
 
-    if(node.edges) {
-        for(let i = 0; i < node.edges.length; i++) {
-            if(node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
+    if (node.edges) {
+        for (let i = 0; i < node.edges.length; i++) {
+            if (node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
                 undertermCount++;
                 let outcomeNode = doc.createElement("Outcome");
                 outcomeNode.setAttribute("value", "undetermined");
@@ -11945,77 +12504,76 @@ function predeterminingNodeToXml(doc, node, editorUi)
         }
     }
     let errorPred = "";
-    if(predCount == 0) {
+    if (predCount == 0) {
         errorPred += getTextByLocale("predOutcomeIsMissing");
     }
-    if(undertermCount != 1) {
+    if (undertermCount != 1) {
         errorPred += getTextByLocale("undeterminedOnlyOne");
     }
-    if(errorPred) {
+    if (errorPred) {
         throw new Error(errorPred + "\nУзел с текстом: " + node.value.getAttribute("label"));
     }
 
     return resultNode;
 }
 
-function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining)
-{
+function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining) {
     let prevValues = new Set();
-    if(node.edges) {
-        for(let i = 0; i < node.edges.length; i++) {
-            if(node.edges[i].target != node) {
+    if (node.edges) {
+        for (let i = 0; i < node.edges.length; i++) {
+            if (node.edges[i].target != node) {
                 valueEdge = node.edges[i].value;
-                if(valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
+                if (valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
-                    throw new Error(getTextByLocale("valueInOutcomeIsMissing") 
-                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
+                    throw new Error(getTextByLocale("valueInOutcomeIsMissing")
+                        + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
                 let typeNode;
                 try {
                     typeNode = getTypeFromCode(node.value.getAttribute('expression'), editorUi);
-                } catch(e) {
-                    throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label") 
-                    + "\nСтрелка с текстом: " + valueEdge.getAttribute("value"))
+                } catch (e) {
+                    throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label")
+                        + "\nСтрелка с текстом: " + valueEdge.getAttribute("value"))
                 }
-                if(typeNode.type == valueEdge.getAttribute("typeValue")) {
-                    if(valueEdge.getAttribute("typeValue") == "enum") {
+                if (typeNode.type == valueEdge.getAttribute("typeValue")) {
+                    if (valueEdge.getAttribute("typeValue") == "enum") {
                         let enumsList = getEnums(editorUi);
                         let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
                         let valueEnumInOutcome = valueEdge.getAttribute("value").split(":");
-                        if(findEnum[0] != undefined) {
-                            if(findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
+                        if (findEnum[0] != undefined) {
+                            if (findEnum[0].values.indexOf(valueEnumInOutcome[1]) == -1) {
                                 markOutcome(editorUi.editor.graph, node.edges[i])
                                 throw new Error(getTextByLocale("valueEnumIsMissing")
-                                + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
+                                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                             }
                         } else {
                             throw new Error(getTextByLocale("EnumIsMissing")
-                            + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
+                                + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                         }
-                    } else if(valueEdge.getAttribute("typeValue") == "class") {
+                    } else if (valueEdge.getAttribute("typeValue") == "class") {
                         let jsonClasses = getClasses(editorUi);
                         let findClass = jsonClasses.filter(el => el.name == valueEdge.getAttribute("value"));
-                        if(findClass.length == 0) {
+                        if (findClass.length == 0) {
                             markOutcome(editorUi.editor.graph, node.edges[i])
                             throw new Error(getTextByLocale("ClassInDictIsMissing")
-                            + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
+                                + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                         }
                     }
-                } else if(valueEdge.getAttribute("typeValue") && typeNode.type != valueEdge.getAttribute("typeValue")) {
+                } else if (valueEdge.getAttribute("typeValue") && typeNode.type != valueEdge.getAttribute("typeValue")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("TypesDontMatch")
-                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
+                        + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
-                if(prevValues.has(valueEdge.getAttribute("value"))) {
+                if (prevValues.has(valueEdge.getAttribute("value"))) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("OutcomesHasSameValues")
-                    + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
+                        + "\nИсходит из узла с текстом: " + node.value.getAttribute("label"));
                 }
                 prevValues.add(valueEdge.getAttribute("value"));
                 let resultNode = doc.createElement("Outcome");
 
                 resultNode = getQuestionInfoOutcome(resultNode, node.edges[i]);
-                
+
                 resultNode.setAttribute("value", specialChars(valueEdge.getAttribute("value")));
                 resultNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
                 parentNode.appendChild(resultNode);
@@ -12027,7 +12585,7 @@ function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining)
 
 function markOutcome(graph, cell) {
     graph.getModel().beginUpdate();
-    if(!cell.style.includes("strokeColor=#FF0000;")) {
+    if (!cell.style.includes("strokeColor=#FF0000;")) {
         cell.style += "strokeColor=#FF0000;";
     }
     graph.getModel().endUpdate();
@@ -12035,81 +12593,81 @@ function markOutcome(graph, cell) {
 }
 
 function getQuestionInfoThoughtBranch(thoughtBranchNode, edge) {
-    if(edge.value.getAttribute("_description")) {
+    if (edge.value.getAttribute("_description")) {
         thoughtBranchNode.setAttribute("_description", specialChars(edge.value.getAttribute("_description")));
     }
-    if(edge.value.getAttribute("_nextStepQuestion")) {
+    if (edge.value.getAttribute("_nextStepQuestion")) {
         thoughtBranchNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestion")));
     }
-    if(edge.value.getAttribute("_nextStepExplanation")) {
+    if (edge.value.getAttribute("_nextStepExplanation")) {
         thoughtBranchNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanation")));
     }
     return thoughtBranchNode;
 }
 
 function getQuestionInfoOutcome(resultNode, edge) {
-    if(edge.value.getAttribute("_text")) {
+    if (edge.value.getAttribute("_text")) {
         resultNode.setAttribute("_text", specialChars(edge.value.getAttribute("_text")));
     }
-    if(edge.value.getAttribute("_explanation")) {
+    if (edge.value.getAttribute("_explanation")) {
         resultNode.setAttribute("_explanation", specialChars(edge.value.getAttribute("_explanation")));
     }
-    if(edge.value.getAttribute("_nextStepBranchResult")) {
+    if (edge.value.getAttribute("_nextStepBranchResult")) {
         resultNode.setAttribute("_nextStepBranchResult", specialChars(edge.value.getAttribute("_nextStepBranchResult")));
     }
-    if(edge.value.getAttribute("_nextStepQuestion")) {
+    if (edge.value.getAttribute("_nextStepQuestion")) {
         resultNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestion")));
     }
-    if(edge.value.getAttribute("_nextStepExplanation")) {
+    if (edge.value.getAttribute("_nextStepExplanation")) {
         resultNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanation")));
     }
     return resultNode;
 }
 
 function getQuestionInfoNode(resultNode, node, isLogic) {
-    if(isLogic) {
-        if(node.value.getAttribute("_description")) {
+    if (isLogic) {
+        if (node.value.getAttribute("_description")) {
             resultNode.setAttribute("_description", specialChars(node.value.getAttribute("_description")));
         }
     } else {
-        if(node.value.getAttribute("_question")) {
+        if (node.value.getAttribute("_question")) {
             resultNode.setAttribute("_question", specialChars(node.value.getAttribute("_question")));
         }
     }
-    if(node.value.getAttribute("_asNextStep")) {
+    if (node.value.getAttribute("_asNextStep")) {
         resultNode.setAttribute("_asNextStep", specialChars(node.value.getAttribute("_asNextStep")));
     }
-    if(node.value.getAttribute("_endingCause")) {
+    if (node.value.getAttribute("_endingCause")) {
         resultNode.setAttribute("_endingCause", specialChars(node.value.getAttribute("_endingCause")));
     }
     return resultNode;
 }
 
 function getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, edge) {
-    
-    if(edge.value.getAttribute("_text")) {
+
+    if (edge.value.getAttribute("_text")) {
         outcomeNode.setAttribute("_text", specialChars(edge.value.getAttribute("_text")));
     }
-    if(edge.value.getAttribute("_explanation")) {
+    if (edge.value.getAttribute("_explanation")) {
         outcomeNode.setAttribute("_explanation", specialChars(edge.value.getAttribute("_explanation")));
     }
-    if(edge.value.getAttribute("_nextStepBranchResult")) {
+    if (edge.value.getAttribute("_nextStepBranchResult")) {
         outcomeNode.setAttribute("_nextStepBranchResult", specialChars(edge.value.getAttribute("_nextStepBranchResult")));
     }
-    if(edge.value.getAttribute("_nextStepQuestionOutcome")) {
+    if (edge.value.getAttribute("_nextStepQuestionOutcome")) {
         outcomeNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestionOutcome")));
     }
-    if(edge.value.getAttribute("_nextStepExplanationOutcome")) {
+    if (edge.value.getAttribute("_nextStepExplanationOutcome")) {
         outcomeNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanationOutcome")));
     }
 
-    if(edge.value.getAttribute("_description")) {
+    if (edge.value.getAttribute("_description")) {
         thoughtBranchNode.setAttribute("_description", specialChars(edge.value.getAttribute("_description")));
     }
-    if(edge.value.getAttribute("_nextStepQuestionThoughtBranch")) {
+    if (edge.value.getAttribute("_nextStepQuestionThoughtBranch")) {
         thoughtBranchNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestionThoughtBranch")));
     }
-    if(edge.value.getAttribute("_nextStepExplanationThoughtBranch")) {
+    if (edge.value.getAttribute("_nextStepExplanationThoughtBranch")) {
         thoughtBranchNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanationThoughtBranch")));
     }
 
@@ -12121,16 +12679,16 @@ function checkCorrectPredeterminingBranch(node) {
     let resultNode = null;
 
     function branchBypass(node) {
-        if ((node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;" 
-        || node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;")
-        && (!resultNode || resultNode && (resultNode.style != node.style || 
-        resultNode.value.getAttribute("expression") != node.value.getAttribute("expression")))) {
+        if ((node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
+            || node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;")
+            && (!resultNode || resultNode && (resultNode.style != node.style ||
+                resultNode.value.getAttribute("expression") != node.value.getAttribute("expression")))) {
             countResultNode++;
             resultNode = node;
             return true;
         }
         let countChildNodes = 0;
-        for(let i = 0; i < node.edges.length; i++) {
+        for (let i = 0; i < node.edges.length; i++) {
             let child = node.edges[i].target;
             if (child != node) {
                 countChildNodes++;
@@ -12140,7 +12698,7 @@ function checkCorrectPredeterminingBranch(node) {
             return true;
         }
         // Рекурсивно обходим потомков текущего узла
-        for(let i = 0; i < node.edges.length; i++) {
+        for (let i = 0; i < node.edges.length; i++) {
             let child = node.edges[i].target;
             if (child != node) {
                 branchBypass(child);
@@ -12149,7 +12707,7 @@ function checkCorrectPredeterminingBranch(node) {
         return true;
     }
     branchBypass(node);
-    if(countResultNode != 1) {
+    if (countResultNode != 1) {
         throw new Error(getTextByLocale("ResultOutcomeForPredNode"));
     }
     return resultNode;
@@ -12372,6 +12930,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'UncertaintyNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'cycleNodeConstructor');
+        ui.menus.addMenuItem(menu, 'whileNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
         ui.menus.addMenuItem(menu, 'switchCaseNodeConstructor');
     }, ui.menubar.editorUi.statusContainer);
@@ -12405,74 +12964,76 @@ Draw.loadPlugin(function (ui) {
 
 
     // Привязывание действий к разделам меню
-    mxResources.parse('classesConstructor='+getTextByLocale("classesConstructor"));
+    mxResources.parse('classesConstructor=' + getTextByLocale("classesConstructor"));
 
-    mxResources.parse('classPropertiesConstructor='+getTextByLocale("classPropertiesConstructor"));
+    mxResources.parse('classPropertiesConstructor=' + getTextByLocale("classPropertiesConstructor"));
 
-    mxResources.parse('relationshipsConstructor='+getTextByLocale("relationshipsConstructor"));
+    mxResources.parse('relationshipsConstructor=' + getTextByLocale("relationshipsConstructor"));
 
-    mxResources.parse('enumConstructor='+getTextByLocale("enumConstructor"));
+    mxResources.parse('enumConstructor=' + getTextByLocale("enumConstructor"));
 
-    mxResources.parse('actionNodeConstructor='+getTextByLocale("actionNodeConstructor"));
+    mxResources.parse('actionNodeConstructor=' + getTextByLocale("actionNodeConstructor"));
 
-    mxResources.parse('cycleNodeConstructor='+getTextByLocale("cycleNodeConstructor"));
+    mxResources.parse('cycleNodeConstructor=' + getTextByLocale("cycleNodeConstructor"));
 
-    mxResources.parse('conditionNodeConstructor='+getTextByLocale("conditionNodeConstructor"));
+    mxResources.parse('whileNodeConstructor=' + getTextByLocale("whileNodeConstructor"));
 
-    mxResources.parse('switchCaseNodeConstructor='+getTextByLocale("switchCaseNodeConstructor"));
+    mxResources.parse('conditionNodeConstructor=' + getTextByLocale("conditionNodeConstructor"));
 
-    mxResources.parse('exportEnum='+getTextByLocale("exportEnum"));
+    mxResources.parse('switchCaseNodeConstructor=' + getTextByLocale("switchCaseNodeConstructor"));
 
-    mxResources.parse('exportClass='+getTextByLocale("exportClass"));
+    mxResources.parse('exportEnum=' + getTextByLocale("exportEnum"));
 
-    mxResources.parse('exportProperty='+getTextByLocale("exportProperty"));
+    mxResources.parse('exportClass=' + getTextByLocale("exportClass"));
 
-    mxResources.parse('exportRelationship='+getTextByLocale("exportRelationship"));
+    mxResources.parse('exportProperty=' + getTextByLocale("exportProperty"));
 
-    mxResources.parse('TrueNodeCreate='+getTextByLocale("TrueNodeCreate"));
+    mxResources.parse('exportRelationship=' + getTextByLocale("exportRelationship"));
 
-    mxResources.parse('FalseNodeCreate='+getTextByLocale("FalseNodeCreate"));
+    mxResources.parse('TrueNodeCreate=' + getTextByLocale("TrueNodeCreate"));
 
-    mxResources.parse('LogicNodeCreate='+getTextByLocale("LogicNodeCreate"));
+    mxResources.parse('FalseNodeCreate=' + getTextByLocale("FalseNodeCreate"));
 
-    mxResources.parse('PredeterminingFactorsNodeCreate='+getTextByLocale("PredeterminingFactorsNodeCreate"));
+    mxResources.parse('LogicNodeCreate=' + getTextByLocale("LogicNodeCreate"));
 
-    mxResources.parse('UncertaintyNodeCreate='+getTextByLocale("UncertaintyNodeCreate"));
+    mxResources.parse('PredeterminingFactorsNodeCreate=' + getTextByLocale("PredeterminingFactorsNodeCreate"));
 
-    mxResources.parse('startNodeConstructor='+getTextByLocale("startNodeConstructor"));
+    mxResources.parse('UncertaintyNodeCreate=' + getTextByLocale("UncertaintyNodeCreate"));
 
-    mxResources.parse('exportTree='+getTextByLocale("exportTree"));
+    mxResources.parse('startNodeConstructor=' + getTextByLocale("startNodeConstructor"));
 
-    mxResources.parse('editValue='+getTextByLocale("editValue"));
+    mxResources.parse('exportTree=' + getTextByLocale("exportTree"));
 
-    mxResources.parse('editTextInNode='+getTextByLocale("editTextInNode"));
+    mxResources.parse('editValue=' + getTextByLocale("editValue"));
 
-    mxResources.parse('editQuestionInfo='+getTextByLocale("editQuestionInfo"));
+    mxResources.parse('editTextInNode=' + getTextByLocale("editTextInNode"));
 
-    mxResources.parse('convertStartNode='+getTextByLocale("convertStartNode"));
+    mxResources.parse('editQuestionInfo=' + getTextByLocale("editQuestionInfo"));
 
-    mxResources.parse('convertTrueNode='+getTextByLocale("convertTrueNode"));
+    mxResources.parse('convertStartNode=' + getTextByLocale("convertStartNode"));
 
-    mxResources.parse('convertFalseNode='+getTextByLocale("convertFalseNode"));
+    mxResources.parse('convertTrueNode=' + getTextByLocale("convertTrueNode"));
 
-    mxResources.parse('convertLogicNode='+getTextByLocale("convertLogicNode"));
+    mxResources.parse('convertFalseNode=' + getTextByLocale("convertFalseNode"));
 
-    mxResources.parse('convertPredeterminingFactorsNode='+getTextByLocale("convertPredeterminingFactorsNode"));
+    mxResources.parse('convertLogicNode=' + getTextByLocale("convertLogicNode"));
 
-    mxResources.parse('convertUncertaintyNode='+getTextByLocale("convertUncertaintyNode"));
+    mxResources.parse('convertPredeterminingFactorsNode=' + getTextByLocale("convertPredeterminingFactorsNode"));
 
-    mxResources.parse('convertActionNode='+getTextByLocale("convertActionNode"));
+    mxResources.parse('convertUncertaintyNode=' + getTextByLocale("convertUncertaintyNode"));
 
-    mxResources.parse('convertCycleNode='+getTextByLocale("convertCycleNode"));
+    mxResources.parse('convertActionNode=' + getTextByLocale("convertActionNode"));
 
-    mxResources.parse('convertConditionNode='+getTextByLocale("convertConditionNode"));
+    mxResources.parse('convertCycleNode=' + getTextByLocale("convertCycleNode"));
 
-    mxResources.parse('convertSwitchCaseNode='+getTextByLocale("convertSwitchCaseNode"));
+    mxResources.parse('convertConditionNode=' + getTextByLocale("convertConditionNode"));
+
+    mxResources.parse('convertSwitchCaseNode=' + getTextByLocale("convertSwitchCaseNode"));
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
-        if(!this.classConstructorWindow || !this.classConstructorWindow.window.content) {
+        if (!this.classConstructorWindow || !this.classConstructorWindow.window.content) {
             this.classConstructorWindow = new ClassConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.classConstructorWindow.window.setVisible(true);
         }
@@ -12480,7 +13041,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора блока со свойствами классов
     ui.actions.addAction('classPropertiesConstructor', function () {
-        if(!this.classPropertiesConstructorWindow || !this.classPropertiesConstructorWindow.window.content) {
+        if (!this.classPropertiesConstructorWindow || !this.classPropertiesConstructorWindow.window.content) {
             this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.classPropertiesConstructorWindow.window.setVisible(true);
         }
@@ -12488,7 +13049,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора enum
     ui.actions.addAction('enumConstructor', function () {
-        if(!this.enumConstructorWindow || !this.enumConstructorWindow.window.content) {
+        if (!this.enumConstructorWindow || !this.enumConstructorWindow.window.content) {
             this.enumConstructorWindow = new EnumConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.enumConstructorWindow.window.setVisible(true);
         }
@@ -12496,7 +13057,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора блока с отношениями для классов
     ui.actions.addAction('relationshipsConstructor', function () {
-        if(!this.relationshipsConstructorWindow || !this.relationshipsConstructorWindow.window.content) {
+        if (!this.relationshipsConstructorWindow || !this.relationshipsConstructorWindow.window.content) {
             this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.relationshipsConstructorWindow.window.setVisible(true);
         }
@@ -12504,7 +13065,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора начального узла
     ui.actions.addAction('startNodeConstructor', function () {
-        if(!this.startConstructorWindow || !this.startConstructorWindow.window.content) {
+        if (!this.startConstructorWindow || !this.startConstructorWindow.window.content) {
             this.startConstructorWindow = new StartConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
             this.startConstructorWindow.window.setVisible(true);
         }
@@ -12512,7 +13073,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание узла ИСТИНА
     ui.actions.addAction('TrueNodeCreate', function () {
-        if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
+        if (!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
             this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, true, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
@@ -12520,7 +13081,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание узла ЛОЖЬ
     ui.actions.addAction('FalseNodeCreate', function () {
-        if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
+        if (!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
             this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, false, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
@@ -12528,7 +13089,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание логического узла 
     ui.actions.addAction('LogicNodeCreate', function () {
-        if(!this.logicNodeConstructorWindow || !this.logicNodeConstructorWindow.window.content) {
+        if (!this.logicNodeConstructorWindow || !this.logicNodeConstructorWindow.window.content) {
             this.logicNodeConstructorWindow = new LogicNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
             this.logicNodeConstructorWindow.window.setVisible(true);
         }
@@ -12536,7 +13097,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание узла "Предрешающий фактор"
     ui.actions.addAction('PredeterminingFactorsNodeCreate', function () {
-        if(!this.predeterminingFactorsNodeConstructorWindow || !this.predeterminingFactorsNodeConstructorWindow.window.content) {
+        if (!this.predeterminingFactorsNodeConstructorWindow || !this.predeterminingFactorsNodeConstructorWindow.window.content) {
             this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 150);
             this.predeterminingFactorsNodeConstructorWindow.window.setVisible(true);
         }
@@ -12555,7 +13116,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора узлов действия
     ui.actions.addAction('actionNodeConstructor', function () {
-        if(!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
+        if (!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
             this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.actionNodeConstructorWindow.window.setVisible(true);
         }
@@ -12563,15 +13124,23 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора узлов цикла
     ui.actions.addAction('cycleNodeConstructor', function () {
-        if(!this.cycleNodeConstructorWindow || !this.cycleNodeConstructorWindow.window.content) {
+        if (!this.cycleNodeConstructorWindow || !this.cycleNodeConstructorWindow.window.content) {
             this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.cycleNodeConstructorWindow.window.setVisible(true);
         }
     });
 
+    // Действие на отоброжение конструктора узлов while
+    ui.actions.addAction('whileNodeConstructor', function () {
+        if (!this.whileNodeConstructorWindow || !this.whileNodeConstructorWindow.window.content) {
+            this.whileNodeConstructorWindow = new WhileNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
+            this.whileNodeConstructorWindow.window.setVisible(true);
+        }
+    });
+
     // Действие на отоброжение конструктора узлов условия
     ui.actions.addAction('conditionNodeConstructor', function () {
-        if(!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
+        if (!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
             this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.conditionNodeConstructorWindow.window.setVisible(true);
         }
@@ -12579,7 +13148,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора узлов "switch case"
     ui.actions.addAction('switchCaseNodeConstructor', function () {
-        if(!this.switchCaseNodeConstructorWindow || !this.switchCaseNodeConstructorWindow.window.content) {
+        if (!this.switchCaseNodeConstructorWindow || !this.switchCaseNodeConstructorWindow.window.content) {
             this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.switchCaseNodeConstructorWindow.window.setVisible(true);
         }
@@ -12591,7 +13160,7 @@ Draw.loadPlugin(function (ui) {
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'text/csv'});
+            let file = new Blob([data], { type: 'text/csv' });
             a.href = URL.createObjectURL(file);
             a.download = "enums.csv";
             a.click();
@@ -12599,13 +13168,13 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('exportClass', function () {
-        
+
         let text = exportClasses(getClasses(ui), globalWS);
         downloadAsFile(text);
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'text/csv'});
+            let file = new Blob([data], { type: 'text/csv' });
             a.href = URL.createObjectURL(file);
             a.download = "classes.csv";
             a.click();
@@ -12613,13 +13182,13 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('exportProperty', function () {
-        
+
         let text = exportProperties(getProperties(ui));
         downloadAsFile(text);
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'text/csv'});
+            let file = new Blob([data], { type: 'text/csv' });
             a.href = URL.createObjectURL(file);
             a.download = "properties.csv";
             a.click();
@@ -12627,13 +13196,13 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('exportRelationship', function () {
-        
+
         let text = exportRelastionships(getRelationships(ui));
         downloadAsFile(text);
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'text/csv'});
+            let file = new Blob([data], { type: 'text/csv' });
             a.href = URL.createObjectURL(file);
             a.download = "relationships.csv";
             a.click();
@@ -12641,13 +13210,13 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('exportTree', function () {
-        
+
         let text = treeToXml(ui);
         downloadAsFile(text);
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'application/xml'});
+            let file = new Blob([data], { type: 'application/xml' });
             a.href = URL.createObjectURL(file);
             a.download = "tree.xml";
             a.click();
@@ -12657,72 +13226,78 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editValue', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
-            && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
+            if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
+                && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
                 this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.conditionNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;"
-            && (!this.actionNodeEditorWindow || !this.actionNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;"
+                && (!this.actionNodeEditorWindow || !this.actionNodeEditorWindow.window.content)) {
                 this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.actionNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('operator')
-            && (!this.cycleNodeEditorWindow || !this.cycleNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('operator')
+                && selectedcell.value.getAttribute('typeCycle')
+                && (!this.whileNodeEditorWindow || !this.whileNodeEditorWindow.window.content)) {
+                this.whileNodeEditorWindow = new WhileNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
+                this.whileNodeEditorWindow.window.setVisible(true);
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('operator')
+                && (!this.cycleNodeEditorWindow || !this.cycleNodeEditorWindow.window.content)) {
                 this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.cycleNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;"
-            && (!this.switchCaseNodeEditorWindow || !this.switchCaseNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;"
+                && (!this.switchCaseNodeEditorWindow || !this.switchCaseNodeEditorWindow.window.content)) {
                 this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.switchCaseNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('type') == "START"
-            && (!this.startEditorWindow || !this.startEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('type') == "START"
+                && (!this.startEditorWindow || !this.startEditorWindow.window.content)) {
                 this.startEditorWindow = new StartEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.startEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('type') == "predetermining"
-            && (!this.predeterminingFactorsNodeEditorWindow || !this.predeterminingFactorsNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('type') == "predetermining"
+                && (!this.predeterminingFactorsNodeEditorWindow || !this.predeterminingFactorsNodeEditorWindow.window.content)) {
                 this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 600, 150);
                 this.predeterminingFactorsNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")
-            && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")
+                && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
                 this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
                 this.logicNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
-            && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
+                && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                 this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
-            && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+                && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                 this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
-            && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+                && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
                 this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.classEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
-            && (!this.enumEditorWindow || !this.enumEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "string"
+                && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+                && (!this.enumEditorWindow || !this.enumEditorWindow.window.content)) {
                 this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.enumEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
-            && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "string"
+                && selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
+                && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.classPropertiesEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
-            && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+                && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
                 this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.relationshipsEditorWindow.window.setVisible(true);
-            } else if(selectedcell.edge) {
+            } else if (selectedcell.edge) {
                 this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 200);
                 this.editValueInOutcomeWindow.window.setVisible(true);
             }
@@ -12732,17 +13307,17 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editTextInNode', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object" 
-            && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
-            && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
-            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
-            || selectedcell.value != null && typeof selectedcell.value == "object" 
-            && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
-            && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
-            && selectedcell.value.getAttribute('type') != "AND" 
-            && selectedcell.value.getAttribute('type') != "OR" 
-            && selectedcell.value.getAttribute('type') != "predetermining"
-            && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+            if (selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object"
+                && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+                && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
+                && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge
+                || selectedcell.value != null && typeof selectedcell.value == "object"
+                && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+                && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+                && selectedcell.value.getAttribute('type') != "AND"
+                && selectedcell.value.getAttribute('type') != "OR"
+                && selectedcell.value.getAttribute('type') != "predetermining"
+                && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editTextInNodeWindow.window.setVisible(true);
             }
@@ -12752,19 +13327,19 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editQuestionInfo', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object" 
-            && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
-            && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
-            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
-            || selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
-            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
-            && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
-            && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
-            && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+            if (selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object"
+                && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+                && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
+                && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge
+                || selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
+                && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+                && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+                && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+                && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editQuestionInfoInNodeWindow = new EditQuestionInfoInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editQuestionInfoInNodeWindow.window.setVisible(true);
-            } else if(selectedcell.edge) {
+            } else if (selectedcell.edge) {
                 this.editQuestionInfoInOutcomeWindow = new EditQuestionInfoInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editQuestionInfoInOutcomeWindow.window.setVisible(true);
             }
