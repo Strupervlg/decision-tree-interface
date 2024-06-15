@@ -102,9 +102,16 @@ function switchCaseNodes(doc, node, editorUi, isPredetermining) {
     else if (typeof node.value == "object" && node.value.getAttribute("type") == "predetermining") {
         resultNode = predeterminingNodeToXml(doc, node, editorUi);
     }
+    //Узел "пока"
+    else if (typeof node.value == "object"
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && node.value.getAttribute("typeCycle") == "while") {
+        resultNode = whileNodeToXml(doc, node, editorUi, isPredetermining);
+    }
     //Узел цикла
     else if (typeof node.value == "object"
-        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")) {
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && node.value.getAttribute("typeCycle") == null) {
         resultNode = cycleNodeToXml(doc, node, editorUi, isPredetermining);
     }
     //Узел неопределенность предрешающего фактора
@@ -190,6 +197,90 @@ function actionNodeToXml(doc, node, editorUi, isPredetermining) {
 
     //Следующие ветки
     resultNode = outcomeToXml(doc, resultNode, node, editorUi, isPredetermining);
+
+    return resultNode;
+}
+
+function whileNodeToXml(doc, node, editorUi, isPredetermining) {
+    let resultNode = doc.createElement("WhileAggregationNode");
+    if (node.value.getAttribute("label")) {
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"));
+    }
+    resultNode.setAttribute("operator", node.value.getAttribute("operator"));
+    resultNode = getQuestionInfoNode(resultNode, node, false);
+
+    let selectorExpressionNode = doc.createElement("SelectorExpression");
+    try {
+        selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch (e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
+    resultNode.appendChild(selectorExpressionNode);
+
+    let typeVar = node.value.getAttribute("typeVar");
+
+    let decisionTreeVarDeclNode = doc.createElement("DecisionTreeVarDecl");
+    decisionTreeVarDeclNode.setAttribute("name", specialChars(node.value.getAttribute("nameVar")));
+    decisionTreeVarDeclNode.setAttribute("type", specialChars(typeVar));
+    resultNode.appendChild(decisionTreeVarDeclNode);
+
+    let bodyCount = 0;
+    let trueCount = 0;
+    let falseCount = 0;
+    if (node.edges) {
+        for (let i = 0; i < node.edges.length; i++) {
+            if (node.edges[i].target != node) {
+                valueEdge = node.edges[i].value;
+                if (valueEdge == null || typeof valueEdge != "object"
+                    || !valueEdge.getAttribute("type")
+                    || (valueEdge.getAttribute("type") != "True"
+                        && valueEdge.getAttribute("type") != "False"
+                        && valueEdge.getAttribute("type") != "Body")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing")
+                        + "\nУзел с текстом: " + node.value.getAttribute("label"));
+                }
+                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    if (valueEdge.getAttribute("type") == "True") {
+                        trueCount++;
+                    } else {
+                        falseCount++;
+                    }
+
+                    let outcomeNode = doc.createElement("Outcome");
+                    outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
+                    outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(outcomeNode);
+
+                } else if (valueEdge.getAttribute("type") == "Body") {
+
+                    let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("type", "bool");
+                    thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
+                    thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(thoughtBranchNode);
+
+                    bodyCount++;
+                }
+            }
+        }
+    }
+    let errorCycle = "";
+    if (bodyCount > 1) {
+        errorCycle += getTextByLocale("bodyOnlyOne");
+    }
+    if (trueCount > 1) {
+        errorCycle += getTextByLocale("trueCycleOnlyOne");
+    }
+    if (falseCount > 1) {
+        errorCycle += getTextByLocale("falseCycleOnlyOne");
+    }
+    if (errorCycle) {
+        throw new Error(errorCycle + "\nУзел с текстом: " + node.value.getAttribute("label"));
+    }
+
 
     return resultNode;
 }

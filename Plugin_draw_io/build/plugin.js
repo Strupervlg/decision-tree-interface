@@ -1,5 +1,5 @@
 function getTextByLocale(type) {
-    if(mxClient.language == "ru") {
+    if (mxClient.language == "ru") {
         return RU_TEXT[type];
     } else {
         return EN_TEXT[type];
@@ -27,6 +27,7 @@ const RU_TEXT = {
     "UncertaintyNodeCreate": 'Создать узел "Неопределенность"',
     "actionNodeConstructor": "Создать узел действия",
     "cycleNodeConstructor": 'Создать узел "Цикл"',
+    "whileNodeConstructor": 'Создать узел "While"',
     "conditionNodeConstructor": "Создать узел вопроса",
     "switchCaseNodeConstructor": 'Создать узел "Switch case"',
     "exportClass": "Экспорт словаря классов",
@@ -67,6 +68,8 @@ const RU_TEXT = {
     "TitleConditionNodeEditorWindow": "Редактор узла вопроса",
     "TitleCycleNodeConstructorWindow": 'Конструктор узла "Цикл"',
     "TitleCycleNodeEditorWindow": 'Редактор узла "Цикл"',
+    "TitleWhileNodeConstructorWindow": 'Конструктор узла "Пока"',
+    "TitleWhileNodeEditorWindow": 'Редактор узла "Пока"',
     "TitleEditTextInNodeWindow": "Редактор текста в узле",
     "TitleEditValueInOutcomeWindow": "Редактор значений в ветке",
     "TitleLogicNodeConstructorWindow": "Конструктор логическего узла",
@@ -196,6 +199,7 @@ const EN_TEXT = {
     "UncertaintyNodeCreate": "Create node uncertainty",
     "actionNodeConstructor": "Action Node Constructor",
     "cycleNodeConstructor": "Cycle Node Constructor",
+    "whileNodeConstructor": "While Node Constructor",
     "conditionNodeConstructor": "Condition Node Constructor",
     "switchCaseNodeConstructor": "Switch case Node Constructor",
     "exportClass": "Export class",
@@ -236,6 +240,8 @@ const EN_TEXT = {
     "TitleConditionNodeEditorWindow": "Condition node editor",
     "TitleCycleNodeConstructorWindow": "Cycle node constructor",
     "TitleCycleNodeEditorWindow": "Cycle node editor",
+    "TitleWhileNodeConstructorWindow": "While node constructor",
+    "TitleWhileNodeEditorWindow": "While node editor",
     "TitleEditTextInNodeWindow": "Edit text in node",
     "TitleEditValueInOutcomeWindow": "Edit value in outcome",
     "TitleLogicNodeConstructorWindow": "Logic node constructor",
@@ -8915,6 +8921,239 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setClosable(true);
     this.window.setVisible(true);
 };
+// Окно коструктора узлов действия
+var WhileNodeConstructorWindow = function (editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    div.style.height = "100%";
+    var divText = document.createElement('div');
+    divText.style.height = "100%";
+    var divBlockly = document.createElement('div');
+    divBlockly.style.height = "100%";
+    divBlockly.style.display = "none";
+
+    var operators = ["And", "Or"];
+
+    //Экран с текстом
+    var text = document.createElement('textarea');
+    text = styleTextAreaExp(text);
+    text.style.height = "74%";
+
+    // Кнопка создания узла
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
+
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if (expression) {
+            //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
+            parser.parse(expression)
+        } else {
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
+        }
+        error = "";
+        if (!nameVarInText.value) {
+            error += getTextByLocale("NameVariableIsMissing");
+        } else if (!checkValidID(nameVarInText.value)) {
+            error += getTextByLocale("NameVariableIsIncorrect");
+        }
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+            error += getTextByLocale("TypeVariableIsMissing");
+        }
+        if (error) {
+            throw new Error(error);
+        }
+
+        var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
+
+
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
+
+            //TODO: Возможно сделать подсветку в самом узле 
+
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+            var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'expression', expression);
+            theGraph.setAttributeForCell(newElement, 'typeVar', typeInText);
+            theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInText.value);
+            theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInText);
+            theGraph.setAttributeForCell(newElement, 'typeCycle', 'while');
+        }
+        win.destroy();
+    });
+
+    var workspace;
+
+    // Кнопка переключение на Blockly
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if (expression) {
+            parser.parse(expression)
+        }
+        divText.style.display = "none";
+        divBlockly.style.display = "block";
+        nestedDiv.innerHTML = "";
+        workspace = Blockly.inject('cycleCreateBlocklyDiv', { toolbox: toolbox });
+        workspace.clear();
+        if (expression) {
+            parser.parse(expression)
+            toBlock(root, workspace);
+        }
+        nameVarInBlockly.value = nameVarInText.value;
+        selectOperatorInBlockly.options.selectedIndex = selectOperatorInText.options.selectedIndex;
+        selectClassInBlockly.options.selectedIndex = selectClassInText.options.selectedIndex;
+    });
+
+    var nameVarInText = document.createElement('input');
+    nameVarInText.type = "text";
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
+    nameVarInText.placeholder = "New variable";
+
+    var jsonClasses = getClasses(editorUi);
+
+    var selectClassInText = document.createElement('select');
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInText.options[selectClassInText.options.length] = newOption;
+    });
+
+    var selectOperatorInText = document.createElement('select');
+    selectOperatorInText = styleSelect(selectOperatorInText);
+    selectOperatorInText.style.height = '5%';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
+    });
+
+    divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    divText.appendChild(nameVarInText);
+    divText.appendChild(selectClassInText);
+    divText.appendChild(selectOperatorInText);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
+    div.appendChild(divText);
+
+
+    //Экран с blockly
+    var nestedDiv = document.createElement('div');
+    nestedDiv.id = "cycleCreateBlocklyDiv";
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
+    nestedDiv.style.height = h * 0.72 + 'px';
+
+    // Кнопка создания узла
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
+        var code = generateCode(workspace);
+        if (!code) {
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try {
+                parser.parse(code);
+            } catch (e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
+        }
+        error = "";
+        if (!nameVarInBlockly.value) {
+            error += getTextByLocale("NameVariableIsMissing");
+        } else if (!checkValidID(nameVarInBlockly.value)) {
+            error += getTextByLocale("NameVariableIsIncorrect");
+        }
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+            error += getTextByLocale("TypeVariableIsMissing");
+        }
+        if (error) {
+            throw new Error(error);
+        }
+        var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
+
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
+
+
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+            var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+            theGraph.setAttributeForCell(newElement, 'expression', code);
+            theGraph.setAttributeForCell(newElement, 'typeVar', typeInBlockly);
+            theGraph.setAttributeForCell(newElement, 'nameVar', nameVarInBlockly.value);
+            theGraph.setAttributeForCell(newElement, 'operator', selectedOperatorInBlockly);
+            theGraph.setAttributeForCell(newElement, 'typeCycle', 'while');
+        }
+        win.destroy();
+    });
+
+    //кнопка переключения на текстовый вариант
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
+        var code = generateCode(workspace);
+        divBlockly.style.display = "none";
+        divText.style.display = "block";
+        divText.getElementsByTagName("textarea").item(0).value = code;
+        nameVarInText.value = nameVarInBlockly.value;
+        selectOperatorInText.options.selectedIndex = selectOperatorInBlockly.options.selectedIndex;
+        selectClassInText.options.selectedIndex = selectClassInBlockly.options.selectedIndex;
+    });
+
+    var nameVarInBlockly = document.createElement('input');
+    nameVarInBlockly.type = "text";
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
+    nameVarInBlockly.placeholder = "New variable";
+
+    var selectClassInBlockly = document.createElement('select');
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
+    });
+
+    var selectOperatorInBlockly = document.createElement('select');
+    selectOperatorInBlockly = styleSelect(selectOperatorInBlockly);
+    selectOperatorInBlockly.style.height = '5%';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
+    });
+
+    divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectClassInBlockly);
+    divBlockly.appendChild(selectOperatorInBlockly);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
+    div.appendChild(divBlockly);
+
+
+    // Настройки окна
+    var win = new mxWindow(getTextByLocale("TitleWhileNodeConstructorWindow"), div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.contentWrapper.style.height = "100%";
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
 // Окно коструктора начального узла
 var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
@@ -9680,6 +9919,244 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleCycleNodeEditorWindow"), div, x, y, w, h, true, true);
+    this.window = win;
+    this.window.contentWrapper.style.height = "100%";
+    this.window.destroyOnClose = true;
+    this.window.setMaximizable(false);
+    this.window.setResizable(false);
+    this.window.setClosable(true);
+    this.window.setVisible(true);
+};
+// Окно редактирования узлов действия
+var WhileNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+
+    // Верстка окна
+    var div = document.createElement('div');
+    div.style.height = "100%";
+    var divText = document.createElement('div');
+    divText.style.height = "100%";
+    var divBlockly = document.createElement('div');
+    divBlockly.style.height = "100%";
+    divBlockly.style.display = "none";
+
+    var operators = ["And", "Or"];
+
+    //Экран с текстом
+    var text = document.createElement('textarea');
+    text = styleTextAreaExp(text);
+    text.style.height = "74%";
+    text.value = cell.value.getAttribute('expression');
+
+    // Кнопка создания узла
+    var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
+
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if (expression) {
+            //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
+            parser.parse(expression)
+        } else {
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
+        }
+        error = "";
+        if (!nameVarInText.value) {
+            error += getTextByLocale("NameVariableIsMissing");
+        } else if (!checkValidID(nameVarInText.value)) {
+            error += getTextByLocale("NameVariableIsIncorrect");
+        }
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+            error += getTextByLocale("TypeVariableIsMissing");
+        }
+        if (error) {
+            throw new Error(error);
+        }
+
+        var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
+        var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
+
+
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", expression);
+        cell.value.setAttribute("typeVar", typeInText);
+        cell.value.setAttribute("nameVar", nameVarInText.value);
+        cell.value.setAttribute("operator", selectedOperatorInText);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    var workspace;
+
+    // Кнопка переключение на Blockly
+    var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
+        var expression = divText.getElementsByTagName("textarea").item(0).value;
+        if (expression) {
+            parser.parse(expression)
+        }
+        divText.style.display = "none";
+        divBlockly.style.display = "block";
+        nestedDiv.innerHTML = "";
+        workspace = Blockly.inject('cycleUpdateBlocklyDiv', { toolbox: toolbox });
+        workspace.clear();
+        if (expression) {
+            parser.parse(expression)
+            toBlock(root, workspace);
+        }
+        nameVarInBlockly.value = nameVarInText.value;
+        selectOperatorInBlockly.options.selectedIndex = selectOperatorInText.options.selectedIndex;
+        selectClassInBlockly.options.selectedIndex = selectClassInText.options.selectedIndex;
+    });
+
+    var nameVarInText = document.createElement('input');
+    nameVarInText.type = "text";
+    nameVarInText = styleInput(nameVarInText);
+    nameVarInText.style.height = '5%';
+    nameVarInText.placeholder = "New variable";
+    nameVarInText.value = cell.value.getAttribute('nameVar');
+
+    var jsonClasses = getClasses(editorUi);
+
+    var selectClassInText = document.createElement('select');
+    selectClassInText = styleSelect(selectClassInText);
+    selectClassInText.style.height = '5%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInText.options[selectClassInText.options.length] = newOption;
+    });
+    let type = cell.value.getAttribute('typeVar');
+    for (let index = 0; index < selectClassInText.options.length; ++index) {
+        if (selectClassInText.options[index].value == type) {
+            selectClassInText.options[index].selected = true;
+        }
+    }
+
+    var selectOperatorInText = document.createElement('select');
+    selectOperatorInText = styleSelect(selectOperatorInText);
+    selectOperatorInText.style.height = '5%';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
+    });
+    let operator = cell.value.getAttribute('operator');
+    for (let index = 0; index < selectOperatorInText.options.length; ++index) {
+        if (selectOperatorInText.options[index].value == operator) {
+            selectOperatorInText.options[index].selected = true;
+        }
+    }
+
+    divText.appendChild(text);
+    var btnTextDiv = document.createElement('div');
+    btnTextDiv = styleDivBtn(btnTextDiv);
+    btnTextDiv.style.height = "10%";
+    btnCreateNodeInText = styleBtn(btnCreateNodeInText);
+    btnSwitchToBlockly = styleBtn(btnSwitchToBlockly);
+    divText.appendChild(nameVarInText);
+    divText.appendChild(selectClassInText);
+    divText.appendChild(selectOperatorInText);
+    btnTextDiv.appendChild(btnCreateNodeInText);
+    btnTextDiv.appendChild(btnSwitchToBlockly);
+    divText.appendChild(btnTextDiv);
+    div.appendChild(divText);
+
+
+    //Экран с blockly
+    var nestedDiv = document.createElement('div');
+    nestedDiv.id = "cycleUpdateBlocklyDiv";
+    nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
+    nestedDiv.style.height = h * 0.72 + 'px';
+
+    // Кнопка создания узла
+    var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
+        var code = generateCode(workspace);
+        if (!code) {
+            throw new Error(getTextByLocale("ExpressionIsMissing"));
+        } else {
+            try {
+                parser.parse(code);
+            } catch (e) {
+                throw new Error(getTextByLocale("EmptyConnection"));
+            }
+        }
+        error = "";
+        if (!nameVarInBlockly.value) {
+            error += getTextByLocale("NameVariableIsMissing");
+        } else if (!checkValidID(nameVarInBlockly.value)) {
+            error += getTextByLocale("NameVariableIsIncorrect");
+        }
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+            error += getTextByLocale("TypeVariableIsMissing");
+        }
+        if (error) {
+            throw new Error(error);
+        }
+        var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
+        var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
+
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("expression", code);
+        cell.value.setAttribute("typeVar", typeInBlockly);
+        cell.value.setAttribute("nameVar", nameVarInBlockly.value);
+        cell.value.setAttribute("operator", selectedOperatorInBlockly);
+
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
+    //кнопка переключения на текстовый вариант
+    var btnSwitchToText = mxUtils.button(getTextByLocale("SwitchText"), function () {
+        var code = generateCode(workspace);
+        divBlockly.style.display = "none";
+        divText.style.display = "block";
+        divText.getElementsByTagName("textarea").item(0).value = code;
+        nameVarInText.value = nameVarInBlockly.value;
+        selectOperatorInText.options.selectedIndex = selectOperatorInBlockly.options.selectedIndex;
+        selectClassInText.options.selectedIndex = selectClassInBlockly.options.selectedIndex;
+    });
+
+    var nameVarInBlockly = document.createElement('input');
+    nameVarInBlockly.type = "text";
+    nameVarInBlockly = styleInput(nameVarInBlockly);
+    nameVarInBlockly.style.height = '5%';
+    nameVarInBlockly.placeholder = "New variable";
+
+    var selectClassInBlockly = document.createElement('select');
+    selectClassInBlockly = styleSelect(selectClassInBlockly);
+    selectClassInBlockly.style.height = '5%';
+    jsonClasses.forEach(classItem => {
+        var newOption = new Option(classItem.name, classItem.name);
+        selectClassInBlockly.options[selectClassInBlockly.options.length] = newOption;
+    });
+
+    var selectOperatorInBlockly = document.createElement('select');
+    selectOperatorInBlockly = styleSelect(selectOperatorInBlockly);
+    selectOperatorInBlockly.style.height = '5%';
+    operators.forEach(item => {
+        var newOption = new Option(item, item.toUpperCase());
+        selectOperatorInBlockly.options[selectOperatorInBlockly.options.length] = newOption;
+    });
+
+    divBlockly.appendChild(nestedDiv);
+    var btnBlockDiv = document.createElement('div');
+    btnBlockDiv = styleDivBtn(btnBlockDiv);
+    btnBlockDiv.style.height = "8%";
+    btnCreateNodeInBlockly = styleBtn(btnCreateNodeInBlockly);
+    btnSwitchToText = styleBtn(btnSwitchToText);
+    divBlockly.appendChild(nameVarInBlockly);
+    divBlockly.appendChild(selectClassInBlockly);
+    divBlockly.appendChild(selectOperatorInBlockly);
+    btnBlockDiv.appendChild(btnCreateNodeInBlockly);
+    btnBlockDiv.appendChild(btnSwitchToText);
+    divBlockly.appendChild(btnBlockDiv);
+    div.appendChild(divBlockly);
+
+
+    // Настройки окна
+    var win = new mxWindow(getTextByLocale("TitleWhileNodeEditorWindow"), div, x, y, w, h, true, true);
     this.window = win;
     this.window.contentWrapper.style.height = "100%";
     this.window.destroyOnClose = true;
@@ -11638,9 +12115,16 @@ function switchCaseNodes(doc, node, editorUi, isPredetermining) {
     else if (typeof node.value == "object" && node.value.getAttribute("type") == "predetermining") {
         resultNode = predeterminingNodeToXml(doc, node, editorUi);
     }
+    //Узел "пока"
+    else if (typeof node.value == "object"
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && node.value.getAttribute("typeCycle") == "while") {
+        resultNode = whileNodeToXml(doc, node, editorUi, isPredetermining);
+    }
     //Узел цикла
     else if (typeof node.value == "object"
-        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")) {
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && node.value.getAttribute("typeCycle") == null) {
         resultNode = cycleNodeToXml(doc, node, editorUi, isPredetermining);
     }
     //Узел неопределенность предрешающего фактора
@@ -11726,6 +12210,90 @@ function actionNodeToXml(doc, node, editorUi, isPredetermining) {
 
     //Следующие ветки
     resultNode = outcomeToXml(doc, resultNode, node, editorUi, isPredetermining);
+
+    return resultNode;
+}
+
+function whileNodeToXml(doc, node, editorUi, isPredetermining) {
+    let resultNode = doc.createElement("WhileAggregationNode");
+    if (node.value.getAttribute("label")) {
+        resultNode.setAttribute("_alias", node.value.getAttribute("label"));
+    }
+    resultNode.setAttribute("operator", node.value.getAttribute("operator"));
+    resultNode = getQuestionInfoNode(resultNode, node, false);
+
+    let selectorExpressionNode = doc.createElement("SelectorExpression");
+    try {
+        selectorExpressionNode.innerHTML = codeToXML(globalWS, node.value.getAttribute("expression"));
+    } catch (e) {
+        throw new Error(e.message + "\nУзел с текстом: " + node.value.getAttribute("label"))
+    }
+    resultNode.appendChild(selectorExpressionNode);
+
+    let typeVar = node.value.getAttribute("typeVar");
+
+    let decisionTreeVarDeclNode = doc.createElement("DecisionTreeVarDecl");
+    decisionTreeVarDeclNode.setAttribute("name", specialChars(node.value.getAttribute("nameVar")));
+    decisionTreeVarDeclNode.setAttribute("type", specialChars(typeVar));
+    resultNode.appendChild(decisionTreeVarDeclNode);
+
+    let bodyCount = 0;
+    let trueCount = 0;
+    let falseCount = 0;
+    if (node.edges) {
+        for (let i = 0; i < node.edges.length; i++) {
+            if (node.edges[i].target != node) {
+                valueEdge = node.edges[i].value;
+                if (valueEdge == null || typeof valueEdge != "object"
+                    || !valueEdge.getAttribute("type")
+                    || (valueEdge.getAttribute("type") != "True"
+                        && valueEdge.getAttribute("type") != "False"
+                        && valueEdge.getAttribute("type") != "Body")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error(getTextByLocale("typeOutcomeCycleIsMissing")
+                        + "\nУзел с текстом: " + node.value.getAttribute("label"));
+                }
+                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
+                    if (valueEdge.getAttribute("type") == "True") {
+                        trueCount++;
+                    } else {
+                        falseCount++;
+                    }
+
+                    let outcomeNode = doc.createElement("Outcome");
+                    outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
+                    outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(outcomeNode);
+
+                } else if (valueEdge.getAttribute("type") == "Body") {
+
+                    let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("type", "bool");
+                    thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
+                    thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    resultNode.appendChild(thoughtBranchNode);
+
+                    bodyCount++;
+                }
+            }
+        }
+    }
+    let errorCycle = "";
+    if (bodyCount > 1) {
+        errorCycle += getTextByLocale("bodyOnlyOne");
+    }
+    if (trueCount > 1) {
+        errorCycle += getTextByLocale("trueCycleOnlyOne");
+    }
+    if (falseCount > 1) {
+        errorCycle += getTextByLocale("falseCycleOnlyOne");
+    }
+    if (errorCycle) {
+        throw new Error(errorCycle + "\nУзел с текстом: " + node.value.getAttribute("label"));
+    }
+
 
     return resultNode;
 }
@@ -12362,6 +12930,7 @@ Draw.loadPlugin(function (ui) {
         ui.menus.addMenuItem(menu, 'UncertaintyNodeCreate');
         ui.menus.addMenuItem(menu, 'actionNodeConstructor');
         ui.menus.addMenuItem(menu, 'cycleNodeConstructor');
+        ui.menus.addMenuItem(menu, 'whileNodeConstructor');
         ui.menus.addMenuItem(menu, 'conditionNodeConstructor');
         ui.menus.addMenuItem(menu, 'switchCaseNodeConstructor');
     }, ui.menubar.editorUi.statusContainer);
@@ -12395,74 +12964,76 @@ Draw.loadPlugin(function (ui) {
 
 
     // Привязывание действий к разделам меню
-    mxResources.parse('classesConstructor='+getTextByLocale("classesConstructor"));
+    mxResources.parse('classesConstructor=' + getTextByLocale("classesConstructor"));
 
-    mxResources.parse('classPropertiesConstructor='+getTextByLocale("classPropertiesConstructor"));
+    mxResources.parse('classPropertiesConstructor=' + getTextByLocale("classPropertiesConstructor"));
 
-    mxResources.parse('relationshipsConstructor='+getTextByLocale("relationshipsConstructor"));
+    mxResources.parse('relationshipsConstructor=' + getTextByLocale("relationshipsConstructor"));
 
-    mxResources.parse('enumConstructor='+getTextByLocale("enumConstructor"));
+    mxResources.parse('enumConstructor=' + getTextByLocale("enumConstructor"));
 
-    mxResources.parse('actionNodeConstructor='+getTextByLocale("actionNodeConstructor"));
+    mxResources.parse('actionNodeConstructor=' + getTextByLocale("actionNodeConstructor"));
 
-    mxResources.parse('cycleNodeConstructor='+getTextByLocale("cycleNodeConstructor"));
+    mxResources.parse('cycleNodeConstructor=' + getTextByLocale("cycleNodeConstructor"));
 
-    mxResources.parse('conditionNodeConstructor='+getTextByLocale("conditionNodeConstructor"));
+    mxResources.parse('whileNodeConstructor=' + getTextByLocale("whileNodeConstructor"));
 
-    mxResources.parse('switchCaseNodeConstructor='+getTextByLocale("switchCaseNodeConstructor"));
+    mxResources.parse('conditionNodeConstructor=' + getTextByLocale("conditionNodeConstructor"));
 
-    mxResources.parse('exportEnum='+getTextByLocale("exportEnum"));
+    mxResources.parse('switchCaseNodeConstructor=' + getTextByLocale("switchCaseNodeConstructor"));
 
-    mxResources.parse('exportClass='+getTextByLocale("exportClass"));
+    mxResources.parse('exportEnum=' + getTextByLocale("exportEnum"));
 
-    mxResources.parse('exportProperty='+getTextByLocale("exportProperty"));
+    mxResources.parse('exportClass=' + getTextByLocale("exportClass"));
 
-    mxResources.parse('exportRelationship='+getTextByLocale("exportRelationship"));
+    mxResources.parse('exportProperty=' + getTextByLocale("exportProperty"));
 
-    mxResources.parse('TrueNodeCreate='+getTextByLocale("TrueNodeCreate"));
+    mxResources.parse('exportRelationship=' + getTextByLocale("exportRelationship"));
 
-    mxResources.parse('FalseNodeCreate='+getTextByLocale("FalseNodeCreate"));
+    mxResources.parse('TrueNodeCreate=' + getTextByLocale("TrueNodeCreate"));
 
-    mxResources.parse('LogicNodeCreate='+getTextByLocale("LogicNodeCreate"));
+    mxResources.parse('FalseNodeCreate=' + getTextByLocale("FalseNodeCreate"));
 
-    mxResources.parse('PredeterminingFactorsNodeCreate='+getTextByLocale("PredeterminingFactorsNodeCreate"));
+    mxResources.parse('LogicNodeCreate=' + getTextByLocale("LogicNodeCreate"));
 
-    mxResources.parse('UncertaintyNodeCreate='+getTextByLocale("UncertaintyNodeCreate"));
+    mxResources.parse('PredeterminingFactorsNodeCreate=' + getTextByLocale("PredeterminingFactorsNodeCreate"));
 
-    mxResources.parse('startNodeConstructor='+getTextByLocale("startNodeConstructor"));
+    mxResources.parse('UncertaintyNodeCreate=' + getTextByLocale("UncertaintyNodeCreate"));
 
-    mxResources.parse('exportTree='+getTextByLocale("exportTree"));
+    mxResources.parse('startNodeConstructor=' + getTextByLocale("startNodeConstructor"));
 
-    mxResources.parse('editValue='+getTextByLocale("editValue"));
+    mxResources.parse('exportTree=' + getTextByLocale("exportTree"));
 
-    mxResources.parse('editTextInNode='+getTextByLocale("editTextInNode"));
+    mxResources.parse('editValue=' + getTextByLocale("editValue"));
 
-    mxResources.parse('editQuestionInfo='+getTextByLocale("editQuestionInfo"));
+    mxResources.parse('editTextInNode=' + getTextByLocale("editTextInNode"));
 
-    mxResources.parse('convertStartNode='+getTextByLocale("convertStartNode"));
+    mxResources.parse('editQuestionInfo=' + getTextByLocale("editQuestionInfo"));
 
-    mxResources.parse('convertTrueNode='+getTextByLocale("convertTrueNode"));
+    mxResources.parse('convertStartNode=' + getTextByLocale("convertStartNode"));
 
-    mxResources.parse('convertFalseNode='+getTextByLocale("convertFalseNode"));
+    mxResources.parse('convertTrueNode=' + getTextByLocale("convertTrueNode"));
 
-    mxResources.parse('convertLogicNode='+getTextByLocale("convertLogicNode"));
+    mxResources.parse('convertFalseNode=' + getTextByLocale("convertFalseNode"));
 
-    mxResources.parse('convertPredeterminingFactorsNode='+getTextByLocale("convertPredeterminingFactorsNode"));
+    mxResources.parse('convertLogicNode=' + getTextByLocale("convertLogicNode"));
 
-    mxResources.parse('convertUncertaintyNode='+getTextByLocale("convertUncertaintyNode"));
+    mxResources.parse('convertPredeterminingFactorsNode=' + getTextByLocale("convertPredeterminingFactorsNode"));
 
-    mxResources.parse('convertActionNode='+getTextByLocale("convertActionNode"));
+    mxResources.parse('convertUncertaintyNode=' + getTextByLocale("convertUncertaintyNode"));
 
-    mxResources.parse('convertCycleNode='+getTextByLocale("convertCycleNode"));
+    mxResources.parse('convertActionNode=' + getTextByLocale("convertActionNode"));
 
-    mxResources.parse('convertConditionNode='+getTextByLocale("convertConditionNode"));
+    mxResources.parse('convertCycleNode=' + getTextByLocale("convertCycleNode"));
 
-    mxResources.parse('convertSwitchCaseNode='+getTextByLocale("convertSwitchCaseNode"));
+    mxResources.parse('convertConditionNode=' + getTextByLocale("convertConditionNode"));
+
+    mxResources.parse('convertSwitchCaseNode=' + getTextByLocale("convertSwitchCaseNode"));
 
     // Создание действий для меню
     // Действие на отоброжение конструктора блока с классами
     ui.actions.addAction('classesConstructor', function () {
-        if(!this.classConstructorWindow || !this.classConstructorWindow.window.content) {
+        if (!this.classConstructorWindow || !this.classConstructorWindow.window.content) {
             this.classConstructorWindow = new ClassConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.classConstructorWindow.window.setVisible(true);
         }
@@ -12470,7 +13041,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора блока со свойствами классов
     ui.actions.addAction('classPropertiesConstructor', function () {
-        if(!this.classPropertiesConstructorWindow || !this.classPropertiesConstructorWindow.window.content) {
+        if (!this.classPropertiesConstructorWindow || !this.classPropertiesConstructorWindow.window.content) {
             this.classPropertiesConstructorWindow = new ClassPropertiesConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.classPropertiesConstructorWindow.window.setVisible(true);
         }
@@ -12478,7 +13049,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора enum
     ui.actions.addAction('enumConstructor', function () {
-        if(!this.enumConstructorWindow || !this.enumConstructorWindow.window.content) {
+        if (!this.enumConstructorWindow || !this.enumConstructorWindow.window.content) {
             this.enumConstructorWindow = new EnumConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.enumConstructorWindow.window.setVisible(true);
         }
@@ -12486,7 +13057,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора блока с отношениями для классов
     ui.actions.addAction('relationshipsConstructor', function () {
-        if(!this.relationshipsConstructorWindow || !this.relationshipsConstructorWindow.window.content) {
+        if (!this.relationshipsConstructorWindow || !this.relationshipsConstructorWindow.window.content) {
             this.relationshipsConstructorWindow = new RelationshipsConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.relationshipsConstructorWindow.window.setVisible(true);
         }
@@ -12494,7 +13065,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора начального узла
     ui.actions.addAction('startNodeConstructor', function () {
-        if(!this.startConstructorWindow || !this.startConstructorWindow.window.content) {
+        if (!this.startConstructorWindow || !this.startConstructorWindow.window.content) {
             this.startConstructorWindow = new StartConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
             this.startConstructorWindow.window.setVisible(true);
         }
@@ -12502,7 +13073,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание узла ИСТИНА
     ui.actions.addAction('TrueNodeCreate', function () {
-        if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
+        if (!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
             this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, true, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
@@ -12510,7 +13081,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание узла ЛОЖЬ
     ui.actions.addAction('FalseNodeCreate', function () {
-        if(!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
+        if (!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
             this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, false, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
@@ -12518,7 +13089,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание логического узла 
     ui.actions.addAction('LogicNodeCreate', function () {
-        if(!this.logicNodeConstructorWindow || !this.logicNodeConstructorWindow.window.content) {
+        if (!this.logicNodeConstructorWindow || !this.logicNodeConstructorWindow.window.content) {
             this.logicNodeConstructorWindow = new LogicNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
             this.logicNodeConstructorWindow.window.setVisible(true);
         }
@@ -12526,7 +13097,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание узла "Предрешающий фактор"
     ui.actions.addAction('PredeterminingFactorsNodeCreate', function () {
-        if(!this.predeterminingFactorsNodeConstructorWindow || !this.predeterminingFactorsNodeConstructorWindow.window.content) {
+        if (!this.predeterminingFactorsNodeConstructorWindow || !this.predeterminingFactorsNodeConstructorWindow.window.content) {
             this.predeterminingFactorsNodeConstructorWindow = new PredeterminingFactorsNodeConstructorWindow(ui, (document.body.offsetWidth - 880) / 2, 120, 600, 150);
             this.predeterminingFactorsNodeConstructorWindow.window.setVisible(true);
         }
@@ -12545,7 +13116,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора узлов действия
     ui.actions.addAction('actionNodeConstructor', function () {
-        if(!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
+        if (!this.actionNodeConstructorWindow || !this.actionNodeConstructorWindow.window.content) {
             this.actionNodeConstructorWindow = new ActionNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.actionNodeConstructorWindow.window.setVisible(true);
         }
@@ -12553,15 +13124,23 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора узлов цикла
     ui.actions.addAction('cycleNodeConstructor', function () {
-        if(!this.cycleNodeConstructorWindow || !this.cycleNodeConstructorWindow.window.content) {
+        if (!this.cycleNodeConstructorWindow || !this.cycleNodeConstructorWindow.window.content) {
             this.cycleNodeConstructorWindow = new CycleNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.cycleNodeConstructorWindow.window.setVisible(true);
         }
     });
 
+    // Действие на отоброжение конструктора узлов while
+    ui.actions.addAction('whileNodeConstructor', function () {
+        if (!this.whileNodeConstructorWindow || !this.whileNodeConstructorWindow.window.content) {
+            this.whileNodeConstructorWindow = new WhileNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
+            this.whileNodeConstructorWindow.window.setVisible(true);
+        }
+    });
+
     // Действие на отоброжение конструктора узлов условия
     ui.actions.addAction('conditionNodeConstructor', function () {
-        if(!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
+        if (!this.conditionNodeConstructorWindow || !this.conditionNodeConstructorWindow.window.content) {
             this.conditionNodeConstructorWindow = new ConditionNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.conditionNodeConstructorWindow.window.setVisible(true);
         }
@@ -12569,7 +13148,7 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на отоброжение конструктора узлов "switch case"
     ui.actions.addAction('switchCaseNodeConstructor', function () {
-        if(!this.switchCaseNodeConstructorWindow || !this.switchCaseNodeConstructorWindow.window.content) {
+        if (!this.switchCaseNodeConstructorWindow || !this.switchCaseNodeConstructorWindow.window.content) {
             this.switchCaseNodeConstructorWindow = new SwitchCaseNodeConstructorWindow(ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
             this.switchCaseNodeConstructorWindow.window.setVisible(true);
         }
@@ -12581,7 +13160,7 @@ Draw.loadPlugin(function (ui) {
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'text/csv'});
+            let file = new Blob([data], { type: 'text/csv' });
             a.href = URL.createObjectURL(file);
             a.download = "enums.csv";
             a.click();
@@ -12589,13 +13168,13 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('exportClass', function () {
-        
+
         let text = exportClasses(getClasses(ui), globalWS);
         downloadAsFile(text);
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'text/csv'});
+            let file = new Blob([data], { type: 'text/csv' });
             a.href = URL.createObjectURL(file);
             a.download = "classes.csv";
             a.click();
@@ -12603,13 +13182,13 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('exportProperty', function () {
-        
+
         let text = exportProperties(getProperties(ui));
         downloadAsFile(text);
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'text/csv'});
+            let file = new Blob([data], { type: 'text/csv' });
             a.href = URL.createObjectURL(file);
             a.download = "properties.csv";
             a.click();
@@ -12617,13 +13196,13 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('exportRelationship', function () {
-        
+
         let text = exportRelastionships(getRelationships(ui));
         downloadAsFile(text);
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'text/csv'});
+            let file = new Blob([data], { type: 'text/csv' });
             a.href = URL.createObjectURL(file);
             a.download = "relationships.csv";
             a.click();
@@ -12631,13 +13210,13 @@ Draw.loadPlugin(function (ui) {
     });
 
     ui.actions.addAction('exportTree', function () {
-        
+
         let text = treeToXml(ui);
         downloadAsFile(text);
 
         function downloadAsFile(data) {
             let a = document.createElement("a");
-            let file = new Blob([data], {type: 'application/xml'});
+            let file = new Blob([data], { type: 'application/xml' });
             a.href = URL.createObjectURL(file);
             a.download = "tree.xml";
             a.click();
@@ -12647,72 +13226,78 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editValue', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
-            && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
+            if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;"
+                && (!this.conditionNodeEditorWindow || !this.conditionNodeEditorWindow.window.content)) {
                 this.conditionNodeEditorWindow = new ConditionNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.conditionNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;"
-            && (!this.actionNodeEditorWindow || !this.actionNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;"
+                && (!this.actionNodeEditorWindow || !this.actionNodeEditorWindow.window.content)) {
                 this.actionNodeEditorWindow = new ActionNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.actionNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('operator')
-            && (!this.cycleNodeEditorWindow || !this.cycleNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('operator')
+                && selectedcell.value.getAttribute('typeCycle')
+                && (!this.whileNodeEditorWindow || !this.whileNodeEditorWindow.window.content)) {
+                this.whileNodeEditorWindow = new WhileNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
+                this.whileNodeEditorWindow.window.setVisible(true);
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('operator')
+                && (!this.cycleNodeEditorWindow || !this.cycleNodeEditorWindow.window.content)) {
                 this.cycleNodeEditorWindow = new CycleNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.cycleNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;"
-            && (!this.switchCaseNodeEditorWindow || !this.switchCaseNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rhombus;whiteSpace=wrap;html=1;editable=0;"
+                && (!this.switchCaseNodeEditorWindow || !this.switchCaseNodeEditorWindow.window.content)) {
                 this.switchCaseNodeEditorWindow = new SwitchCaseNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.switchCaseNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('type') == "START"
-            && (!this.startEditorWindow || !this.startEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('type') == "START"
+                && (!this.startEditorWindow || !this.startEditorWindow.window.content)) {
                 this.startEditorWindow = new StartEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.startEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('type') == "predetermining"
-            && (!this.predeterminingFactorsNodeEditorWindow || !this.predeterminingFactorsNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('type') == "predetermining"
+                && (!this.predeterminingFactorsNodeEditorWindow || !this.predeterminingFactorsNodeEditorWindow.window.content)) {
                 this.predeterminingFactorsNodeEditorWindow = new PredeterminingFactorsNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 600, 150);
                 this.predeterminingFactorsNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")
-            && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && (selectedcell.value.getAttribute('type') == "AND" || selectedcell.value.getAttribute('type') == "OR")
+                && (!this.logicNodeEditorWindow || !this.logicNodeEditorWindow.window.content)) {
                 this.logicNodeEditorWindow = new LogicNodeEditorWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 300, 150);
                 this.logicNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
-            && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
+                && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                 this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
-            && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+                && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                 this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
-            && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+                && (!this.classEditorWindow || !this.classEditorWindow.window.content)) {
                 this.classEditorWindow = new ClassEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.classEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
-            && (!this.enumEditorWindow || !this.enumEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "string"
+                && selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+                && (!this.enumEditorWindow || !this.enumEditorWindow.window.content)) {
                 this.enumEditorWindow = new EnumEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.enumEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "string"
-            && selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
-            && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "string"
+                && selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
+                && (!this.classPropertiesEditorWindow || !this.classPropertiesEditorWindow.window.content)) {
                 this.classPropertiesEditorWindow = new ClassPropertiesEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.classPropertiesEditorWindow.window.setVisible(true);
-            } else if(selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
-            && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+                && (!this.relationshipsEditorWindow || !this.relationshipsEditorWindow.window.content)) {
                 this.relationshipsEditorWindow = new RelationshipsEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.relationshipsEditorWindow.window.setVisible(true);
-            } else if(selectedcell.edge) {
+            } else if (selectedcell.edge) {
                 this.editValueInOutcomeWindow = new EditValueInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 200);
                 this.editValueInOutcomeWindow.window.setVisible(true);
             }
@@ -12722,17 +13307,17 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editTextInNode', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object" 
-            && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
-            && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
-            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
-            || selectedcell.value != null && typeof selectedcell.value == "object" 
-            && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
-            && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
-            && selectedcell.value.getAttribute('type') != "AND" 
-            && selectedcell.value.getAttribute('type') != "OR" 
-            && selectedcell.value.getAttribute('type') != "predetermining"
-            && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+            if (selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object"
+                && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+                && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
+                && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge
+                || selectedcell.value != null && typeof selectedcell.value == "object"
+                && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+                && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+                && selectedcell.value.getAttribute('type') != "AND"
+                && selectedcell.value.getAttribute('type') != "OR"
+                && selectedcell.value.getAttribute('type') != "predetermining"
+                && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editTextInNodeWindow = new EditTextInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editTextInNodeWindow.window.setVisible(true);
             }
@@ -12742,19 +13327,19 @@ Draw.loadPlugin(function (ui) {
     ui.actions.addAction('editQuestionInfo', function () {
         if (graph.isEnabled() && graph.getSelectionCount() == 1) {
             var selectedcell = graph.getSelectionCell();
-            if(selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object" 
-            && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
-            && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
-            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge 
-            || selectedcell.value != null && typeof selectedcell.value == "object" 
-            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
-            && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
-            && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
-            && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
-            && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
+            if (selectedcell.value != null && selectedcell.value != "" && typeof selectedcell.value != "object"
+                && !selectedcell.value.startsWith('<font color="#000000"><b>Enum</b></font>')
+                && !selectedcell.value.startsWith('<b><font color="#000000">Class and Object properties</font></b>')
+                && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;" && !selectedcell.edge
+                || selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;"
+                && selectedcell.style != "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+                && !selectedcell.value.getAttribute('label').startsWith('<font color="#000000"><b>Classes</b></font>')
+                && !selectedcell.value.getAttribute('label').startsWith('<b><font color="#000000">Relationships between objects</font></b>')
+                && selectedcell.value.getAttribute("type") != "START" && !selectedcell.edge) {
                 this.editQuestionInfoInNodeWindow = new EditQuestionInfoInNodeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editQuestionInfoInNodeWindow.window.setVisible(true);
-            } else if(selectedcell.edge) {
+            } else if (selectedcell.edge) {
                 this.editQuestionInfoInOutcomeWindow = new EditQuestionInfoInOutcomeWindow(selectedcell, ui, (document.body.offsetWidth - 880) / 2, 120, 900, 550);
                 this.editQuestionInfoInOutcomeWindow.window.setVisible(true);
             }

@@ -1,5 +1,5 @@
 function getTextByLocale(type) {
-    if(mxClient.language == "ru") {
+    if (mxClient.language == "ru") {
         return RU_TEXT[type];
     } else {
         return EN_TEXT[type];
@@ -27,6 +27,7 @@ const RU_TEXT = {
     "UncertaintyNodeCreate": 'Создать узел "Неопределенность"',
     "actionNodeConstructor": "Создать узел действия",
     "cycleNodeConstructor": 'Создать узел "Цикл"',
+    "whileNodeConstructor": 'Создать узел "While"',
     "conditionNodeConstructor": "Создать узел вопроса",
     "switchCaseNodeConstructor": 'Создать узел "Switch case"',
     "exportClass": "Экспорт словаря классов",
@@ -67,6 +68,8 @@ const RU_TEXT = {
     "TitleConditionNodeEditorWindow": "Редактор узла вопроса",
     "TitleCycleNodeConstructorWindow": 'Конструктор узла "Цикл"',
     "TitleCycleNodeEditorWindow": 'Редактор узла "Цикл"',
+    "TitleWhileNodeConstructorWindow": 'Конструктор узла "Пока"',
+    "TitleWhileNodeEditorWindow": 'Редактор узла "Пока"',
     "TitleEditTextInNodeWindow": "Редактор текста в узле",
     "TitleEditValueInOutcomeWindow": "Редактор значений в ветке",
     "TitleLogicNodeConstructorWindow": "Конструктор логическего узла",
@@ -196,6 +199,7 @@ const EN_TEXT = {
     "UncertaintyNodeCreate": "Create node uncertainty",
     "actionNodeConstructor": "Action Node Constructor",
     "cycleNodeConstructor": "Cycle Node Constructor",
+    "whileNodeConstructor": "While Node Constructor",
     "conditionNodeConstructor": "Condition Node Constructor",
     "switchCaseNodeConstructor": "Switch case Node Constructor",
     "exportClass": "Export class",
@@ -236,6 +240,8 @@ const EN_TEXT = {
     "TitleConditionNodeEditorWindow": "Condition node editor",
     "TitleCycleNodeConstructorWindow": "Cycle node constructor",
     "TitleCycleNodeEditorWindow": "Cycle node editor",
+    "TitleWhileNodeConstructorWindow": "While node constructor",
+    "TitleWhileNodeEditorWindow": "While node editor",
     "TitleEditTextInNodeWindow": "Edit text in node",
     "TitleEditValueInOutcomeWindow": "Edit value in outcome",
     "TitleLogicNodeConstructorWindow": "Logic node constructor",
