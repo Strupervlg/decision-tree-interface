@@ -1387,7 +1387,7 @@ function addRowRelationship(editorUi) {
             tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
             selectType = styleSelect(selectType);
-            var scales = ["One to one", "One to many"]; // "ONE_TO_ONE", "ONE_TO_MANY"
+            var scales = ["One to one", "One to many", "Many to one", "Many to many"]; // "ONE_TO_ONE", "ONE_TO_MANY", "MANY_TO_ONE", "MANY_TO_MANY"
             scales.forEach(element => {
                 var newOption = new Option(element, element);
                 selectType.options[selectType.options.length] = newOption;
@@ -1858,7 +1858,10 @@ function getRelationships(editorUi) {
                 if (element.indexOf('<font color="#6666FF">scale:</font>') != -1) {
                     element = element.slice(element.indexOf('scale:</font>') + 13);
                     scale = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
-                    scale = scale.toUpperCase();
+                    scale = scale.toLowerCase();
+                    if (scale == "partially linear") {
+                        scale = "partial";
+                    }
                     element = element.slice(element.indexOf('</font>') + 7);
                 }
 
@@ -1869,7 +1872,7 @@ function getRelationships(editorUi) {
                 if (isBetween == "true") {
                     element = element.slice(element.indexOf('type:</font>') + 12);
                     type = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
-                    type = type.toUpperCase().replaceAll(" ", "_");
+                    type = type.toLowerCase().replaceAll(" ", "");
                 }
 
                 let namesRels = cellValue.getAttribute('namesRels_' + index)
@@ -4470,7 +4473,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
             var selectType = document.createElement('select');
             selectType = styleSelect(selectType);
             selectType.style.width = '100%';
-            var scales = ["One to one", "One to many"];
+            var scales = ["One to one", "One to many", "Many to one", "Many to many"];
             scales.forEach(element => {
                 var newOption = new Option(element, element);
                 selectType.options[selectType.options.length] = newOption;
@@ -4659,7 +4662,7 @@ function fillFlags(row, strBinFlags) {
     module$exports$Blockly$Tooltip.unbindMouseEvents = function (a) { a && ((0, module$exports$Blockly$browserEvents.unbind)(a.mouseOverWrapper_), (0, module$exports$Blockly$browserEvents.unbind)(a.mouseOutWrapper_), a.removeEventListener("mousemove", module$contents$Blockly$Tooltip_onMouseMove)) };
     var module$contents$Blockly$Tooltip_onMouseOver = function (a) { module$contents$Blockly$Tooltip_blocked || (a = module$contents$Blockly$Tooltip_getTargetObject(a.currentTarget), module$contents$Blockly$Tooltip_element !== a && ((0, module$exports$Blockly$Tooltip.hide)(), module$contents$Blockly$Tooltip_poisonedElement = null, module$contents$Blockly$Tooltip_element = a), clearTimeout(module$contents$Blockly$Tooltip_mouseOutPid)) }, module$contents$Blockly$Tooltip_onMouseOut = function (a) {
         module$contents$Blockly$Tooltip_blocked ||
-        (module$contents$Blockly$Tooltip_mouseOutPid = setTimeout(function () { module$contents$Blockly$Tooltip_poisonedElement = module$contents$Blockly$Tooltip_element = null; (0, module$exports$Blockly$Tooltip.hide)() }, 1), clearTimeout(module$contents$Blockly$Tooltip_showPid))
+            (module$contents$Blockly$Tooltip_mouseOutPid = setTimeout(function () { module$contents$Blockly$Tooltip_poisonedElement = module$contents$Blockly$Tooltip_element = null; (0, module$exports$Blockly$Tooltip.hide)() }, 1), clearTimeout(module$contents$Blockly$Tooltip_showPid))
     }, module$contents$Blockly$Tooltip_onMouseMove = function (a) {
         if (module$contents$Blockly$Tooltip_element && module$contents$Blockly$Tooltip_element.tooltip && !module$contents$Blockly$Tooltip_blocked) if (module$contents$Blockly$Tooltip_visible) {
             var b =
@@ -4872,8 +4875,8 @@ function fillFlags(row, strBinFlags) {
                 a.commentModel.size, f = a.commentModel.pinned, g = (0, $.module$exports$Blockly$utils$xml.createElement)("comment"); g.appendChild((0, $.module$exports$Blockly$utils$xml.createTextNode)(d)); g.setAttribute("pinned", f); g.setAttribute("h", e.height); g.setAttribute("w", e.width); c.appendChild(g)
         } a.data && (d = (0, $.module$exports$Blockly$utils$xml.createElement)("data"), d.appendChild((0, $.module$exports$Blockly$utils$xml.createTextNode)(a.data)), c.appendChild(d)); for (d = 0; d < a.inputList.length; d++)if (e = a.inputList[d],
             f = void 0, g = !0, e.type !== $.module$exports$Blockly$inputTypes.inputTypes.DUMMY) {
-                var h = e.connection.targetBlock(); e.type === $.module$exports$Blockly$inputTypes.inputTypes.VALUE ? f = (0, $.module$exports$Blockly$utils$xml.createElement)("value") : e.type === $.module$exports$Blockly$inputTypes.inputTypes.STATEMENT && (f = (0, $.module$exports$Blockly$utils$xml.createElement)("statement")); var k = e.connection.getShadowDom(); !k || h && h.isShadow() || f.appendChild(module$contents$Blockly$Xml_cloneShadow(k, b)); h && (h = (0, $.module$exports$Blockly$Xml.blockToDom)(h,
-                    b), h.nodeType === module$exports$Blockly$utils$dom.NodeType.ELEMENT_NODE && (f.appendChild(h), g = !1)); f.setAttribute("name", e.name); g || c.appendChild(f)
+            var h = e.connection.targetBlock(); e.type === $.module$exports$Blockly$inputTypes.inputTypes.VALUE ? f = (0, $.module$exports$Blockly$utils$xml.createElement)("value") : e.type === $.module$exports$Blockly$inputTypes.inputTypes.STATEMENT && (f = (0, $.module$exports$Blockly$utils$xml.createElement)("statement")); var k = e.connection.getShadowDom(); !k || h && h.isShadow() || f.appendChild(module$contents$Blockly$Xml_cloneShadow(k, b)); h && (h = (0, $.module$exports$Blockly$Xml.blockToDom)(h,
+                b), h.nodeType === module$exports$Blockly$utils$dom.NodeType.ELEMENT_NODE && (f.appendChild(h), g = !1)); f.setAttribute("name", e.name); g || c.appendChild(f)
         } void 0 !== a.inputsInline && a.inputsInline !== a.inputsInlineDefault && c.setAttribute("inline", a.inputsInline); a.isCollapsed() && c.setAttribute("collapsed", !0); a.isEnabled() || c.setAttribute("disabled", !0); a.isDeletable() || a.isShadow() || c.setAttribute("deletable", !1); a.isMovable() || a.isShadow() || c.setAttribute("movable", !1); a.isEditable() || c.setAttribute("editable",
             !1); d = a.getNextBlock(); if (d && (e = (0, $.module$exports$Blockly$Xml.blockToDom)(d, b), e.nodeType === module$exports$Blockly$utils$dom.NodeType.ELEMENT_NODE)) { var l = (0, $.module$exports$Blockly$utils$xml.createElement)("next"); l.appendChild(e); c.appendChild(l) } a = a.nextConnection && a.nextConnection.getShadowDom(); !a || d && d.isShadow() || l.appendChild(module$contents$Blockly$Xml_cloneShadow(a, b)); return c
     };
@@ -4907,7 +4910,7 @@ function fillFlags(row, strBinFlags) {
             var d = module$contents$Blockly$Xml_domToBlockHeadless(a, b); if (b.rendered) {
                 var e = d, f = d.getDescendants(!1); e.setConnectionTracking(!1); for (var g = f.length - 1; 0 <= g; g--)f[g].initSvg(); for (var h = f.length - 1; 0 <= h; h--)f[h].render(!1); setTimeout(function () {
                     e.disposed ||
-                    e.setConnectionTracking(!0)
+                        e.setConnectionTracking(!0)
                 }, 1); e.updateDisabled(); b.resizeContents()
             } else for (var k = d.getDescendants(!1), l = k.length - 1; 0 <= l; l--)k[l].initModel()
         } finally { (0, module$exports$Blockly$Events$utils.enable)() } if ((0, module$exports$Blockly$Events$utils.isEnabled)()) { a = $.module$exports$Blockly$Variables.getAddedVariables(b, c); for (b = 0; b < a.length; b++)f = a[b], (0, module$exports$Blockly$Events$utils.fire)(new ((0, module$exports$Blockly$Events$utils.get)(module$exports$Blockly$Events$utils.VAR_CREATE))(f)); (0, module$exports$Blockly$Events$utils.fire)(new ((0, module$exports$Blockly$Events$utils.get)(module$exports$Blockly$Events$utils.CREATE))(d)) } return d
@@ -4923,8 +4926,8 @@ function fillFlags(row, strBinFlags) {
     }, module$contents$Blockly$Xml_applyMutationTagNodes = function (a, b) { for (var c = !1, d = 0; d < a.length; d++) { var e = a[d]; b.domToMutation && (b.domToMutation(e), b.initSvg && (c = !0)) } return c }, module$contents$Blockly$Xml_applyCommentTagNodes = function (a, b) {
         for (var c = {}, d = 0; d < a.length; c =
             { $jscomp$loop$prop$blockSvg$289: c.$jscomp$loop$prop$blockSvg$289 }, d++) {
-                var e = a[d], f = e.textContent, g = "true" === e.getAttribute("pinned"), h = parseInt(e.getAttribute("w"), 10); e = parseInt(e.getAttribute("h"), 10); b.setCommentText(f); b.commentModel.pinned = g; isNaN(h) || isNaN(e) || (b.commentModel.size = new module$exports$Blockly$utils$Size.Size(h, e)); g && b.getCommentIcon && !b.isInFlyout && (c.$jscomp$loop$prop$blockSvg$289 = b, setTimeout(function (k) { return function () { k.$jscomp$loop$prop$blockSvg$289.getCommentIcon().setVisible(!0) } }(c),
-                    1))
+            var e = a[d], f = e.textContent, g = "true" === e.getAttribute("pinned"), h = parseInt(e.getAttribute("w"), 10); e = parseInt(e.getAttribute("h"), 10); b.setCommentText(f); b.commentModel.pinned = g; isNaN(h) || isNaN(e) || (b.commentModel.size = new module$exports$Blockly$utils$Size.Size(h, e)); g && b.getCommentIcon && !b.isInFlyout && (c.$jscomp$loop$prop$blockSvg$289 = b, setTimeout(function (k) { return function () { k.$jscomp$loop$prop$blockSvg$289.getCommentIcon().setVisible(!0) } }(c),
+                1))
         }
     }, module$contents$Blockly$Xml_applyDataTagNodes = function (a, b) { for (var c = 0; c < a.length; c++)b.data = a[c].textContent }, module$contents$Blockly$Xml_applyFieldTagNodes = function (a, b) { for (var c = 0; c < a.length; c++) { var d = a[c], e = d.getAttribute("name"); module$contents$Blockly$Xml_domToField(b, e, d) } }, module$contents$Blockly$Xml_findChildBlocks = function (a) {
         for (var b = { childBlockElement: null, childShadowElement: null }, c = 0; c < a.childNodes.length; c++) {
@@ -5500,7 +5503,7 @@ function fillFlags(row, strBinFlags) {
     module$exports$Blockly$Workspace.Workspace.prototype.clear = function () {
         this.isClearing = !0; try { var a = (0, module$exports$Blockly$Events$utils.getGroup)(); for (a || (0, module$exports$Blockly$Events$utils.setGroup)(!0); this.topBlocks_.length;)this.topBlocks_[0].dispose(!1); for (; this.topComments_.length;)this.topComments_[this.topComments_.length - 1].dispose(); a || (0, module$exports$Blockly$Events$utils.setGroup)(!1); this.variableMap_.clear(); this.potentialVariableMap_ && this.potentialVariableMap_.clear() } finally {
             this.isClearing =
-            !1
+                !1
         }
     }; module$exports$Blockly$Workspace.Workspace.prototype.renameVariableById = function (a, b) { this.variableMap_.renameVariableById(a, b) }; module$exports$Blockly$Workspace.Workspace.prototype.createVariable = function (a, b, c) { return this.variableMap_.createVariable(a, b, c) }; module$exports$Blockly$Workspace.Workspace.prototype.getVariableUsesById = function (a) { return this.variableMap_.getVariableUsesById(a) }; module$exports$Blockly$Workspace.Workspace.prototype.deleteVariableById = function (a) { this.variableMap_.deleteVariableById(a) };
     module$exports$Blockly$Workspace.Workspace.prototype.getVariable = function (a, b) { return this.variableMap_.getVariable(a, b) }; module$exports$Blockly$Workspace.Workspace.prototype.getVariableById = function (a) { return this.variableMap_.getVariableById(a) }; module$exports$Blockly$Workspace.Workspace.prototype.getVariablesOfType = function (a) { return this.variableMap_.getVariablesOfType(a) }; module$exports$Blockly$Workspace.Workspace.prototype.getVariableTypes = function () { return this.variableMap_.getVariableTypes(this) };
@@ -6082,7 +6085,7 @@ function fillFlags(row, strBinFlags) {
     $.module$exports$Blockly$FieldDropdown.FieldDropdown.prototype.showEditor_ = function (a) {
         this.dropdownCreate_(); this.menu_.openingCoords = a && "number" === typeof a.clientX ? new module$exports$Blockly$utils$Coordinate.Coordinate(a.clientX, a.clientY) : null; (0, module$exports$Blockly$dropDownDiv.clearContent)(); this.menu_.render((0, module$exports$Blockly$dropDownDiv.getContentDiv)()); a = this.menu_.getElement(); (0, module$exports$Blockly$utils$dom.addClass)(a, "blocklyDropdownMenu"); if (this.getConstants().FIELD_DROPDOWN_COLOURED_DIV) {
             a =
-            this.sourceBlock_.isShadow() ? this.sourceBlock_.getParent().getColour() : this.sourceBlock_.getColour(); var b = this.sourceBlock_.isShadow() ? this.sourceBlock_.getParent().style.colourTertiary : this.sourceBlock_.style.colourTertiary; (0, module$exports$Blockly$dropDownDiv.setColour)(a, b)
+                this.sourceBlock_.isShadow() ? this.sourceBlock_.getParent().getColour() : this.sourceBlock_.getColour(); var b = this.sourceBlock_.isShadow() ? this.sourceBlock_.getParent().style.colourTertiary : this.sourceBlock_.style.colourTertiary; (0, module$exports$Blockly$dropDownDiv.setColour)(a, b)
         } (0, module$exports$Blockly$dropDownDiv.showPositionedByField)(this, this.dropdownDispose_.bind(this)); this.menu_.focus(); this.selectedMenuItem_ && this.menu_.setHighlighted(this.selectedMenuItem_); this.applyColour()
     };
     $.module$exports$Blockly$FieldDropdown.FieldDropdown.prototype.dropdownCreate_ = function () {
@@ -6192,7 +6195,7 @@ function fillFlags(row, strBinFlags) {
     module$exports$Blockly$Block.Block.prototype.doInit_ = function () {
         var a = (0, module$exports$Blockly$Events$utils.getGroup)(); a || (0, module$exports$Blockly$Events$utils.setGroup)(!0); var b = (0, module$exports$Blockly$Events$utils.getRecordUndo)(); try { "function" === typeof this.init && ((0, module$exports$Blockly$Events$utils.setRecordUndo)(!1), this.init(), (0, module$exports$Blockly$Events$utils.setRecordUndo)(b)), (0, module$exports$Blockly$Events$utils.isEnabled)() && (0, module$exports$Blockly$Events$utils.fire)(new ((0, module$exports$Blockly$Events$utils.get)(module$exports$Blockly$Events$utils.CREATE))(this)) } finally {
             a ||
-            (0, module$exports$Blockly$Events$utils.setGroup)(!1), (0, module$exports$Blockly$Events$utils.setRecordUndo)(b)
+                (0, module$exports$Blockly$Events$utils.setGroup)(!1), (0, module$exports$Blockly$Events$utils.setRecordUndo)(b)
         } this.inputsInlineDefault = this.inputsInline; "function" === typeof this.onchange && this.setOnChange(this.onchange)
     };
     module$exports$Blockly$Block.Block.prototype.dispose = function (a) {
@@ -6427,7 +6430,7 @@ function fillFlags(row, strBinFlags) {
         if (!this.renderIsInProgress_) {
             this.renderIsInProgress_ = !0; try { this.rendered = !0; (0, module$exports$Blockly$utils$dom.startTextWidthCache)(); this.isCollapsed() && this.updateCollapsed_(); this.workspace.getRenderer().render(this); this.updateConnectionLocations_(); if (!1 !== a) { var b = this.getParent(); b ? b.render(!0) : this.workspace.resizeContents() } (0, module$exports$Blockly$utils$dom.stopTextWidthCache)(); this.updateMarkers_() } finally {
                 this.renderIsInProgress_ =
-                !1
+                    !1
             }
         }
     }; module$exports$Blockly$BlockSvg.BlockSvg.prototype.updateMarkers_ = function () { this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg && this.workspace.getCursor().draw(); this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg && this.workspace.getMarker(module$exports$Blockly$MarkerManager.MarkerManager.LOCAL_MARKER).draw() };
@@ -6745,7 +6748,7 @@ function fillFlags(row, strBinFlags) {
             for (c = 0; d = b[c]; c++) {
                 if (this.RTL) {
                     e =
-                    d.getRelativeToSurfaceXY().x; var f = a / this.workspace_.scale - this.MARGIN; d.outputConnection || (f -= this.tabWidth_); d.moveBy(f - e, 0)
+                        d.getRelativeToSurfaceXY().x; var f = a / this.workspace_.scale - this.MARGIN; d.outputConnection || (f -= this.tabWidth_); d.moveBy(f - e, 0)
                 } this.rectMap_.has(d) && this.moveRectToBlock_(this.rectMap_.get(d), d)
             } if (this.RTL) for (b = 0; c = this.buttons_[b]; b++)d = c.getPosition().y, c.moveTo(a / this.workspace_.scale - c.width - this.MARGIN - this.tabWidth_, d); this.targetWorkspace.toolboxPosition !== this.toolboxPosition_ || this.toolboxPosition_ !== module$exports$Blockly$utils$toolbox.Position.LEFT || this.targetWorkspace.getToolbox() ||
                 this.targetWorkspace.translate(this.targetWorkspace.scrollX + a, this.targetWorkspace.scrollY); this.width_ = a; this.position(); this.targetWorkspace.recordDragTargets()
@@ -7057,7 +7060,7 @@ function fillFlags(row, strBinFlags) {
         if (this.gauge_) {
             var a = Number(this.getText()) + this.offset_, b = (0, module$exports$Blockly$utils$math.toRadians)(a % 360); a = ["M ", module$exports$Blockly$FieldAngle.FieldAngle.HALF, ",", module$exports$Blockly$FieldAngle.FieldAngle.HALF]; var c = module$exports$Blockly$FieldAngle.FieldAngle.HALF, d = module$exports$Blockly$FieldAngle.FieldAngle.HALF; if (!isNaN(b)) {
                 var e = Number(this.clockwise_), f = (0, module$exports$Blockly$utils$math.toRadians)(this.offset_),
-                g = Math.cos(f) * module$exports$Blockly$FieldAngle.FieldAngle.RADIUS, h = Math.sin(f) * -module$exports$Blockly$FieldAngle.FieldAngle.RADIUS; e && (b = 2 * f - b); c += Math.cos(b) * module$exports$Blockly$FieldAngle.FieldAngle.RADIUS; d -= Math.sin(b) * module$exports$Blockly$FieldAngle.FieldAngle.RADIUS; b = Math.abs(Math.floor((b - f) / Math.PI) % 2); e && (b = 1 - b); a.push(" l ", g, ",", h, " A ", module$exports$Blockly$FieldAngle.FieldAngle.RADIUS, ",", module$exports$Blockly$FieldAngle.FieldAngle.RADIUS, " 0 ", b, " ", e, " ", c, ",", d, " z")
+                    g = Math.cos(f) * module$exports$Blockly$FieldAngle.FieldAngle.RADIUS, h = Math.sin(f) * -module$exports$Blockly$FieldAngle.FieldAngle.RADIUS; e && (b = 2 * f - b); c += Math.cos(b) * module$exports$Blockly$FieldAngle.FieldAngle.RADIUS; d -= Math.sin(b) * module$exports$Blockly$FieldAngle.FieldAngle.RADIUS; b = Math.abs(Math.floor((b - f) / Math.PI) % 2); e && (b = 1 - b); a.push(" l ", g, ",", h, " A ", module$exports$Blockly$FieldAngle.FieldAngle.RADIUS, ",", module$exports$Blockly$FieldAngle.FieldAngle.RADIUS, " 0 ", b, " ", e, " ", c, ",", d, " z")
             } this.gauge_.setAttribute("d",
                 a.join("")); this.line_.setAttribute("x2", c); this.line_.setAttribute("y2", d)
         }
@@ -7292,10 +7295,10 @@ function fillFlags(row, strBinFlags) {
             !b) return module$exports$Blockly$blockRendering$Types.Types.isField(a) && a.isEditable ? this.constants_.MEDIUM_PADDING : module$exports$Blockly$blockRendering$Types.Types.isIcon(a) ? 2 * this.constants_.LARGE_PADDING + 1 : module$exports$Blockly$blockRendering$Types.Types.isHat(a) ? this.constants_.NO_PADDING : module$exports$Blockly$blockRendering$Types.Types.isPreviousOrNextConnection(a) ? this.constants_.LARGE_PADDING : module$exports$Blockly$blockRendering$Types.Types.isLeftRoundedCorner(a) ? this.constants_.MIN_BLOCK_WIDTH :
                 module$exports$Blockly$blockRendering$Types.Types.isJaggedEdge(a) ? this.constants_.NO_PADDING : this.constants_.LARGE_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isInput(a) && !b) { if (module$exports$Blockly$blockRendering$Types.Types.isExternalInput(a)) return this.constants_.NO_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(a)) return this.constants_.LARGE_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isStatementInput(a)) return this.constants_.NO_PADDING } if (!module$exports$Blockly$blockRendering$Types.Types.isInput(a) &&
                     b && module$exports$Blockly$blockRendering$Types.Types.isInput(b)) {
-                        if (module$exports$Blockly$blockRendering$Types.Types.isField(a) && a.isEditable) { if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(b) || module$exports$Blockly$blockRendering$Types.Types.isExternalInput(b)) return this.constants_.SMALL_PADDING } else {
-                            if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(b) || module$exports$Blockly$blockRendering$Types.Types.isExternalInput(b)) return this.constants_.MEDIUM_LARGE_PADDING;
-                            if (module$exports$Blockly$blockRendering$Types.Types.isStatementInput(b)) return this.constants_.LARGE_PADDING
-                        } return this.constants_.LARGE_PADDING - 1
+            if (module$exports$Blockly$blockRendering$Types.Types.isField(a) && a.isEditable) { if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(b) || module$exports$Blockly$blockRendering$Types.Types.isExternalInput(b)) return this.constants_.SMALL_PADDING } else {
+                if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(b) || module$exports$Blockly$blockRendering$Types.Types.isExternalInput(b)) return this.constants_.MEDIUM_LARGE_PADDING;
+                if (module$exports$Blockly$blockRendering$Types.Types.isStatementInput(b)) return this.constants_.LARGE_PADDING
+            } return this.constants_.LARGE_PADDING - 1
         } if (module$exports$Blockly$blockRendering$Types.Types.isIcon(a) && b && !module$exports$Blockly$blockRendering$Types.Types.isInput(b)) return this.constants_.LARGE_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(a) && b && module$exports$Blockly$blockRendering$Types.Types.isField(b)) return b.isEditable ? this.constants_.MEDIUM_PADDING :
             this.constants_.LARGE_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isLeftSquareCorner(a) && b) { if (module$exports$Blockly$blockRendering$Types.Types.isHat(b)) return this.constants_.NO_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isPreviousConnection(b) || module$exports$Blockly$blockRendering$Types.Types.isNextConnection(b)) return b.notchOffset } return module$exports$Blockly$blockRendering$Types.Types.isLeftRoundedCorner(a) && b ? b.notchOffset - this.constants_.CORNER_RADIUS :
                 module$exports$Blockly$blockRendering$Types.Types.isField(a) && b && module$exports$Blockly$blockRendering$Types.Types.isField(b) && a.isEditable === b.isEditable || b && module$exports$Blockly$blockRendering$Types.Types.isJaggedEdge(b) ? this.constants_.LARGE_PADDING : this.constants_.MEDIUM_PADDING
@@ -7417,10 +7420,10 @@ function fillFlags(row, strBinFlags) {
             (!b || module$exports$Blockly$blockRendering$Types.Types.isStatementInput(b))) return module$exports$Blockly$blockRendering$Types.Types.isField(a) && a.isEditable ? this.constants_.MEDIUM_PADDING : module$exports$Blockly$blockRendering$Types.Types.isIcon(a) ? 2 * this.constants_.LARGE_PADDING + 1 : module$exports$Blockly$blockRendering$Types.Types.isHat(a) ? this.constants_.NO_PADDING : module$exports$Blockly$blockRendering$Types.Types.isPreviousOrNextConnection(a) ? this.constants_.LARGE_PADDING : module$exports$Blockly$blockRendering$Types.Types.isLeftRoundedCorner(a) ?
                 this.constants_.MIN_BLOCK_WIDTH : module$exports$Blockly$blockRendering$Types.Types.isJaggedEdge(a) ? this.constants_.NO_PADDING : this.constants_.LARGE_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isInput(a) && !b) { if (module$exports$Blockly$blockRendering$Types.Types.isExternalInput(a)) return this.constants_.NO_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(a)) return this.constants_.LARGE_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isStatementInput(a)) return this.constants_.NO_PADDING } if (!module$exports$Blockly$blockRendering$Types.Types.isInput(a) &&
                     b && module$exports$Blockly$blockRendering$Types.Types.isInput(b)) {
-                        if (module$exports$Blockly$blockRendering$Types.Types.isField(a) && a.isEditable) { if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(b) || module$exports$Blockly$blockRendering$Types.Types.isExternalInput(b)) return this.constants_.SMALL_PADDING } else {
-                            if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(b) || module$exports$Blockly$blockRendering$Types.Types.isExternalInput(b)) return this.constants_.MEDIUM_LARGE_PADDING;
-                            if (module$exports$Blockly$blockRendering$Types.Types.isStatementInput(b)) return this.constants_.LARGE_PADDING
-                        } return this.constants_.LARGE_PADDING - 1
+            if (module$exports$Blockly$blockRendering$Types.Types.isField(a) && a.isEditable) { if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(b) || module$exports$Blockly$blockRendering$Types.Types.isExternalInput(b)) return this.constants_.SMALL_PADDING } else {
+                if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(b) || module$exports$Blockly$blockRendering$Types.Types.isExternalInput(b)) return this.constants_.MEDIUM_LARGE_PADDING;
+                if (module$exports$Blockly$blockRendering$Types.Types.isStatementInput(b)) return this.constants_.LARGE_PADDING
+            } return this.constants_.LARGE_PADDING - 1
         } if (module$exports$Blockly$blockRendering$Types.Types.isIcon(a) && b && !module$exports$Blockly$blockRendering$Types.Types.isInput(b)) return this.constants_.LARGE_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isInlineInput(a) && b && module$exports$Blockly$blockRendering$Types.Types.isField(b)) return b.isEditable ? this.constants_.MEDIUM_PADDING :
             this.constants_.LARGE_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isLeftSquareCorner(a) && b) { if (module$exports$Blockly$blockRendering$Types.Types.isHat(b)) return this.constants_.NO_PADDING; if (module$exports$Blockly$blockRendering$Types.Types.isPreviousConnection(b)) return b.notchOffset; if (module$exports$Blockly$blockRendering$Types.Types.isNextConnection(b)) return b.notchOffset + (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2 } if (module$exports$Blockly$blockRendering$Types.Types.isLeftRoundedCorner(a) &&
                 b) { if (module$exports$Blockly$blockRendering$Types.Types.isPreviousConnection(b)) return b.notchOffset - this.constants_.CORNER_RADIUS; if (module$exports$Blockly$blockRendering$Types.Types.isNextConnection(b)) return b.notchOffset - this.constants_.CORNER_RADIUS + (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2 } return module$exports$Blockly$blockRendering$Types.Types.isField(a) && b && module$exports$Blockly$blockRendering$Types.Types.isField(b) && a.isEditable === b.isEditable || b && module$exports$Blockly$blockRendering$Types.Types.isJaggedEdge(b) ?
@@ -7575,7 +7578,7 @@ function fillFlags(row, strBinFlags) {
         module$exports$Blockly$ContextMenuRegistry.ContextMenuRegistry.registry.register({
             displayText: function (a) { return a.block.getCommentIcon() ? $.module$exports$Blockly$Msg.Msg.REMOVE_COMMENT : $.module$exports$Blockly$Msg.Msg.ADD_COMMENT }, preconditionFn: function (a) { a = a.block; return module$exports$Blockly$utils$userAgent.IE || a.isInFlyout || !a.workspace.options.comments || a.isCollapsed() || !a.isEditable() ? "hidden" : "enabled" }, callback: function (a) {
                 a =
-                a.block; a.getCommentIcon() ? a.setCommentText(null) : a.setCommentText("")
+                    a.block; a.getCommentIcon() ? a.setCommentText(null) : a.setCommentText("")
             }, scopeType: module$exports$Blockly$ContextMenuRegistry.ContextMenuRegistry.ScopeType.BLOCK, id: "blockComment", weight: 2
         })
     };
@@ -7605,7 +7608,7 @@ function fillFlags(row, strBinFlags) {
         module$exports$Blockly$ContextMenuRegistry.ContextMenuRegistry.registry.register({
             displayText: function (a) { var b = a.block; a = b.getDescendants(!1).length; (b = b.getNextBlock()) && (a -= b.getDescendants(!1).length); return 1 === a ? $.module$exports$Blockly$Msg.Msg.DELETE_BLOCK : $.module$exports$Blockly$Msg.Msg.DELETE_X_BLOCKS.replace("%1", String(a)) }, preconditionFn: function (a) { return !a.block.isInFlyout && a.block.isDeletable() ? "enabled" : "hidden" }, callback: function (a) {
                 a.block &&
-                a.block.checkAndDelete()
+                    a.block.checkAndDelete()
             }, scopeType: module$exports$Blockly$ContextMenuRegistry.ContextMenuRegistry.ScopeType.BLOCK, id: "blockDelete", weight: 6
         })
     };
@@ -8650,11 +8653,11 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";
         }, saveExtraState: function () { var a = Object.create(null); a.name = this.getProcedureCall(); this.arguments_.length && (a.params = this.arguments_); return a }, loadExtraState: function (a) { this.renameProcedure(this.getProcedureCall(), a.name); if (a = a.params) { var b = []; b.length = a.length; b.fill(null); this.setProcedureParameters_(a, b) } }, getVars: function () { return this.arguments_ }, getVarModels: function () { return this.argumentVarModels_ }, onchange: function (a) {
             if (this.workspace && !this.workspace.isFlyout && a.recordUndo) if (a.type ===
                 $.module$exports$Blockly$Events.BLOCK_CREATE && -1 !== a.ids.indexOf(this.id)) {
-                    var b = this.getProcedureCall(); b = (0, $.module$exports$Blockly$Procedures.getDefinition)(b, this.workspace); !b || b.type === this.defType_ && JSON.stringify(b.getVars()) === JSON.stringify(this.arguments_) || (b = null); if (!b) {
-                        (0, $.module$exports$Blockly$Events.setGroup)(a.group); a = (0, $.module$exports$Blockly$utils$xml.createElement)("xml"); b = (0, $.module$exports$Blockly$utils$xml.createElement)("block"); b.setAttribute("type", this.defType_);
-                        var c = this.getRelativeToSurfaceXY(), d = c.y + 2 * $.module$exports$Blockly$config.config.snapRadius; b.setAttribute("x", c.x + $.module$exports$Blockly$config.config.snapRadius * (this.RTL ? -1 : 1)); b.setAttribute("y", d); c = this.mutationToDom(); b.appendChild(c); c = (0, $.module$exports$Blockly$utils$xml.createElement)("field"); c.setAttribute("name", "NAME"); d = this.getProcedureCall(); var e = (0, $.module$exports$Blockly$Procedures.findLegalName)(d, this); d !== e && this.renameProcedure(d, e); c.appendChild((0, $.module$exports$Blockly$utils$xml.createTextNode)(d));
-                        b.appendChild(c); a.appendChild(b); (0, $.module$exports$Blockly$Xml.domToWorkspace)(a, this.workspace); (0, $.module$exports$Blockly$Events.setGroup)(!1)
-                    }
+                var b = this.getProcedureCall(); b = (0, $.module$exports$Blockly$Procedures.getDefinition)(b, this.workspace); !b || b.type === this.defType_ && JSON.stringify(b.getVars()) === JSON.stringify(this.arguments_) || (b = null); if (!b) {
+                    (0, $.module$exports$Blockly$Events.setGroup)(a.group); a = (0, $.module$exports$Blockly$utils$xml.createElement)("xml"); b = (0, $.module$exports$Blockly$utils$xml.createElement)("block"); b.setAttribute("type", this.defType_);
+                    var c = this.getRelativeToSurfaceXY(), d = c.y + 2 * $.module$exports$Blockly$config.config.snapRadius; b.setAttribute("x", c.x + $.module$exports$Blockly$config.config.snapRadius * (this.RTL ? -1 : 1)); b.setAttribute("y", d); c = this.mutationToDom(); b.appendChild(c); c = (0, $.module$exports$Blockly$utils$xml.createElement)("field"); c.setAttribute("name", "NAME"); d = this.getProcedureCall(); var e = (0, $.module$exports$Blockly$Procedures.findLegalName)(d, this); d !== e && this.renameProcedure(d, e); c.appendChild((0, $.module$exports$Blockly$utils$xml.createTextNode)(d));
+                    b.appendChild(c); a.appendChild(b); (0, $.module$exports$Blockly$Xml.domToWorkspace)(a, this.workspace); (0, $.module$exports$Blockly$Events.setGroup)(!1)
+                }
             } else a.type === $.module$exports$Blockly$Events.BLOCK_DELETE ? (b = this.getProcedureCall(), (0, $.module$exports$Blockly$Procedures.getDefinition)(b, this.workspace) || ((0, $.module$exports$Blockly$Events.setGroup)(a.group), this.dispose(!0), (0, $.module$exports$Blockly$Events.setGroup)(!1))) : a.type === $.module$exports$Blockly$Events.CHANGE && "disabled" === a.element &&
                 (b = this.getProcedureCall(), (b = (0, $.module$exports$Blockly$Procedures.getDefinition)(b, this.workspace)) && b.id === a.blockId && ((b = (0, $.module$exports$Blockly$Events.getGroup)()) && console.log("Saw an existing group while responding to a definition change"), (0, $.module$exports$Blockly$Events.setGroup)(a.group), a.newValue ? (this.previousEnabledState_ = this.isEnabled(), this.setEnabled(!1)) : this.setEnabled(this.previousEnabledState_), (0, $.module$exports$Blockly$Events.setGroup)(b)))
         }, customContextMenu: function (a) {
@@ -8678,8 +8681,8 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";
         }, mutationToDom: function () { var a = (0, $.module$exports$Blockly$utils$xml.createElement)("mutation"); a.setAttribute("value", Number(this.hasReturnValue_)); return a }, domToMutation: function (a) { this.hasReturnValue_ = "1" === a.getAttribute("value"); this.hasReturnValue_ || (this.removeInput("VALUE"), this.appendDummyInput("VALUE").appendField($.module$exports$Blockly$Msg.Msg.PROCEDURES_DEFRETURN_RETURN)) }, onchange: function (a) {
             if (!(this.workspace.isDragging &&
                 this.workspace.isDragging() || a.type !== $.module$exports$Blockly$Events.BLOCK_MOVE)) {
-                    var b = !1, c = this; do { if (-1 !== this.FUNCTION_TYPES.indexOf(c.type)) { b = !0; break } c = c.getSurroundParent() } while (c); b ? ("procedures_defnoreturn" === c.type && this.hasReturnValue_ ? (this.removeInput("VALUE"), this.appendDummyInput("VALUE").appendField($.module$exports$Blockly$Msg.Msg.PROCEDURES_DEFRETURN_RETURN), this.hasReturnValue_ = !1) : "procedures_defreturn" !== c.type || this.hasReturnValue_ || (this.removeInput("VALUE"), this.appendValueInput("VALUE").appendField($.module$exports$Blockly$Msg.Msg.PROCEDURES_DEFRETURN_RETURN),
-                        this.hasReturnValue_ = !0), this.setWarningText(null)) : this.setWarningText($.module$exports$Blockly$Msg.Msg.PROCEDURES_IFRETURN_WARNING); this.isInFlyout || (c = (0, $.module$exports$Blockly$Events.getGroup)(), (0, $.module$exports$Blockly$Events.setGroup)(a.group), this.setEnabled(b), (0, $.module$exports$Blockly$Events.setGroup)(c))
+                var b = !1, c = this; do { if (-1 !== this.FUNCTION_TYPES.indexOf(c.type)) { b = !0; break } c = c.getSurroundParent() } while (c); b ? ("procedures_defnoreturn" === c.type && this.hasReturnValue_ ? (this.removeInput("VALUE"), this.appendDummyInput("VALUE").appendField($.module$exports$Blockly$Msg.Msg.PROCEDURES_DEFRETURN_RETURN), this.hasReturnValue_ = !1) : "procedures_defreturn" !== c.type || this.hasReturnValue_ || (this.removeInput("VALUE"), this.appendValueInput("VALUE").appendField($.module$exports$Blockly$Msg.Msg.PROCEDURES_DEFRETURN_RETURN),
+                    this.hasReturnValue_ = !0), this.setWarningText(null)) : this.setWarningText($.module$exports$Blockly$Msg.Msg.PROCEDURES_IFRETURN_WARNING); this.isInFlyout || (c = (0, $.module$exports$Blockly$Events.getGroup)(), (0, $.module$exports$Blockly$Events.setGroup)(a.group), this.setEnabled(b), (0, $.module$exports$Blockly$Events.setGroup)(c))
             }
         }, FUNCTION_TYPES: ["procedures_defnoreturn", "procedures_defreturn"]
     }; (0, $.module$exports$Blockly$common.defineBlocks)(module$exports$Blockly$libraryBlocks$procedures.blocks); var module$exports$Blockly$libraryBlocks$math = {};
@@ -8866,7 +8869,7 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";
             } return b
         }, compose: function (a) { var b = a.getInputTargetBlock("STACK"); for (a = []; b && !b.isInsertionMarker();)a.push(b.valueConnection_), b = b.nextConnection && b.nextConnection.targetBlock(); for (b = 0; b < this.itemCount_; b++) { var c = this.getInput("ADD" + b).connection.targetConnection; c && -1 === a.indexOf(c) && c.disconnect() } this.itemCount_ = a.length; this.updateShape_(); for (b = 0; b < this.itemCount_; b++)$.module$exports$Blockly$Mutator.Mutator.reconnect(a[b], this, "ADD" + b) }, saveConnections: function (a) {
             a =
-            a.getInputTargetBlock("STACK"); for (var b = 0; a;) { var c = this.getInput("ADD" + b); a.valueConnection_ = c && c.connection.targetConnection; a = a.nextConnection && a.nextConnection.targetBlock(); b++ }
+                a.getInputTargetBlock("STACK"); for (var b = 0; a;) { var c = this.getInput("ADD" + b); a.valueConnection_ = c && c.connection.targetConnection; a = a.nextConnection && a.nextConnection.targetBlock(); b++ }
         }, updateShape_: function () {
             this.itemCount_ && this.getInput("EMPTY") ? this.removeInput("EMPTY") : this.itemCount_ || this.getInput("EMPTY") || this.appendDummyInput("EMPTY").appendField($.module$exports$Blockly$Msg.Msg.LISTS_CREATE_EMPTY_TITLE); for (var a = 0; a < this.itemCount_; a++)if (!this.getInput("ADD" + a)) {
                 var b = this.appendValueInput("ADD" +
@@ -8920,7 +8923,7 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";
             })
         }, mutationToDom: function () { var a = (0, $.module$exports$Blockly$utils$xml.createElement)("mutation"), b = this.getInput("AT").type === $.module$exports$Blockly$ConnectionType.ConnectionType.INPUT_VALUE; a.setAttribute("at", b); return a }, domToMutation: function (a) {
             a =
-            "false" !== a.getAttribute("at"); this.updateAt_(a)
+                "false" !== a.getAttribute("at"); this.updateAt_(a)
         }, updateAt_: function (a) {
             this.removeInput("AT"); this.removeInput("ORDINAL", !0); a ? (this.appendValueInput("AT").setCheck("Number"), $.module$exports$Blockly$Msg.Msg.ORDINAL_NUMBER_SUFFIX && this.appendDummyInput("ORDINAL").appendField($.module$exports$Blockly$Msg.Msg.ORDINAL_NUMBER_SUFFIX)) : this.appendDummyInput("AT"); var b = new $.module$exports$Blockly$FieldDropdown.FieldDropdown(this.WHERE_OPTIONS, function (c) {
                 var d = "FROM_START" === c || "FROM_END" === c; if (d !==
@@ -9422,13 +9425,11 @@ function exportRelastionships(jsonRelationships) {
             result += ";" + relationshipItem.classes[i];
         }
 
-        result += "|" + relationshipItem.scale + "|";
+        result += "|" + relationshipItem.scale + "|" + relationshipItem.namesRels + "|";
         if (relationshipItem.isBetween == "true") {
-            result += "TRUE" + "|" + relationshipItem.type + "|";
-        } else {
-            result += "FALSE||";
+            result += relationshipItem.type;
         }
-        result += relationshipItem.namesRels + "|" + relationshipItem.decFlags + "\n";
+        result += "\n";
     });
     return result;
 }
