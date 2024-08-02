@@ -32,6 +32,7 @@ where           return 'WHERE';
 "("          return '(';
 ")"          return ')';
 ","          return ',';
+";"          return ';';
 ">"          return '>';
 "<"          return '<';
 "::"          return '::';
@@ -81,7 +82,17 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 %% /* language grammar */
 
 program
-    : stmt { root = new ProgramNode($1); return $1;}
+    : stmt { root = new ProgramNode($1, false); return $1;}
+    | block { root = new ProgramNode($1, true); return $1;}
+    ;
+
+block
+    : "{" stmt_seq "}" { $$ = new BlockNode($2); }
+    ;
+
+stmt_seq
+    : stmt ";" { $$ = createStmtSeqNode($1); }
+    | stmt_seq stmt ";" { $$ = addStmtToStmtSeqNode($1, $2); }
     ;
 
 stmt

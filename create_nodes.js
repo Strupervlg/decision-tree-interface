@@ -1,19 +1,47 @@
 var LASTID = 0;
 
-function ProgramNode(statement) {
-    this.stmt = statement;
+function ProgramNode(statement, isBlock) {
+    this.isBlock = isBlock;
+    if (isBlock) {
+        this.block = statement;
+        this.stmt = null;
+    } else {
+        this.block = null;
+        this.stmt = statement;
+    }
+    this.id = LASTID++;
+}
+
+function BlockNode(statementSeq) {
+    this.statementSeq = statementSeq;
     this.id = LASTID++;
 }
 
 function StatementNode(firstExpression, secondExpression) {
     this.firstExpr = firstExpression;
     this.secondExpr = secondExpression;
+    this.next = null;
     this.id = LASTID++;
 }
 
-const ExprType = { 
-    ID: 'id', 
-    STRING: 'string', 
+function StatementSeq(first, last) {
+    this.first = first;
+    this.last = last;
+}
+
+function createStmtSeqNode(stmt) {
+    return new StatementSeq(stmt, stmt);
+}
+
+function addStmtToStmtSeqNode(seqStmt, stmt) {
+    seqStmt.last.next = stmt;
+    seqStmt.last = stmt;
+    return seqStmt;
+}
+
+const ExprType = {
+    ID: 'id',
+    STRING: 'string',
     INT: 'int',
     DOUBLE: 'double',
     BOOLEAN: 'boolean',
@@ -23,22 +51,22 @@ const ExprType = {
     GET_BY_RELATIONSHIP: 'get by relationship',
     PROPERTY: 'property',
     IS: 'is',
-    GREATER: 'greater', 
-    LESS: 'less', 
-    EQUAL: 'equal', 
-    NOT_EQUAL: 'not equal', 
-    GE: 'ge', 
-    LE: 'le', 
-    COMPARE: 'compare', 
-    AND: 'and', 
-    OR: 'or', 
-    NOT: 'not', 
+    GREATER: 'greater',
+    LESS: 'less',
+    EQUAL: 'equal',
+    NOT_EQUAL: 'not equal',
+    GE: 'ge',
+    LE: 'le',
+    COMPARE: 'compare',
+    AND: 'and',
+    OR: 'or',
+    NOT: 'not',
     CHECK_REL: 'check_rel',
-    GET_CLASS: 'get_class', 
+    GET_CLASS: 'get_class',
     FIND: 'find',
-    FIND_EXTREM: 'find extreme', 
-    EXIST: 'exist', 
-    FORALL: 'forall', 
+    FIND_EXTREM: 'find extreme',
+    EXIST: 'exist',
+    FORALL: 'forall',
 };
 
 function ExpressionNode() {
@@ -65,12 +93,12 @@ function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = firstExprOperand;
-    if(typeNode == ExprType.PROPERTY) {
+    if (typeNode == ExprType.PROPERTY) {
         newNode.ident = secondExprOperand;
     } else {
         newNode.secondOperand = secondExprOperand;
     }
-    
+
     return newNode;
 }
 
@@ -80,7 +108,7 @@ function createGetObjectByRel(firstExprOperand, relationship) {
     newNode.rel = relationship;
 
     newNode.firstOperand = firstExprOperand;
-    
+
     return newNode;
 }
 
@@ -94,21 +122,21 @@ function createUnaryExprNode(typeNode, operand) {
 function createLiteral(typeNode, literal) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
-    if(typeNode == ExprType.ID) {
+    if (typeNode == ExprType.ID) {
         newNode.ident = literal;
-    } else if(typeNode == ExprType.TREE_VAR) {
+    } else if (typeNode == ExprType.TREE_VAR) {
         newNode.ident = literal.substring(4);
-    } else if(typeNode == ExprType.VAR) {
+    } else if (typeNode == ExprType.VAR) {
         newNode.ident = literal.substring(1);
-    } else if(typeNode == ExprType.STRING) {
+    } else if (typeNode == ExprType.STRING) {
         newNode.string = literal;
-    } else if(typeNode == ExprType.INT) {
+    } else if (typeNode == ExprType.INT) {
         newNode.int = Number(literal);
-    } else if(typeNode == ExprType.DOUBLE) {
+    } else if (typeNode == ExprType.DOUBLE) {
         newNode.double = Number(literal);
-    } else if(typeNode == ExprType.BOOLEAN) {
+    } else if (typeNode == ExprType.BOOLEAN) {
         newNode.boolean = literal;
-    } 
+    }
     return newNode;
 }
 
@@ -147,7 +175,7 @@ function createFindExtremeExprNode(extremeVarName, extremeCondition, varName, co
     return newNode;
 }
 
-function createQuantifierExprNode(typeNode, id, expression1, expression2) { 
+function createQuantifierExprNode(typeNode, id, expression1, expression2) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = expression1;
@@ -176,7 +204,9 @@ var root;
 var string;
 
 // Для экспорта
-module.exports = { createBinExprNode, createGetObjectByRel, createUnaryExprNode,
+module.exports = {
+    createBinExprNode, createGetObjectByRel, createUnaryExprNode,
     createLiteral, createEnum, createCheckRelExprNode, createGetExprNode, createFindExtremeExprNode,
     createQuantifierExprNode, createObjectSeqNode, addObjectToObjectSeqNode, root, string, ObjectSeq,
-    ProgramNode, StatementNode, ExpressionNode, ExprType }
+    ProgramNode, StatementNode, ExpressionNode, ExprType
+}
