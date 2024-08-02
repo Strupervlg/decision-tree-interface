@@ -9,16 +9,16 @@ function createXML() {
     var s = new XMLSerializer();
     var str = s.serializeToString(lastXML)
     str = str.replace(/(?<=>)[\s]+(?=<)/g, '');
-    output.value = str; 
+    output.value = str;
 }
 
 function createCode() {
-    if(workspace.getTopBlocks().length > 1) {
+    if (workspace.getTopBlocks().length > 1) {
         console.log("Error")
         return;
     }
     let code = Blockly.JavaScript.workspaceToCode(workspace);
-    if(code.slice(-1) == "\n") {
+    if (code.slice(-1) == "\n") {
         code = code.slice(0, -2);
     }
     let output = document.getElementById('output_code');
@@ -256,6 +256,12 @@ const xslTxt = `<?xml version="1.0"?>
             <xsl:apply-templates select="value[@name='definition_area']" />
             <xsl:apply-templates select="value[@name='verification_condition']" />
         </ForAllQuantifier>
+    </xsl:template>
+
+    <xsl:template match="block[@type='block']">
+        <Block>
+            <xsl:apply-templates select="value" />
+        </Block>
     </xsl:template>
 
 </xsl:stylesheet>`
