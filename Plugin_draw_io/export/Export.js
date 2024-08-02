@@ -2,11 +2,11 @@ function exportEnums(jsonEnums) {
     var result = "";
     jsonEnums.forEach(enumItem => {
         result += enumItem.nameEnum + "|" + enumItem.values[0];
-        for(var i = 1; i < enumItem.values.length; i++) {
+        for (var i = 1; i < enumItem.values.length; i++) {
             result += ";" + enumItem.values[i];
         }
-        
-        if(enumItem.isLinear == 'true') {
+
+        if (enumItem.isLinear == 'true') {
             result += "|TRUE|" + enumItem.nameRDF + "\n";
         } else {
             result += "|FALSE|" + enumItem.nameRDF + "\n";
@@ -19,7 +19,7 @@ function exportClasses(jsonClasses, workspace) {
     var result = "";
     jsonClasses.forEach(classItem => {
         result += classItem.name + "|" + classItem.extend + "|";
-        if(classItem.expression) {
+        if (classItem.expression) {
             result += codeToXML(workspace, classItem.expression);
         }
         result += "\n";
@@ -32,22 +32,22 @@ function exportProperties(jsonProperties) {
     jsonProperties.forEach(propertyItem => {
         result += propertyItem.name + "|";
 
-        if(propertyItem.type != "Integer" && propertyItem.type != "Double" 
-        && propertyItem.type != "Boolean" && propertyItem.type != "String") {
+        if (propertyItem.type != "Integer" && propertyItem.type != "Double"
+            && propertyItem.type != "Boolean" && propertyItem.type != "String") {
             result += "ENUM" + "|" + propertyItem.type.slice(6) + "|";
         } else {
             result += propertyItem.type.toUpperCase() + "||";
         }
 
-        if(propertyItem.isStatic == 'true') {
+        if (propertyItem.isStatic == 'true') {
             result += "TRUE|" + propertyItem.classes[0];
-            for(var i = 1; i < propertyItem.classes.length; i++) {
+            for (var i = 1; i < propertyItem.classes.length; i++) {
                 result += ";" + propertyItem.classes[i];
             }
             result += "|";
         } else {
             result += "FALSE|" + propertyItem.classes[0];
-            for(var i = 1; i < propertyItem.classes.length; i++) {
+            for (var i = 1; i < propertyItem.classes.length; i++) {
                 result += ";" + propertyItem.classes[i];
             }
             result += "|";
@@ -61,14 +61,14 @@ function exportProperties(jsonProperties) {
 function exportRelastionships(jsonRelationships) {
     var result = "";
     jsonRelationships.forEach(relationshipItem => {
-        result += relationshipItem.name + "|" + relationshipItem.extend + "|" 
+        result += relationshipItem.name + "|" + relationshipItem.extend + "|"
             + relationshipItem.classes[0];
-        for(var i = 1; i < relationshipItem.classes.length; i++) {
+        for (var i = 1; i < relationshipItem.classes.length; i++) {
             result += ";" + relationshipItem.classes[i];
         }
 
         result += "|" + relationshipItem.scale + "|";
-        if(relationshipItem.isBetween == "true") {
+        if (relationshipItem.isBetween == "true") {
             result += "TRUE" + "|" + relationshipItem.type + "|";
         } else {
             result += "FALSE||";
@@ -328,6 +328,12 @@ const xslTxt = `<?xml version="1.0"?>
             <xsl:apply-templates select="value[@name='definition_area']" />
             <xsl:apply-templates select="value[@name='verification_condition']" />
         </ForAllQuantifier>
+    </xsl:template>
+
+    <xsl:template match="block[@type='block']">
+        <Block>
+            <xsl:apply-templates select="value" />
+        </Block>
     </xsl:template>
 
 </xsl:stylesheet>`

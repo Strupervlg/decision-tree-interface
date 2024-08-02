@@ -77,7 +77,7 @@ var toolbox = {
                     "kind": "block",
                     "type": "get_extr_object"
                 },
-                
+
             ]
         },
         {
@@ -153,5 +153,17 @@ var toolbox = {
                 },
             ]
         },
+        {
+            "kind": "category",
+            "name": "Block",
+            "colour": "75",
+            "contents": [
+                {
+                    "kind": "block",
+                    "type": "block"
+                },
+            ]
+        },
+
     ]
 }
