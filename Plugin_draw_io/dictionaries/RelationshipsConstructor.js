@@ -148,11 +148,11 @@ function addRowRelationship(editorUi) {
     });
 
     selectScale.addEventListener('change', (event) => {
-        checkFlags(event.target.parentElement.parentElement, 
+        checkFlags(event.target.parentElement.parentElement,
             event.target.options[event.target.options.selectedIndex].value)
-        if ((event.target.options[event.target.options.selectedIndex].value == "Linear" 
-        || event.target.options[event.target.options.selectedIndex].value == "Partially linear") 
-        && !event.currentTarget.parentElement.nextElementSibling.classList.contains("names")) {
+        if ((event.target.options[event.target.options.selectedIndex].value == "Linear"
+            || event.target.options[event.target.options.selectedIndex].value == "Partially linear")
+            && !event.currentTarget.parentElement.nextElementSibling.classList.contains("names")) {
             var tdInputNames = document.createElement('td');
             tdInputNames.classList = "names";
             tdInputNames.style.minWidth = "150px";
@@ -190,10 +190,10 @@ function addRowRelationship(editorUi) {
 
             event.currentTarget.parentElement.parentElement.insertBefore(tdAddName, event.currentTarget.parentElement.nextElementSibling);
             event.currentTarget.parentElement.parentElement.insertBefore(tdInputNames, event.currentTarget.parentElement.nextElementSibling);
-        } else if(event.target.options[event.target.options.selectedIndex].value == "None"
-        && event.currentTarget.parentElement.nextElementSibling.classList.contains("names")) {
+        } else if (event.target.options[event.target.options.selectedIndex].value == "None"
+            && event.currentTarget.parentElement.nextElementSibling.classList.contains("names")) {
             var currentTd = event.currentTarget.parentElement.nextElementSibling;
-            while(currentTd.classList != 'addNames') {
+            while (currentTd.classList != 'addNames') {
                 currentTd.remove();
                 currentTd = event.currentTarget.parentElement.nextElementSibling;
             }
@@ -218,7 +218,7 @@ function addRowRelationship(editorUi) {
             tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
             selectType = styleSelect(selectType);
-            var scales = ["One to one", "One to many"]; // "ONE_TO_ONE", "ONE_TO_MANY"
+            var scales = ["One to one", "One to many", "Many to one", "Many to many"]; // "ONE_TO_ONE", "ONE_TO_MANY", "MANY_TO_ONE", "MANY_TO_MANY"
             scales.forEach(element => {
                 var newOption = new Option(element, element);
                 selectType.options[selectType.options.length] = newOption;
@@ -229,7 +229,7 @@ function addRowRelationship(editorUi) {
             //Удаление поля с типом
             event.currentTarget.parentElement.nextElementSibling.remove();
         }
-      });
+    });
     td6.appendChild(span);
     td6.appendChild(checkbox);
     tr1.appendChild(td6);
@@ -318,22 +318,22 @@ function checkAllInputsRelationship(table) {
         arrayNames.push(checkValue);
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
-        if(checkValue == "") {
-            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
-        } else if(!checkValidID(checkValue)) {
-            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
+        if (checkValue == "") {
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i + 1));
+        } else if (!checkValidID(checkValue)) {
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i + 1));
         }
-        if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
-            errors += getTextByLocale("extendRelationshipIsIncorrect").replace("%i", (i+1));
+        if (checkValueExtend != "" && !checkValidID(checkValueExtend)) {
+            errors += getTextByLocale("extendRelationshipIsIncorrect").replace("%i", (i + 1));
         }
 
         let lastIndex = 2;
         let currentSelect = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("select").item(0);
         let hasntClass = false;
-        while(currentSelect != null) {
-            if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined" && !hasntClass) {
-                errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
+        while (currentSelect != null) {
+            if (typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined" && !hasntClass) {
+                errors += getTextByLocale("classesIsMissing").replace("%i", (i + 1));
                 hasntClass = true;
             }
             lastIndex++;
@@ -342,18 +342,18 @@ function checkAllInputsRelationship(table) {
         }
         lastIndex++;
         currentSelect = table.rows.item(i).getElementsByTagName("td")
-                .item(lastIndex).getElementsByTagName("select").item(0);
-        if(currentSelect.options[currentSelect.options.selectedIndex].value == "Linear" 
-        || currentSelect.options[currentSelect.options.selectedIndex].value == "Partially linear") {
+            .item(lastIndex).getElementsByTagName("select").item(0);
+        if (currentSelect.options[currentSelect.options.selectedIndex].value == "Linear"
+            || currentSelect.options[currentSelect.options.selectedIndex].value == "Partially linear") {
             lastIndex++;
             let currentInputName = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(0);
-            while(currentInputName != null) {
-                if(currentInputName.value == "") {
-                    errors += getTextByLocale("nameRelationshipsIsMissing").replace("%i", (i+1));
+            while (currentInputName != null) {
+                if (currentInputName.value == "") {
+                    errors += getTextByLocale("nameRelationshipsIsMissing").replace("%i", (i + 1));
                     break;
-                } else if(!checkValidID(currentInputName.value)) {
-                    errors += getTextByLocale("nameRelationshipsIsIncorrect").replace("%i", (i+1));
+                } else if (!checkValidID(currentInputName.value)) {
+                    errors += getTextByLocale("nameRelationshipsIsIncorrect").replace("%i", (i + 1));
                     break;
                 }
                 lastIndex++;
@@ -362,10 +362,10 @@ function checkAllInputsRelationship(table) {
             }
         }
     }
-    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+    if (arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
         errors += getTextByLocale("nonUniqueRelationshipName");
     }
-    if(errors != "") {
+    if (errors != "") {
         throw new Error(errors);
     }
 }
@@ -381,7 +381,7 @@ function generateStrValueForRelationships(table) {
 
         var extendRelationship = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
-        
+
         var classList = [];
 
         var classSelect = table.rows.item(i).getElementsByTagName("td")
@@ -390,7 +390,7 @@ function generateStrValueForRelationships(table) {
         lastIndex = 3;
         let currentSelect = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("select").item(0);
-        while(currentSelect != null) {
+        while (currentSelect != null) {
             classList.push(currentSelect.options[currentSelect.options.selectedIndex].value);
             lastIndex++;
             currentSelect = table.rows.item(i).getElementsByTagName("td")
@@ -402,11 +402,11 @@ function generateStrValueForRelationships(table) {
             .item(lastIndex).getElementsByTagName("select").item(0);
         var scale = scaleSelect.options[scaleSelect.options.selectedIndex].value;
         let namesRels = [];
-        if(scale == "Linear" || scale == "Partially linear") {
+        if (scale == "Linear" || scale == "Partially linear") {
             lastIndex++;
             let currentInputName = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(0);
-            while(currentInputName != null) {
+            while (currentInputName != null) {
                 namesRels.push(currentInputName.value);
                 lastIndex++;
                 currentInputName = table.rows.item(i).getElementsByTagName("td")
@@ -419,7 +419,7 @@ function generateStrValueForRelationships(table) {
         var isBetween = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("input").item(0).checked;
         var type = "";
-        if(isBetween) {
+        if (isBetween) {
             lastIndex++;
             var typeSelect = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("select").item(0);
@@ -428,22 +428,22 @@ function generateStrValueForRelationships(table) {
         binFlags.push(getMarkedFlags(table.rows.item(i)));
 
         strValue += '<br>' + '<font color="#00cccc">' + relationship + '</font>';
-        if(extendRelationship != "") {
+        if (extendRelationship != "") {
             strValue += ' (<font color="#00cccc">' + extendRelationship + '</font>)'
         }
         strValue += ' <font color="#6666FF">classes:</font> <font color="#ff66b3">' + classList[0];
-        for(let i = 1; i < classList.length; i++) {
+        for (let i = 1; i < classList.length; i++) {
             strValue += ', ' + classList[i];
         }
         strValue += '</font>';
 
-        if(scale != "None") {
+        if (scale != "None") {
             strValue += ' <font color="#6666FF">scale:</font> <font color="#000000">' + scale + '</font>';
         }
 
-        strValue += ' <font color="#6666FF">is relationship between classes:</font> <font color="#000000">' 
+        strValue += ' <font color="#6666FF">is relationship between classes:</font> <font color="#000000">'
             + isBetween + '</font>';
-        if(isBetween) {
+        if (isBetween) {
             strValue += ' <font color="#6666FF">type:</font> <font color="#000000">' + type + '</font>';
         }
     }
@@ -468,7 +468,7 @@ function checkFlags(row, scale) {
     let tdAntiRelf = row.getElementsByClassName("antireflexivity")[0];
     let tdTrans = row.getElementsByClassName("transitivity")[0];
     let tdAntiTrans = row.getElementsByClassName("antitransivity")[0];
-    if(scale == "Linear") {
+    if (scale == "Linear") {
         tdSym.getElementsByTagName("input").item(0).checked = false;
         tdSym.getElementsByTagName("input").item(0).disabled = true;
         tdAntiSym.getElementsByTagName("input").item(0).checked = true;
@@ -481,7 +481,7 @@ function checkFlags(row, scale) {
         tdTrans.getElementsByTagName("input").item(0).disabled = true;
         tdAntiTrans.getElementsByTagName("input").item(0).checked = false;
         tdAntiTrans.getElementsByTagName("input").item(0).disabled = true;
-    } else if(scale == "Partially linear") {
+    } else if (scale == "Partially linear") {
         tdSym.getElementsByTagName("input").item(0).checked = false;
         tdSym.getElementsByTagName("input").item(0).disabled = true;
         tdAntiSym.getElementsByTagName("input").item(0).checked = true;
@@ -494,7 +494,7 @@ function checkFlags(row, scale) {
         tdTrans.getElementsByTagName("input").item(0).disabled = true;
         tdAntiTrans.getElementsByTagName("input").item(0).checked = false;
         tdAntiTrans.getElementsByTagName("input").item(0).disabled = true;
-    } else if(scale == "None") {
+    } else if (scale == "None") {
         tdSym.getElementsByTagName("input").item(0).checked = false;
         tdSym.getElementsByTagName("input").item(0).disabled = false;
         tdAntiSym.getElementsByTagName("input").item(0).checked = false;
@@ -517,6 +517,6 @@ function getMarkedFlags(row) {
     let AntiRelf = row.getElementsByClassName("antireflexivity")[0].getElementsByTagName("input").item(0).checked;;
     let trans = row.getElementsByClassName("transitivity")[0].getElementsByTagName("input").item(0).checked;;
     let antiTrans = row.getElementsByClassName("antitransivity")[0].getElementsByTagName("input").item(0).checked;;
-    return String(Number(sym)) + String(Number(antiSym)) + String(Number(relf)) + String(Number(AntiRelf)) 
+    return String(Number(sym)) + String(Number(antiSym)) + String(Number(relf)) + String(Number(AntiRelf))
         + String(Number(trans)) + String(Number(antiTrans));
 }

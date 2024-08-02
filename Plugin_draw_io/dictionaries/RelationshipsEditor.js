@@ -73,38 +73,38 @@ function fillDataRelationships(tbody, cell, editorUi) {
     var values = cellLabel.split('<br>');
 
     values.forEach((element, index) => {
-        var nameRelationship = element.slice(element.indexOf('<font color="#00cccc">')+22, element.indexOf('</font>'));
-        element = element.slice(element.indexOf('</font>')+7);
+        var nameRelationship = element.slice(element.indexOf('<font color="#00cccc">') + 22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>') + 7);
 
         var extendRelationship = ""
-        if(element.indexOf(' (<font color="#00cccc">') != -1) {
-            extendRelationship = element.slice(element.indexOf('(<font color="#00cccc">')+23, element.indexOf('</font>)'));
-            element = element.slice(element.indexOf('</font>)')+8);
+        if (element.indexOf(' (<font color="#00cccc">') != -1) {
+            extendRelationship = element.slice(element.indexOf('(<font color="#00cccc">') + 23, element.indexOf('</font>)'));
+            element = element.slice(element.indexOf('</font>)') + 8);
         }
 
-        element = element.slice(element.indexOf('classes:</font>')+15);
-        var valuesStr = element.slice(element.indexOf('<font color="#ff66b3">')+22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('classes:</font>') + 15);
+        var valuesStr = element.slice(element.indexOf('<font color="#ff66b3">') + 22, element.indexOf('</font>'));
         var classes = valuesStr.split(', ');
-        element = element.slice(element.indexOf('</font>')+7);
+        element = element.slice(element.indexOf('</font>') + 7);
 
         var scale = "";
-        if(element.indexOf('<font color="#6666FF">scale:</font>') != -1) {
-            element = element.slice(element.indexOf('scale:</font>')+13);
-            scale = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
-            element = element.slice(element.indexOf('</font>')+7);
+        if (element.indexOf('<font color="#6666FF">scale:</font>') != -1) {
+            element = element.slice(element.indexOf('scale:</font>') + 13);
+            scale = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
+            element = element.slice(element.indexOf('</font>') + 7);
         }
 
-        element = element.slice(element.indexOf('classes:</font>')+15);
-        isBetween = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
-        element = element.slice(element.indexOf('</font>')+7);
+        element = element.slice(element.indexOf('classes:</font>') + 15);
+        isBetween = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>') + 7);
         var type = "";
-        if(isBetween == "true") {
-            element = element.slice(element.indexOf('type:</font>')+12);
-            type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
+        if (isBetween == "true") {
+            element = element.slice(element.indexOf('type:</font>') + 12);
+            type = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
         }
 
-        let namesRels = cellValue.getAttribute('namesRels_'+index);
-        let binFlags = cellValue.getAttribute('binFlags_'+index);
+        let namesRels = cellValue.getAttribute('namesRels_' + index);
+        let binFlags = cellValue.getAttribute('binFlags_' + index);
 
         var row = addRowRelationship(editorUi);
 
@@ -116,7 +116,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
         let lastIndex = 2;
         classes.forEach(element => {
-            if(lastIndex != 2) {
+            if (lastIndex != 2) {
                 let newTdClass = document.createElement('td');
                 newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
@@ -141,8 +141,8 @@ function fillDataRelationships(tbody, cell, editorUi) {
             }
             var classSelect = row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("select").item(0);
-            for(let index = 0; index < classSelect.options.length; ++index) {
-                if(classSelect.options[index].value == element) {
+            for (let index = 0; index < classSelect.options.length; ++index) {
+                if (classSelect.options[index].value == element) {
                     classSelect.options[index].selected = true;
                 }
             }
@@ -153,14 +153,14 @@ function fillDataRelationships(tbody, cell, editorUi) {
         var scaleSelect = row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("select").item(0);
 
-        for(let index = 0; index < scaleSelect.options.length; ++index) {
-            if(scaleSelect.options[index].value == scale) {
+        for (let index = 0; index < scaleSelect.options.length; ++index) {
+            if (scaleSelect.options[index].value == scale) {
                 scaleSelect.options[index].selected = true;
             }
         }
         checkFlags(row, scale);
         let namesRelsArray = namesRels.split(";");
-        if(scale == "Linear" || scale == "Partially linear") {
+        if (scale == "Linear" || scale == "Partially linear") {
             var tdInputNames = document.createElement('td');
             tdInputNames.classList = "names";
             tdInputNames.style.minWidth = "150px";
@@ -201,7 +201,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
             lastIndex++;
             namesRelsArray.forEach((element, index) => {
-                if(index != 0) {
+                if (index != 0) {
                     let newTdName = document.createElement('td');
                     newTdName.style.minWidth = "200px";
                     var newNameInput = document.createElement('input');
@@ -226,20 +226,20 @@ function fillDataRelationships(tbody, cell, editorUi) {
                 lastIndex++;
             });
         }
-        if(!scale) {
+        if (!scale) {
             fillFlags(row, binFlags);
         }
         lastIndex++;
-        
+
         row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("input").item(0).checked = isBetween == 'true';
-        if(isBetween == 'true') {
+        if (isBetween == 'true') {
             var tdType = document.createElement('td');
             tdType.style.minWidth = "150px";
             var selectType = document.createElement('select');
             selectType = styleSelect(selectType);
             selectType.style.width = '100%';
-            var scales = ["One to one", "One to many"];
+            var scales = ["One to one", "One to many", "Many to one", "Many to many"];
             scales.forEach(element => {
                 var newOption = new Option(element, element);
                 selectType.options[selectType.options.length] = newOption;
@@ -251,14 +251,14 @@ function fillDataRelationships(tbody, cell, editorUi) {
 
             var typeSelect = row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("select").item(0);
-            for(let index = 0; index < typeSelect.options.length; ++index) {
-                if(typeSelect.options[index].value == type) {
+            for (let index = 0; index < typeSelect.options.length; ++index) {
+                if (typeSelect.options[index].value == type) {
                     typeSelect.options[index].selected = true;
                 }
             }
         }
 
-        if(index != 0) {
+        if (index != 0) {
             var tdDelRow = document.createElement('td');
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();

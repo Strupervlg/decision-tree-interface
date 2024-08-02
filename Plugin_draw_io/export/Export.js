@@ -67,13 +67,11 @@ function exportRelastionships(jsonRelationships) {
             result += ";" + relationshipItem.classes[i];
         }
 
-        result += "|" + relationshipItem.scale + "|";
+        result += "|" + relationshipItem.scale + "|" + relationshipItem.namesRels + "|";
         if (relationshipItem.isBetween == "true") {
-            result += "TRUE" + "|" + relationshipItem.type + "|";
-        } else {
-            result += "FALSE||";
+            result += relationshipItem.type;
         }
-        result += relationshipItem.namesRels + "|" + relationshipItem.decFlags + "\n";
+        result += "\n";
     });
     return result;
 }
