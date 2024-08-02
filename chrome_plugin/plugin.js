@@ -1893,14 +1893,32 @@ function getRelationships(editorUi) {
     return relationships;
 }
 function toBlock(rootNode, workspace) {
-    if (rootNode.stmt != null) {
+    if (!rootNode.isBlock && rootNode.stmt != null) {
         stmtNodeToBlock(rootNode.stmt, workspace);
+    } else if (rootNode.isBlock && rootNode.block != null) {
+        blockNodeToBlock(rootNode.block, workspace);
+    }
+}
+
+function blockNodeToBlock(blockNode, workspace) {
+    var resBlock = new Blockly.BlockSvg(workspace, "block");
+    resBlock.initSvg();
+    resBlock.itemCount_ = 0;
+    resBlock.render();
+
+    var current = blockNode.statementSeq.first;
+    while (current != null) {
+        resBlock.itemCount_++;
+        resBlock.updateShape_();
+        stmtBlock = stmtNodeToBlock(current, workspace);
+        resBlock.getInput("statement" + (resBlock.itemCount_ - 1)).connection.connect(stmtBlock.outputConnection);
+        current = current.next;
     }
 }
 
 function stmtNodeToBlock(stmtNode, workspace) {
     if (stmtNode.secondExpr == null) {
-        printExprNode(stmtNode.firstExpr, workspace);
+        return printExprNode(stmtNode.firstExpr, workspace);
     } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.TREE_VAR) {
         var assignment = new Blockly.BlockSvg(workspace, "assign_value_to_variable_decision_tree");
         assignment.initSvg();
@@ -1914,6 +1932,7 @@ function stmtNodeToBlock(stmtNode, workspace) {
         checkTypeBlocks(assignment, block2, "new_object");
         assignment.getInput("new_object").connection.connect(block2.outputConnection);
 
+        return assignment;
     } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.PROPERTY) {
         var assignment = new Blockly.BlockSvg(workspace, "assign_value_to_property");
         assignment.initSvg();
@@ -1933,6 +1952,8 @@ function stmtNodeToBlock(stmtNode, workspace) {
         var valueBlock = printExprNode(stmtNode.secondExpr, workspace);
         checkTypeBlocks(assignment, valueBlock, "new_value");
         assignment.getInput("new_value").connection.connect(valueBlock.outputConnection);
+
+        return assignment;
     } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY
         && stmtNode.firstExpr.type != ExprType.TREE_VAR) {
         throw new Error(getTextByLocale("invalidAssign"));
@@ -2295,15 +2316,43 @@ function checkTypeBlocks(blockInput, blockOutput, input) {
 }
 var LASTID = 0;
 
-function ProgramNode(statement) {
-    this.stmt = statement;
+function ProgramNode(statement, isBlock) {
+    this.isBlock = isBlock;
+    if (isBlock) {
+        this.block = statement;
+        this.stmt = null;
+    } else {
+        this.block = null;
+        this.stmt = statement;
+    }
+    this.id = LASTID++;
+}
+
+function BlockNode(statementSeq) {
+    this.statementSeq = statementSeq;
     this.id = LASTID++;
 }
 
 function StatementNode(firstExpression, secondExpression) {
     this.firstExpr = firstExpression;
     this.secondExpr = secondExpression;
+    this.next = null;
     this.id = LASTID++;
+}
+
+function StatementSeq(first, last) {
+    this.first = first;
+    this.last = last;
+}
+
+function createStmtSeqNode(stmt) {
+    return new StatementSeq(stmt, stmt);
+}
+
+function addStmtToStmtSeqNode(seqStmt, stmt) {
+    seqStmt.last.next = stmt;
+    seqStmt.last = stmt;
+    return seqStmt;
 }
 
 const ExprType = {
@@ -2543,124 +2592,136 @@ var string;
   }
 */
 var parser = (function () {
-    var o = function (k, v, o, l) { for (o = o || {}, l = k.length; l--; o[k[l]] = v); return o }, $V0 = [1, 4], $V1 = [1, 5], $V2 = [1, 6], $V3 = [1, 7], $V4 = [1, 8], $V5 = [1, 9], $V6 = [1, 10], $V7 = [1, 11], $V8 = [1, 12], $V9 = [1, 13], $Va = [1, 14], $Vb = [1, 15], $Vc = [1, 16], $Vd = [1, 17], $Ve = [1, 19], $Vf = [1, 20], $Vg = [1, 21], $Vh = [1, 22], $Vi = [1, 23], $Vj = [1, 24], $Vk = [1, 25], $Vl = [1, 26], $Vm = [1, 27], $Vn = [1, 28], $Vo = [1, 29], $Vp = [1, 6, 16, 17, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29, 35, 38, 42], $Vq = [1, 6, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29, 35, 38, 42], $Vr = [27, 42];
+    var o = function (k, v, o, l) { for (o = o || {}, l = k.length; l--; o[k[l]] = v); return o }, $V0 = [1, 6], $V1 = [1, 7], $V2 = [1, 8], $V3 = [1, 9], $V4 = [1, 10], $V5 = [1, 11], $V6 = [1, 12], $V7 = [1, 13], $V8 = [1, 14], $V9 = [1, 15], $Va = [1, 16], $Vb = [1, 17], $Vc = [1, 18], $Vd = [1, 19], $Ve = [1, 21], $Vf = [1, 22], $Vg = [1, 23], $Vh = [1, 24], $Vi = [1, 25], $Vj = [1, 26], $Vk = [1, 27], $Vl = [1, 28], $Vm = [1, 29], $Vn = [1, 30], $Vo = [1, 31], $Vp = [1, 8, 9, 11, 21, 22, 23, 24, 25, 26, 27, 28, 29, 32, 33, 34, 41, 45], $Vq = [1, 8, 9, 11, 23, 24, 25, 26, 27, 28, 29, 32, 33, 34, 41, 45], $Vr = [8, 12, 13, 14, 15, 16, 17, 18, 19, 31, 35, 38, 39, 43, 44], $Vs = [32, 45];
     var parser = {
         trace: function trace() { },
         yy: {},
-        symbols_: { "error": 2, "program": 3, "stmt": 4, "exp": 5, "=": 6, "ID": 7, "STRING": 8, "INT": 9, "DOUBLE": 10, "TRUE": 11, "FALSE": 12, "TREE_VAR": 13, "VAR": 14, "::": 15, "->": 16, ".": 17, "IS": 18, ">": 19, "<": 20, "==": 21, "!=": 22, ">=": 23, "<=": 24, "COMPARE": 25, "(": 26, ")": 27, "AND": 28, "OR": 29, "NOT": 30, "object_seq": 31, "CLASS": 32, "FIND": 33, "{": 34, "}": 35, "FIND_EXTREM": 36, "[": 37, "]": 38, "WHERE": 39, "EXIST": 40, "FORALL": 41, ",": 42, "$accept": 0, "$end": 1 },
-        terminals_: { 2: "error", 6: "=", 7: "ID", 8: "STRING", 9: "INT", 10: "DOUBLE", 11: "TRUE", 12: "FALSE", 13: "TREE_VAR", 14: "VAR", 15: "::", 16: "->", 17: ".", 18: "IS", 19: ">", 20: "<", 21: "==", 22: "!=", 23: ">=", 24: "<=", 25: "COMPARE", 26: "(", 27: ")", 28: "AND", 29: "OR", 30: "NOT", 32: "CLASS", 33: "FIND", 34: "{", 35: "}", 36: "FIND_EXTREM", 37: "[", 38: "]", 39: "WHERE", 40: "EXIST", 41: "FORALL", 42: "," },
-        productions_: [0, [3, 1], [4, 1], [4, 3], [5, 1], [5, 1], [5, 1], [5, 1], [5, 1], [5, 1], [5, 1], [5, 1], [5, 3], [5, 3], [5, 3], [5, 3], [5, 3], [5, 3], [5, 3], [5, 3], [5, 3], [5, 3], [5, 6], [5, 3], [5, 3], [5, 3], [5, 2], [5, 6], [5, 5], [5, 5], [5, 10], [5, 8], [5, 8], [31, 1], [31, 3]],
+        symbols_: { "error": 2, "program": 3, "stmt": 4, "block": 5, "{": 6, "stmt_seq": 7, "}": 8, ";": 9, "exp": 10, "=": 11, "ID": 12, "STRING": 13, "INT": 14, "DOUBLE": 15, "TRUE": 16, "FALSE": 17, "TREE_VAR": 18, "VAR": 19, "::": 20, "->": 21, ".": 22, "IS": 23, ">": 24, "<": 25, "==": 26, "!=": 27, ">=": 28, "<=": 29, "COMPARE": 30, "(": 31, ")": 32, "AND": 33, "OR": 34, "NOT": 35, "object_seq": 36, "CLASS": 37, "FIND": 38, "FIND_EXTREM": 39, "[": 40, "]": 41, "WHERE": 42, "EXIST": 43, "FORALL": 44, ",": 45, "$accept": 0, "$end": 1 },
+        terminals_: { 2: "error", 6: "{", 8: "}", 9: ";", 11: "=", 12: "ID", 13: "STRING", 14: "INT", 15: "DOUBLE", 16: "TRUE", 17: "FALSE", 18: "TREE_VAR", 19: "VAR", 20: "::", 21: "->", 22: ".", 23: "IS", 24: ">", 25: "<", 26: "==", 27: "!=", 28: ">=", 29: "<=", 30: "COMPARE", 31: "(", 32: ")", 33: "AND", 34: "OR", 35: "NOT", 37: "CLASS", 38: "FIND", 39: "FIND_EXTREM", 40: "[", 41: "]", 42: "WHERE", 43: "EXIST", 44: "FORALL", 45: "," },
+        productions_: [0, [3, 1], [3, 1], [5, 3], [7, 2], [7, 3], [4, 1], [4, 3], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 6], [10, 3], [10, 3], [10, 3], [10, 2], [10, 6], [10, 5], [10, 5], [10, 10], [10, 8], [10, 8], [36, 1], [36, 3]],
         performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
             /* this == yyval */
 
             var $0 = $$.length - 1;
             switch (yystate) {
                 case 1:
-                    root = new ProgramNode($$[$0]); return $$[$0];
+                    root = new ProgramNode($$[$0], false); return $$[$0];
                     break;
                 case 2:
-                    this.$ = new StatementNode($$[$0], null);
+                    root = new ProgramNode($$[$0], true); return $$[$0];
                     break;
                 case 3:
-                    this.$ = new StatementNode($$[$0 - 2], $$[$0]);
+                    this.$ = new BlockNode($$[$0 - 1]);
                     break;
                 case 4:
-                    this.$ = createLiteral(ExprType.ID, $$[$0]);
+                    this.$ = createStmtSeqNode($$[$0 - 1]);
                     break;
                 case 5:
-                    this.$ = createLiteral(ExprType.STRING, $$[$0]);
+                    this.$ = addStmtToStmtSeqNode($$[$0 - 2], $$[$0 - 1]);
                     break;
                 case 6:
-                    this.$ = createLiteral(ExprType.INT, $$[$0]);
+                    this.$ = new StatementNode($$[$0], null);
                     break;
                 case 7:
-                    this.$ = createLiteral(ExprType.DOUBLE, $$[$0]);
+                    this.$ = new StatementNode($$[$0 - 2], $$[$0]);
                     break;
                 case 8:
-                    this.$ = createLiteral(ExprType.BOOLEAN, true);
+                    this.$ = createLiteral(ExprType.ID, $$[$0]);
                     break;
                 case 9:
-                    this.$ = createLiteral(ExprType.BOOLEAN, false);
+                    this.$ = createLiteral(ExprType.STRING, $$[$0]);
                     break;
                 case 10:
-                    this.$ = createLiteral(ExprType.TREE_VAR, $$[$0]);
+                    this.$ = createLiteral(ExprType.INT, $$[$0]);
                     break;
                 case 11:
-                    this.$ = createLiteral(ExprType.VAR, $$[$0]);
+                    this.$ = createLiteral(ExprType.DOUBLE, $$[$0]);
                     break;
                 case 12:
-                    this.$ = createEnum($$[$0 - 2], $$[$0]);
+                    this.$ = createLiteral(ExprType.BOOLEAN, true);
                     break;
                 case 13:
-                    this.$ = createGetObjectByRel($$[$0 - 2], $$[$0]);
+                    this.$ = createLiteral(ExprType.BOOLEAN, false);
                     break;
                 case 14:
-                    this.$ = createBinExprNode(ExprType.PROPERTY, $$[$0 - 2], $$[$0]);
+                    this.$ = createLiteral(ExprType.TREE_VAR, $$[$0]);
                     break;
                 case 15:
-                    this.$ = createBinExprNode(ExprType.IS, $$[$0 - 2], $$[$0]);
+                    this.$ = createLiteral(ExprType.VAR, $$[$0]);
                     break;
                 case 16:
-                    this.$ = createBinExprNode(ExprType.GREATER, $$[$0 - 2], $$[$0]);
+                    this.$ = createEnum($$[$0 - 2], $$[$0]);
                     break;
                 case 17:
-                    this.$ = createBinExprNode(ExprType.LESS, $$[$0 - 2], $$[$0]);
+                    this.$ = createGetObjectByRel($$[$0 - 2], $$[$0]);
                     break;
                 case 18:
-                    this.$ = createBinExprNode(ExprType.EQUAL, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.PROPERTY, $$[$0 - 2], $$[$0]);
                     break;
                 case 19:
-                    this.$ = createBinExprNode(ExprType.NOT_EQUAL, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.IS, $$[$0 - 2], $$[$0]);
                     break;
                 case 20:
-                    this.$ = createBinExprNode(ExprType.GE, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.GREATER, $$[$0 - 2], $$[$0]);
                     break;
                 case 21:
-                    this.$ = createBinExprNode(ExprType.LE, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.LESS, $$[$0 - 2], $$[$0]);
                     break;
                 case 22:
-                    this.$ = createBinExprNode(ExprType.COMPARE, $$[$0 - 5], $$[$0 - 1]);
+                    this.$ = createBinExprNode(ExprType.EQUAL, $$[$0 - 2], $$[$0]);
                     break;
                 case 23:
-                    this.$ = $$[$0 - 1];
+                    this.$ = createBinExprNode(ExprType.NOT_EQUAL, $$[$0 - 2], $$[$0]);
                     break;
                 case 24:
-                    this.$ = createBinExprNode(ExprType.AND, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.GE, $$[$0 - 2], $$[$0]);
                     break;
                 case 25:
-                    this.$ = createBinExprNode(ExprType.OR, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.LE, $$[$0 - 2], $$[$0]);
                     break;
                 case 26:
-                    this.$ = createUnaryExprNode(ExprType.NOT, $$[$0]);
+                    this.$ = createBinExprNode(ExprType.COMPARE, $$[$0 - 5], $$[$0 - 1]);
                     break;
                 case 27:
-                    this.$ = createCheckRelExprNode($$[$0 - 5], $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = $$[$0 - 1];
                     break;
                 case 28:
-                    this.$ = createUnaryExprNode(ExprType.GET_CLASS, $$[$0 - 4]);
+                    this.$ = createBinExprNode(ExprType.AND, $$[$0 - 2], $$[$0]);
                     break;
                 case 29:
-                    this.$ = createGetExprNode(ExprType.FIND, $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = createBinExprNode(ExprType.OR, $$[$0 - 2], $$[$0]);
                     break;
                 case 30:
-                    this.$ = createFindExtremeExprNode($$[$0 - 8], $$[$0 - 6], $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = createUnaryExprNode(ExprType.NOT, $$[$0]);
                     break;
                 case 31:
-                    this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    this.$ = createCheckRelExprNode($$[$0 - 5], $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 32:
-                    this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    this.$ = createUnaryExprNode(ExprType.GET_CLASS, $$[$0 - 4]);
                     break;
                 case 33:
-                    this.$ = createObjectSeqNode($$[$0]);
+                    this.$ = createGetExprNode(ExprType.FIND, $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 34:
+                    this.$ = createFindExtremeExprNode($$[$0 - 8], $$[$0 - 6], $$[$0 - 3], $$[$0 - 1]);
+                    break;
+                case 35:
+                    this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    break;
+                case 36:
+                    this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    break;
+                case 37:
+                    this.$ = createObjectSeqNode($$[$0]);
+                    break;
+                case 38:
                     this.$ = addObjectToObjectSeqNode($$[$0 - 2], $$[$0]);
                     break;
             }
         },
-        table: [{ 3: 1, 4: 2, 5: 3, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2], 6: [1, 18], 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo }, o($Vp, [2, 4], { 15: [1, 30] }), o($Vp, [2, 5]), o($Vp, [2, 6]), o($Vp, [2, 7]), o($Vp, [2, 8]), o($Vp, [2, 9]), o($Vp, [2, 10]), o($Vp, [2, 11]), { 5: 31, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 32, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 7: [1, 33] }, { 7: [1, 34] }, { 7: [1, 35] }, { 7: [1, 36] }, { 5: 37, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 7: [1, 38] }, { 7: [1, 39], 25: [1, 40], 32: [1, 41] }, { 5: 42, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 43, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 44, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 45, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 46, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 47, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 48, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 49, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 50, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 7: [1, 51] }, { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 27: [1, 52], 28: $Vn, 29: $Vo }, o($Vq, [2, 26], { 16: $Ve, 17: $Vf }), { 34: [1, 53] }, { 37: [1, 54] }, { 37: [1, 55] }, { 37: [1, 56] }, { 1: [2, 3], 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo }, o($Vp, [2, 13], { 26: [1, 57] }), o($Vp, [2, 14]), { 26: [1, 58] }, { 26: [1, 59] }, o([1, 6, 18, 27, 28, 29, 35, 38, 42], [2, 15], { 16: $Ve, 17: $Vf, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm }), o($Vq, [2, 16], { 16: $Ve, 17: $Vf }), o($Vq, [2, 17], { 16: $Ve, 17: $Vf }), o($Vq, [2, 18], { 16: $Ve, 17: $Vf }), o($Vq, [2, 19], { 16: $Ve, 17: $Vf }), o($Vq, [2, 20], { 16: $Ve, 17: $Vf }), o($Vq, [2, 21], { 16: $Ve, 17: $Vf }), o([1, 6, 27, 28, 29, 35, 38, 42], [2, 24], { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm }), o([1, 6, 27, 29, 35, 38, 42], [2, 25], { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn }), o($Vp, [2, 12]), o($Vp, [2, 23]), { 5: 60, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 61, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 62, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 63, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 65, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 31: 64, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 66, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 27: [1, 67] }, { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo, 35: [1, 68] }, { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo, 38: [1, 69] }, { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo, 38: [1, 70] }, { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo, 38: [1, 71] }, { 27: [1, 72], 42: [1, 73] }, o($Vr, [2, 33], { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo }), { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 27: [1, 74], 28: $Vn, 29: $Vo }, o($Vp, [2, 28]), o($Vp, [2, 29]), { 39: [1, 75] }, { 34: [1, 76] }, { 34: [1, 77] }, o($Vp, [2, 27]), { 5: 78, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, o($Vp, [2, 22]), { 7: [1, 79] }, { 5: 80, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, { 5: 81, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, o($Vr, [2, 34], { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo }), { 34: [1, 82] }, { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo, 35: [1, 83] }, { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo, 35: [1, 84] }, { 5: 85, 7: $V0, 8: $V1, 9: $V2, 10: $V3, 11: $V4, 12: $V5, 13: $V6, 14: $V7, 26: $V8, 30: $V9, 33: $Va, 36: $Vb, 40: $Vc, 41: $Vd }, o($Vp, [2, 31]), o($Vp, [2, 32]), { 16: $Ve, 17: $Vf, 18: $Vg, 19: $Vh, 20: $Vi, 21: $Vj, 22: $Vk, 23: $Vl, 24: $Vm, 28: $Vn, 29: $Vo, 35: [1, 86] }, o($Vp, [2, 30])],
-        defaultActions: { 2: [2, 1] },
+        table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2] }, o($V3, [2, 6], { 11: [1, 20], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 4: 33, 7: 32, 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 8], { 20: [1, 34] }), o($Vp, [2, 9]), o($Vp, [2, 10]), o($Vp, [2, 11]), o($Vp, [2, 12]), o($Vp, [2, 13]), o($Vp, [2, 14]), o($Vp, [2, 15]), { 10: 35, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 36, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 37] }, { 12: [1, 38] }, { 12: [1, 39] }, { 12: [1, 40] }, { 10: 41, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 42] }, { 12: [1, 43], 30: [1, 44], 37: [1, 45] }, { 10: 46, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 47, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 48, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 49, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 50, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 51, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 52, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 53, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 54, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 4: 56, 8: [1, 55], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 9: [1, 57] }, { 12: [1, 58] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 59], 33: $Vn, 34: $Vo }, o($Vq, [2, 30], { 21: $Ve, 22: $Vf }), { 6: [1, 60] }, { 40: [1, 61] }, { 40: [1, 62] }, { 40: [1, 63] }, o($V3, [2, 7], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), o($Vp, [2, 17], { 31: [1, 64] }), o($Vp, [2, 18]), { 31: [1, 65] }, { 31: [1, 66] }, o([1, 8, 9, 11, 23, 32, 33, 34, 41, 45], [2, 19], { 21: $Ve, 22: $Vf, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o($Vq, [2, 20], { 21: $Ve, 22: $Vf }), o($Vq, [2, 21], { 21: $Ve, 22: $Vf }), o($Vq, [2, 22], { 21: $Ve, 22: $Vf }), o($Vq, [2, 23], { 21: $Ve, 22: $Vf }), o($Vq, [2, 24], { 21: $Ve, 22: $Vf }), o($Vq, [2, 25], { 21: $Ve, 22: $Vf }), o([1, 8, 9, 11, 32, 33, 34, 41, 45], [2, 28], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o([1, 8, 9, 11, 32, 34, 41, 45], [2, 29], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn }), { 1: [2, 3] }, { 9: [1, 67] }, o($Vr, [2, 4]), o($Vp, [2, 16]), o($Vp, [2, 27]), { 10: 68, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 69, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 70, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 71, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 73, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 36: 72, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 74, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 32: [1, 75] }, o($Vr, [2, 5]), { 8: [1, 76], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 77] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 78] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 79] }, { 32: [1, 80], 45: [1, 81] }, o($Vs, [2, 37], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 82], 33: $Vn, 34: $Vo }, o($Vp, [2, 32]), o($Vp, [2, 33]), { 42: [1, 83] }, { 6: [1, 84] }, { 6: [1, 85] }, o($Vp, [2, 31]), { 10: 86, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 26]), { 12: [1, 87] }, { 10: 88, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 89, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vs, [2, 38], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 6: [1, 90] }, { 8: [1, 91], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 8: [1, 92], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 10: 93, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 35]), o($Vp, [2, 36]), { 8: [1, 94], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, o($Vp, [2, 34])],
+        defaultActions: { 2: [2, 1], 3: [2, 2], 55: [2, 3] },
         parseError: function parseError(str, hash) {
             if (hash.recoverable) {
                 this.trace(str);
@@ -3136,104 +3197,106 @@ var parser = (function () {
             performAction: function anonymous(yy, yy_, $avoiding_name_collisions, YY_START) {
                 var YYSTATE = YY_START;
                 switch ($avoiding_name_collisions) {
-                    case 0: return 11;
+                    case 0: return 16;
                         break;
-                    case 1: return 12;
+                    case 1: return 17;
                         break;
-                    case 2: return 32;
+                    case 2: return 37;
                         break;
-                    case 3: return 33;
+                    case 3: return 38;
                         break;
-                    case 4: return 36;
+                    case 4: return 39;
                         break;
-                    case 5: return 18;
+                    case 5: return 23;
                         break;
-                    case 6: return 28;
+                    case 6: return 33;
                         break;
-                    case 7: return 29;
+                    case 7: return 34;
                         break;
-                    case 8: return 30;
+                    case 8: return 35;
                         break;
-                    case 9: return 25;
+                    case 9: return 30;
                         break;
-                    case 10: return 40;
+                    case 10: return 43;
                         break;
-                    case 11: return 41;
+                    case 11: return 44;
                         break;
-                    case 12: return 39;
+                    case 12: return 42;
                         break;
-                    case 13: return 16;
+                    case 13: return 21;
                         break;
-                    case 14: return 34;
+                    case 14: return 6;
                         break;
-                    case 15: return 35;
+                    case 15: return 8;
                         break;
-                    case 16: return 37;
+                    case 16: return 40;
                         break;
-                    case 17: return 38;
+                    case 17: return 41;
                         break;
-                    case 18: return 21;
+                    case 18: return 26;
                         break;
-                    case 19: return 22;
+                    case 19: return 27;
                         break;
-                    case 20: return 23;
+                    case 20: return 28;
                         break;
-                    case 21: return 24;
+                    case 21: return 29;
                         break;
-                    case 22: return 6;
+                    case 22: return 11;
                         break;
-                    case 23: return 26;
+                    case 23: return 31;
                         break;
-                    case 24: return 27;
+                    case 24: return 32;
                         break;
-                    case 25: return 42;
+                    case 25: return 45;
                         break;
-                    case 26: return 19;
+                    case 26: return 9;
                         break;
-                    case 27: return 20;
+                    case 27: return 24;
                         break;
-                    case 28: return 15;
+                    case 28: return 25;
                         break;
-                    case 29: return 13;
+                    case 29: return 20;
                         break;
-                    case 30: return 7;
+                    case 30: return 18;
                         break;
-                    case 31: return 14;
+                    case 31: return 12;
                         break;
-                    case 32: string = ''; this.begin('STRING');
+                    case 32: return 19;
                         break;
-                    case 33: string += yy_.yytext;
+                    case 33: string = ''; this.begin('STRING');
                         break;
-                    case 34: string += '\n';
+                    case 34: string += yy_.yytext;
                         break;
-                    case 35: string += '\t';
+                    case 35: string += '\n';
                         break;
-                    case 36: string += '\\';
+                    case 36: string += '\t';
                         break;
-                    case 37: throw new Error('Error: invalid escape\n');
+                    case 37: string += '\\';
                         break;
-                    case 38: throw new Error('Error: unfinished string.\n');
+                    case 38: throw new Error('Error: invalid escape\n');
                         break;
-                    case 39: string += '"';
+                    case 39: throw new Error('Error: unfinished string.\n');
                         break;
-                    case 40: string += '\'';
+                    case 40: string += '"';
                         break;
-                    case 41: this.begin('INITIAL'); yy_.yytext = string; return 8;
+                    case 41: string += '\'';
                         break;
-                    case 42: this.begin('INITIAL'); throw new Error('Error: expected \".\n');
+                    case 42: this.begin('INITIAL'); yy_.yytext = string; return 13;
                         break;
-                    case 43: return 10;
+                    case 43: this.begin('INITIAL'); throw new Error('Error: expected \".\n');
                         break;
-                    case 44: return 9;
+                    case 44: return 15;
                         break;
-                    case 45: return 17;
+                    case 45: return 14;
                         break;
-                    case 46:/* skip whitespace */
+                    case 46: return 22;
+                        break;
+                    case 47:/* skip whitespace */
                         break;
                 }
             },
-            rules: [/^(?:true\b)/, /^(?:false\b)/, /^(?:getClass\b)/, /^(?:find\b)/, /^(?:findExtreme\b)/, /^(?:is\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:not\b)/, /^(?:compare\b)/, /^(?:exist\b)/, /^(?:forall\b)/, /^(?:where\b)/, /^(?:->)/, /^(?:\{)/, /^(?:\})/, /^(?:\[)/, /^(?:\])/, /^(?:==)/, /^(?:!=)/, /^(?:>=)/, /^(?:<=)/, /^(?:=)/, /^(?:\()/, /^(?:\))/, /^(?:,)/, /^(?:>)/, /^(?:<)/, /^(?:::)/, /^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:")/, /^(?:[^\\\"\n]+)/, /^(?:\\n)/, /^(?:\\t)/, /^(?:\\\\)/, /^(?:\\[^nt\"\'\\])/, /^(?:\n)/, /^(?:\\")/, /^(?:\\')/, /^(?:")/, /^(?:$)/, /^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/, /^(?:[0-9]+)/, /^(?:\.)/, /^(?:\s+)/],
-            conditions: { "STRING": { "rules": [33, 34, 35, 36, 37, 38, 39, 40, 41, 42], "inclusive": false }, "INITIAL": { "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 43, 44, 45, 46], "inclusive": true } }
+            rules: [/^(?:true\b)/, /^(?:false\b)/, /^(?:getClass\b)/, /^(?:find\b)/, /^(?:findExtreme\b)/, /^(?:is\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:not\b)/, /^(?:compare\b)/, /^(?:exist\b)/, /^(?:forall\b)/, /^(?:where\b)/, /^(?:->)/, /^(?:\{)/, /^(?:\})/, /^(?:\[)/, /^(?:\])/, /^(?:==)/, /^(?:!=)/, /^(?:>=)/, /^(?:<=)/, /^(?:=)/, /^(?:\()/, /^(?:\))/, /^(?:,)/, /^(?:;)/, /^(?:>)/, /^(?:<)/, /^(?:::)/, /^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:")/, /^(?:[^\\\"\n]+)/, /^(?:\\n)/, /^(?:\\t)/, /^(?:\\\\)/, /^(?:\\[^nt\"\'\\])/, /^(?:\n)/, /^(?:\\")/, /^(?:\\')/, /^(?:")/, /^(?:$)/, /^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/, /^(?:[0-9]+)/, /^(?:\.)/, /^(?:\s+)/],
+            conditions: { "STRING": { "rules": [34, 35, 36, 37, 38, 39, 40, 41, 42, 43], "inclusive": false }, "INITIAL": { "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 44, 45, 46, 47], "inclusive": true } }
         });
         return lexer;
     })();
@@ -9276,6 +9339,18 @@ var toolbox = {
                 },
             ]
         },
+        {
+            "kind": "category",
+            "name": "Block",
+            "colour": "75",
+            "contents": [
+                {
+                    "kind": "block",
+                    "type": "block"
+                },
+            ]
+        },
+
     ]
 }
 function exportEnums(jsonEnums) {
@@ -9610,6 +9685,12 @@ const xslTxt = `<?xml version="1.0"?>
         </ForAllQuantifier>
     </xsl:template>
 
+    <xsl:template match="block[@type='block']">
+        <Block>
+            <xsl:apply-templates select="value" />
+        </Block>
+    </xsl:template>
+
 </xsl:stylesheet>`
 var validator = function (newValue) {
     if (!/^[a-zA-Z_][A-Za-z0-9_]*$/.test(newValue)) {
@@ -9805,6 +9886,7 @@ Blockly.Blocks['assign_value_to_property'] = {
         this.appendValueInput("new_value")
             .setCheck(["Boolean", "String", "Integer", "Double", "Enum"])
             .appendField("new value");
+        this.setOutput(true, "Statement");
         this.setColour(240);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -9821,6 +9903,7 @@ Blockly.Blocks['assign_value_to_variable_decision_tree'] = {
         this.appendValueInput("new_object")
             .setCheck("Object")
             .appendField("new object");
+        this.setOutput(true, "Statement");
         this.setColour(240);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -10137,6 +10220,137 @@ Blockly.Blocks['enum'] = {
         this.setTooltip("");
         this.setHelpUrl("");
     }
+};
+
+Blockly.Blocks['block'] = {
+    init: function () {
+        this.itemCount_ = 2;
+        this.appendDummyInput()
+            .appendField("Block");
+        this.appendValueInput("statement0")
+            .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean", "Statement"])
+            .appendField("statement0");
+        this.setInputsInline(false);
+        this.setMutator(new Blockly.Mutator(['check_statement_item']));
+        this.setColour(240);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    },
+
+    mutationToDom: function () {
+        const container = Blockly.utils.xml.createElement('mutation');
+        container.setAttribute('items', this.itemCount_);
+        return container;
+    },
+
+    domToMutation: function (xmlElement) {
+        this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+        this.updateShape_();
+    },
+
+    saveExtraState: function () {
+        return {
+            'itemCount': this.itemCount_,
+        };
+    },
+
+    loadExtraState: function (state) {
+        this.itemCount_ = state['itemCount'];
+        this.updateShape_();
+    },
+
+    decompose: function (workspace) {
+        //TODO: сделать рефакторинг
+        const containerBlock = workspace.newBlock('check_statement_container');
+        containerBlock.initSvg();
+        let connection = containerBlock.getInput('STACK').connection;
+        for (let i = 0; i < this.itemCount_; i++) {
+            const itemBlock = workspace.newBlock('check_statement_item');
+            itemBlock.initSvg();
+            connection.connect(itemBlock.previousConnection);
+            connection = itemBlock.nextConnection;
+        }
+        return containerBlock;
+    },
+
+    compose: function (containerBlock) {
+        //TODO: сделать рефакторинг
+        let itemBlock = containerBlock.getInputTargetBlock('STACK');
+        // Count number of inputs.
+        const connections = [];
+        while (itemBlock && !itemBlock.isInsertionMarker()) {
+            connections.push(itemBlock.valueConnection_);
+            itemBlock =
+                itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+        }
+        // Disconnect any children that don't belong.
+        for (let i = 0; i < this.itemCount_; i++) {
+            const connection = this.getInput("statement" + i).connection.targetConnection;
+            if (connection && connections.indexOf(connection) === -1) {
+                connection.disconnect();
+            }
+        }
+        this.itemCount_ = connections.length;
+        this.updateShape_();
+        // Reconnect any child blocks.
+        for (let i = 0; i < this.itemCount_; i++) {
+            Blockly.Mutator.reconnect(connections[i], this, "statement" + i);
+        }
+    },
+
+    saveConnections: function (containerBlock) {
+        //TODO: сделать рефакторинг
+        let itemBlock = containerBlock.getInputTargetBlock('STACK');
+        let i = 0;
+        while (itemBlock) {
+            const input = this.getInput("statement" + i);
+            itemBlock.valueConnection_ = input && input.connection.targetConnection;
+            itemBlock =
+                itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+            i++;
+        }
+    },
+
+    updateShape_: function () {
+        //TODO: сделать рефакторинг
+        if (this.itemCount_ && this.getInput('EMPTY')) {
+            this.removeInput('EMPTY');
+        } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
+            this.appendDummyInput("EMPTY").appendField("statements");
+        }
+        // Add new inputs.
+        for (let i = 0; i < this.itemCount_; i++) {
+            if (!this.getInput("statement" + i)) {
+                const input = this.appendValueInput("statement" + i).setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean", "Statement"]).appendField("statement" + i);
+            }
+        }
+        // Remove deleted inputs.
+        for (let i = this.itemCount_; this.getInput("statement" + i); i++) {
+            this.removeInput("statement" + i);
+        }
+    },
+
+};
+
+Blockly.Blocks['check_statement_item'] = {
+    init: function () {
+        this.setColour(240);
+        this.appendDummyInput().appendField("Statement");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip("");
+        this.contextMenu = false;
+    },
+};
+
+Blockly.Blocks['check_statement_container'] = {
+    init: function () {
+        this.setColour(240);
+        this.appendDummyInput().appendField("list statements");
+        this.appendStatementInput('STACK');
+        this.setTooltip("");
+        this.contextMenu = false;
+    },
 }; Blockly.JavaScript['object'] = function (block) {
     var text_object_name = block.getFieldValue('object_name');
     var code = text_object_name;
@@ -10232,14 +10446,14 @@ Blockly.JavaScript['assign_value_to_property'] = function (block) {
     var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_ASSIGNMENT);
     var value_new_value = Blockly.JavaScript.valueToCode(block, 'new_value', Blockly.JavaScript.ORDER_ASSIGNMENT);
     var code = value_object + "." + value_property + " = " + value_new_value;
-    return code;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['assign_value_to_variable_decision_tree'] = function (block) {
     var value_ref_to_object = Blockly.JavaScript.valueToCode(block, 'ref_to_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
     var value_new_object = Blockly.JavaScript.valueToCode(block, 'new_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
     var code = value_ref_to_object + " = " + value_new_object;
-    return code;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['check_object_class'] = function (block) {
@@ -10337,6 +10551,18 @@ Blockly.JavaScript['enum'] = function (block) {
     var text_value = block.getFieldValue('value');
     var code = text_owner_name + "::" + text_value;
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['block'] = function (block) {
+    var code = "{\n";
+    for (var i = 0; i < block.itemCount_; i++) {
+        let valueCode = Blockly.JavaScript.valueToCode(block, 'statement' + i, Blockly.JavaScript.ORDER_NONE);
+        if (valueCode) {
+            code += valueCode + ";\n";
+        }
+    }
+    code += "}";
+    return code;
 };// Окно создание логических узлов
 var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
@@ -14615,12 +14841,15 @@ const SemanticType = {
     COMPARISON_RESULT: 'comparison',
     ENUM: 'enum',
     ASSIGN: 'assign',
-    PROPERTY_VALUE: 'propertyValue'
+    PROPERTY_VALUE: 'propertyValue',
+    BLOCK: 'block',
 };
 
 
 function getType(root) {
-    if (root.stmt) {
+    if (root.isBlock && root.block) {
+        return SemanticType.BLOCK;
+    } else if (!root.isBlock && root.stmt) {
         return getType(root.stmt);
     } else if (!root.secondExpr && root.firstExpr) {
         return getType(root.firstExpr);

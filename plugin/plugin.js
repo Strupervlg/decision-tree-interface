@@ -1893,15 +1893,33 @@ function getRelationships(editorUi) {
     return relationships;
 }
 function toBlock(rootNode, workspace) {
-	if (rootNode.stmt != null) {
-		stmtNodeToBlock(rootNode.stmt, workspace);
-	}
+    if (!rootNode.isBlock && rootNode.stmt != null) {
+        stmtNodeToBlock(rootNode.stmt, workspace);
+    } else if (rootNode.isBlock && rootNode.block != null) {
+        blockNodeToBlock(rootNode.block, workspace);
+    }
+}
+
+function blockNodeToBlock(blockNode, workspace) {
+    var resBlock = new Blockly.BlockSvg(workspace, "block");
+    resBlock.initSvg();
+    resBlock.itemCount_ = 0;
+    resBlock.render();
+
+    var current = blockNode.statementSeq.first;
+    while (current != null) {
+        resBlock.itemCount_++;
+        resBlock.updateShape_();
+        stmtBlock = stmtNodeToBlock(current, workspace);
+        resBlock.getInput("statement" + (resBlock.itemCount_ - 1)).connection.connect(stmtBlock.outputConnection);
+        current = current.next;
+    }
 }
 
 function stmtNodeToBlock(stmtNode, workspace) {
-    if(stmtNode.secondExpr == null) {
-        printExprNode(stmtNode.firstExpr, workspace);
-    } else if(stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.TREE_VAR) {
+    if (stmtNode.secondExpr == null) {
+        return printExprNode(stmtNode.firstExpr, workspace);
+    } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.TREE_VAR) {
         var assignment = new Blockly.BlockSvg(workspace, "assign_value_to_variable_decision_tree");
         assignment.initSvg();
         assignment.render();
@@ -1914,7 +1932,8 @@ function stmtNodeToBlock(stmtNode, workspace) {
         checkTypeBlocks(assignment, block2, "new_object");
         assignment.getInput("new_object").connection.connect(block2.outputConnection);
 
-    } else if(stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.PROPERTY) {
+        return assignment;
+    } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.PROPERTY) {
         var assignment = new Blockly.BlockSvg(workspace, "assign_value_to_property");
         assignment.initSvg();
         assignment.render();
@@ -1933,14 +1952,16 @@ function stmtNodeToBlock(stmtNode, workspace) {
         var valueBlock = printExprNode(stmtNode.secondExpr, workspace);
         checkTypeBlocks(assignment, valueBlock, "new_value");
         assignment.getInput("new_value").connection.connect(valueBlock.outputConnection);
-    } else if(stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY 
+
+        return assignment;
+    } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY
         && stmtNode.firstExpr.type != ExprType.TREE_VAR) {
-            throw new Error(getTextByLocale("invalidAssign"));
-        }
+        throw new Error(getTextByLocale("invalidAssign"));
+    }
 }
 
 function printExprNode(exprNode, workspace) {
-    switch(exprNode.type) {
+    switch (exprNode.type) {
         case ExprType.ID:
             var resBlock = new Blockly.BlockSvg(workspace, "object");
             resBlock.initSvg();
@@ -2001,7 +2022,7 @@ function printExprNode(exprNode, workspace) {
             relBlock.inputList[0].fieldRow[0].setValue(exprNode.rel);
             checkTypeBlocks(resBlock, relBlock, "relationship");
             resBlock.getInput("relationship").connection.connect(relBlock.outputConnection);
-            
+
             objBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
@@ -2018,7 +2039,7 @@ function printExprNode(exprNode, workspace) {
             propBlock.inputList[0].fieldRow[0].setValue(exprNode.ident);
             checkTypeBlocks(resBlock, propBlock, "property");
             resBlock.getInput("property").connection.connect(propBlock.outputConnection);
-            
+
             objBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
@@ -2028,12 +2049,12 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "check_object_class");
             resBlock.initSvg();
             resBlock.render();
-            
+
             objBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
 
-            if(exprNode.secondOperand.type == ExprType.ID) {
+            if (exprNode.secondOperand.type == ExprType.ID) {
                 var classBlock = new Blockly.BlockSvg(workspace, "class");
                 classBlock.initSvg();
                 classBlock.render();
@@ -2050,7 +2071,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[2].fieldRow[0].setValue("GREATER");
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2065,7 +2086,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[2].fieldRow[0].setValue("LESS");
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2080,7 +2101,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[2].fieldRow[0].setValue("EQUAL");
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2095,7 +2116,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[2].fieldRow[0].setValue("NOT_EQUAL");
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2110,7 +2131,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[2].fieldRow[0].setValue("GE");
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2125,7 +2146,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[2].fieldRow[0].setValue("LE");
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2139,7 +2160,7 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "three_digit_comparison");
             resBlock.initSvg();
             resBlock.render();
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2153,7 +2174,7 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "and");
             resBlock.initSvg();
             resBlock.render();
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2167,7 +2188,7 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "or");
             resBlock.initSvg();
             resBlock.render();
-            
+
             op1Block = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, op1Block, "operand1");
             resBlock.getInput("operand1").connection.connect(op1Block.outputConnection);
@@ -2181,7 +2202,7 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "not");
             resBlock.initSvg();
             resBlock.render();
-            
+
             opBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, opBlock, "operand");
             resBlock.getInput("operand").connection.connect(opBlock.outputConnection);
@@ -2199,7 +2220,7 @@ function printExprNode(exprNode, workspace) {
             relBlock.inputList[0].fieldRow[0].setValue(exprNode.rel);
             checkTypeBlocks(resBlock, relBlock, "relationship");
             resBlock.getInput("relationship").connection.connect(relBlock.outputConnection);
-            
+
             objBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
@@ -2209,8 +2230,8 @@ function printExprNode(exprNode, workspace) {
                 resBlock.itemCount_++;
                 resBlock.updateShape_();
                 objOpBlock = printExprNode(current, workspace);
-                checkTypeBlocks(resBlock, objOpBlock, "object" + (resBlock.itemCount_-1));
-                resBlock.getInput("object" + (resBlock.itemCount_-1)).connection.connect(objOpBlock.outputConnection);
+                checkTypeBlocks(resBlock, objOpBlock, "object" + (resBlock.itemCount_ - 1));
+                resBlock.getInput("object" + (resBlock.itemCount_ - 1)).connection.connect(objOpBlock.outputConnection);
                 current = current.next;
             }
 
@@ -2219,7 +2240,7 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "get_class");
             resBlock.initSvg();
             resBlock.render();
-            
+
             objBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
@@ -2230,7 +2251,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[2].fieldRow[0].setValue(exprNode.ident);
-            
+
             condBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, condBlock, "condition");
             resBlock.getInput("condition").connection.connect(condBlock.outputConnection);
@@ -2242,7 +2263,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.render();
             resBlock.inputList[1].fieldRow[0].setValue(exprNode.extremeIdent);
             resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
-            
+
             extrCondBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, extrCondBlock, "extreme_condition");
             resBlock.getInput("extreme_condition").connection.connect(extrCondBlock.outputConnection);
@@ -2257,7 +2278,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
-            
+
             defBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, defBlock, "definition_area");
             resBlock.getInput("definition_area").connection.connect(defBlock.outputConnection);
@@ -2272,7 +2293,7 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
-            
+
             defBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, defBlock, "definition_area");
             resBlock.getInput("definition_area").connection.connect(defBlock.outputConnection);
@@ -2288,27 +2309,55 @@ function printExprNode(exprNode, workspace) {
 function checkTypeBlocks(blockInput, blockOutput, input) {
     let outputCheck = blockOutput.outputConnection.check_;
     let inputCheck = blockInput.getInput(input).connection.check_;
-    if(outputCheck.filter(x => inputCheck.includes(x)).length == 0) {
+    if (outputCheck.filter(x => inputCheck.includes(x)).length == 0) {
         throw new Error(getTextByLocale("InvalidType").replace("%type", blockInput.type)
             .replace("%inputCheck", inputCheck).replace("%outputCheck", outputCheck))
     }
 }
 var LASTID = 0;
 
-function ProgramNode(statement) {
-    this.stmt = statement;
+function ProgramNode(statement, isBlock) {
+    this.isBlock = isBlock;
+    if (isBlock) {
+        this.block = statement;
+        this.stmt = null;
+    } else {
+        this.block = null;
+        this.stmt = statement;
+    }
+    this.id = LASTID++;
+}
+
+function BlockNode(statementSeq) {
+    this.statementSeq = statementSeq;
     this.id = LASTID++;
 }
 
 function StatementNode(firstExpression, secondExpression) {
     this.firstExpr = firstExpression;
     this.secondExpr = secondExpression;
+    this.next = null;
     this.id = LASTID++;
 }
 
-const ExprType = { 
-    ID: 'id', 
-    STRING: 'string', 
+function StatementSeq(first, last) {
+    this.first = first;
+    this.last = last;
+}
+
+function createStmtSeqNode(stmt) {
+    return new StatementSeq(stmt, stmt);
+}
+
+function addStmtToStmtSeqNode(seqStmt, stmt) {
+    seqStmt.last.next = stmt;
+    seqStmt.last = stmt;
+    return seqStmt;
+}
+
+const ExprType = {
+    ID: 'id',
+    STRING: 'string',
     INT: 'int',
     DOUBLE: 'double',
     BOOLEAN: 'boolean',
@@ -2318,22 +2367,22 @@ const ExprType = {
     GET_BY_RELATIONSHIP: 'get by relationship',
     PROPERTY: 'property',
     IS: 'is',
-    GREATER: 'greater', 
-    LESS: 'less', 
-    EQUAL: 'equal', 
-    NOT_EQUAL: 'not equal', 
-    GE: 'ge', 
-    LE: 'le', 
-    COMPARE: 'compare', 
-    AND: 'and', 
-    OR: 'or', 
-    NOT: 'not', 
+    GREATER: 'greater',
+    LESS: 'less',
+    EQUAL: 'equal',
+    NOT_EQUAL: 'not equal',
+    GE: 'ge',
+    LE: 'le',
+    COMPARE: 'compare',
+    AND: 'and',
+    OR: 'or',
+    NOT: 'not',
     CHECK_REL: 'check_rel',
-    GET_CLASS: 'get_class', 
+    GET_CLASS: 'get_class',
     FIND: 'find',
-    FIND_EXTREM: 'find extreme', 
-    EXIST: 'exist', 
-    FORALL: 'forall', 
+    FIND_EXTREM: 'find extreme',
+    EXIST: 'exist',
+    FORALL: 'forall',
 };
 
 function ExpressionNode() {
@@ -2360,12 +2409,12 @@ function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = firstExprOperand;
-    if(typeNode == ExprType.PROPERTY) {
+    if (typeNode == ExprType.PROPERTY) {
         newNode.ident = secondExprOperand;
     } else {
         newNode.secondOperand = secondExprOperand;
     }
-    
+
     return newNode;
 }
 
@@ -2375,7 +2424,7 @@ function createGetObjectByRel(firstExprOperand, relationship) {
     newNode.rel = relationship;
 
     newNode.firstOperand = firstExprOperand;
-    
+
     return newNode;
 }
 
@@ -2389,21 +2438,21 @@ function createUnaryExprNode(typeNode, operand) {
 function createLiteral(typeNode, literal) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
-    if(typeNode == ExprType.ID) {
+    if (typeNode == ExprType.ID) {
         newNode.ident = literal;
-    } else if(typeNode == ExprType.TREE_VAR) {
+    } else if (typeNode == ExprType.TREE_VAR) {
         newNode.ident = literal.substring(4);
-    } else if(typeNode == ExprType.VAR) {
+    } else if (typeNode == ExprType.VAR) {
         newNode.ident = literal.substring(1);
-    } else if(typeNode == ExprType.STRING) {
+    } else if (typeNode == ExprType.STRING) {
         newNode.string = literal;
-    } else if(typeNode == ExprType.INT) {
+    } else if (typeNode == ExprType.INT) {
         newNode.int = Number(literal);
-    } else if(typeNode == ExprType.DOUBLE) {
+    } else if (typeNode == ExprType.DOUBLE) {
         newNode.double = Number(literal);
-    } else if(typeNode == ExprType.BOOLEAN) {
+    } else if (typeNode == ExprType.BOOLEAN) {
         newNode.boolean = literal;
-    } 
+    }
     return newNode;
 }
 
@@ -2442,7 +2491,7 @@ function createFindExtremeExprNode(extremeVarName, extremeCondition, varName, co
     return newNode;
 }
 
-function createQuantifierExprNode(typeNode, id, expression1, expression2) { 
+function createQuantifierExprNode(typeNode, id, expression1, expression2) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = expression1;
@@ -2542,723 +2591,739 @@ var string;
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[1,9],$V6=[1,10],$V7=[1,11],$V8=[1,12],$V9=[1,13],$Va=[1,14],$Vb=[1,15],$Vc=[1,16],$Vd=[1,17],$Ve=[1,19],$Vf=[1,20],$Vg=[1,21],$Vh=[1,22],$Vi=[1,23],$Vj=[1,24],$Vk=[1,25],$Vl=[1,26],$Vm=[1,27],$Vn=[1,28],$Vo=[1,29],$Vp=[1,6,16,17,18,19,20,21,22,23,24,27,28,29,35,38,42],$Vq=[1,6,18,19,20,21,22,23,24,27,28,29,35,38,42],$Vr=[27,42];
-var parser = {trace: function trace () { },
-yy: {},
-symbols_: {"error":2,"program":3,"stmt":4,"exp":5,"=":6,"ID":7,"STRING":8,"INT":9,"DOUBLE":10,"TRUE":11,"FALSE":12,"TREE_VAR":13,"VAR":14,"::":15,"->":16,".":17,"IS":18,">":19,"<":20,"==":21,"!=":22,">=":23,"<=":24,"COMPARE":25,"(":26,")":27,"AND":28,"OR":29,"NOT":30,"object_seq":31,"CLASS":32,"FIND":33,"{":34,"}":35,"FIND_EXTREM":36,"[":37,"]":38,"WHERE":39,"EXIST":40,"FORALL":41,",":42,"$accept":0,"$end":1},
-terminals_: {2:"error",6:"=",7:"ID",8:"STRING",9:"INT",10:"DOUBLE",11:"TRUE",12:"FALSE",13:"TREE_VAR",14:"VAR",15:"::",16:"->",17:".",18:"IS",19:">",20:"<",21:"==",22:"!=",23:">=",24:"<=",25:"COMPARE",26:"(",27:")",28:"AND",29:"OR",30:"NOT",32:"CLASS",33:"FIND",34:"{",35:"}",36:"FIND_EXTREM",37:"[",38:"]",39:"WHERE",40:"EXIST",41:"FORALL",42:","},
-productions_: [0,[3,1],[4,1],[4,3],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,1],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,3],[5,6],[5,3],[5,3],[5,3],[5,2],[5,6],[5,5],[5,5],[5,10],[5,8],[5,8],[31,1],[31,3]],
-performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
-/* this == yyval */
+var parser = (function () {
+    var o = function (k, v, o, l) { for (o = o || {}, l = k.length; l--; o[k[l]] = v); return o }, $V0 = [1, 6], $V1 = [1, 7], $V2 = [1, 8], $V3 = [1, 9], $V4 = [1, 10], $V5 = [1, 11], $V6 = [1, 12], $V7 = [1, 13], $V8 = [1, 14], $V9 = [1, 15], $Va = [1, 16], $Vb = [1, 17], $Vc = [1, 18], $Vd = [1, 19], $Ve = [1, 21], $Vf = [1, 22], $Vg = [1, 23], $Vh = [1, 24], $Vi = [1, 25], $Vj = [1, 26], $Vk = [1, 27], $Vl = [1, 28], $Vm = [1, 29], $Vn = [1, 30], $Vo = [1, 31], $Vp = [1, 8, 9, 11, 21, 22, 23, 24, 25, 26, 27, 28, 29, 32, 33, 34, 41, 45], $Vq = [1, 8, 9, 11, 23, 24, 25, 26, 27, 28, 29, 32, 33, 34, 41, 45], $Vr = [8, 12, 13, 14, 15, 16, 17, 18, 19, 31, 35, 38, 39, 43, 44], $Vs = [32, 45];
+    var parser = {
+        trace: function trace() { },
+        yy: {},
+        symbols_: { "error": 2, "program": 3, "stmt": 4, "block": 5, "{": 6, "stmt_seq": 7, "}": 8, ";": 9, "exp": 10, "=": 11, "ID": 12, "STRING": 13, "INT": 14, "DOUBLE": 15, "TRUE": 16, "FALSE": 17, "TREE_VAR": 18, "VAR": 19, "::": 20, "->": 21, ".": 22, "IS": 23, ">": 24, "<": 25, "==": 26, "!=": 27, ">=": 28, "<=": 29, "COMPARE": 30, "(": 31, ")": 32, "AND": 33, "OR": 34, "NOT": 35, "object_seq": 36, "CLASS": 37, "FIND": 38, "FIND_EXTREM": 39, "[": 40, "]": 41, "WHERE": 42, "EXIST": 43, "FORALL": 44, ",": 45, "$accept": 0, "$end": 1 },
+        terminals_: { 2: "error", 6: "{", 8: "}", 9: ";", 11: "=", 12: "ID", 13: "STRING", 14: "INT", 15: "DOUBLE", 16: "TRUE", 17: "FALSE", 18: "TREE_VAR", 19: "VAR", 20: "::", 21: "->", 22: ".", 23: "IS", 24: ">", 25: "<", 26: "==", 27: "!=", 28: ">=", 29: "<=", 30: "COMPARE", 31: "(", 32: ")", 33: "AND", 34: "OR", 35: "NOT", 37: "CLASS", 38: "FIND", 39: "FIND_EXTREM", 40: "[", 41: "]", 42: "WHERE", 43: "EXIST", 44: "FORALL", 45: "," },
+        productions_: [0, [3, 1], [3, 1], [5, 3], [7, 2], [7, 3], [4, 1], [4, 3], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 6], [10, 3], [10, 3], [10, 3], [10, 2], [10, 6], [10, 5], [10, 5], [10, 10], [10, 8], [10, 8], [36, 1], [36, 3]],
+        performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
+            /* this == yyval */
 
-var $0 = $$.length - 1;
-switch (yystate) {
-case 1:
- root = new ProgramNode($$[$0]); return $$[$0];
-break;
-case 2:
- this.$ = new StatementNode($$[$0], null); 
-break;
-case 3:
- this.$ = new StatementNode($$[$0-2], $$[$0]); 
-break;
-case 4:
- this.$ = createLiteral(ExprType.ID, $$[$0]); 
-break;
-case 5:
- this.$ = createLiteral(ExprType.STRING, $$[$0]); 
-break;
-case 6:
- this.$ = createLiteral(ExprType.INT, $$[$0]); 
-break;
-case 7:
- this.$ = createLiteral(ExprType.DOUBLE, $$[$0]); 
-break;
-case 8:
- this.$ = createLiteral(ExprType.BOOLEAN, true); 
-break;
-case 9:
- this.$ = createLiteral(ExprType.BOOLEAN, false); 
-break;
-case 10:
- this.$ = createLiteral(ExprType.TREE_VAR, $$[$0]); 
-break;
-case 11:
- this.$ = createLiteral(ExprType.VAR, $$[$0]); 
-break;
-case 12:
- this.$ = createEnum($$[$0-2], $$[$0]); 
-break;
-case 13:
- this.$ = createGetObjectByRel($$[$0-2], $$[$0]); 
-break;
-case 14:
- this.$ = createBinExprNode(ExprType.PROPERTY, $$[$0-2], $$[$0]); 
-break;
-case 15:
- this.$ = createBinExprNode(ExprType.IS, $$[$0-2], $$[$0]); 
-break;
-case 16:
- this.$ = createBinExprNode(ExprType.GREATER, $$[$0-2], $$[$0]); 
-break;
-case 17:
- this.$ = createBinExprNode(ExprType.LESS, $$[$0-2], $$[$0]); 
-break;
-case 18:
- this.$ = createBinExprNode(ExprType.EQUAL, $$[$0-2], $$[$0]); 
-break;
-case 19:
- this.$ = createBinExprNode(ExprType.NOT_EQUAL, $$[$0-2], $$[$0]); 
-break;
-case 20:
- this.$ = createBinExprNode(ExprType.GE, $$[$0-2], $$[$0]); 
-break;
-case 21:
- this.$ = createBinExprNode(ExprType.LE, $$[$0-2], $$[$0]); 
-break;
-case 22:
- this.$ = createBinExprNode(ExprType.COMPARE, $$[$0-5], $$[$0-1]); 
-break;
-case 23:
- this.$ = $$[$0-1]; 
-break;
-case 24:
- this.$ = createBinExprNode(ExprType.AND, $$[$0-2], $$[$0]); 
-break;
-case 25:
- this.$ = createBinExprNode(ExprType.OR, $$[$0-2], $$[$0]); 
-break;
-case 26:
- this.$ = createUnaryExprNode(ExprType.NOT, $$[$0]); 
-break;
-case 27:
- this.$ = createCheckRelExprNode($$[$0-5], $$[$0-3], $$[$0-1]); 
-break;
-case 28:
- this.$ = createUnaryExprNode(ExprType.GET_CLASS, $$[$0-4]); 
-break;
-case 29:
- this.$ = createGetExprNode(ExprType.FIND, $$[$0-3], $$[$0-1]); 
-break;
-case 30:
- this.$ = createFindExtremeExprNode($$[$0-8], $$[$0-6], $$[$0-3], $$[$0-1]); 
-break;
-case 31:
- this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0-6], $$[$0-4], $$[$0-1]); 
-break;
-case 32:
- this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0-6], $$[$0-4], $$[$0-1]); 
-break;
-case 33:
- this.$ = createObjectSeqNode($$[$0]); 
-break;
-case 34:
- this.$ = addObjectToObjectSeqNode($$[$0-2], $$[$0]); 
-break;
-}
-},
-table: [{3:1,4:2,5:3,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{1:[3]},{1:[2,1]},{1:[2,2],6:[1,18],16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo},o($Vp,[2,4],{15:[1,30]}),o($Vp,[2,5]),o($Vp,[2,6]),o($Vp,[2,7]),o($Vp,[2,8]),o($Vp,[2,9]),o($Vp,[2,10]),o($Vp,[2,11]),{5:31,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:32,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,33]},{7:[1,34]},{7:[1,35]},{7:[1,36]},{5:37,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,38]},{7:[1,39],25:[1,40],32:[1,41]},{5:42,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:43,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:44,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:45,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:46,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:47,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:48,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:49,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:50,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{7:[1,51]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,27:[1,52],28:$Vn,29:$Vo},o($Vq,[2,26],{16:$Ve,17:$Vf}),{34:[1,53]},{37:[1,54]},{37:[1,55]},{37:[1,56]},{1:[2,3],16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo},o($Vp,[2,13],{26:[1,57]}),o($Vp,[2,14]),{26:[1,58]},{26:[1,59]},o([1,6,18,27,28,29,35,38,42],[2,15],{16:$Ve,17:$Vf,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm}),o($Vq,[2,16],{16:$Ve,17:$Vf}),o($Vq,[2,17],{16:$Ve,17:$Vf}),o($Vq,[2,18],{16:$Ve,17:$Vf}),o($Vq,[2,19],{16:$Ve,17:$Vf}),o($Vq,[2,20],{16:$Ve,17:$Vf}),o($Vq,[2,21],{16:$Ve,17:$Vf}),o([1,6,27,28,29,35,38,42],[2,24],{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm}),o([1,6,27,29,35,38,42],[2,25],{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn}),o($Vp,[2,12]),o($Vp,[2,23]),{5:60,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:61,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:62,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:63,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:65,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,31:64,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:66,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{27:[1,67]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,35:[1,68]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,38:[1,69]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,38:[1,70]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,38:[1,71]},{27:[1,72],42:[1,73]},o($Vr,[2,33],{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo}),{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,27:[1,74],28:$Vn,29:$Vo},o($Vp,[2,28]),o($Vp,[2,29]),{39:[1,75]},{34:[1,76]},{34:[1,77]},o($Vp,[2,27]),{5:78,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,22]),{7:[1,79]},{5:80,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},{5:81,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vr,[2,34],{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo}),{34:[1,82]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,35:[1,83]},{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,35:[1,84]},{5:85,7:$V0,8:$V1,9:$V2,10:$V3,11:$V4,12:$V5,13:$V6,14:$V7,26:$V8,30:$V9,33:$Va,36:$Vb,40:$Vc,41:$Vd},o($Vp,[2,31]),o($Vp,[2,32]),{16:$Ve,17:$Vf,18:$Vg,19:$Vh,20:$Vi,21:$Vj,22:$Vk,23:$Vl,24:$Vm,28:$Vn,29:$Vo,35:[1,86]},o($Vp,[2,30])],
-defaultActions: {2:[2,1]},
-parseError: function parseError (str, hash) {
-    if (hash.recoverable) {
-        this.trace(str);
-    } else {
-        var error = new Error(str);
-        error.hash = hash;
-        throw error;
-    }
-},
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
-    var args = lstack.slice.call(arguments, 1);
-    var lexer = Object.create(this.lexer);
-    var sharedState = { yy: {} };
-    for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
-        }
-    }
-    lexer.setInput(input, sharedState.yy);
-    sharedState.yy.lexer = lexer;
-    sharedState.yy.parser = this;
-    if (typeof lexer.yylloc == 'undefined') {
-        lexer.yylloc = {};
-    }
-    var yyloc = lexer.yylloc;
-    lstack.push(yyloc);
-    var ranges = lexer.options && lexer.options.ranges;
-    if (typeof sharedState.yy.parseError === 'function') {
-        this.parseError = sharedState.yy.parseError;
-    } else {
-        this.parseError = Object.getPrototypeOf(this).parseError;
-    }
-    function popStack(n) {
-        stack.length = stack.length - 2 * n;
-        vstack.length = vstack.length - n;
-        lstack.length = lstack.length - n;
-    }
-    _token_stack:
-        var lex = function () {
-            var token;
-            token = lexer.lex() || EOF;
-            if (typeof token !== 'number') {
-                token = self.symbols_[token] || token;
+            var $0 = $$.length - 1;
+            switch (yystate) {
+                case 1:
+                    root = new ProgramNode($$[$0], false); return $$[$0];
+                    break;
+                case 2:
+                    root = new ProgramNode($$[$0], true); return $$[$0];
+                    break;
+                case 3:
+                    this.$ = new BlockNode($$[$0 - 1]);
+                    break;
+                case 4:
+                    this.$ = createStmtSeqNode($$[$0 - 1]);
+                    break;
+                case 5:
+                    this.$ = addStmtToStmtSeqNode($$[$0 - 2], $$[$0 - 1]);
+                    break;
+                case 6:
+                    this.$ = new StatementNode($$[$0], null);
+                    break;
+                case 7:
+                    this.$ = new StatementNode($$[$0 - 2], $$[$0]);
+                    break;
+                case 8:
+                    this.$ = createLiteral(ExprType.ID, $$[$0]);
+                    break;
+                case 9:
+                    this.$ = createLiteral(ExprType.STRING, $$[$0]);
+                    break;
+                case 10:
+                    this.$ = createLiteral(ExprType.INT, $$[$0]);
+                    break;
+                case 11:
+                    this.$ = createLiteral(ExprType.DOUBLE, $$[$0]);
+                    break;
+                case 12:
+                    this.$ = createLiteral(ExprType.BOOLEAN, true);
+                    break;
+                case 13:
+                    this.$ = createLiteral(ExprType.BOOLEAN, false);
+                    break;
+                case 14:
+                    this.$ = createLiteral(ExprType.TREE_VAR, $$[$0]);
+                    break;
+                case 15:
+                    this.$ = createLiteral(ExprType.VAR, $$[$0]);
+                    break;
+                case 16:
+                    this.$ = createEnum($$[$0 - 2], $$[$0]);
+                    break;
+                case 17:
+                    this.$ = createGetObjectByRel($$[$0 - 2], $$[$0]);
+                    break;
+                case 18:
+                    this.$ = createBinExprNode(ExprType.PROPERTY, $$[$0 - 2], $$[$0]);
+                    break;
+                case 19:
+                    this.$ = createBinExprNode(ExprType.IS, $$[$0 - 2], $$[$0]);
+                    break;
+                case 20:
+                    this.$ = createBinExprNode(ExprType.GREATER, $$[$0 - 2], $$[$0]);
+                    break;
+                case 21:
+                    this.$ = createBinExprNode(ExprType.LESS, $$[$0 - 2], $$[$0]);
+                    break;
+                case 22:
+                    this.$ = createBinExprNode(ExprType.EQUAL, $$[$0 - 2], $$[$0]);
+                    break;
+                case 23:
+                    this.$ = createBinExprNode(ExprType.NOT_EQUAL, $$[$0 - 2], $$[$0]);
+                    break;
+                case 24:
+                    this.$ = createBinExprNode(ExprType.GE, $$[$0 - 2], $$[$0]);
+                    break;
+                case 25:
+                    this.$ = createBinExprNode(ExprType.LE, $$[$0 - 2], $$[$0]);
+                    break;
+                case 26:
+                    this.$ = createBinExprNode(ExprType.COMPARE, $$[$0 - 5], $$[$0 - 1]);
+                    break;
+                case 27:
+                    this.$ = $$[$0 - 1];
+                    break;
+                case 28:
+                    this.$ = createBinExprNode(ExprType.AND, $$[$0 - 2], $$[$0]);
+                    break;
+                case 29:
+                    this.$ = createBinExprNode(ExprType.OR, $$[$0 - 2], $$[$0]);
+                    break;
+                case 30:
+                    this.$ = createUnaryExprNode(ExprType.NOT, $$[$0]);
+                    break;
+                case 31:
+                    this.$ = createCheckRelExprNode($$[$0 - 5], $$[$0 - 3], $$[$0 - 1]);
+                    break;
+                case 32:
+                    this.$ = createUnaryExprNode(ExprType.GET_CLASS, $$[$0 - 4]);
+                    break;
+                case 33:
+                    this.$ = createGetExprNode(ExprType.FIND, $$[$0 - 3], $$[$0 - 1]);
+                    break;
+                case 34:
+                    this.$ = createFindExtremeExprNode($$[$0 - 8], $$[$0 - 6], $$[$0 - 3], $$[$0 - 1]);
+                    break;
+                case 35:
+                    this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    break;
+                case 36:
+                    this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    break;
+                case 37:
+                    this.$ = createObjectSeqNode($$[$0]);
+                    break;
+                case 38:
+                    this.$ = addObjectToObjectSeqNode($$[$0 - 2], $$[$0]);
+                    break;
             }
-            return token;
-        };
-    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
-    while (true) {
-        state = stack[stack.length - 1];
-        if (this.defaultActions[state]) {
-            action = this.defaultActions[state];
-        } else {
-            if (symbol === null || typeof symbol == 'undefined') {
-                symbol = lex();
-            }
-            action = table[state] && table[state][symbol];
-        }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
-                var errStr = '';
-                expected = [];
-                for (p in table[state]) {
-                    if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
-                    }
-                }
-                if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
-                } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
-                }
-                this.parseError(errStr, {
-                    text: lexer.match,
-                    token: this.terminals_[symbol] || symbol,
-                    line: lexer.yylineno,
-                    loc: yyloc,
-                    expected: expected
-                });
-            }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
-                yyleng = lexer.yyleng;
-                yytext = lexer.yytext;
-                yylineno = lexer.yylineno;
-                yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
-                }
+        },
+        table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2] }, o($V3, [2, 6], { 11: [1, 20], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 4: 33, 7: 32, 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 8], { 20: [1, 34] }), o($Vp, [2, 9]), o($Vp, [2, 10]), o($Vp, [2, 11]), o($Vp, [2, 12]), o($Vp, [2, 13]), o($Vp, [2, 14]), o($Vp, [2, 15]), { 10: 35, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 36, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 37] }, { 12: [1, 38] }, { 12: [1, 39] }, { 12: [1, 40] }, { 10: 41, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 42] }, { 12: [1, 43], 30: [1, 44], 37: [1, 45] }, { 10: 46, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 47, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 48, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 49, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 50, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 51, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 52, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 53, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 54, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 4: 56, 8: [1, 55], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 9: [1, 57] }, { 12: [1, 58] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 59], 33: $Vn, 34: $Vo }, o($Vq, [2, 30], { 21: $Ve, 22: $Vf }), { 6: [1, 60] }, { 40: [1, 61] }, { 40: [1, 62] }, { 40: [1, 63] }, o($V3, [2, 7], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), o($Vp, [2, 17], { 31: [1, 64] }), o($Vp, [2, 18]), { 31: [1, 65] }, { 31: [1, 66] }, o([1, 8, 9, 11, 23, 32, 33, 34, 41, 45], [2, 19], { 21: $Ve, 22: $Vf, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o($Vq, [2, 20], { 21: $Ve, 22: $Vf }), o($Vq, [2, 21], { 21: $Ve, 22: $Vf }), o($Vq, [2, 22], { 21: $Ve, 22: $Vf }), o($Vq, [2, 23], { 21: $Ve, 22: $Vf }), o($Vq, [2, 24], { 21: $Ve, 22: $Vf }), o($Vq, [2, 25], { 21: $Ve, 22: $Vf }), o([1, 8, 9, 11, 32, 33, 34, 41, 45], [2, 28], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o([1, 8, 9, 11, 32, 34, 41, 45], [2, 29], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn }), { 1: [2, 3] }, { 9: [1, 67] }, o($Vr, [2, 4]), o($Vp, [2, 16]), o($Vp, [2, 27]), { 10: 68, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 69, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 70, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 71, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 73, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 36: 72, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 74, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 32: [1, 75] }, o($Vr, [2, 5]), { 8: [1, 76], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 77] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 78] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 79] }, { 32: [1, 80], 45: [1, 81] }, o($Vs, [2, 37], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 82], 33: $Vn, 34: $Vo }, o($Vp, [2, 32]), o($Vp, [2, 33]), { 42: [1, 83] }, { 6: [1, 84] }, { 6: [1, 85] }, o($Vp, [2, 31]), { 10: 86, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 26]), { 12: [1, 87] }, { 10: 88, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 89, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vs, [2, 38], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 6: [1, 90] }, { 8: [1, 91], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 8: [1, 92], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 10: 93, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 35]), o($Vp, [2, 36]), { 8: [1, 94], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, o($Vp, [2, 34])],
+        defaultActions: { 2: [2, 1], 3: [2, 2], 55: [2, 3] },
+        parseError: function parseError(str, hash) {
+            if (hash.recoverable) {
+                this.trace(str);
             } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
+                var error = new Error(str);
+                error.hash = hash;
+                throw error;
             }
-            break;
-        case 2:
-            len = this.productions_[action[1]][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
+        },
+        parse: function parse(input) {
+            var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+            var args = lstack.slice.call(arguments, 1);
+            var lexer = Object.create(this.lexer);
+            var sharedState = { yy: {} };
+            for (var k in this.yy) {
+                if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+                    sharedState.yy[k] = this.yy[k];
+                }
+            }
+            lexer.setInput(input, sharedState.yy);
+            sharedState.yy.lexer = lexer;
+            sharedState.yy.parser = this;
+            if (typeof lexer.yylloc == 'undefined') {
+                lexer.yylloc = {};
+            }
+            var yyloc = lexer.yylloc;
+            lstack.push(yyloc);
+            var ranges = lexer.options && lexer.options.ranges;
+            if (typeof sharedState.yy.parseError === 'function') {
+                this.parseError = sharedState.yy.parseError;
+            } else {
+                this.parseError = Object.getPrototypeOf(this).parseError;
+            }
+            function popStack(n) {
+                stack.length = stack.length - 2 * n;
+                vstack.length = vstack.length - n;
+                lstack.length = lstack.length - n;
+            }
+            _token_stack:
+            var lex = function () {
+                var token;
+                token = lexer.lex() || EOF;
+                if (typeof token !== 'number') {
+                    token = self.symbols_[token] || token;
+                }
+                return token;
             };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
+            var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
+            while (true) {
+                state = stack[stack.length - 1];
+                if (this.defaultActions[state]) {
+                    action = this.defaultActions[state];
+                } else {
+                    if (symbol === null || typeof symbol == 'undefined') {
+                        symbol = lex();
+                    }
+                    action = table[state] && table[state][symbol];
+                }
+                if (typeof action === 'undefined' || !action.length || !action[0]) {
+                    var errStr = '';
+                    expected = [];
+                    for (p in table[state]) {
+                        if (this.terminals_[p] && p > TERROR) {
+                            expected.push('\'' + this.terminals_[p] + '\'');
+                        }
+                    }
+                    if (lexer.showPosition) {
+                        errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                    } else {
+                        errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                    }
+                    this.parseError(errStr, {
+                        text: lexer.match,
+                        token: this.terminals_[symbol] || symbol,
+                        line: lexer.yylineno,
+                        loc: yyloc,
+                        expected: expected
+                    });
+                }
+                if (action[0] instanceof Array && action.length > 1) {
+                    throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
+                }
+                switch (action[0]) {
+                    case 1:
+                        stack.push(symbol);
+                        vstack.push(lexer.yytext);
+                        lstack.push(lexer.yylloc);
+                        stack.push(action[1]);
+                        symbol = null;
+                        if (!preErrorSymbol) {
+                            yyleng = lexer.yyleng;
+                            yytext = lexer.yytext;
+                            yylineno = lexer.yylineno;
+                            yyloc = lexer.yylloc;
+                            if (recovering > 0) {
+                                recovering--;
+                            }
+                        } else {
+                            symbol = preErrorSymbol;
+                            preErrorSymbol = null;
+                        }
+                        break;
+                    case 2:
+                        len = this.productions_[action[1]][1];
+                        yyval.$ = vstack[vstack.length - len];
+                        yyval._$ = {
+                            first_line: lstack[lstack.length - (len || 1)].first_line,
+                            last_line: lstack[lstack.length - 1].last_line,
+                            first_column: lstack[lstack.length - (len || 1)].first_column,
+                            last_column: lstack[lstack.length - 1].last_column
+                        };
+                        if (ranges) {
+                            yyval._$.range = [
+                                lstack[lstack.length - (len || 1)].range[0],
+                                lstack[lstack.length - 1].range[1]
+                            ];
+                        }
+                        r = this.performAction.apply(yyval, [
+                            yytext,
+                            yyleng,
+                            yylineno,
+                            sharedState.yy,
+                            action[1],
+                            vstack,
+                            lstack
+                        ].concat(args));
+                        if (typeof r !== 'undefined') {
+                            return r;
+                        }
+                        if (len) {
+                            stack = stack.slice(0, -1 * len * 2);
+                            vstack = vstack.slice(0, -1 * len);
+                            lstack = lstack.slice(0, -1 * len);
+                        }
+                        stack.push(this.productions_[action[1]][0]);
+                        vstack.push(yyval.$);
+                        lstack.push(yyval._$);
+                        newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+                        stack.push(newState);
+                        break;
+                    case 3:
+                        return true;
+                }
             }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
-            }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            stack.push(this.productions_[action[1]][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-            stack.push(newState);
-            break;
-        case 3:
             return true;
         }
-    }
-    return true;
-}};
-/* generated by jison-lex 0.3.4 */
-var lexer = (function(){
-var lexer = ({
+    };
+    /* generated by jison-lex 0.3.4 */
+    var lexer = (function () {
+        var lexer = ({
 
-EOF:1,
+            EOF: 1,
 
-parseError:function parseError(str, hash) {
-        if (this.yy.parser) {
-            this.yy.parser.parseError(str, hash);
-        } else {
-            throw new Error(str);
-        }
-    },
+            parseError: function parseError(str, hash) {
+                if (this.yy.parser) {
+                    this.yy.parser.parseError(str, hash);
+                } else {
+                    throw new Error(str);
+                }
+            },
 
-// resets the lexer, sets new input
-setInput:function (input, yy) {
-        this.yy = yy || this.yy || {};
-        this._input = input;
-        this._more = this._backtrack = this.done = false;
-        this.yylineno = this.yyleng = 0;
-        this.yytext = this.matched = this.match = '';
-        this.conditionStack = ['INITIAL'];
-        this.yylloc = {
-            first_line: 1,
-            first_column: 0,
-            last_line: 1,
-            last_column: 0
-        };
-        if (this.options.ranges) {
-            this.yylloc.range = [0,0];
-        }
-        this.offset = 0;
-        return this;
-    },
+            // resets the lexer, sets new input
+            setInput: function (input, yy) {
+                this.yy = yy || this.yy || {};
+                this._input = input;
+                this._more = this._backtrack = this.done = false;
+                this.yylineno = this.yyleng = 0;
+                this.yytext = this.matched = this.match = '';
+                this.conditionStack = ['INITIAL'];
+                this.yylloc = {
+                    first_line: 1,
+                    first_column: 0,
+                    last_line: 1,
+                    last_column: 0
+                };
+                if (this.options.ranges) {
+                    this.yylloc.range = [0, 0];
+                }
+                this.offset = 0;
+                return this;
+            },
 
-// consumes and returns one char from the input
-input:function () {
-        var ch = this._input[0];
-        this.yytext += ch;
-        this.yyleng++;
-        this.offset++;
-        this.match += ch;
-        this.matched += ch;
-        var lines = ch.match(/(?:\r\n?|\n).*/g);
-        if (lines) {
-            this.yylineno++;
-            this.yylloc.last_line++;
-        } else {
-            this.yylloc.last_column++;
-        }
-        if (this.options.ranges) {
-            this.yylloc.range[1]++;
-        }
+            // consumes and returns one char from the input
+            input: function () {
+                var ch = this._input[0];
+                this.yytext += ch;
+                this.yyleng++;
+                this.offset++;
+                this.match += ch;
+                this.matched += ch;
+                var lines = ch.match(/(?:\r\n?|\n).*/g);
+                if (lines) {
+                    this.yylineno++;
+                    this.yylloc.last_line++;
+                } else {
+                    this.yylloc.last_column++;
+                }
+                if (this.options.ranges) {
+                    this.yylloc.range[1]++;
+                }
 
-        this._input = this._input.slice(1);
-        return ch;
-    },
+                this._input = this._input.slice(1);
+                return ch;
+            },
 
-// unshifts one char (or a string) into the input
-unput:function (ch) {
-        var len = ch.length;
-        var lines = ch.split(/(?:\r\n?|\n)/g);
+            // unshifts one char (or a string) into the input
+            unput: function (ch) {
+                var len = ch.length;
+                var lines = ch.split(/(?:\r\n?|\n)/g);
 
-        this._input = ch + this._input;
-        this.yytext = this.yytext.substr(0, this.yytext.length - len);
-        //this.yyleng -= len;
-        this.offset -= len;
-        var oldLines = this.match.split(/(?:\r\n?|\n)/g);
-        this.match = this.match.substr(0, this.match.length - 1);
-        this.matched = this.matched.substr(0, this.matched.length - 1);
+                this._input = ch + this._input;
+                this.yytext = this.yytext.substr(0, this.yytext.length - len);
+                //this.yyleng -= len;
+                this.offset -= len;
+                var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+                this.match = this.match.substr(0, this.match.length - 1);
+                this.matched = this.matched.substr(0, this.matched.length - 1);
 
-        if (lines.length - 1) {
-            this.yylineno -= lines.length - 1;
-        }
-        var r = this.yylloc.range;
+                if (lines.length - 1) {
+                    this.yylineno -= lines.length - 1;
+                }
+                var r = this.yylloc.range;
 
-        this.yylloc = {
-            first_line: this.yylloc.first_line,
-            last_line: this.yylineno + 1,
-            first_column: this.yylloc.first_column,
-            last_column: lines ?
-                (lines.length === oldLines.length ? this.yylloc.first_column : 0)
-                 + oldLines[oldLines.length - lines.length].length - lines[0].length :
-              this.yylloc.first_column - len
-        };
-
-        if (this.options.ranges) {
-            this.yylloc.range = [r[0], r[0] + this.yyleng - len];
-        }
-        this.yyleng = this.yytext.length;
-        return this;
-    },
-
-// When called from action, caches matched text and appends it on next action
-more:function () {
-        this._more = true;
-        return this;
-    },
-
-// When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
-reject:function () {
-        if (this.options.backtrack_lexer) {
-            this._backtrack = true;
-        } else {
-            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
-                text: "",
-                token: null,
-                line: this.yylineno
-            });
-
-        }
-        return this;
-    },
-
-// retain first n characters of the match
-less:function (n) {
-        this.unput(this.match.slice(n));
-    },
-
-// displays already matched input, i.e. for error messages
-pastInput:function () {
-        var past = this.matched.substr(0, this.matched.length - this.match.length);
-        return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
-    },
-
-// displays upcoming input, i.e. for error messages
-upcomingInput:function () {
-        var next = this.match;
-        if (next.length < 20) {
-            next += this._input.substr(0, 20-next.length);
-        }
-        return (next.substr(0,20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
-    },
-
-// displays the character position where the lexing error occurred, i.e. for error messages
-showPosition:function () {
-        var pre = this.pastInput();
-        var c = new Array(pre.length + 1).join("-");
-        return pre + this.upcomingInput() + "\n" + c + "^";
-    },
-
-// test the lexed token: return FALSE when not a match, otherwise return token
-test_match:function(match, indexed_rule) {
-        var token,
-            lines,
-            backup;
-
-        if (this.options.backtrack_lexer) {
-            // save context
-            backup = {
-                yylineno: this.yylineno,
-                yylloc: {
+                this.yylloc = {
                     first_line: this.yylloc.first_line,
-                    last_line: this.last_line,
+                    last_line: this.yylineno + 1,
                     first_column: this.yylloc.first_column,
-                    last_column: this.yylloc.last_column
-                },
-                yytext: this.yytext,
-                match: this.match,
-                matches: this.matches,
-                matched: this.matched,
-                yyleng: this.yyleng,
-                offset: this.offset,
-                _more: this._more,
-                _input: this._input,
-                yy: this.yy,
-                conditionStack: this.conditionStack.slice(0),
-                done: this.done
-            };
-            if (this.options.ranges) {
-                backup.yylloc.range = this.yylloc.range.slice(0);
-            }
-        }
+                    last_column: lines ?
+                        (lines.length === oldLines.length ? this.yylloc.first_column : 0)
+                        + oldLines[oldLines.length - lines.length].length - lines[0].length :
+                        this.yylloc.first_column - len
+                };
 
-        lines = match[0].match(/(?:\r\n?|\n).*/g);
-        if (lines) {
-            this.yylineno += lines.length;
-        }
-        this.yylloc = {
-            first_line: this.yylloc.last_line,
-            last_line: this.yylineno + 1,
-            first_column: this.yylloc.last_column,
-            last_column: lines ?
-                         lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
-                         this.yylloc.last_column + match[0].length
-        };
-        this.yytext += match[0];
-        this.match += match[0];
-        this.matches = match;
-        this.yyleng = this.yytext.length;
-        if (this.options.ranges) {
-            this.yylloc.range = [this.offset, this.offset += this.yyleng];
-        }
-        this._more = false;
-        this._backtrack = false;
-        this._input = this._input.slice(match[0].length);
-        this.matched += match[0];
-        token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
-        if (this.done && this._input) {
-            this.done = false;
-        }
-        if (token) {
-            return token;
-        } else if (this._backtrack) {
-            // recover context
-            for (var k in backup) {
-                this[k] = backup[k];
-            }
-            return false; // rule action called reject() implying the next rule should be tested instead.
-        }
-        return false;
-    },
+                if (this.options.ranges) {
+                    this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+                }
+                this.yyleng = this.yytext.length;
+                return this;
+            },
 
-// return next match in input
-next:function () {
-        if (this.done) {
-            return this.EOF;
-        }
-        if (!this._input) {
-            this.done = true;
-        }
+            // When called from action, caches matched text and appends it on next action
+            more: function () {
+                this._more = true;
+                return this;
+            },
 
-        var token,
-            match,
-            tempMatch,
-            index;
-        if (!this._more) {
-            this.yytext = '';
-            this.match = '';
-        }
-        var rules = this._currentRules();
-        for (var i = 0; i < rules.length; i++) {
-            tempMatch = this._input.match(this.rules[rules[i]]);
-            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
-                match = tempMatch;
-                index = i;
+            // When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
+            reject: function () {
                 if (this.options.backtrack_lexer) {
-                    token = this.test_match(tempMatch, rules[i]);
+                    this._backtrack = true;
+                } else {
+                    return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
+                        text: "",
+                        token: null,
+                        line: this.yylineno
+                    });
+
+                }
+                return this;
+            },
+
+            // retain first n characters of the match
+            less: function (n) {
+                this.unput(this.match.slice(n));
+            },
+
+            // displays already matched input, i.e. for error messages
+            pastInput: function () {
+                var past = this.matched.substr(0, this.matched.length - this.match.length);
+                return (past.length > 20 ? '...' : '') + past.substr(-20).replace(/\n/g, "");
+            },
+
+            // displays upcoming input, i.e. for error messages
+            upcomingInput: function () {
+                var next = this.match;
+                if (next.length < 20) {
+                    next += this._input.substr(0, 20 - next.length);
+                }
+                return (next.substr(0, 20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
+            },
+
+            // displays the character position where the lexing error occurred, i.e. for error messages
+            showPosition: function () {
+                var pre = this.pastInput();
+                var c = new Array(pre.length + 1).join("-");
+                return pre + this.upcomingInput() + "\n" + c + "^";
+            },
+
+            // test the lexed token: return FALSE when not a match, otherwise return token
+            test_match: function (match, indexed_rule) {
+                var token,
+                    lines,
+                    backup;
+
+                if (this.options.backtrack_lexer) {
+                    // save context
+                    backup = {
+                        yylineno: this.yylineno,
+                        yylloc: {
+                            first_line: this.yylloc.first_line,
+                            last_line: this.last_line,
+                            first_column: this.yylloc.first_column,
+                            last_column: this.yylloc.last_column
+                        },
+                        yytext: this.yytext,
+                        match: this.match,
+                        matches: this.matches,
+                        matched: this.matched,
+                        yyleng: this.yyleng,
+                        offset: this.offset,
+                        _more: this._more,
+                        _input: this._input,
+                        yy: this.yy,
+                        conditionStack: this.conditionStack.slice(0),
+                        done: this.done
+                    };
+                    if (this.options.ranges) {
+                        backup.yylloc.range = this.yylloc.range.slice(0);
+                    }
+                }
+
+                lines = match[0].match(/(?:\r\n?|\n).*/g);
+                if (lines) {
+                    this.yylineno += lines.length;
+                }
+                this.yylloc = {
+                    first_line: this.yylloc.last_line,
+                    last_line: this.yylineno + 1,
+                    first_column: this.yylloc.last_column,
+                    last_column: lines ?
+                        lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
+                        this.yylloc.last_column + match[0].length
+                };
+                this.yytext += match[0];
+                this.match += match[0];
+                this.matches = match;
+                this.yyleng = this.yytext.length;
+                if (this.options.ranges) {
+                    this.yylloc.range = [this.offset, this.offset += this.yyleng];
+                }
+                this._more = false;
+                this._backtrack = false;
+                this._input = this._input.slice(match[0].length);
+                this.matched += match[0];
+                token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
+                if (this.done && this._input) {
+                    this.done = false;
+                }
+                if (token) {
+                    return token;
+                } else if (this._backtrack) {
+                    // recover context
+                    for (var k in backup) {
+                        this[k] = backup[k];
+                    }
+                    return false; // rule action called reject() implying the next rule should be tested instead.
+                }
+                return false;
+            },
+
+            // return next match in input
+            next: function () {
+                if (this.done) {
+                    return this.EOF;
+                }
+                if (!this._input) {
+                    this.done = true;
+                }
+
+                var token,
+                    match,
+                    tempMatch,
+                    index;
+                if (!this._more) {
+                    this.yytext = '';
+                    this.match = '';
+                }
+                var rules = this._currentRules();
+                for (var i = 0; i < rules.length; i++) {
+                    tempMatch = this._input.match(this.rules[rules[i]]);
+                    if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                        match = tempMatch;
+                        index = i;
+                        if (this.options.backtrack_lexer) {
+                            token = this.test_match(tempMatch, rules[i]);
+                            if (token !== false) {
+                                return token;
+                            } else if (this._backtrack) {
+                                match = false;
+                                continue; // rule action called reject() implying a rule MISmatch.
+                            } else {
+                                // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                                return false;
+                            }
+                        } else if (!this.options.flex) {
+                            break;
+                        }
+                    }
+                }
+                if (match) {
+                    token = this.test_match(match, rules[index]);
                     if (token !== false) {
                         return token;
-                    } else if (this._backtrack) {
-                        match = false;
-                        continue; // rule action called reject() implying a rule MISmatch.
-                    } else {
-                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-                        return false;
                     }
-                } else if (!this.options.flex) {
-                    break;
+                    // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                    return false;
                 }
-            }
-        }
-        if (match) {
-            token = this.test_match(match, rules[index]);
-            if (token !== false) {
-                return token;
-            }
-            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-            return false;
-        }
-        if (this._input === "") {
-            return this.EOF;
-        } else {
-            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
-                text: "",
-                token: null,
-                line: this.yylineno
-            });
-        }
-    },
+                if (this._input === "") {
+                    return this.EOF;
+                } else {
+                    return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
+                        text: "",
+                        token: null,
+                        line: this.yylineno
+                    });
+                }
+            },
 
-// return next match that has a token
-lex:function lex () {
-        var r = this.next();
-        if (r) {
-            return r;
-        } else {
-            return this.lex();
-        }
-    },
+            // return next match that has a token
+            lex: function lex() {
+                var r = this.next();
+                if (r) {
+                    return r;
+                } else {
+                    return this.lex();
+                }
+            },
 
-// activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
-begin:function begin (condition) {
-        this.conditionStack.push(condition);
-    },
+            // activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
+            begin: function begin(condition) {
+                this.conditionStack.push(condition);
+            },
 
-// pop the previously active lexer condition state off the condition stack
-popState:function popState () {
-        var n = this.conditionStack.length - 1;
-        if (n > 0) {
-            return this.conditionStack.pop();
-        } else {
-            return this.conditionStack[0];
-        }
-    },
+            // pop the previously active lexer condition state off the condition stack
+            popState: function popState() {
+                var n = this.conditionStack.length - 1;
+                if (n > 0) {
+                    return this.conditionStack.pop();
+                } else {
+                    return this.conditionStack[0];
+                }
+            },
 
-// produce the lexer rule set which is active for the currently active lexer condition state
-_currentRules:function _currentRules () {
-        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-            return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
-        } else {
-            return this.conditions["INITIAL"].rules;
-        }
-    },
+            // produce the lexer rule set which is active for the currently active lexer condition state
+            _currentRules: function _currentRules() {
+                if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
+                    return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
+                } else {
+                    return this.conditions["INITIAL"].rules;
+                }
+            },
 
-// return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
-topState:function topState (n) {
-        n = this.conditionStack.length - 1 - Math.abs(n || 0);
-        if (n >= 0) {
-            return this.conditionStack[n];
-        } else {
-            return "INITIAL";
-        }
-    },
+            // return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
+            topState: function topState(n) {
+                n = this.conditionStack.length - 1 - Math.abs(n || 0);
+                if (n >= 0) {
+                    return this.conditionStack[n];
+                } else {
+                    return "INITIAL";
+                }
+            },
 
-// alias for begin(condition)
-pushState:function pushState (condition) {
-        this.begin(condition);
-    },
+            // alias for begin(condition)
+            pushState: function pushState(condition) {
+                this.begin(condition);
+            },
 
-// return the number of states currently on the stack
-stateStackSize:function stateStackSize() {
-        return this.conditionStack.length;
-    },
-options: {},
-performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
-var YYSTATE=YY_START;
-switch($avoiding_name_collisions) {
-case 0:return 11;
-break;
-case 1:return 12;
-break;
-case 2:return 32;
-break;
-case 3:return 33;
-break;
-case 4:return 36;
-break;
-case 5:return 18;
-break;
-case 6:return 28;
-break;
-case 7:return 29;
-break;
-case 8:return 30;
-break;
-case 9:return 25;
-break;
-case 10:return 40;
-break;
-case 11:return 41;
-break;
-case 12:return 39;
-break;
-case 13:return 16;
-break;
-case 14:return 34;
-break;
-case 15:return 35;
-break;
-case 16:return 37;
-break;
-case 17:return 38;
-break;
-case 18:return 21;
-break;
-case 19:return 22;
-break;
-case 20:return 23;
-break;
-case 21:return 24;
-break;
-case 22:return 6;
-break;
-case 23:return 26;
-break;
-case 24:return 27;
-break;
-case 25:return 42;
-break;
-case 26:return 19;
-break;
-case 27:return 20;
-break;
-case 28:return 15;
-break;
-case 29:return 13;
-break;
-case 30:return 7; 
-break;
-case 31:return 14;
-break;
-case 32: string = ''; this.begin('STRING'); 
-break;
-case 33:string += yy_.yytext;
-break;
-case 34:string += '\n';
-break;
-case 35:string += '\t';
-break;
-case 36:string += '\\';
-break;
-case 37:throw new Error('Error: invalid escape\n');
-break;
-case 38:throw new Error('Error: unfinished string.\n');
-break;
-case 39:string += '"';
-break;
-case 40:string += '\'';
-break;
-case 41: this.begin('INITIAL'); yy_.yytext = string; return 8; 
-break;
-case 42: this.begin('INITIAL'); throw new Error('Error: expected \".\n'); 
-break;
-case 43:return 10;
-break;
-case 44:return 9;
-break;
-case 45:return 17;
-break;
-case 46:/* skip whitespace */
-break;
-}
-},
-rules: [/^(?:true\b)/,/^(?:false\b)/,/^(?:getClass\b)/,/^(?:find\b)/,/^(?:findExtreme\b)/,/^(?:is\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:not\b)/,/^(?:compare\b)/,/^(?:exist\b)/,/^(?:forall\b)/,/^(?:where\b)/,/^(?:->)/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:==)/,/^(?:!=)/,/^(?:>=)/,/^(?:<=)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:,)/,/^(?:>)/,/^(?:<)/,/^(?:::)/,/^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/,/^(?:")/,/^(?:[^\\\"\n]+)/,/^(?:\\n)/,/^(?:\\t)/,/^(?:\\\\)/,/^(?:\\[^nt\"\'\\])/,/^(?:\n)/,/^(?:\\")/,/^(?:\\')/,/^(?:")/,/^(?:$)/,/^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/,/^(?:[0-9]+)/,/^(?:\.)/,/^(?:\s+)/],
-conditions: {"STRING":{"rules":[33,34,35,36,37,38,39,40,41,42],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,43,44,45,46],"inclusive":true}}
-});
-return lexer;
-})();
-parser.lexer = lexer;
-function Parser () {
-  this.yy = {};
-}
-Parser.prototype = parser;parser.Parser = Parser;
-return new Parser;
+            // return the number of states currently on the stack
+            stateStackSize: function stateStackSize() {
+                return this.conditionStack.length;
+            },
+            options: {},
+            performAction: function anonymous(yy, yy_, $avoiding_name_collisions, YY_START) {
+                var YYSTATE = YY_START;
+                switch ($avoiding_name_collisions) {
+                    case 0: return 16;
+                        break;
+                    case 1: return 17;
+                        break;
+                    case 2: return 37;
+                        break;
+                    case 3: return 38;
+                        break;
+                    case 4: return 39;
+                        break;
+                    case 5: return 23;
+                        break;
+                    case 6: return 33;
+                        break;
+                    case 7: return 34;
+                        break;
+                    case 8: return 35;
+                        break;
+                    case 9: return 30;
+                        break;
+                    case 10: return 43;
+                        break;
+                    case 11: return 44;
+                        break;
+                    case 12: return 42;
+                        break;
+                    case 13: return 21;
+                        break;
+                    case 14: return 6;
+                        break;
+                    case 15: return 8;
+                        break;
+                    case 16: return 40;
+                        break;
+                    case 17: return 41;
+                        break;
+                    case 18: return 26;
+                        break;
+                    case 19: return 27;
+                        break;
+                    case 20: return 28;
+                        break;
+                    case 21: return 29;
+                        break;
+                    case 22: return 11;
+                        break;
+                    case 23: return 31;
+                        break;
+                    case 24: return 32;
+                        break;
+                    case 25: return 45;
+                        break;
+                    case 26: return 9;
+                        break;
+                    case 27: return 24;
+                        break;
+                    case 28: return 25;
+                        break;
+                    case 29: return 20;
+                        break;
+                    case 30: return 18;
+                        break;
+                    case 31: return 12;
+                        break;
+                    case 32: return 19;
+                        break;
+                    case 33: string = ''; this.begin('STRING');
+                        break;
+                    case 34: string += yy_.yytext;
+                        break;
+                    case 35: string += '\n';
+                        break;
+                    case 36: string += '\t';
+                        break;
+                    case 37: string += '\\';
+                        break;
+                    case 38: throw new Error('Error: invalid escape\n');
+                        break;
+                    case 39: throw new Error('Error: unfinished string.\n');
+                        break;
+                    case 40: string += '"';
+                        break;
+                    case 41: string += '\'';
+                        break;
+                    case 42: this.begin('INITIAL'); yy_.yytext = string; return 13;
+                        break;
+                    case 43: this.begin('INITIAL'); throw new Error('Error: expected \".\n');
+                        break;
+                    case 44: return 15;
+                        break;
+                    case 45: return 14;
+                        break;
+                    case 46: return 22;
+                        break;
+                    case 47:/* skip whitespace */
+                        break;
+                }
+            },
+            rules: [/^(?:true\b)/, /^(?:false\b)/, /^(?:getClass\b)/, /^(?:find\b)/, /^(?:findExtreme\b)/, /^(?:is\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:not\b)/, /^(?:compare\b)/, /^(?:exist\b)/, /^(?:forall\b)/, /^(?:where\b)/, /^(?:->)/, /^(?:\{)/, /^(?:\})/, /^(?:\[)/, /^(?:\])/, /^(?:==)/, /^(?:!=)/, /^(?:>=)/, /^(?:<=)/, /^(?:=)/, /^(?:\()/, /^(?:\))/, /^(?:,)/, /^(?:;)/, /^(?:>)/, /^(?:<)/, /^(?:::)/, /^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:")/, /^(?:[^\\\"\n]+)/, /^(?:\\n)/, /^(?:\\t)/, /^(?:\\\\)/, /^(?:\\[^nt\"\'\\])/, /^(?:\n)/, /^(?:\\")/, /^(?:\\')/, /^(?:")/, /^(?:$)/, /^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/, /^(?:[0-9]+)/, /^(?:\.)/, /^(?:\s+)/],
+            conditions: { "STRING": { "rules": [34, 35, 36, 37, 38, 39, 40, 41, 42, 43], "inclusive": false }, "INITIAL": { "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 44, 45, 46, 47], "inclusive": true } }
+        });
+        return lexer;
+    })();
+    parser.lexer = lexer;
+    function Parser() {
+        this.yy = {};
+    }
+    Parser.prototype = parser; parser.Parser = Parser;
+    return new Parser;
 })();
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = parser;
-exports.Parser = parser.Parser;
-exports.parse = function () { return parser.parse.apply(parser, arguments); };
-exports.main = function commonjsMain (args) {
-    if (!args[1]) {
-        console.log('Usage: '+args[0]+' FILE');
-        process.exit(1);
+    exports.parser = parser;
+    exports.Parser = parser.Parser;
+    exports.parse = function () { return parser.parse.apply(parser, arguments); };
+    exports.main = function commonjsMain(args) {
+        if (!args[1]) {
+            console.log('Usage: ' + args[0] + ' FILE');
+            process.exit(1);
+        }
+        var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+        return exports.parser.parse(source);
+    };
+    if (typeof module !== 'undefined' && require.main === module) {
+        exports.main(process.argv.slice(1));
     }
-    var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
-    return exports.parser.parse(source);
-};
-if (typeof module !== 'undefined' && require.main === module) {
-  exports.main(process.argv.slice(1));
-}
 }
 // Окно коструктора узлов действия
 var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
@@ -7307,7 +7372,7 @@ var toolbox = {
                     "kind": "block",
                     "type": "get_extr_object"
                 },
-                
+
             ]
         },
         {
@@ -7383,17 +7448,29 @@ var toolbox = {
                 },
             ]
         },
+        {
+            "kind": "category",
+            "name": "Block",
+            "colour": "75",
+            "contents": [
+                {
+                    "kind": "block",
+                    "type": "block"
+                },
+            ]
+        },
+
     ]
 }
 function exportEnums(jsonEnums) {
     var result = "";
     jsonEnums.forEach(enumItem => {
         result += enumItem.nameEnum + "|" + enumItem.values[0];
-        for(var i = 1; i < enumItem.values.length; i++) {
+        for (var i = 1; i < enumItem.values.length; i++) {
             result += ";" + enumItem.values[i];
         }
-        
-        if(enumItem.isLinear == 'true') {
+
+        if (enumItem.isLinear == 'true') {
             result += "|TRUE|" + enumItem.nameRDF + "\n";
         } else {
             result += "|FALSE|" + enumItem.nameRDF + "\n";
@@ -7406,7 +7483,7 @@ function exportClasses(jsonClasses, workspace) {
     var result = "";
     jsonClasses.forEach(classItem => {
         result += classItem.name + "|" + classItem.extend + "|";
-        if(classItem.expression) {
+        if (classItem.expression) {
             result += codeToXML(workspace, classItem.expression);
         }
         result += "\n";
@@ -7419,22 +7496,22 @@ function exportProperties(jsonProperties) {
     jsonProperties.forEach(propertyItem => {
         result += propertyItem.name + "|";
 
-        if(propertyItem.type != "Integer" && propertyItem.type != "Double" 
-        && propertyItem.type != "Boolean" && propertyItem.type != "String") {
+        if (propertyItem.type != "Integer" && propertyItem.type != "Double"
+            && propertyItem.type != "Boolean" && propertyItem.type != "String") {
             result += "ENUM" + "|" + propertyItem.type.slice(6) + "|";
         } else {
             result += propertyItem.type.toUpperCase() + "||";
         }
 
-        if(propertyItem.isStatic == 'true') {
+        if (propertyItem.isStatic == 'true') {
             result += "TRUE|" + propertyItem.classes[0];
-            for(var i = 1; i < propertyItem.classes.length; i++) {
+            for (var i = 1; i < propertyItem.classes.length; i++) {
                 result += ";" + propertyItem.classes[i];
             }
             result += "|";
         } else {
             result += "FALSE|" + propertyItem.classes[0];
-            for(var i = 1; i < propertyItem.classes.length; i++) {
+            for (var i = 1; i < propertyItem.classes.length; i++) {
                 result += ";" + propertyItem.classes[i];
             }
             result += "|";
@@ -7448,14 +7525,14 @@ function exportProperties(jsonProperties) {
 function exportRelastionships(jsonRelationships) {
     var result = "";
     jsonRelationships.forEach(relationshipItem => {
-        result += relationshipItem.name + "|" + relationshipItem.extend + "|" 
+        result += relationshipItem.name + "|" + relationshipItem.extend + "|"
             + relationshipItem.classes[0];
-        for(var i = 1; i < relationshipItem.classes.length; i++) {
+        for (var i = 1; i < relationshipItem.classes.length; i++) {
             result += ";" + relationshipItem.classes[i];
         }
 
         result += "|" + relationshipItem.scale + "|";
-        if(relationshipItem.isBetween == "true") {
+        if (relationshipItem.isBetween == "true") {
             result += "TRUE" + "|" + relationshipItem.type + "|";
         } else {
             result += "FALSE||";
@@ -7717,8 +7794,14 @@ const xslTxt = `<?xml version="1.0"?>
         </ForAllQuantifier>
     </xsl:template>
 
+    <xsl:template match="block[@type='block']">
+        <Block>
+            <xsl:apply-templates select="value" />
+        </Block>
+    </xsl:template>
+
 </xsl:stylesheet>`
-var validator = function(newValue) {
+var validator = function (newValue) {
   if (!/^[a-zA-Z_][A-Za-z0-9_]*$/.test(newValue)) {
     return null;
   }
@@ -7726,273 +7809,275 @@ var validator = function(newValue) {
 };
 
 Blockly.Blocks['object'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("object", validator), "object_name");
+      .appendField(new Blockly.FieldTextInput("object", validator), "object_name");
     this.setOutput(true, "Object");
     this.setColour(120);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['class'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("class", validator), "class_name");
+      .appendField(new Blockly.FieldTextInput("class", validator), "class_name");
     this.setOutput(true, "Class");
     this.setColour(315);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['property'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("property", validator), "property_name");
+      .appendField(new Blockly.FieldTextInput("property", validator), "property_name");
     this.setOutput(true, "Property");
     this.setColour(60);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['relationship'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("relationship", validator), "relationship_name");
+      .appendField(new Blockly.FieldTextInput("relationship", validator), "relationship_name");
     this.setOutput(true, "Relationship");
     this.setColour(180);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['string'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("string"), "value");
+      .appendField(new Blockly.FieldTextInput("string"), "value");
     this.setOutput(true, "String");
     this.setColour(0);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['boolean'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldCheckbox("TRUE"), "value");
+      .appendField(new Blockly.FieldCheckbox("TRUE"), "value");
     this.setOutput(true, "Boolean");
     this.setColour(0);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['integer'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldNumber(0, -Infinity, Infinity, 1), "value");
+      .appendField(new Blockly.FieldNumber(0, -Infinity, Infinity, 1), "value");
     this.setOutput(true, "Integer");
     this.setColour(0);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['double'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldNumber(0), "value");
+      .appendField(new Blockly.FieldNumber(0), "value");
     this.setOutput(true, "Double");
     this.setColour(0);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['get_class'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("get class");
+      .setCheck("Object")
+      .appendField("get class");
     this.setOutput(true, "Class");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['get_property_value'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("get property value");
+      .appendField("get property value");
     this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("object");
+      .setCheck("Object")
+      .appendField("object");
     this.appendValueInput("property")
-        .setCheck("Property")
-        .appendField("property");
+      .setCheck("Property")
+      .appendField("property");
     this.setOutput(true, ["Boolean", "String", "Integer", "Double", "Enum"]);
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['get_relationship_object'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("get relationship object");
+      .appendField("get relationship object");
     this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("subject");
+      .setCheck("Object")
+      .appendField("subject");
     this.appendValueInput("relationship")
-        .setCheck("Relationship")
-        .appendField("relationship");
+      .setCheck("Relationship")
+      .appendField("relationship");
     this.setInputsInline(false);
     this.setOutput(true, ["Object"]);
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['get_condition_object'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("get object by condition");
+      .appendField("get object by condition");
     this.appendValueInput("condition")
-        .setCheck("Boolean")
-        .appendField("condition");
+      .setCheck("Boolean")
+      .appendField("condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
+      .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, ["Object"]);
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['get_extr_object'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("get extreme object");
+      .appendField("get extreme object");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var1", validator), "name_var1");
+      .appendField(new Blockly.FieldTextInput("var1", validator), "name_var1");
     this.appendValueInput("extreme_condition")
-        .setCheck("Boolean")
-        .appendField("extreme condition");
+      .setCheck("Boolean")
+      .appendField("extreme condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var2", validator), "name_var2");
+      .appendField(new Blockly.FieldTextInput("var2", validator), "name_var2");
     this.appendValueInput("general_condition")
-        .setCheck("Boolean")
-        .appendField("general condition");
+      .setCheck("Boolean")
+      .appendField("general condition");
     this.setInputsInline(false);
     this.setOutput(true, ["Object"]);
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['assign_value_to_property'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("Assign a value to a property");
+      .appendField("Assign a value to a property");
     this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("object");
+      .setCheck("Object")
+      .appendField("object");
     this.appendValueInput("property")
-        .setCheck("Property")
-        .appendField("property");
+      .setCheck("Property")
+      .appendField("property");
     this.appendValueInput("new_value")
-        .setCheck(["Boolean", "String", "Integer", "Double", "Enum"])
-        .appendField("new value");
+      .setCheck(["Boolean", "String", "Integer", "Double", "Enum"])
+      .appendField("new value");
+    this.setOutput(true, "Statement");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['assign_value_to_variable_decision_tree'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("Assign a value to a variable decision tree");
+      .appendField("Assign a value to a variable decision tree");
     this.appendValueInput("ref_to_object")
-        .setCheck("VarObject")
-        .appendField("reference to object");
+      .setCheck("VarObject")
+      .appendField("reference to object");
     this.appendValueInput("new_object")
-        .setCheck("Object")
-        .appendField("new object");
+      .setCheck("Object")
+      .appendField("new object");
+    this.setOutput(true, "Statement");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['check_object_class'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("Check the object class");
+      .appendField("Check the object class");
     this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("object");
+      .setCheck("Object")
+      .appendField("object");
     this.appendValueInput("class")
-        .setCheck("Class")
-        .appendField("class");
+      .setCheck("Class")
+      .appendField("class");
     this.setOutput(true, "Boolean");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['check_relationship'] = {
-  init: function() {
+  init: function () {
     this.itemCount_ = 2;
     this.appendDummyInput()
-        .appendField("Check for a relationship");
+      .appendField("Check for a relationship");
     this.appendValueInput("relationship")
-        .setCheck("Relationship")
-        .appendField("relationship");
+      .setCheck("Relationship")
+      .appendField("relationship");
     this.appendValueInput("object")
-        .setCheck("Object")
-        .appendField("subject");
+      .setCheck("Object")
+      .appendField("subject");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setMutator(new Blockly.Mutator(['check_relationship_item']));
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   },
 
-  mutationToDom: function() {
+  mutationToDom: function () {
     const container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('items', this.itemCount_);
     return container;
   },
 
-  domToMutation: function(xmlElement) {
+  domToMutation: function (xmlElement) {
     this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
     this.updateShape_();
   },
 
-  saveExtraState: function() {
+  saveExtraState: function () {
     return {
       'itemCount': this.itemCount_,
     };
   },
-  
-  loadExtraState: function(state) {
+
+  loadExtraState: function (state) {
     this.itemCount_ = state['itemCount'];
     this.updateShape_();
   },
-  
-  decompose: function(workspace) {
+
+  decompose: function (workspace) {
     //TODO: сделать рефакторинг
     const containerBlock = workspace.newBlock('check_relationship_container');
     containerBlock.initSvg();
@@ -8005,8 +8090,8 @@ Blockly.Blocks['check_relationship'] = {
     }
     return containerBlock;
   },
-  
-  compose: function(containerBlock) {
+
+  compose: function (containerBlock) {
     //TODO: сделать рефакторинг
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
     // Count number of inputs.
@@ -8014,7 +8099,7 @@ Blockly.Blocks['check_relationship'] = {
     while (itemBlock && !itemBlock.isInsertionMarker()) {
       connections.push(itemBlock.valueConnection_);
       itemBlock =
-          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+        itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
     }
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
@@ -8030,8 +8115,8 @@ Blockly.Blocks['check_relationship'] = {
       Blockly.Mutator.reconnect(connections[i], this, "object" + i);
     }
   },
-  
-  saveConnections: function(containerBlock) {
+
+  saveConnections: function (containerBlock) {
     //TODO: сделать рефакторинг
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
     let i = 0;
@@ -8039,12 +8124,12 @@ Blockly.Blocks['check_relationship'] = {
       const input = this.getInput("object" + i);
       itemBlock.valueConnection_ = input && input.connection.targetConnection;
       itemBlock =
-          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+        itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
       i++;
     }
   },
-  
-  updateShape_: function() {
+
+  updateShape_: function () {
     //TODO: сделать рефакторинг
     if (this.itemCount_ && this.getInput('EMPTY')) {
       this.removeInput('EMPTY');
@@ -8054,7 +8139,7 @@ Blockly.Blocks['check_relationship'] = {
     // Add new inputs.
     for (let i = 0; i < this.itemCount_; i++) {
       if (!this.getInput("object" + i)) {
-        const input = this.appendValueInput("object" + i).setCheck("Object").appendField("object"+i);
+        const input = this.appendValueInput("object" + i).setCheck("Object").appendField("object" + i);
       }
     }
     // Remove deleted inputs.
@@ -8066,7 +8151,7 @@ Blockly.Blocks['check_relationship'] = {
 };
 
 Blockly.Blocks['check_relationship_item'] = {
-  init: function() {
+  init: function () {
     this.setColour(240);
     this.appendDummyInput().appendField("Object");
     this.setPreviousStatement(true);
@@ -8077,7 +8162,7 @@ Blockly.Blocks['check_relationship_item'] = {
 };
 
 Blockly.Blocks['check_relationship_container'] = {
-  init: function() {
+  init: function () {
     this.setColour(240);
     this.appendDummyInput().appendField("list objects");
     this.appendStatementInput('STACK');
@@ -8087,188 +8172,319 @@ Blockly.Blocks['check_relationship_container'] = {
 };
 
 Blockly.Blocks['and'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("And");
+      .appendField("And");
     this.appendValueInput("operand1")
-        .setCheck("Boolean")
-        .appendField("operand1");
+      .setCheck("Boolean")
+      .appendField("operand1");
     this.appendValueInput("operand2")
-        .setCheck("Boolean")
-        .appendField("operand2");
+      .setCheck("Boolean")
+      .appendField("operand2");
     this.setOutput(true, "Boolean");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['or'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("Or");
+      .appendField("Or");
     this.appendValueInput("operand1")
-        .setCheck("Boolean")
-        .appendField("operand1");
+      .setCheck("Boolean")
+      .appendField("operand1");
     this.appendValueInput("operand2")
-        .setCheck("Boolean")
-        .appendField("operand2");
+      .setCheck("Boolean")
+      .appendField("operand2");
     this.setOutput(true, "Boolean");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['not'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("Not");
+      .appendField("Not");
     this.appendValueInput("operand")
-        .setCheck("Boolean")
-        .appendField("operand");
+      .setCheck("Boolean")
+      .appendField("operand");
     this.setOutput(true, "Boolean");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['comparison'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("comparison");
+      .appendField("comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
-        .appendField("operand1");
+      .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
+      .appendField("operand1");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["greater","GREATER"], ["less","LESS"], ["equal","EQUAL"], ["not equal","NOT_EQUAL"], ["greater or equal","GE"], ["less or equal","LE"]]), "operator");
+      .appendField(new Blockly.FieldDropdown([["greater", "GREATER"], ["less", "LESS"], ["equal", "EQUAL"], ["not equal", "NOT_EQUAL"], ["greater or equal", "GE"], ["less or equal", "LE"]]), "operator");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
-        .appendField("operand1");
+      .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
+      .appendField("operand1");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['three_digit_comparison'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("three-digit comparison");
+      .appendField("three-digit comparison");
     this.appendValueInput("operand1")
-        .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
-        .appendField("operand1");
+      .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
+      .appendField("operand1");
     this.appendValueInput("operand2")
-        .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
-        .appendField("operand2");
+      .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean"])
+      .appendField("operand2");
     this.setOutput(true, "Enum");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['quantifier_of_existence'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("∃");
+      .appendField("∃");
     this.appendValueInput("definition_area")
-        .setCheck("Boolean")
-        .appendField("definition area");
+      .setCheck("Boolean")
+      .appendField("definition area");
     this.appendValueInput("verification_condition")
-        .setCheck("Boolean")
-        .appendField("verification condition");
+      .setCheck("Boolean")
+      .appendField("verification condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
+      .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['quantifier_of_generality'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField("∀");
+      .appendField("∀");
     this.appendValueInput("definition_area")
-        .setCheck("Boolean")
-        .appendField("definition area");
+      .setCheck("Boolean")
+      .appendField("definition area");
     this.appendValueInput("verification_condition")
-        .setCheck("Boolean")
-        .appendField("verification condition");
+      .setCheck("Boolean")
+      .appendField("verification condition");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
+      .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
     this.setColour(240);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['ref_to_decision_tree_var'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("decision_tree_var", validator), "var_name");
+      .appendField(new Blockly.FieldTextInput("decision_tree_var", validator), "var_name");
     this.setOutput(true, ["Object", "VarObject"]);
     this.setColour(60);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['variable'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("variable", validator), "var_name");
+      .appendField(new Blockly.FieldTextInput("variable", validator), "var_name");
     this.setOutput(true, "Object");
     this.setColour(45);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
 Blockly.Blocks['enum'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("owner", validator), "owner_name");
+      .appendField(new Blockly.FieldTextInput("owner", validator), "owner_name");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("value", validator), "value");
+      .appendField(new Blockly.FieldTextInput("value", validator), "value");
     this.setOutput(true, "Enum");
     this.setColour(0);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
-};Blockly.JavaScript['object'] = function(block) {
+};
+
+Blockly.Blocks['block'] = {
+  init: function () {
+    this.itemCount_ = 2;
+    this.appendDummyInput()
+      .appendField("Block");
+    this.appendValueInput("statement0")
+      .setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean", "Statement"])
+      .appendField("statement0");
+    this.setInputsInline(false);
+    this.setMutator(new Blockly.Mutator(['check_statement_item']));
+    this.setColour(240);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+
+  mutationToDom: function () {
+    const container = Blockly.utils.xml.createElement('mutation');
+    container.setAttribute('items', this.itemCount_);
+    return container;
+  },
+
+  domToMutation: function (xmlElement) {
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    this.updateShape_();
+  },
+
+  saveExtraState: function () {
+    return {
+      'itemCount': this.itemCount_,
+    };
+  },
+
+  loadExtraState: function (state) {
+    this.itemCount_ = state['itemCount'];
+    this.updateShape_();
+  },
+
+  decompose: function (workspace) {
+    //TODO: сделать рефакторинг
+    const containerBlock = workspace.newBlock('check_statement_container');
+    containerBlock.initSvg();
+    let connection = containerBlock.getInput('STACK').connection;
+    for (let i = 0; i < this.itemCount_; i++) {
+      const itemBlock = workspace.newBlock('check_statement_item');
+      itemBlock.initSvg();
+      connection.connect(itemBlock.previousConnection);
+      connection = itemBlock.nextConnection;
+    }
+    return containerBlock;
+  },
+
+  compose: function (containerBlock) {
+    //TODO: сделать рефакторинг
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    // Count number of inputs.
+    const connections = [];
+    while (itemBlock && !itemBlock.isInsertionMarker()) {
+      connections.push(itemBlock.valueConnection_);
+      itemBlock =
+        itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+    }
+    // Disconnect any children that don't belong.
+    for (let i = 0; i < this.itemCount_; i++) {
+      const connection = this.getInput("statement" + i).connection.targetConnection;
+      if (connection && connections.indexOf(connection) === -1) {
+        connection.disconnect();
+      }
+    }
+    this.itemCount_ = connections.length;
+    this.updateShape_();
+    // Reconnect any child blocks.
+    for (let i = 0; i < this.itemCount_; i++) {
+      Blockly.Mutator.reconnect(connections[i], this, "statement" + i);
+    }
+  },
+
+  saveConnections: function (containerBlock) {
+    //TODO: сделать рефакторинг
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    let i = 0;
+    while (itemBlock) {
+      const input = this.getInput("statement" + i);
+      itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      itemBlock =
+        itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      i++;
+    }
+  },
+
+  updateShape_: function () {
+    //TODO: сделать рефакторинг
+    if (this.itemCount_ && this.getInput('EMPTY')) {
+      this.removeInput('EMPTY');
+    } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
+      this.appendDummyInput("EMPTY").appendField("statements");
+    }
+    // Add new inputs.
+    for (let i = 0; i < this.itemCount_; i++) {
+      if (!this.getInput("statement" + i)) {
+        const input = this.appendValueInput("statement" + i).setCheck(["String", "Integer", "Double", "Enum", "Object", "Boolean", "Statement"]).appendField("statement" + i);
+      }
+    }
+    // Remove deleted inputs.
+    for (let i = this.itemCount_; this.getInput("statement" + i); i++) {
+      this.removeInput("statement" + i);
+    }
+  },
+
+};
+
+Blockly.Blocks['check_statement_item'] = {
+  init: function () {
+    this.setColour(240);
+    this.appendDummyInput().appendField("Statement");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip("");
+    this.contextMenu = false;
+  },
+};
+
+Blockly.Blocks['check_statement_container'] = {
+  init: function () {
+    this.setColour(240);
+    this.appendDummyInput().appendField("list statements");
+    this.appendStatementInput('STACK');
+    this.setTooltip("");
+    this.contextMenu = false;
+  },
+};Blockly.JavaScript['object'] = function (block) {
   var text_object_name = block.getFieldValue('object_name');
   var code = text_object_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['class'] = function(block) {
+Blockly.JavaScript['class'] = function (block) {
   var text_class_name = block.getFieldValue('class_name');
   var code = text_class_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['property'] = function(block) {
+Blockly.JavaScript['property'] = function (block) {
   var text_property_name = block.getFieldValue('property_name');
   var code = text_property_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['relationship'] = function(block) {
+Blockly.JavaScript['relationship'] = function (block) {
   var text_relationship_name = block.getFieldValue('relationship_name');
   var code = text_relationship_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['string'] = function(block) {
+Blockly.JavaScript['string'] = function (block) {
   var text_value = block.getFieldValue('value');
   var newTextValue = text_value
     .replaceAll("\\", '\\\\')
@@ -8279,52 +8495,52 @@ Blockly.JavaScript['string'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['boolean'] = function(block) {
+Blockly.JavaScript['boolean'] = function (block) {
   var checkbox_value = block.getFieldValue('value') === 'TRUE';
   var code = checkbox_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['integer'] = function(block) {
+Blockly.JavaScript['integer'] = function (block) {
   var number_value = block.getFieldValue('value');
   var code = number_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['double'] = function(block) {
+Blockly.JavaScript['double'] = function (block) {
   var number_value = block.getFieldValue('value');
   var code = number_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['get_class'] = function(block) {
+Blockly.JavaScript['get_class'] = function (block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var code = value_object + ".getClass()";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['get_property_value'] = function(block) {
+Blockly.JavaScript['get_property_value'] = function (block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_NONE);
   var code = value_object + "." + value_property;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['get_relationship_object'] = function(block) {
+Blockly.JavaScript['get_relationship_object'] = function (block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
   var code = value_object + "->" + value_relationship;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['get_condition_object'] = function(block) {
+Blockly.JavaScript['get_condition_object'] = function (block) {
   var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
   var text_name_var = block.getFieldValue('name_var');
   var code = "find " + text_name_var + " { " + value_condition + " } ";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['get_extr_object'] = function(block) {
+Blockly.JavaScript['get_extr_object'] = function (block) {
 
   var text_name_var1 = block.getFieldValue('name_var1');
   var value_extreme_condition = Blockly.JavaScript.valueToCode(block, 'extreme_condition', Blockly.JavaScript.ORDER_NONE);
@@ -8334,37 +8550,37 @@ Blockly.JavaScript['get_extr_object'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['assign_value_to_property'] = function(block) {
+Blockly.JavaScript['assign_value_to_property'] = function (block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var value_property = Blockly.JavaScript.valueToCode(block, 'property', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var value_new_value = Blockly.JavaScript.valueToCode(block, 'new_value', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var code = value_object + "." + value_property + " = " + value_new_value;
-  return code;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['assign_value_to_variable_decision_tree'] = function(block) {
+Blockly.JavaScript['assign_value_to_variable_decision_tree'] = function (block) {
   var value_ref_to_object = Blockly.JavaScript.valueToCode(block, 'ref_to_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var value_new_object = Blockly.JavaScript.valueToCode(block, 'new_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var code = value_ref_to_object + " = " + value_new_object;
-  return code;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['check_object_class'] = function(block) {
+Blockly.JavaScript['check_object_class'] = function (block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_INSTANCEOF);
   var value_class = Blockly.JavaScript.valueToCode(block, 'class', Blockly.JavaScript.ORDER_INSTANCEOF);
   var code = value_object + " is " + value_class;
   return [code, Blockly.JavaScript.ORDER_INSTANCEOF];
 };
 
-Blockly.JavaScript['check_relationship'] = function(block) {
+Blockly.JavaScript['check_relationship'] = function (block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
 
-  var code = value_object + "->" + value_relationship + "("; 
+  var code = value_object + "->" + value_relationship + "(";
   let values = [];
   for (var i = 0; i < block.itemCount_; i++) {
     let valueCode = Blockly.JavaScript.valueToCode(block, 'object' + i, Blockly.JavaScript.ORDER_NONE);
-    if(valueCode) {
+    if (valueCode) {
       values.push(valueCode);
     }
   }
@@ -8373,43 +8589,43 @@ Blockly.JavaScript['check_relationship'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['and'] = function(block) {
+Blockly.JavaScript['and'] = function (block) {
   var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_LOGICAL_AND);
   var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_LOGICAL_AND);
   var code = value_operand1 + " and " + value_operand2;
   return [code, Blockly.JavaScript.ORDER_LOGICAL_AND];
 };
 
-Blockly.JavaScript['or'] = function(block) {
+Blockly.JavaScript['or'] = function (block) {
   var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_LOGICAL_OR);
   var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_LOGICAL_OR);
   var code = value_operand1 + " or " + value_operand2;
   return [code, Blockly.JavaScript.ORDER_LOGICAL_OR];
 };
 
-Blockly.JavaScript['not'] = function(block) {
+Blockly.JavaScript['not'] = function (block) {
   var value_operand = Blockly.JavaScript.valueToCode(block, 'operand', Blockly.JavaScript.ORDER_LOGICAL_NOT);
   var code = "not " + value_operand;
   return [code, Blockly.JavaScript.ORDER_LOGICAL_NOT];
 };
 
-Blockly.JavaScript['comparison'] = function(block) {
+Blockly.JavaScript['comparison'] = function (block) {
   var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_RELATIONAL);
   var dropdown_operator = block.getFieldValue('operator');
-  var operators = {GREATER: ">", LESS: "<", EQUAL: "==", NOT_EQUAL: "!=", GE: ">=", LE: "<="};
+  var operators = { GREATER: ">", LESS: "<", EQUAL: "==", NOT_EQUAL: "!=", GE: ">=", LE: "<=" };
   var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_RELATIONAL);
   var code = value_operand1 + " " + operators[dropdown_operator] + " " + value_operand2;
   return [code, Blockly.JavaScript.ORDER_RELATIONAL];
 };
 
-Blockly.JavaScript['three_digit_comparison'] = function(block) {
+Blockly.JavaScript['three_digit_comparison'] = function (block) {
   var value_operand1 = Blockly.JavaScript.valueToCode(block, 'operand1', Blockly.JavaScript.ORDER_NONE);
   var value_operand2 = Blockly.JavaScript.valueToCode(block, 'operand2', Blockly.JavaScript.ORDER_NONE);
   var code = value_operand1 + ".compare(" + value_operand2 + ")";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['quantifier_of_existence'] = function(block) {
+Blockly.JavaScript['quantifier_of_existence'] = function (block) {
   var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
   var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
   var dropdown_type = block.getFieldValue('type');
@@ -8419,7 +8635,7 @@ Blockly.JavaScript['quantifier_of_existence'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['quantifier_of_generality'] = function(block) {
+Blockly.JavaScript['quantifier_of_generality'] = function (block) {
   var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
   var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
   var text_name_var = block.getFieldValue('name_var');
@@ -8427,23 +8643,35 @@ Blockly.JavaScript['quantifier_of_generality'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['ref_to_decision_tree_var'] = function(block) {
+Blockly.JavaScript['ref_to_decision_tree_var'] = function (block) {
   var text_var_name = block.getFieldValue('var_name');
   var code = 'var:' + text_var_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['variable'] = function(block) {
+Blockly.JavaScript['variable'] = function (block) {
   var text_name_variable = block.getFieldValue('var_name');
-  var code = "$"+text_name_variable;
+  var code = "$" + text_name_variable;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['enum'] = function(block) {
+Blockly.JavaScript['enum'] = function (block) {
   var text_owner_name = block.getFieldValue('owner_name');
   var text_value = block.getFieldValue('value');
   var code = text_owner_name + "::" + text_value;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['block'] = function (block) {
+  var code = "{\n";
+  for (var i = 0; i < block.itemCount_; i++) {
+    let valueCode = Blockly.JavaScript.valueToCode(block, 'statement' + i, Blockly.JavaScript.ORDER_NONE);
+    if (valueCode) {
+      code += valueCode + ";\n";
+    }
+  }
+  code += "}";
+  return code;
 };// Окно создание логических узлов
 var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
@@ -12712,37 +12940,40 @@ function checkCorrectPredeterminingBranch(node) {
     }
     return resultNode;
 }
-const SemanticType = { 
+const SemanticType = {
     OBJECT: 'object',
     CLASS: 'class',
-    STRING: 'string', 
+    STRING: 'string',
     BOOLEAN: 'bool',
     INT: 'int',
     DOUBLE: 'double',
     COMPARISON_RESULT: 'comparison',
     ENUM: 'enum',
     ASSIGN: 'assign',
-    PROPERTY_VALUE: 'propertyValue'
+    PROPERTY_VALUE: 'propertyValue',
+    BLOCK: 'block',
 };
 
 
 function getType(root) {
-    if(root.stmt) {
+    if (root.isBlock && root.block) {
+        return SemanticType.BLOCK;
+    } else if (!root.isBlock && root.stmt) {
         return getType(root.stmt);
-    } else if(!root.secondExpr && root.firstExpr) {
+    } else if (!root.secondExpr && root.firstExpr) {
         return getType(root.firstExpr);
-    } else if(root.secondExpr && root.firstExpr) {
+    } else if (root.secondExpr && root.firstExpr) {
         return SemanticType.ASSIGN;
-    } else if(root.type && root.type == ExprType.STRING) {
+    } else if (root.type && root.type == ExprType.STRING) {
         return SemanticType.STRING;
-    } else if(root.type && root.type == ExprType.INT) {
+    } else if (root.type && root.type == ExprType.INT) {
         return SemanticType.INT;
-    } else if(root.type && root.type == ExprType.DOUBLE) {
+    } else if (root.type && root.type == ExprType.DOUBLE) {
         return SemanticType.DOUBLE;
-    } else if(root.type && root.type == ExprType.ENUM) {
+    } else if (root.type && root.type == ExprType.ENUM) {
         return SemanticType.ENUM;
-    } else if(root.type && (root.type == ExprType.BOOLEAN 
-        || root.type == ExprType.IS 
+    } else if (root.type && (root.type == ExprType.BOOLEAN
+        || root.type == ExprType.IS
         || root.type == ExprType.CHECK_REL
         || root.type == ExprType.AND
         || root.type == ExprType.OR
@@ -12756,18 +12987,18 @@ function getType(root) {
         || root.type == ExprType.EXIST
         || root.type == ExprType.FORALL)) {
         return SemanticType.BOOLEAN;
-    } else if(root.type && (root.type == ExprType.VAR 
-        || root.type == ExprType.ID 
-        || root.type == ExprType.GET_BY_RELATIONSHIP 
+    } else if (root.type && (root.type == ExprType.VAR
+        || root.type == ExprType.ID
+        || root.type == ExprType.GET_BY_RELATIONSHIP
         || root.type == ExprType.FIND
         || root.type == ExprType.FIND_EXTREM
         || root.type == ExprType.TREE_VAR)) {
         return SemanticType.OBJECT;
-    } else if(root.type && root.type == ExprType.GET_CLASS) {
+    } else if (root.type && root.type == ExprType.GET_CLASS) {
         return SemanticType.CLASS;
-    } else if(root.type && root.type == ExprType.PROPERTY) {
+    } else if (root.type && root.type == ExprType.PROPERTY) {
         return SemanticType.PROPERTY_VALUE;
-    } else if(root.type && root.type == ExprType.COMPARE) {
+    } else if (root.type && root.type == ExprType.COMPARE) {
         return SemanticType.COMPARISON_RESULT;
     } else {
         alert("Error: " + root.type);
@@ -12775,11 +13006,11 @@ function getType(root) {
 }
 
 function generateCode(workspace) {
-    if(workspace.getTopBlocks().length > 1) {
+    if (workspace.getTopBlocks().length > 1) {
         throw new Error(getTextByLocale("moreBlocksInWorkspace"));
     }
     let code = Blockly.JavaScript.workspaceToCode(workspace);
-    if(code.slice(-1) == "\n") {
+    if (code.slice(-1) == "\n") {
         code = code.slice(0, -2);
     }
     return code;
@@ -12788,107 +13019,107 @@ function generateCode(workspace) {
 function getTypeFromCode(code, editorUi) {
     root = null
     parser.parse(code)
-    let obj = {type: getType(root)};
-    if(obj.type == SemanticType.PROPERTY_VALUE) {
+    let obj = { type: getType(root) };
+    if (obj.type == SemanticType.PROPERTY_VALUE) {
         let propertyName = root.stmt.firstExpr.ident;
         let properties = getProperties(editorUi);
         let foundProp = properties.filter(el => el.name == propertyName);
-        if(typeof foundProp[0] == "undefined") {
+        if (typeof foundProp[0] == "undefined") {
             throw new Error(getTextByLocale("propertyIsMissingInDict").replace("%propertyName", propertyName));
         }
         obj = foundProp[0];
         let propType = obj.type;
 
-        if(propType != "Integer" && propType != "Double" 
-        && propType != "Boolean" && propType != "String") {
+        if (propType != "Integer" && propType != "Double"
+            && propType != "Boolean" && propType != "String") {
             obj.enum = propType.slice(6);
-            propType = propType.slice(0,4)
+            propType = propType.slice(0, 4)
         }
-        if(propType == "Integer") {
+        if (propType == "Integer") {
             propType = "int"
         }
-        if(propType == "Boolean") {
+        if (propType == "Boolean") {
             propType = "bool"
         }
         obj.type = propType.toLowerCase();
-    } else if(obj.type == SemanticType.COMPARISON_RESULT) {
+    } else if (obj.type == SemanticType.COMPARISON_RESULT) {
         obj.enum = "comparisonResult";
         obj.type = "enum";
-    } else if(obj.type == SemanticType.ENUM && root.stmt.firstExpr.type == ExprType.ENUM) {
+    } else if (obj.type == SemanticType.ENUM && root.stmt.firstExpr.type == ExprType.ENUM) {
         obj.enum = root.stmt.firstExpr.ident;
     }
     return obj;
 }
 
 function getTextFromCode(code, editorUi) {
-    if(code == "") {
+    if (code == "") {
         return "";
     }
     let type = getTypeFromCode(code, editorUi);
-    if(type.type == "int" || type.type == "double") {
+    if (type.type == "int" || type.type == "double") {
         return "How many ";
-    } else if(type.type == "bool") {
+    } else if (type.type == "bool") {
         return "Is ";
-    } else if(type.type == "enum" && type.enum != "comparisonResult") {
+    } else if (type.type == "enum" && type.enum != "comparisonResult") {
         return "What is ";
-    } else if(type.type == "enum" && type.enum == "comparisonResult") {
+    } else if (type.type == "enum" && type.enum == "comparisonResult") {
         return "Compare ";
     }
     return "";
 }
 
 function getTextFromValueInOutcome(value) {
-    if(value == "") {
+    if (value == "") {
         return "";
-    } else if(value == "True") {
+    } else if (value == "True") {
         return "Yes";
-    } else if(value == "False") {
+    } else if (value == "False") {
         return "No";
-    } 
+    }
     else {
         return value;
     }
 }
 
 function CheckCycleInTree(startNode, editorUi) {
-    if(hasCycle(startNode, editorUi)) {
+    if (hasCycle(startNode, editorUi)) {
         throw new Error(getTextByLocale("hasCycleInTree"));
     }
 }
 
 function hasCycle(root, editorUi) {
     const visited = new Set(); // Список посещенных узлов
-  
-    function dfs(node) {
-      if (!node.edges) return false; // Достигнут конец дерева
-      if (visited.has(node)) return true; // Найден цикл
 
-      visited.add(node); // Добавляем текущий узел в список посещенных
-  
-      // Рекурсивно обходим потомков текущего узла
-      for(let i = 0; i < node.edges.length; i++) {
-        let child = node.edges[i].target;
-        if(!child) {
-            markOutcome(editorUi.editor.graph, node.edges[i])
-            throw new Error(getTextByLocale("TargetNodeIsMissing"));
+    function dfs(node) {
+        if (!node.edges) return false; // Достигнут конец дерева
+        if (visited.has(node)) return true; // Найден цикл
+
+        visited.add(node); // Добавляем текущий узел в список посещенных
+
+        // Рекурсивно обходим потомков текущего узла
+        for (let i = 0; i < node.edges.length; i++) {
+            let child = node.edges[i].target;
+            if (!child) {
+                markOutcome(editorUi.editor.graph, node.edges[i])
+                throw new Error(getTextByLocale("TargetNodeIsMissing"));
+            }
+            if (child != node && dfs(child)) {
+                return true; // Найден цикл
+            }
         }
-        if (child != node && dfs(child)) {
-            return true; // Найден цикл
-        }
-      }
-  
-      return false; // Нет цикла
+
+        return false; // Нет цикла
     }
-  
+
     return dfs(root);
 }
 
 function specialChars(str) {
     return str.replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 function checkValidID(str) {
