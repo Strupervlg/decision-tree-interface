@@ -121,12 +121,13 @@ exp
     | exp "<=" exp { $$ = createBinExprNode(ExprType.LE, $1, $3); }
     | exp "." COMPARE "(" exp ")" { $$ = createBinExprNode(ExprType.COMPARE, $1, $5); }
     | "(" exp ")" { $$ = $2; }
+    | "(" exp ")" exp { $$ = createCastExprNode($2, $4); }
     | exp AND exp { $$ = createBinExprNode(ExprType.AND, $1, $3); }
     | exp OR exp { $$ = createBinExprNode(ExprType.OR, $1, $3); }
     | NOT exp { $$ = createUnaryExprNode(ExprType.NOT, $2); }
     | exp "->" ID "(" object_seq ")" { $$ = createCheckRelExprNode($1, $3, $5); }
     | exp "." CLASS "(" ")" { $$ = createUnaryExprNode(ExprType.GET_CLASS, $1); }
-    | FIND ID "{" exp "}" { $$ = createGetExprNode(ExprType.FIND, $2, $4); }
+    | FIND ID ID "{" exp "}" { $$ = createGetExprNode(ExprType.FIND, $2, $3, $5); }
     | FIND_EXTREM ID "[" exp "]" WHERE ID "{" exp "}" { $$ = createFindExtremeExprNode($2, $4, $7, $9); }
     | EXIST ID "[" exp "]" "{" exp "}" { $$ = createQuantifierExprNode(ExprType.EXIST, $2, $4, $7); }
     | FORALL ID "[" exp "]" "{" exp "}" { $$ = createQuantifierExprNode(ExprType.FORALL, $2, $4, $7); }
