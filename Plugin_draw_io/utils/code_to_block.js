@@ -356,7 +356,8 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "get_condition_object");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[2].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[2].fieldRow[0].setValue(exprNode.typeIdent);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
 
             condBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, condBlock, "condition");
@@ -408,6 +409,27 @@ function printExprNode(exprNode, workspace) {
             checkTypeBlocks(resBlock, verBlock, "verification_condition");
             resBlock.getInput("verification_condition").connection.connect(verBlock.outputConnection);
 
+            return resBlock
+        case ExprType.CAST:
+            var resBlock = new Blockly.BlockSvg(workspace, "cast_object_to_class");
+            resBlock.initSvg();
+            resBlock.render();
+
+            objBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, objBlock, "object");
+            resBlock.getInput("object").connection.connect(objBlock.outputConnection);
+
+            if (exprNode.cast.type == ExprType.ID) {
+                var classBlock = new Blockly.BlockSvg(workspace, "class");
+                classBlock.initSvg();
+                classBlock.render();
+                classBlock.inputList[0].fieldRow[0].setValue(exprNode.cast.ident);
+            }
+            else {
+                var classBlock = printExprNode(exprNode.cast, workspace);
+            }
+            checkTypeBlocks(resBlock, classBlock, "class");
+            resBlock.getInput("class").connection.connect(classBlock.outputConnection);
             return resBlock
     }
 }

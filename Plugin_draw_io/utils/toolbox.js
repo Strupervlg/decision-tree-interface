@@ -93,6 +93,10 @@ var toolbox = {
                     "kind": "block",
                     "type": "assign_value_to_variable_decision_tree"
                 },
+                {
+                    "kind": "block",
+                    "type": "cast_object_to_class"
+                },
             ]
         },
         {

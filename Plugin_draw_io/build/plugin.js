@@ -2253,7 +2253,8 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "get_condition_object");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[2].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[2].fieldRow[0].setValue(exprNode.typeIdent);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
 
             condBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, condBlock, "condition");
@@ -2305,6 +2306,27 @@ function printExprNode(exprNode, workspace) {
             checkTypeBlocks(resBlock, verBlock, "verification_condition");
             resBlock.getInput("verification_condition").connection.connect(verBlock.outputConnection);
 
+            return resBlock
+        case ExprType.CAST:
+            var resBlock = new Blockly.BlockSvg(workspace, "cast_object_to_class");
+            resBlock.initSvg();
+            resBlock.render();
+
+            objBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, objBlock, "object");
+            resBlock.getInput("object").connection.connect(objBlock.outputConnection);
+
+            if (exprNode.cast.type == ExprType.ID) {
+                var classBlock = new Blockly.BlockSvg(workspace, "class");
+                classBlock.initSvg();
+                classBlock.render();
+                classBlock.inputList[0].fieldRow[0].setValue(exprNode.cast.ident);
+            }
+            else {
+                var classBlock = printExprNode(exprNode.cast, workspace);
+            }
+            checkTypeBlocks(resBlock, classBlock, "class");
+            resBlock.getInput("class").connection.connect(classBlock.outputConnection);
             return resBlock
     }
 }
@@ -2386,11 +2408,13 @@ const ExprType = {
     FIND_EXTREM: 'find extreme',
     EXIST: 'exist',
     FORALL: 'forall',
+    CAST: 'cast',
 };
 
 function ExpressionNode() {
     this.id = LASTID++;
     this.type = null;
+    this.typeIdent = null;
     this.ident = null;
     this.rel = null;
     this.extremeIdent = null;
@@ -2400,6 +2424,8 @@ function ExpressionNode() {
     this.boolean = null;
 
     this.identValue = null;
+
+    this.cast = null;
 
     this.firstOperand = null;
     this.secondOperand = null;
@@ -2435,6 +2461,14 @@ function createUnaryExprNode(typeNode, operand) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = operand;
+    return newNode;
+}
+
+function createCastExprNode(cast, operand) {
+    newNode = new ExpressionNode();
+    newNode.type = ExprType.CAST;
+    newNode.firstOperand = operand;
+    newNode.cast = cast;
     return newNode;
 }
 
@@ -2476,10 +2510,11 @@ function createCheckRelExprNode(expression, relationship, objectSeq) {
     return newNode;
 }
 
-function createGetExprNode(typeNode, id, expression) {
+function createGetExprNode(typeNode, type, id, expression) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = expression;
+    newNode.typeIdent = type;
     newNode.ident = id;
     return newNode;
 }
@@ -2601,7 +2636,7 @@ var parser = (function () {
         yy: {},
         symbols_: { "error": 2, "program": 3, "stmt": 4, "block": 5, "{": 6, "stmt_seq": 7, "}": 8, ";": 9, "exp": 10, "=": 11, "ID": 12, "STRING": 13, "INT": 14, "DOUBLE": 15, "TRUE": 16, "FALSE": 17, "TREE_VAR": 18, "VAR": 19, "::": 20, "->": 21, ".": 22, "IS": 23, ">": 24, "<": 25, "==": 26, "!=": 27, ">=": 28, "<=": 29, "COMPARE": 30, "(": 31, ")": 32, "AND": 33, "OR": 34, "NOT": 35, "object_seq": 36, "CLASS": 37, "FIND": 38, "FIND_EXTREM": 39, "[": 40, "]": 41, "WHERE": 42, "EXIST": 43, "FORALL": 44, ",": 45, "$accept": 0, "$end": 1 },
         terminals_: { 2: "error", 6: "{", 8: "}", 9: ";", 11: "=", 12: "ID", 13: "STRING", 14: "INT", 15: "DOUBLE", 16: "TRUE", 17: "FALSE", 18: "TREE_VAR", 19: "VAR", 20: "::", 21: "->", 22: ".", 23: "IS", 24: ">", 25: "<", 26: "==", 27: "!=", 28: ">=", 29: "<=", 30: "COMPARE", 31: "(", 32: ")", 33: "AND", 34: "OR", 35: "NOT", 37: "CLASS", 38: "FIND", 39: "FIND_EXTREM", 40: "[", 41: "]", 42: "WHERE", 43: "EXIST", 44: "FORALL", 45: "," },
-        productions_: [0, [3, 1], [3, 1], [5, 3], [7, 2], [7, 3], [4, 1], [4, 3], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 6], [10, 3], [10, 3], [10, 3], [10, 2], [10, 6], [10, 5], [10, 5], [10, 10], [10, 8], [10, 8], [36, 1], [36, 3]],
+        productions_: [0, [3, 1], [3, 1], [5, 3], [7, 2], [7, 3], [4, 1], [4, 3], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 6], [10, 3], [10, 4], [10, 3], [10, 3], [10, 2], [10, 6], [10, 5], [10, 6], [10, 10], [10, 8], [10, 8], [36, 1], [36, 3]],
         performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
             /* this == yyval */
 
@@ -2689,41 +2724,44 @@ var parser = (function () {
                     this.$ = $$[$0 - 1];
                     break;
                 case 28:
-                    this.$ = createBinExprNode(ExprType.AND, $$[$0 - 2], $$[$0]);
+                    this.$ = createCastExprNode($$[$0 - 2], $$[$0]);
                     break;
                 case 29:
-                    this.$ = createBinExprNode(ExprType.OR, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.AND, $$[$0 - 2], $$[$0]);
                     break;
                 case 30:
-                    this.$ = createUnaryExprNode(ExprType.NOT, $$[$0]);
+                    this.$ = createBinExprNode(ExprType.OR, $$[$0 - 2], $$[$0]);
                     break;
                 case 31:
-                    this.$ = createCheckRelExprNode($$[$0 - 5], $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = createUnaryExprNode(ExprType.NOT, $$[$0]);
                     break;
                 case 32:
-                    this.$ = createUnaryExprNode(ExprType.GET_CLASS, $$[$0 - 4]);
+                    this.$ = createCheckRelExprNode($$[$0 - 5], $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 33:
-                    this.$ = createGetExprNode(ExprType.FIND, $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = createUnaryExprNode(ExprType.GET_CLASS, $$[$0 - 4]);
                     break;
                 case 34:
-                    this.$ = createFindExtremeExprNode($$[$0 - 8], $$[$0 - 6], $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = createGetExprNode(ExprType.FIND, $$[$0 - 4], $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 35:
-                    this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    this.$ = createFindExtremeExprNode($$[$0 - 8], $$[$0 - 6], $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 36:
-                    this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
                     break;
                 case 37:
-                    this.$ = createObjectSeqNode($$[$0]);
+                    this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
                     break;
                 case 38:
+                    this.$ = createObjectSeqNode($$[$0]);
+                    break;
+                case 39:
                     this.$ = addObjectToObjectSeqNode($$[$0 - 2], $$[$0]);
                     break;
             }
         },
-        table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2] }, o($V3, [2, 6], { 11: [1, 20], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 4: 33, 7: 32, 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 8], { 20: [1, 34] }), o($Vp, [2, 9]), o($Vp, [2, 10]), o($Vp, [2, 11]), o($Vp, [2, 12]), o($Vp, [2, 13]), o($Vp, [2, 14]), o($Vp, [2, 15]), { 10: 35, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 36, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 37] }, { 12: [1, 38] }, { 12: [1, 39] }, { 12: [1, 40] }, { 10: 41, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 42] }, { 12: [1, 43], 30: [1, 44], 37: [1, 45] }, { 10: 46, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 47, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 48, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 49, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 50, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 51, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 52, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 53, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 54, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 4: 56, 8: [1, 55], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 9: [1, 57] }, { 12: [1, 58] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 59], 33: $Vn, 34: $Vo }, o($Vq, [2, 30], { 21: $Ve, 22: $Vf }), { 6: [1, 60] }, { 40: [1, 61] }, { 40: [1, 62] }, { 40: [1, 63] }, o($V3, [2, 7], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), o($Vp, [2, 17], { 31: [1, 64] }), o($Vp, [2, 18]), { 31: [1, 65] }, { 31: [1, 66] }, o([1, 8, 9, 11, 23, 32, 33, 34, 41, 45], [2, 19], { 21: $Ve, 22: $Vf, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o($Vq, [2, 20], { 21: $Ve, 22: $Vf }), o($Vq, [2, 21], { 21: $Ve, 22: $Vf }), o($Vq, [2, 22], { 21: $Ve, 22: $Vf }), o($Vq, [2, 23], { 21: $Ve, 22: $Vf }), o($Vq, [2, 24], { 21: $Ve, 22: $Vf }), o($Vq, [2, 25], { 21: $Ve, 22: $Vf }), o([1, 8, 9, 11, 32, 33, 34, 41, 45], [2, 28], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o([1, 8, 9, 11, 32, 34, 41, 45], [2, 29], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn }), { 1: [2, 3] }, { 9: [1, 67] }, o($Vr, [2, 4]), o($Vp, [2, 16]), o($Vp, [2, 27]), { 10: 68, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 69, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 70, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 71, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 73, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 36: 72, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 74, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 32: [1, 75] }, o($Vr, [2, 5]), { 8: [1, 76], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 77] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 78] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 79] }, { 32: [1, 80], 45: [1, 81] }, o($Vs, [2, 37], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 82], 33: $Vn, 34: $Vo }, o($Vp, [2, 32]), o($Vp, [2, 33]), { 42: [1, 83] }, { 6: [1, 84] }, { 6: [1, 85] }, o($Vp, [2, 31]), { 10: 86, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 26]), { 12: [1, 87] }, { 10: 88, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 89, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vs, [2, 38], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 6: [1, 90] }, { 8: [1, 91], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 8: [1, 92], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 10: 93, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 35]), o($Vp, [2, 36]), { 8: [1, 94], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, o($Vp, [2, 34])],
+        table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2] }, o($V3, [2, 6], { 11: [1, 20], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 4: 33, 7: 32, 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 8], { 20: [1, 34] }), o($Vp, [2, 9]), o($Vp, [2, 10]), o($Vp, [2, 11]), o($Vp, [2, 12]), o($Vp, [2, 13]), o($Vp, [2, 14]), o($Vp, [2, 15]), { 10: 35, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 36, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 37] }, { 12: [1, 38] }, { 12: [1, 39] }, { 12: [1, 40] }, { 10: 41, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 42] }, { 12: [1, 43], 30: [1, 44], 37: [1, 45] }, { 10: 46, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 47, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 48, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 49, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 50, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 51, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 52, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 53, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 54, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 4: 56, 8: [1, 55], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 9: [1, 57] }, { 12: [1, 58] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 59], 33: $Vn, 34: $Vo }, o($Vq, [2, 31], { 21: $Ve, 22: $Vf }), { 12: [1, 60] }, { 40: [1, 61] }, { 40: [1, 62] }, { 40: [1, 63] }, o($V3, [2, 7], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), o($Vp, [2, 17], { 31: [1, 64] }), o($Vp, [2, 18]), { 31: [1, 65] }, { 31: [1, 66] }, o([1, 8, 9, 11, 23, 32, 33, 34, 41, 45], [2, 19], { 21: $Ve, 22: $Vf, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o($Vq, [2, 20], { 21: $Ve, 22: $Vf }), o($Vq, [2, 21], { 21: $Ve, 22: $Vf }), o($Vq, [2, 22], { 21: $Ve, 22: $Vf }), o($Vq, [2, 23], { 21: $Ve, 22: $Vf }), o($Vq, [2, 24], { 21: $Ve, 22: $Vf }), o($Vq, [2, 25], { 21: $Ve, 22: $Vf }), o([1, 8, 9, 11, 32, 33, 34, 41, 45], [2, 29], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o([1, 8, 9, 11, 32, 34, 41, 45], [2, 30], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn }), { 1: [2, 3] }, { 9: [1, 67] }, o($Vr, [2, 4]), o($Vp, [2, 16]), o($Vp, [2, 27], { 10: 68, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }), { 6: [1, 69] }, { 10: 70, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 71, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 72, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 74, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 36: 73, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 75, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 32: [1, 76] }, o($Vr, [2, 5]), o($Vp, [2, 28]), { 10: 77, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 78] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 79] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 80] }, { 32: [1, 81], 45: [1, 82] }, o($Vs, [2, 38], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 83], 33: $Vn, 34: $Vo }, o($Vp, [2, 33]), { 8: [1, 84], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 42: [1, 85] }, { 6: [1, 86] }, { 6: [1, 87] }, o($Vp, [2, 32]), { 10: 88, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 26]), o($Vp, [2, 34]), { 12: [1, 89] }, { 10: 90, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 91, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vs, [2, 39], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 6: [1, 92] }, { 8: [1, 93], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 8: [1, 94], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 10: 95, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 36]), o($Vp, [2, 37]), { 8: [1, 96], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, o($Vp, [2, 35])],
         defaultActions: { 2: [2, 1], 3: [2, 2], 55: [2, 3] },
         parseError: function parseError(str, hash) {
             if (hash.recoverable) {
@@ -7391,6 +7429,10 @@ var toolbox = {
                     "kind": "block",
                     "type": "assign_value_to_variable_decision_tree"
                 },
+                {
+                    "kind": "block",
+                    "type": "cast_object_to_class"
+                },
             ]
         },
         {
@@ -7690,6 +7732,9 @@ const xslTxt = `<?xml version="1.0"?>
 
     <xsl:template match="block[@type='get_condition_object']">
         <GetByCondition>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var']" />
+            </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>
@@ -7723,6 +7768,13 @@ const xslTxt = `<?xml version="1.0"?>
             <xsl:apply-templates select="value[@name='ref_to_object']" />
             <xsl:apply-templates select="value[@name='new_object']" />
         </AssignToDecisionTreeVar>
+    </xsl:template>
+
+    <xsl:template match="block[@type='cast_object_to_class']">
+        <Cast>
+            <xsl:apply-templates select="value[@name='object']" />
+            <xsl:apply-templates select="value[@name='class']" />
+        </Cast>
     </xsl:template>
 
     <xsl:template match="block[@type='check_object_class']">
@@ -7952,6 +8004,8 @@ Blockly.Blocks['get_condition_object'] = {
       .setCheck("Boolean")
       .appendField("condition");
     this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput("type", validator), "type_var");
+    this.appendDummyInput()
       .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, ["Object"]);
@@ -8014,6 +8068,23 @@ Blockly.Blocks['assign_value_to_variable_decision_tree'] = {
       .setCheck("Object")
       .appendField("new object");
     this.setOutput(true, "Statement");
+    this.setColour(240);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['cast_object_to_class'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Cast the object to class");
+    this.appendValueInput("class")
+      .setCheck("Class")
+      .appendField("class");
+    this.appendValueInput("object")
+      .setCheck("Object")
+      .appendField("object");
+    this.setOutput(true, "Object");
     this.setColour(240);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -8537,7 +8608,8 @@ Blockly.JavaScript['get_relationship_object'] = function (block) {
 Blockly.JavaScript['get_condition_object'] = function (block) {
   var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
   var text_name_var = block.getFieldValue('name_var');
-  var code = "find " + text_name_var + " { " + value_condition + " } ";
+  var text_type_var = block.getFieldValue('type_var');
+  var code = "find " + text_type_var + " " + text_name_var + " { " + value_condition + " } ";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -8563,6 +8635,13 @@ Blockly.JavaScript['assign_value_to_variable_decision_tree'] = function (block) 
   var value_ref_to_object = Blockly.JavaScript.valueToCode(block, 'ref_to_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var value_new_object = Blockly.JavaScript.valueToCode(block, 'new_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var code = value_ref_to_object + " = " + value_new_object;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['cast_object_to_class'] = function (block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_INSTANCEOF);
+  var value_class = Blockly.JavaScript.valueToCode(block, 'class', Blockly.JavaScript.ORDER_INSTANCEOF);
+  var code = "(" + value_class + ") " + value_object;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -12993,7 +13072,8 @@ function getType(root) {
         || root.type == ExprType.GET_BY_RELATIONSHIP
         || root.type == ExprType.FIND
         || root.type == ExprType.FIND_EXTREM
-        || root.type == ExprType.TREE_VAR)) {
+        || root.type == ExprType.TREE_VAR
+        || root.type == ExprType.CAST)) {
         return SemanticType.OBJECT;
     } else if (root.type && root.type == ExprType.GET_CLASS) {
         return SemanticType.CLASS;

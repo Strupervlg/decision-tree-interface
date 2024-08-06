@@ -223,6 +223,9 @@ const xslTxt = `<?xml version="1.0"?>
 
     <xsl:template match="block[@type='get_condition_object']">
         <GetByCondition>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var']" />
+            </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>
@@ -256,6 +259,13 @@ const xslTxt = `<?xml version="1.0"?>
             <xsl:apply-templates select="value[@name='ref_to_object']" />
             <xsl:apply-templates select="value[@name='new_object']" />
         </AssignToDecisionTreeVar>
+    </xsl:template>
+
+    <xsl:template match="block[@type='cast_object_to_class']">
+        <Cast>
+            <xsl:apply-templates select="value[@name='object']" />
+            <xsl:apply-templates select="value[@name='class']" />
+        </Cast>
     </xsl:template>
 
     <xsl:template match="block[@type='check_object_class']">

@@ -148,6 +148,8 @@ Blockly.Blocks['get_condition_object'] = {
       .setCheck("Boolean")
       .appendField("condition");
     this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput("type", validator), "type_var");
+    this.appendDummyInput()
       .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, ["Object"]);
@@ -210,6 +212,23 @@ Blockly.Blocks['assign_value_to_variable_decision_tree'] = {
       .setCheck("Object")
       .appendField("new object");
     this.setOutput(true, "Statement");
+    this.setColour(240);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['cast_object_to_class'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Cast the object to class");
+    this.appendValueInput("class")
+      .setCheck("Class")
+      .appendField("class");
+    this.appendValueInput("object")
+      .setCheck("Object")
+      .appendField("object");
+    this.setOutput(true, "Object");
     this.setColour(240);
     this.setTooltip("");
     this.setHelpUrl("");

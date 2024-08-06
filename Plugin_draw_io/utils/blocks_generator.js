@@ -74,7 +74,8 @@ Blockly.JavaScript['get_relationship_object'] = function (block) {
 Blockly.JavaScript['get_condition_object'] = function (block) {
   var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
   var text_name_var = block.getFieldValue('name_var');
-  var code = "find " + text_name_var + " { " + value_condition + " } ";
+  var text_type_var = block.getFieldValue('type_var');
+  var code = "find " + text_type_var + " " + text_name_var + " { " + value_condition + " } ";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -100,6 +101,13 @@ Blockly.JavaScript['assign_value_to_variable_decision_tree'] = function (block) 
   var value_ref_to_object = Blockly.JavaScript.valueToCode(block, 'ref_to_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var value_new_object = Blockly.JavaScript.valueToCode(block, 'new_object', Blockly.JavaScript.ORDER_ASSIGNMENT);
   var code = value_ref_to_object + " = " + value_new_object;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['cast_object_to_class'] = function (block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_INSTANCEOF);
+  var value_class = Blockly.JavaScript.valueToCode(block, 'class', Blockly.JavaScript.ORDER_INSTANCEOF);
+  var code = "(" + value_class + ") " + value_object;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
