@@ -153,6 +153,9 @@ const xslTxt = `<?xml version="1.0"?>
 
     <xsl:template match="block[@type='get_condition_object']">
         <GetByCondition>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var']" />
+            </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>
