@@ -67,11 +67,13 @@ const ExprType = {
     FIND_EXTREM: 'find extreme',
     EXIST: 'exist',
     FORALL: 'forall',
+    CAST: 'cast',
 };
 
 function ExpressionNode() {
     this.id = LASTID++;
     this.type = null;
+    this.typeIdent = null;
     this.ident = null;
     this.rel = null;
     this.extremeIdent = null;
@@ -81,6 +83,8 @@ function ExpressionNode() {
     this.boolean = null;
 
     this.identValue = null;
+
+    this.cast = null;
 
     this.firstOperand = null;
     this.secondOperand = null;
@@ -116,6 +120,14 @@ function createUnaryExprNode(typeNode, operand) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = operand;
+    return newNode;
+}
+
+function createCastExprNode(cast, operand) {
+    newNode = new ExpressionNode();
+    newNode.type = ExprType.CAST;
+    newNode.firstOperand = operand;
+    newNode.cast = cast;
     return newNode;
 }
 
@@ -157,10 +169,11 @@ function createCheckRelExprNode(expression, relationship, objectSeq) {
     return newNode;
 }
 
-function createGetExprNode(typeNode, id, expression) {
+function createGetExprNode(typeNode, type, id, expression) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = expression;
+    newNode.typeIdent = type;
     newNode.ident = id;
     return newNode;
 }

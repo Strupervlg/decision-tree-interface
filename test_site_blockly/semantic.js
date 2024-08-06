@@ -50,7 +50,8 @@ function getType(root) {
         || root.type == ExprType.GET_BY_RELATIONSHIP
         || root.type == ExprType.FIND
         || root.type == ExprType.FIND_EXTREM
-        || root.type == ExprType.TREE_VAR)) {
+        || root.type == ExprType.TREE_VAR
+        || root.type == ExprType.CAST)) {
         return SemanticType.OBJECT;
     } else if (root.type && root.type == ExprType.GET_CLASS) {
         return SemanticType.CLASS;

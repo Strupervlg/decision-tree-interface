@@ -188,6 +188,13 @@ const xslTxt = `<?xml version="1.0"?>
         </AssignToDecisionTreeVar>
     </xsl:template>
 
+    <xsl:template match="block[@type='cast_object_to_class']">
+        <Cast>
+            <xsl:apply-templates select="value[@name='object']" />
+            <xsl:apply-templates select="value[@name='class']" />
+        </Cast>
+    </xsl:template>
+
     <xsl:template match="block[@type='check_object_class']">
         <CheckClass>
             <xsl:apply-templates select="value[@name='object']" />
