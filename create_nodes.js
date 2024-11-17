@@ -206,6 +206,16 @@ function createFindExtremeExprNode(extremeVarName, extremeCondition, typeVar, va
     return newNode;
 }
 
+function createQuantifierExprNode(typeNode, type, id, expression1, expression2) {
+    newNode = new ExpressionNode();
+    newNode.type = typeNode;
+    newNode.firstOperand = expression1;
+    newNode.secondOperand = expression2;
+    newNode.typeIdent = type;
+    newNode.ident = id;
+    return newNode;
+}
+
 function createIfExprNode(condition, expression) {
     newNode = new ExpressionNode();
     newNode.type = ExprType.IF;
