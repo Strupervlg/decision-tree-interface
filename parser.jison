@@ -17,6 +17,9 @@ compare         return 'COMPARE';
 exist           return 'EXIST';
 forall          return 'FORALL';
 where           return 'WHERE';
+among           return 'AMONG';
+if              return 'IF';
+with              return 'WITH';
 
 
 "->"         return '->';
@@ -36,6 +39,7 @@ where           return 'WHERE';
 ">"          return '>';
 "<"          return '<';
 "::"          return '::';
+"+=>"          return '+=>';
 
 
 var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
@@ -68,11 +72,12 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 
 
 /* operator associations and precedence */
-%right '='
+%right '=' '+=>'
 %left 'OR'
 %left 'AND'
 %left 'IS'
-%left '>' '<' '==' '<=' '>=' '!='
+%left '==' '<=' '>=' '!='
+%left '>' '<'
 %right 'NOT'
 %left '.' '->' '('
 %nonassoc ')'
@@ -96,8 +101,9 @@ stmt_seq
     ;
 
 stmt
-    : exp { $$ = new StatementNode($1, null); }
-    | exp "=" exp { $$ = new StatementNode($1, $3); }
+    : exp { $$ = new StatementNode(StmtType.EXPR, $1, null); }
+    | exp "=" exp { $$ = new StatementNode(StmtType.ASSIGNMENT, $1, $3); }
+    | exp "+=>" ID "(" object_seq ")" { $$ = createAddRelationshipStmtNode($1, $3, $5); }
     ;
 
 exp
@@ -128,9 +134,11 @@ exp
     | exp "->" ID "(" object_seq ")" { $$ = createCheckRelExprNode($1, $3, $5); }
     | exp "." CLASS "(" ")" { $$ = createUnaryExprNode(ExprType.GET_CLASS, $1); }
     | FIND ID ID "{" exp "}" { $$ = createGetExprNode(ExprType.FIND, $2, $3, $5); }
-    | FIND_EXTREM ID "[" exp "]" WHERE ID "{" exp "}" { $$ = createFindExtremeExprNode($2, $4, $7, $9); }
-    | EXIST ID "[" exp "]" "{" exp "}" { $$ = createQuantifierExprNode(ExprType.EXIST, $2, $4, $7); }
-    | FORALL ID "[" exp "]" "{" exp "}" { $$ = createQuantifierExprNode(ExprType.FORALL, $2, $4, $7); }
+    | FIND_EXTREM ID "[" exp "]" AMONG ID ID "{" exp "}" { $$ = createFindExtremeExprNode($2, $4, $7, $8, $10); }
+    | EXIST ID ID "[" exp "]" "{" exp "}" { $$ = createQuantifierExprNode(ExprType.EXIST, $2, $3, $5, $8); }
+    | FORALL ID ID "[" exp "]" "{" exp "}" { $$ = createQuantifierExprNode(ExprType.FORALL, $2, $3, $5, $8); }
+    | IF "(" exp ")" exp { $$ = createIfExprNode($3, $5); }
+    | WITH "(" ID "=" exp ")" exp { $$ = createWithExprNode($3, $5, $7); }
     ;
 
 object_seq

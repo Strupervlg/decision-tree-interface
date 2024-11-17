@@ -17,9 +17,16 @@ function BlockNode(statementSeq) {
     this.id = LASTID++;
 }
 
-function StatementNode(firstExpression, secondExpression) {
+const StmtType = {
+    EXPR: 'expr',
+    ASSIGNMENT: 'assignment',
+    ADD_RELATION: 'add_relation',
+}
+
+function StatementNode(type, firstExpression, secondExpression) {
     this.firstExpr = firstExpression;
     this.secondExpr = secondExpression;
+    this.type = type;
     this.next = null;
     this.id = LASTID++;
 }
@@ -27,6 +34,14 @@ function StatementNode(firstExpression, secondExpression) {
 function StatementSeq(first, last) {
     this.first = first;
     this.last = last;
+}
+
+function createAddRelationshipStmtNode(first, relationship, objectSeq) {
+    second = new ExpressionNode();
+    second.type = ExprType.ID;
+    second.ident = relationship;
+    second.objectSeq = objectSeq;
+    return new StatementNode(StmtType.ADD_RELATION, first, second);
 }
 
 function createStmtSeqNode(stmt) {
@@ -68,6 +83,8 @@ const ExprType = {
     EXIST: 'exist',
     FORALL: 'forall',
     CAST: 'cast',
+    IF: 'if',
+    WITH: 'with',
 };
 
 function ExpressionNode() {
@@ -178,19 +195,28 @@ function createGetExprNode(typeNode, type, id, expression) {
     return newNode;
 }
 
-function createFindExtremeExprNode(extremeVarName, extremeCondition, varName, condition) {
+function createFindExtremeExprNode(extremeVarName, extremeCondition, typeVar, varName, condition) {
     newNode = new ExpressionNode();
     newNode.type = ExprType.FIND_EXTREM;
     newNode.extremeIdent = extremeVarName;
     newNode.firstOperand = extremeCondition;
+    newNode.typeIdent = typeVar;
     newNode.ident = varName;
     newNode.secondOperand = condition;
     return newNode;
 }
 
-function createQuantifierExprNode(typeNode, id, expression1, expression2) {
+function createIfExprNode(condition, expression) {
     newNode = new ExpressionNode();
-    newNode.type = typeNode;
+    newNode.type = ExprType.IF;
+    newNode.firstOperand = condition;
+    newNode.secondOperand = expression;
+    return newNode;
+}
+
+function createWithExprNode(id, expression1, expression2) {
+    newNode = new ExpressionNode();
+    newNode.type = ExprType.WITH;
     newNode.firstOperand = expression1;
     newNode.secondOperand = expression2;
     newNode.ident = id;
