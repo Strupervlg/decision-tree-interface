@@ -163,10 +163,30 @@ const xslTxt = `<?xml version="1.0"?>
         </GetByCondition>
     </xsl:template>
 
+    <xsl:template match="block[@type='if_then_stmt']">
+        <IfThen>
+            <xsl:apply-templates select="value[@name='condition']" />
+            <xsl:apply-templates select="value[@name='body']" />
+        </IfThen>
+    </xsl:template>
+
+    <xsl:template match="block[@type='with_stmt']">
+        <With>
+            <xsl:attribute name="varName">
+                <xsl:value-of select="field[@name='name_var']" />
+            </xsl:attribute>
+            <xsl:apply-templates select="value[@name='expression']" />
+            <xsl:apply-templates select="value[@name='body']" />
+        </With>
+    </xsl:template>
+
     <xsl:template match="block[@type='get_extr_object']">
         <GetExtreme>
             <xsl:attribute name="extremeVarName">
                 <xsl:value-of select="field[@name='name_var1']" />
+            </xsl:attribute>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var2']" />
             </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var2']" />
@@ -189,6 +209,12 @@ const xslTxt = `<?xml version="1.0"?>
             <xsl:apply-templates select="value[@name='ref_to_object']" />
             <xsl:apply-templates select="value[@name='new_object']" />
         </AssignToDecisionTreeVar>
+    </xsl:template>
+
+    <xsl:template match="block[@type='add_relationship_to_object']">
+        <AddRelationshipLink>
+            <xsl:apply-templates select="value" />
+        </AddRelationshipLink>
     </xsl:template>
 
     <xsl:template match="block[@type='cast_object_to_class']">
@@ -250,6 +276,9 @@ const xslTxt = `<?xml version="1.0"?>
 
     <xsl:template match="block[@type='quantifier_of_existence']">
         <ExistenceQuantifier>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var']" />
+            </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>
@@ -260,6 +289,9 @@ const xslTxt = `<?xml version="1.0"?>
 
     <xsl:template match="block[@type='quantifier_of_generality']">
         <ForAllQuantifier>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var']" />
+            </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>

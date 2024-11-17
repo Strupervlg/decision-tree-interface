@@ -122,6 +122,44 @@ Blockly.Blocks['get_property_value'] = {
   }
 };
 
+Blockly.Blocks['if_then_stmt'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("If Then");
+    this.appendValueInput("condition")
+      .setCheck("Boolean")
+      .appendField("condition");
+    this.appendValueInput("body")
+      .setCheck(["Object", "Class", "Relationship", "Property", "Boolean", "String", "Integer", "Double", "Enum", "Statement"])
+      .appendField("body");
+    this.setInputsInline(false);
+    this.setOutput(true, "Statement");
+    this.setColour(240);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['with_stmt'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("With");
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
+    this.appendValueInput("expression")
+      .setCheck("Object")
+      .appendField("expression");
+    this.appendValueInput("body")
+      .setCheck(["Object", "Class", "Relationship", "Property", "Boolean", "String", "Integer", "Double", "Enum", "Statement"])
+      .appendField("body");
+    this.setInputsInline(false);
+    this.setOutput(true, "Statement");
+    this.setColour(240);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
 Blockly.Blocks['get_relationship_object'] = {
   init: function () {
     this.appendDummyInput()
@@ -168,6 +206,8 @@ Blockly.Blocks['get_extr_object'] = {
     this.appendValueInput("extreme_condition")
       .setCheck("Boolean")
       .appendField("extreme condition");
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput("type2", validator), "type_var2");
     this.appendDummyInput()
       .appendField(new Blockly.FieldTextInput("var2", validator), "name_var2");
     this.appendValueInput("general_condition")
@@ -216,6 +256,119 @@ Blockly.Blocks['assign_value_to_variable_decision_tree'] = {
     this.setTooltip("");
     this.setHelpUrl("");
   }
+};
+
+Blockly.Blocks['add_relationship_to_object'] = {
+  init: function () {
+    this.itemCount_ = 2;
+    this.appendDummyInput()
+      .appendField("Add relationship to object");
+    this.appendValueInput("relationship")
+      .setCheck("Relationship")
+      .appendField("relationship");
+    this.appendValueInput("object")
+      .setCheck("Object")
+      .appendField("subject");
+    this.setInputsInline(false);
+    this.setOutput(true, "Statement");
+    this.setMutator(new Blockly.Mutator(['check_relationship_item']));
+    this.setColour(240);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+
+  mutationToDom: function () {
+    const container = Blockly.utils.xml.createElement('mutation');
+    container.setAttribute('items', this.itemCount_);
+    return container;
+  },
+
+  domToMutation: function (xmlElement) {
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    this.updateShape_();
+  },
+
+  saveExtraState: function () {
+    return {
+      'itemCount': this.itemCount_,
+    };
+  },
+
+  loadExtraState: function (state) {
+    this.itemCount_ = state['itemCount'];
+    this.updateShape_();
+  },
+
+  decompose: function (workspace) {
+    //TODO: сделать рефакторинг
+    const containerBlock = workspace.newBlock('check_relationship_container');
+    containerBlock.initSvg();
+    let connection = containerBlock.getInput('STACK').connection;
+    for (let i = 0; i < this.itemCount_; i++) {
+      const itemBlock = workspace.newBlock('check_relationship_item');
+      itemBlock.initSvg();
+      connection.connect(itemBlock.previousConnection);
+      connection = itemBlock.nextConnection;
+    }
+    return containerBlock;
+  },
+
+  compose: function (containerBlock) {
+    //TODO: сделать рефакторинг
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    // Count number of inputs.
+    const connections = [];
+    while (itemBlock && !itemBlock.isInsertionMarker()) {
+      connections.push(itemBlock.valueConnection_);
+      itemBlock =
+        itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+    }
+    // Disconnect any children that don't belong.
+    for (let i = 0; i < this.itemCount_; i++) {
+      const connection = this.getInput("object" + i).connection.targetConnection;
+      if (connection && connections.indexOf(connection) === -1) {
+        connection.disconnect();
+      }
+    }
+    this.itemCount_ = connections.length;
+    this.updateShape_();
+    // Reconnect any child blocks.
+    for (let i = 0; i < this.itemCount_; i++) {
+      Blockly.Mutator.reconnect(connections[i], this, "object" + i);
+    }
+  },
+
+  saveConnections: function (containerBlock) {
+    //TODO: сделать рефакторинг
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    let i = 0;
+    while (itemBlock) {
+      const input = this.getInput("object" + i);
+      itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      itemBlock =
+        itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      i++;
+    }
+  },
+
+  updateShape_: function () {
+    //TODO: сделать рефакторинг
+    if (this.itemCount_ && this.getInput('EMPTY')) {
+      this.removeInput('EMPTY');
+    } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
+      this.appendDummyInput("EMPTY").appendField("objects");
+    }
+    // Add new inputs.
+    for (let i = 0; i < this.itemCount_; i++) {
+      if (!this.getInput("object" + i)) {
+        const input = this.appendValueInput("object" + i).setCheck("Object").appendField("object" + i);
+      }
+    }
+    // Remove deleted inputs.
+    for (let i = this.itemCount_; this.getInput("object" + i); i++) {
+      this.removeInput("object" + i);
+    }
+  },
 };
 
 Blockly.Blocks['cast_object_to_class'] = {
@@ -483,6 +636,8 @@ Blockly.Blocks['quantifier_of_existence'] = {
       .setCheck("Boolean")
       .appendField("verification condition");
     this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput("type", validator), "type_var");
+    this.appendDummyInput()
       .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
@@ -502,6 +657,8 @@ Blockly.Blocks['quantifier_of_generality'] = {
     this.appendValueInput("verification_condition")
       .setCheck("Boolean")
       .appendField("verification condition");
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput("type", validator), "type_var");
     this.appendDummyInput()
       .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
     this.setInputsInline(false);
