@@ -6,7 +6,7 @@
 
 true            return 'TRUE';
 false           return 'FALSE';
-getClass           return 'CLASS';
+getClass        return 'CLASS';
 find            return 'FIND';
 findExtreme     return 'FIND_EXTREM';
 is              return 'IS';
@@ -19,7 +19,8 @@ forall          return 'FORALL';
 where           return 'WHERE';
 among           return 'AMONG';
 if              return 'IF';
-with              return 'WITH';
+with            return 'WITH';
+as              return 'AS';
 
 
 "->"         return '->';
@@ -38,8 +39,8 @@ with              return 'WITH';
 ";"          return ';';
 ">"          return '>';
 "<"          return '<';
-"::"          return '::';
-"+=>"          return '+=>';
+"::"         return '::';
+"+=>"        return '+=>';
 
 
 var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
@@ -79,7 +80,7 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 %left '==' '<=' '>=' '!='
 %left '>' '<'
 %right 'NOT'
-%left '.' '->' '('
+%left '.' '->' '(' 'AS'
 %nonassoc ')'
 
 %start program
@@ -127,7 +128,7 @@ exp
     | exp "<=" exp { $$ = createBinExprNode(ExprType.LE, $1, $3); }
     | exp "." COMPARE "(" exp ")" { $$ = createBinExprNode(ExprType.COMPARE, $1, $5); }
     | "(" exp ")" { $$ = $2; }
-    | "(" exp ")" exp { $$ = createCastExprNode($2, $4); }
+    | exp AS exp { $$ = createCastExprNode($1, $3); }
     | exp AND exp { $$ = createBinExprNode(ExprType.AND, $1, $3); }
     | exp OR exp { $$ = createBinExprNode(ExprType.OR, $1, $3); }
     | NOT exp { $$ = createUnaryExprNode(ExprType.NOT, $2); }
