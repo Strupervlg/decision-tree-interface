@@ -77,8 +77,8 @@ var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
 %left 'OR'
 %left 'AND'
 %left 'IS'
-%left '==' '<=' '>=' '!='
-%left '>' '<'
+%left '==' '!='
+%left '>' '<' '<=' '>='
 %right 'NOT'
 %left '.' '->' '(' 'AS'
 %nonassoc ')'
@@ -128,7 +128,7 @@ exp
     | exp "<=" exp { $$ = createBinExprNode(ExprType.LE, $1, $3); }
     | exp "." COMPARE "(" exp ")" { $$ = createBinExprNode(ExprType.COMPARE, $1, $5); }
     | "(" exp ")" { $$ = $2; }
-    | exp AS exp { $$ = createCastExprNode($1, $3); }
+    | exp AS exp { $$ = createCastExprNode($3, $1); }
     | exp AND exp { $$ = createBinExprNode(ExprType.AND, $1, $3); }
     | exp OR exp { $$ = createBinExprNode(ExprType.OR, $1, $3); }
     | NOT exp { $$ = createUnaryExprNode(ExprType.NOT, $2); }
