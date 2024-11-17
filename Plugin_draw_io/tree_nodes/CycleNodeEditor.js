@@ -10,7 +10,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
-    var operators = [ "And", "Or" ];
+    var operators = ["And", "Or", "Mutex", "HYP"];
 
     //Экран с текстом
     var text = document.createElement('textarea');
@@ -22,29 +22,29 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
-        if(!nameVarInText.value) {
+        if (!nameVarInText.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInText.value)) {
+        } else if (!checkValidID(nameVarInText.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
 
         var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
         var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
 
-        
+
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
@@ -63,7 +63,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -71,7 +71,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('cycleUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -97,8 +97,8 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         selectClassInText.options[selectClassInText.options.length] = newOption;
     });
     let type = cell.value.getAttribute('typeVar');
-    for(let index = 0; index < selectClassInText.options.length; ++index) {
-        if(selectClassInText.options[index].value == type) {
+    for (let index = 0; index < selectClassInText.options.length; ++index) {
+        if (selectClassInText.options[index].value == type) {
             selectClassInText.options[index].selected = true;
         }
     }
@@ -111,8 +111,8 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
     });
     let operator = cell.value.getAttribute('operator');
-    for(let index = 0; index < selectOperatorInText.options.length; ++index) {
-        if(selectOperatorInText.options[index].value == operator) {
+    for (let index = 0; index < selectOperatorInText.options.length; ++index) {
+        if (selectOperatorInText.options[index].value == operator) {
             selectOperatorInText.options[index].selected = true;
         }
     }
@@ -136,35 +136,35 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "cycleUpdateBlocklyDiv";
     nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
-    nestedDiv.style.height = h*0.72+'px';
+    nestedDiv.style.height = h * 0.72 + 'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
-        if(!code) {
+        if (!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         } else {
-            try { 
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
         error = "";
-        if(!nameVarInBlockly.value) {
+        if (!nameVarInBlockly.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInBlockly.value)) {
+        } else if (!checkValidID(nameVarInBlockly.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
         var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
         var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
-        
+
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();

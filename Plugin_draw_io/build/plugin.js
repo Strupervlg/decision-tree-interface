@@ -22,9 +22,9 @@ const RU_TEXT = {
     "startNodeConstructor": "Создать начальный узел",
     "TrueNodeCreate": 'Создать узел "Истина"',
     "FalseNodeCreate": 'Создать узел "Ложь"',
-    "LogicNodeCreate": "Создать логический узел",
-    "PredeterminingFactorsNodeCreate": 'Создать узел "Независимое ветвление"',
-    "UncertaintyNodeCreate": 'Создать узел "Неопределенность"',
+    "LogicNodeCreate": "Создать агрегационный узел",
+    "PredeterminingFactorsNodeCreate": 'Создать узел "Mutex"',
+    "UncertaintyNodeCreate": 'Создать узел "Null"',
     "actionNodeConstructor": "Создать узел действия",
     "cycleNodeConstructor": 'Создать узел "Цикл"',
     "whileNodeConstructor": 'Создать узел "While"',
@@ -41,9 +41,9 @@ const RU_TEXT = {
     "convertStartNode": "Конвертировать в стартовый узел",
     "convertTrueNode": "Конвертировать в узел Истина",
     "convertFalseNode": "Конвертировать в узел Ложь",
-    "convertLogicNode": "Конвертировать в логический узел",
-    "convertPredeterminingFactorsNode": 'Конвертировать в узел "Независимое ветвление"',
-    "convertUncertaintyNode": 'Конвертировать в узел "Неопределенность"',
+    "convertLogicNode": "Конвертировать в агрегационный узел",
+    "convertPredeterminingFactorsNode": 'Конвертировать в узел "Mutex"',
+    "convertUncertaintyNode": 'Конвертировать в узел "Null"',
     "convertActionNode": "Конвертировать в узел действия",
     "convertCycleNode": 'Конвертировать в узел "Цикл"',
     "convertConditionNode": "Конвертировать в вопросительный узел",
@@ -72,10 +72,10 @@ const RU_TEXT = {
     "TitleWhileNodeEditorWindow": 'Редактор узла "Пока"',
     "TitleEditTextInNodeWindow": "Редактор текста в узле",
     "TitleEditValueInOutcomeWindow": "Редактор значений в ветке",
-    "TitleLogicNodeConstructorWindow": "Конструктор логическего узла",
-    "TitleLogicNodeEditorWindow": "Редактор логическего узла",
-    "TitlePredeterminingFactorsNodeConstructorWindow": 'Конструктор узла "Независимое ветвление"',
-    "TitlePredeterminingFactorsNodeEditorWindow": 'Редактор узла "Независимое ветвление"',
+    "TitleLogicNodeConstructorWindow": "Конструктор агрегационного узла",
+    "TitleLogicNodeEditorWindow": "Редактор агрегационного узла",
+    "TitlePredeterminingFactorsNodeConstructorWindow": 'Конструктор узла "Mutex"',
+    "TitlePredeterminingFactorsNodeEditorWindow": 'Редактор узла "Mutex"',
     "TitleEditQuestionInfoInNodeWindow": "Редактор информации для вопросов в узле",
     "TitleEditQuestionInfoInOutcomeWindow": "Редактор информации для вопросов в ветке",
     "TitleStartConstructorWindow": "Конструктор начального узла",
@@ -156,10 +156,10 @@ const RU_TEXT = {
     "bodyOnlyOne": "Ветка тела для узла цикла должна быть одна!\n",
     "trueCycleOnlyOne": "Истинная ветка для узла цикла должна быть одна!\n",
     "falseCycleOnlyOne": "Ложная ветка для узла цикла должна быть одна!\n",
-    "typeOutcomeLogicNodeIsMissing": 'Отсутствует тип у ветки после логического узла',
-    "OutcomeLogicNodeOnlyTwo": "Веток для логического узла должно быть 2 и более!\n",
-    "trueLogicNodeOnlyOne": "Истинная ветка для логического узла должна быть одна!\n",
-    "falseLogicNodeOnlyOne": "Ложная ветка для логического узла должна быть одна!\n",
+    "typeOutcomeLogicNodeIsMissing": 'Отсутствует тип у ветки после агрегационного узла',
+    "OutcomeLogicNodeOnlyTwo": "Веток для агрегационного узла должно быть 2 и более!\n",
+    "trueLogicNodeOnlyOne": "Истинная ветка для агрегационного узла должна быть одна!\n",
+    "falseLogicNodeOnlyOne": "Ложная ветка для агрегационного узла должна быть одна!\n",
     "typeOutcomePredIsMissing": 'Отсутствует тип у ветки после независимого ветвления',
     "predOutcomeIsMissing": "Отсутствует предрешающая ветка для узла независимое ветвление!\n",
     "undeterminedOnlyOne": "Ветка undetermined для узла независимое ветвление должна быть одна!\n",
@@ -194,9 +194,9 @@ const EN_TEXT = {
     "startNodeConstructor": "Create start node",
     "TrueNodeCreate": "Create true node",
     "FalseNodeCreate": "Create false node",
-    "LogicNodeCreate": "Create logic node",
-    "PredeterminingFactorsNodeCreate": "Create predetermining factors node",
-    "UncertaintyNodeCreate": "Create node uncertainty",
+    "LogicNodeCreate": "Create agregation node",
+    "PredeterminingFactorsNodeCreate": "Create Mutex node",
+    "UncertaintyNodeCreate": "Create node Null",
     "actionNodeConstructor": "Action Node Constructor",
     "cycleNodeConstructor": "Cycle Node Constructor",
     "whileNodeConstructor": "While Node Constructor",
@@ -213,9 +213,9 @@ const EN_TEXT = {
     "convertStartNode": "Convert to a Start node",
     "convertTrueNode": "Convert to True Node",
     "convertFalseNode": "Convert to Node False",
-    "convertLogicNode": "Convert to a logical node",
-    "convertPredeterminingFactorsNode": 'Convert to an "Independent Branching" node',
-    "convertUncertaintyNode": 'Convert to node "Uncertainty"',
+    "convertLogicNode": "Convert to a agregation node",
+    "convertPredeterminingFactorsNode": 'Convert to an Mutex node',
+    "convertUncertaintyNode": 'Convert to node "Null"',
     "convertActionNode": "Convert to Action Node",
     "convertCycleNode": 'Convert to a "Cycle" node',
     "convertConditionNode": "Convert node in condition node",
@@ -244,10 +244,10 @@ const EN_TEXT = {
     "TitleWhileNodeEditorWindow": "While node editor",
     "TitleEditTextInNodeWindow": "Edit text in node",
     "TitleEditValueInOutcomeWindow": "Edit value in outcome",
-    "TitleLogicNodeConstructorWindow": "Logic node constructor",
-    "TitleLogicNodeEditorWindow": "Logic node editor",
-    "TitlePredeterminingFactorsNodeConstructorWindow": "Predetermining factors node constructor",
-    "TitlePredeterminingFactorsNodeEditorWindow": "Predetermining factors node editor",
+    "TitleLogicNodeConstructorWindow": "Agregation node constructor",
+    "TitleLogicNodeEditorWindow": "Agregation node editor",
+    "TitlePredeterminingFactorsNodeConstructorWindow": "Mutex node constructor",
+    "TitlePredeterminingFactorsNodeEditorWindow": "Mutex node editor",
     "TitleEditQuestionInfoInNodeWindow": "Edit question info in node",
     "TitleEditQuestionInfoInOutcomeWindow": "Edit question info in outcome",
     "TitleStartConstructorWindow": "Start node constructor",
@@ -328,10 +328,10 @@ const EN_TEXT = {
     "bodyOnlyOne": "The true branch for a cycle node must be one!\n",
     "trueCycleOnlyOne": "There must be only one true branch for the cycle node!\n",
     "falseCycleOnlyOne": "There must be only one false branch for the cycle node!\n",
-    "typeOutcomeLogicNodeIsMissing": 'The branch after the logical node has no type',
-    "OutcomeLogicNodeOnlyTwo": "There must be 2 or more branches for the logical node!\n",
-    "trueLogicNodeOnlyOne": "The true branch for a logical node must be one!\n",
-    "falseLogicNodeOnlyOne": "The false branch for a logical node must be one!\n",
+    "typeOutcomeLogicNodeIsMissing": 'The branch after the agregation node has no type',
+    "OutcomeLogicNodeOnlyTwo": "There must be 2 or more branches for the agregation node!\n",
+    "trueLogicNodeOnlyOne": "The true branch for a agregation node must be one!\n",
+    "falseLogicNodeOnlyOne": "The false branch for a agregation node must be one!\n",
     "typeOutcomePredIsMissing": 'No branch type after an independent branch',
     "predOutcomeIsMissing": "There is no predetermined branch for the independent branch node!\n",
     "undeterminedOnlyOne": "The undetermined branch for an independent branch node must be one!\n",
@@ -9140,12 +9140,29 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
         }
         win.destroy();
     });
+
+    var btnCreateHYPNode = mxUtils.button('HYP', function () {
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
+            newElement.value = "HYP";
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'type', "HYP");
+        }
+        win.destroy();
+    });
+
     btnCreateANDNode = styleBtn(btnCreateANDNode);
-    btnCreateANDNode.style.minWidth = "50%";
+    btnCreateANDNode.style.minWidth = "32%";
     btnCreateORNode = styleBtn(btnCreateORNode);
-    btnCreateORNode.style.minWidth = "50%";
+    btnCreateORNode.style.minWidth = "32%";
+    btnCreateHYPNode = styleBtn(btnCreateHYPNode);
+    btnCreateHYPNode.style.minWidth = "32%";
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
+    div.appendChild(btnCreateHYPNode);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleLogicNodeConstructorWindow"), div, x, y, w, h, true, true);
@@ -9359,7 +9376,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
-    var operators = [ "And", "Or" ];
+    var operators = ["And", "Or", "Mutex", "HYP"];
 
     //Экран с текстом
     var text = document.createElement('textarea');
@@ -9370,33 +9387,33 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
-        if(!nameVarInText.value) {
+        if (!nameVarInText.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInText.value)) {
+        } else if (!checkValidID(nameVarInText.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
 
         var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
 
-        
+
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
-            
+
             //TODO: Возможно сделать подсветку в самом узле 
 
             newElement.vertex = !0;
@@ -9415,7 +9432,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -9423,7 +9440,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('cycleCreateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -9475,39 +9492,39 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "cycleCreateBlocklyDiv";
     nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
-    nestedDiv.style.height = h*0.72+'px';
+    nestedDiv.style.height = h * 0.72 + 'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
-        if(!code) {
+        if (!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         } else {
-            try { 
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
         error = "";
-        if(!nameVarInBlockly.value) {
+        if (!nameVarInBlockly.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInBlockly.value)) {
+        } else if (!checkValidID(nameVarInBlockly.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
         var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
-        
+
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
-            
+
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
@@ -10358,7 +10375,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
-    var operators = [ "And", "Or" ];
+    var operators = ["And", "Or", "Mutex", "HYP"];
 
     //Экран с текстом
     var text = document.createElement('textarea');
@@ -10370,29 +10387,29 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
-        if(!nameVarInText.value) {
+        if (!nameVarInText.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInText.value)) {
+        } else if (!checkValidID(nameVarInText.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
 
         var selectedOperatorInText = selectOperatorInText.options[selectOperatorInText.options.selectedIndex].value;
         var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
 
-        
+
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
@@ -10411,7 +10428,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -10419,7 +10436,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('cycleUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -10445,8 +10462,8 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         selectClassInText.options[selectClassInText.options.length] = newOption;
     });
     let type = cell.value.getAttribute('typeVar');
-    for(let index = 0; index < selectClassInText.options.length; ++index) {
-        if(selectClassInText.options[index].value == type) {
+    for (let index = 0; index < selectClassInText.options.length; ++index) {
+        if (selectClassInText.options[index].value == type) {
             selectClassInText.options[index].selected = true;
         }
     }
@@ -10459,8 +10476,8 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         selectOperatorInText.options[selectOperatorInText.options.length] = newOption;
     });
     let operator = cell.value.getAttribute('operator');
-    for(let index = 0; index < selectOperatorInText.options.length; ++index) {
-        if(selectOperatorInText.options[index].value == operator) {
+    for (let index = 0; index < selectOperatorInText.options.length; ++index) {
+        if (selectOperatorInText.options[index].value == operator) {
             selectOperatorInText.options[index].selected = true;
         }
     }
@@ -10484,35 +10501,35 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "cycleUpdateBlocklyDiv";
     nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h);
-    nestedDiv.style.height = h*0.72+'px';
+    nestedDiv.style.height = h * 0.72 + 'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
-        if(!code) {
+        if (!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         } else {
-            try { 
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
         error = "";
-        if(!nameVarInBlockly.value) {
+        if (!nameVarInBlockly.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInBlockly.value)) {
+        } else if (!checkValidID(nameVarInBlockly.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
         var selectedOperatorInBlockly = selectOperatorInBlockly.options[selectOperatorInBlockly.options.selectedIndex].value;
         var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;
-        
+
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
@@ -11137,12 +11154,27 @@ var LogicNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         theGraph.refresh(); // update the graph
         win.destroy();
     });
+
+    var btnCreateHYPNode = mxUtils.button('HYP', function () {
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("label", "HYP");
+        cell.value.setAttribute("type", "HYP");
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
     btnCreateANDNode = styleBtn(btnCreateANDNode);
-    btnCreateANDNode.style.minWidth = "50%";
+    btnCreateANDNode.style.minWidth = "32%";
     btnCreateORNode = styleBtn(btnCreateORNode);
-    btnCreateORNode.style.minWidth = "50%";
+    btnCreateORNode.style.minWidth = "32%";
+    btnCreateHYPNode = styleBtn(btnCreateHYPNode);
+    btnCreateHYPNode.style.minWidth = "32%";
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
+    div.appendChild(btnCreateHYPNode);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleLogicNodeEditorWindow"), div, x, y, w, h, true, true);
@@ -11173,13 +11205,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     divText.appendChild(labelText);
 
     let outNode = cell.source;
-    if(outNode == null) {
+    if (outNode == null) {
         throw new Error(getTextByLocale("sourceNodeIsMissing"));
     }
     let typeValue = "";
-    if(typeof outNode.value == "object" && outNode.value.getAttribute('expression')) {
+    if (typeof outNode.value == "object" && outNode.value.getAttribute('expression')) {
         let typeNode = getTypeFromCode(outNode.value.getAttribute('expression'), editorUi);
-        if(outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
+        if (outNode.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
             labelValue.style.fontSize = '20px';
@@ -11194,7 +11226,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             });
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(typeNode.type == "int" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "int" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "int";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
@@ -11203,7 +11235,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt = styleInput(numberInt);
             numberInt.id = "value_input";
             numberInt.type = "number";
-            if(typeNode.range) {
+            if (typeNode.range) {
                 let ranges = typeNode.range.split('-')
                 numberInt.min = ranges[0];
                 numberInt.max = ranges[1];
@@ -11211,7 +11243,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.style.width = '100%';
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
-        } else if(typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "bool";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
@@ -11220,13 +11252,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
-            let optionTrue = new Option("True", "True");
+            let optionTrue = new Option("Correct", "Correct");
             selectValue.options[selectValue.options.length] = optionTrue;
-            let optionFalse = new Option("False", "False");
+            let optionFalse = new Option("Error", "Error");
             selectValue.options[selectValue.options.length] = optionFalse;
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(typeNode.type == "class" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "class" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "class";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
@@ -11242,7 +11274,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             });
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(typeNode.type == "double" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "double" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "double";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
@@ -11252,7 +11284,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.id = "value_input";
             numberInt.type = "number";
             numberInt.step = "0.01";
-            if(typeNode.range) {
+            if (typeNode.range) {
                 let ranges = typeNode.range.split('-')
                 numberInt.min = ranges[0];
                 numberInt.max = ranges[1];
@@ -11260,7 +11292,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.style.width = '100%';
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
-        } else if(typeNode.type == "string" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "string" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "string";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
@@ -11273,7 +11305,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             textValue.placeholder = "value string";
             labelType.appendChild(textValue);
             divText.appendChild(labelType);
-        } else if(typeNode.type == "enum" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "enum" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "enum";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
@@ -11284,9 +11316,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue.style.width = '100%';
             let enumsList = getEnums(editorUi);
             let findEnum = enumsList.filter(el => el.nameEnum == typeNode.enum);
-            if(findEnum[0] != undefined) {
+            if (findEnum[0] != undefined) {
                 findEnum[0].values.forEach(enumValue => {
-                    var newOption = new Option(typeNode.enum+":"+enumValue, typeNode.enum+":"+enumValue);
+                    var newOption = new Option(typeNode.enum + ":" + enumValue, typeNode.enum + ":" + enumValue);
                     selectValue.options[selectValue.options.length] = newOption;
                 });
             } else {
@@ -11294,12 +11326,12 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             }
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if(typeNode.type == "assign" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "assign" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             throw new Error(getTextByLocale("AssignInNode"));
         }
     }
 
-    if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "START") {
+    if (typeof outNode.value == "object" && outNode.value.getAttribute('type') == "START") {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
         labelType.style.fontSize = '20px';
@@ -11314,7 +11346,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    } else if(typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
+    } else if (typeof outNode.value == "object" && outNode.value.getAttribute('type') == "predetermining") {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
         labelType.style.fontSize = '20px';
@@ -11322,14 +11354,14 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["predeterminingBranch", "undetermined"];
+        let types = ["Branch", "Correct", "Error", "Null"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")) {
+    } else if (typeof outNode.value == "object" && (outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR" || outNode.value.getAttribute('type') == "HYP")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
         labelType.style.fontSize = '20px';
@@ -11337,14 +11369,14 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["Branch", "True", "False"];
+        let types = ["Branch", "Correct", "Error", "Null"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    } else if(typeof outNode.value == "object" && (outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR")) {
+    } else if (typeof outNode.value == "object" && (outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR" || outNode.value.getAttribute('operator') == "HYP")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
         labelType.style.fontSize = '20px';
@@ -11352,7 +11384,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["Body", "True", "False"];
+        let types = ["Body", "Correct", "Error", "Null"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
@@ -11369,22 +11401,22 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         graph.setAttributeForCell(cell, 'label', textInOutcome);
         let vin = document.getElementById("value_input");
         let valInOutcome = "";
-        if(vin != null && vin.tagName == "SELECT") {
+        if (vin != null && vin.tagName == "SELECT") {
             valInOutcome = vin.options[vin.options.selectedIndex].value;
             graph.setAttributeForCell(cell, 'typeValue', typeValue);
-        } else if(vin != null && vin.tagName == "INPUT") {
+        } else if (vin != null && vin.tagName == "INPUT") {
             valInOutcome = vin.value;
             graph.setAttributeForCell(cell, 'typeValue', typeValue);
         }
         graph.setAttributeForCell(cell, 'value', valInOutcome);
 
         let typeOutcome = document.getElementById("type_input");
-        if(typeOutcome) {
+        if (typeOutcome) {
             let typeInOutcome = typeOutcome.options[typeOutcome.options.selectedIndex].value;
             graph.setAttributeForCell(cell, 'type', typeInOutcome);
         }
 
-        if(!cell.style.includes("editable=0;")) {
+        if (!cell.style.includes("editable=0;")) {
             cell.style += "editable=0;";
         }
         cell.style = cell.style.replace("strokeColor=#FF0000;", "");
@@ -11399,12 +11431,12 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         let vin = document.getElementById("value_input");
         let typeSelect = document.getElementById("type_input");
         var humanStr = "";
-        if(vin != null && vin.tagName == "SELECT") {
+        if (vin != null && vin.tagName == "SELECT") {
             var valSelect = vin.options[vin.options.selectedIndex].value;
             humanStr = getTextFromValueInOutcome(valSelect);
-        } else if(vin != null && vin.tagName == "INPUT") {
+        } else if (vin != null && vin.tagName == "INPUT") {
             humanStr = getTextFromValueInOutcome(vin.value);
-        } else if(vin == null && typeof cell.source.value == "object" && cell.source.value.getAttribute('type') != "START" && typeSelect) {
+        } else if (vin == null && typeof cell.source.value == "object" && cell.source.value.getAttribute('type') != "START" && typeSelect) {
             humanStr = typeSelect.options[typeSelect.options.selectedIndex].value;
         }
         text.value = humanStr;
@@ -11429,24 +11461,24 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setClosable(true);
     this.window.setVisible(true);
 
-    if(cell.value != null && typeof cell.value == "object") {
+    if (cell.value != null && typeof cell.value == "object") {
         text.value = cell.value.getAttribute("label");
         let vin = document.getElementById("value_input");
-        if(vin != null && vin.tagName == "SELECT") {
+        if (vin != null && vin.tagName == "SELECT") {
             let valInCell = cell.value.getAttribute("value");
-            for(let index = 0; index < vin.options.length; ++index) {
-                if(vin.options[index].value == valInCell) {
+            for (let index = 0; index < vin.options.length; ++index) {
+                if (vin.options[index].value == valInCell) {
                     vin.options[index].selected = true;
                 }
             }
-        } else if(vin != null && vin.tagName == "INPUT") {
+        } else if (vin != null && vin.tagName == "INPUT") {
             vin.value = cell.value.getAttribute("value");
         }
         let type = cell.value.getAttribute("type");
         let typeInput = document.getElementById("type_input");
-        if(type && typeInput) {
-            for(let index = 0; index < typeInput.options.length; ++index) {
-                if(typeInput.options[index].value == type) {
+        if (type && typeInput) {
+            for (let index = 0; index < typeInput.options.length; ++index) {
+                if (typeInput.options[index].value == type) {
                     typeInput.options[index].selected = true;
                 }
             }
@@ -11456,14 +11488,14 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
 function checkAllInputsOutcome(div, outNodeValue) {
     errors = "";
-    if(div.getElementsByTagName("input").item(0).value == "" && typeof outNodeValue == "object" && outNodeValue.getAttribute('type') != "START") {
+    if (div.getElementsByTagName("input").item(0).value == "" && typeof outNodeValue == "object" && outNodeValue.getAttribute('type') != "START") {
         errors += getTextByLocale("HumanReadableTextIsMissing");
     }
-    if(document.getElementById("value_input") != null 
-    && document.getElementById("value_input").value == "") {
+    if (document.getElementById("value_input") != null
+        && document.getElementById("value_input").value == "") {
         errors += getTextByLocale("ValueOutcomeIsMissing");
     }
-    if(errors != "") {
+    if (errors != "") {
         throw new Error(errors);
     }
 }
@@ -12729,56 +12761,32 @@ function getVariables(doc, nodeValue) {
     return inputVariablesNode;
 }
 
-function switchCaseNodes(doc, node, editorUi, predeterminingNode) {
+function switchCaseNodes(doc, node, editorUi) {
     let resultNode = null;
     //Узел истина
     if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;") {
-        if (predeterminingNode != null) {
-            if (isNotEqualResultNode(node, predeterminingNode)) {
-                //TODO: возможно тут лучше вызывать функцию создания узла результата
-                resultNode = doc.createElement("BranchResultNode");
-                resultNode.setAttribute("value", "false");
-            } else {
-                //TODO: возможно тут лучше вызывать функцию создания узла результата
-                resultNode = doc.createElement("BranchResultNode");
-                resultNode.setAttribute("value", "true");
-            }
-        } else {
-            resultNode = branchResultNodeToXml(doc, node, true);
-        }
+        resultNode = branchResultNodeToXml(doc, node, true);
     }
     //Узел ложь
     else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;") {
-        if (predeterminingNode != null) {
-            if (isNotEqualResultNode(node, predeterminingNode)) {
-                //TODO: возможно тут лучше вызывать функцию создания узла результата
-                resultNode = doc.createElement("BranchResultNode");
-                resultNode.setAttribute("value", "false");
-            } else {
-                //TODO: возможно тут лучше вызывать функцию создания узла результата
-                resultNode = doc.createElement("BranchResultNode");
-                resultNode.setAttribute("value", "true");
-            }
-        } else {
-            resultNode = branchResultNodeToXml(doc, node, false);
-        }
+        resultNode = branchResultNodeToXml(doc, node, false);
     }
     //Узел вопрос
     else if (node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
-        resultNode = questionNodeToXml(doc, node, false, editorUi, predeterminingNode);
+        resultNode = questionNodeToXml(doc, node, false, editorUi);
     }
     //Узел свитч кейс
     else if (node.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
-        resultNode = questionNodeToXml(doc, node, true, editorUi, predeterminingNode);
+        resultNode = questionNodeToXml(doc, node, true, editorUi);
     }
     //Узел действия
     else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
-        resultNode = actionNodeToXml(doc, node, editorUi, predeterminingNode);
+        resultNode = actionNodeToXml(doc, node, editorUi);
     }
     //Узел логическая агрегация
     else if (typeof node.value == "object"
-        && (node.value.getAttribute("type") == "AND" || node.value.getAttribute("type") == "OR")) {
-        resultNode = logicNodeToXml(doc, node, editorUi, predeterminingNode);
+        && (node.value.getAttribute("type") == "AND" || node.value.getAttribute("type") == "OR" || node.value.getAttribute("type") == "HYP")) {
+        resultNode = logicNodeToXml(doc, node, editorUi);
     }
     //Узел предрешающий фактор
     else if (typeof node.value == "object" && node.value.getAttribute("type") == "predetermining") {
@@ -12786,24 +12794,20 @@ function switchCaseNodes(doc, node, editorUi, predeterminingNode) {
     }
     //Узел "пока"
     else if (typeof node.value == "object"
-        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR" || node.value.getAttribute("type") == "HYP")
         && node.value.getAttribute("typeCycle") == "while") {
-        resultNode = whileNodeToXml(doc, node, editorUi, predeterminingNode);
+        resultNode = whileNodeToXml(doc, node, editorUi);
     }
     //Узел цикла
     else if (typeof node.value == "object"
-        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR" || node.value.getAttribute("type") == "HYP")
         && node.value.getAttribute("typeCycle") == null) {
-        resultNode = cycleNodeToXml(doc, node, editorUi, predeterminingNode);
+        resultNode = cycleNodeToXml(doc, node, editorUi);
     }
-    //Узел неопределенность предрешающего фактора
+    //Узел Null
     else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
-        if (predeterminingNode != null) {
-            resultNode = doc.createElement("BranchResultNode");
-            resultNode.setAttribute("value", "false");
-        } else {
-            resultNode = doc.createElement("UndeterminedNode");
-        }
+        resultNode = doc.createElement("BranchResultNode");
+        resultNode.setAttribute("value", "null");
     }
     return resultNode;
 }
@@ -12814,7 +12818,11 @@ function branchResultNodeToXml(doc, node, resultBranch) {
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    resultNode.setAttribute("value", resultBranch)
+    if (resultBranch) {
+        resultNode.setAttribute("value", "correct")
+    } else {
+        resultNode.setAttribute("value", "error")
+    }
 
     if (node.value.getAttribute("expression") != "") {
         let expressionNode = doc.createElement("Expression");
@@ -12828,7 +12836,7 @@ function branchResultNodeToXml(doc, node, resultBranch) {
     return resultNode;
 }
 
-function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining) {
+function questionNodeToXml(doc, node, isSwitch, editorUi) {
     let resultNode = doc.createElement("QuestionNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"))
@@ -12850,12 +12858,12 @@ function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining) {
     resultNode.appendChild(expressionNode);
 
     //Следующие ветки
-    resultNode = outcomeToXml(doc, resultNode, node, editorUi, isPredetermining);
+    resultNode = outcomeToXml(doc, resultNode, node, editorUi);
 
     return resultNode;
 }
 
-function actionNodeToXml(doc, node, editorUi, isPredetermining) {
+function actionNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("FindActionNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
@@ -12878,13 +12886,13 @@ function actionNodeToXml(doc, node, editorUi, isPredetermining) {
     resultNode.appendChild(decisionTreeVarDeclNode);
 
     //Следующие ветки
-    resultNode = outcomeToXml(doc, resultNode, node, editorUi, isPredetermining);
+    resultNode = outcomeToXml(doc, resultNode, node, editorUi);
 
     return resultNode;
 }
 
-function whileNodeToXml(doc, node, editorUi, isPredetermining) {
-    let resultNode = doc.createElement("WhileAggregationNode");
+function whileNodeToXml(doc, node, editorUi) {
+    let resultNode = doc.createElement("WhileCycleNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -12915,24 +12923,25 @@ function whileNodeToXml(doc, node, editorUi, isPredetermining) {
                 valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
-                    || (valueEdge.getAttribute("type") != "True"
-                        && valueEdge.getAttribute("type") != "False"
+                    || (valueEdge.getAttribute("type") != "Correct"
+                        && valueEdge.getAttribute("type") != "Error"
+                        && valueEdge.getAttribute("type") != "Null"
                         && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("typeOutcomeCycleIsMissing")
                         + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
-                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
-                    if (valueEdge.getAttribute("type") == "True") {
-                        trueCount++;
-                    } else {
-                        falseCount++;
-                    }
+                if (valueEdge.getAttribute("type") == "Correct" || valueEdge.getAttribute("type") == "Error" || valueEdge.getAttribute("type") == "Null") {
+                    // if (valueEdge.getAttribute("type") == "Correct") {
+                    //     trueCount++;
+                    // } else {
+                    //     falseCount++;
+                    // }
 
                     let outcomeNode = doc.createElement("Outcome");
                     outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
                     outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
-                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(outcomeNode);
 
                 } else if (valueEdge.getAttribute("type") == "Body") {
@@ -12941,7 +12950,7 @@ function whileNodeToXml(doc, node, editorUi, isPredetermining) {
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
-                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(thoughtBranchNode);
 
                     bodyCount++;
@@ -12967,7 +12976,7 @@ function whileNodeToXml(doc, node, editorUi, isPredetermining) {
     return resultNode;
 }
 
-function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
+function cycleNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("CycleAggregationNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
@@ -12999,24 +13008,25 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
                 valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
-                    || (valueEdge.getAttribute("type") != "True"
-                        && valueEdge.getAttribute("type") != "False"
+                    || (valueEdge.getAttribute("type") != "Correct"
+                        && valueEdge.getAttribute("type") != "Error"
+                        && valueEdge.getAttribute("type") != "Null"
                         && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("typeOutcomeCycleIsMissing")
                         + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
-                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
-                    if (valueEdge.getAttribute("type") == "True") {
-                        trueCount++;
-                    } else {
-                        falseCount++;
-                    }
+                if (valueEdge.getAttribute("type") == "Correct" || valueEdge.getAttribute("type") == "Error" || valueEdge.getAttribute("type") == "Null") {
+                    // if (valueEdge.getAttribute("type") == "Correct") {
+                    //     trueCount++;
+                    // } else {
+                    //     falseCount++;
+                    // }
 
                     let outcomeNode = doc.createElement("Outcome");
                     outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
                     outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
-                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(outcomeNode);
 
                 } else if (valueEdge.getAttribute("type") == "Body") {
@@ -13025,7 +13035,7 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
-                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(thoughtBranchNode);
 
                     bodyCount++;
@@ -13051,8 +13061,8 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
     return resultNode;
 }
 
-function logicNodeToXml(doc, node, editorUi, isPredetermining) {
-    let resultNode = doc.createElement("LogicAggregationNode");
+function logicNodeToXml(doc, node, editorUi) {
+    let resultNode = doc.createElement("BranchAggregationNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -13068,30 +13078,31 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining) {
                 valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
-                    || (valueEdge.getAttribute("type") != "True"
-                        && valueEdge.getAttribute("type") != "False"
+                    || (valueEdge.getAttribute("type") != "Correct"
+                        && valueEdge.getAttribute("type") != "Error"
+                        && valueEdge.getAttribute("type") != "Null"
                         && valueEdge.getAttribute("type") != "Branch")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing")
                         + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
-                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
-                    if (valueEdge.getAttribute("type") == "True") {
-                        trueCount++;
-                    } else {
-                        falseCount++;
-                    }
+                if (valueEdge.getAttribute("type") == "Correct" || valueEdge.getAttribute("type") == "Error" || valueEdge.getAttribute("type") == "Null") {
+                    // if (valueEdge.getAttribute("type") == "Correct") {
+                    //     trueCount++;
+                    // } else {
+                    //     falseCount++;
+                    // }
                     let outcomeNode = doc.createElement("Outcome");
                     outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
                     outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
-                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(outcomeNode);
 
                 } else if (valueEdge.getAttribute("type") == "Branch") {
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
-                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(thoughtBranchNode);
                     branchCount++;
                 }
@@ -13116,80 +13127,122 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining) {
 }
 
 function predeterminingNodeToXml(doc, node, editorUi) {
-    let resultNode = doc.createElement("PredeterminingFactorsNode");
+    let resultNode = doc.createElement("BranchAggregationNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
+    resultNode.setAttribute("operator", "MUTEX");
     resultNode = getQuestionInfoNode(resultNode, node, false);
 
     //Следующие ветки
     let predCount = 0;
     let undertermCount = 0;
+    let branchCount = 0;
+    let trueCount = 0;
+    let falseCount = 0;
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
-            valueEdge = node.edges[i].value;
-            if (node.edges[i].target != node && (valueEdge == null || typeof valueEdge != "object"
-                || !valueEdge.getAttribute("type")
-                || (valueEdge.getAttribute("type") != "predeterminingBranch"
-                    && valueEdge.getAttribute("type") != "undetermined"))) {
-                markOutcome(editorUi.editor.graph, node.edges[i])
-                throw new Error(getTextByLocale("typeOutcomePredIsMissing")
-                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
-            }
-
-            if (node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
-                let resultNodes = checkCorrectPredeterminingBranch(node.edges[i].target);
-                for (let j = 0; j < resultNodes.length; j++) {
-                    let resultBranchNode = resultNodes[j];
-                    predCount++;
+            if (node.edges[i].target != node) {
+                valueEdge = node.edges[i].value;
+                if (valueEdge == null || typeof valueEdge != "object"
+                    || !valueEdge.getAttribute("type")
+                    || (valueEdge.getAttribute("type") != "Correct"
+                        && valueEdge.getAttribute("type") != "Error"
+                        && valueEdge.getAttribute("type") != "Null"
+                        && valueEdge.getAttribute("type") != "Branch")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing")
+                        + "\nУзел с текстом: " + node.value.getAttribute("label"));
+                }
+                if (valueEdge.getAttribute("type") == "Correct" || valueEdge.getAttribute("type") == "Error" || valueEdge.getAttribute("type") == "Null") {
+                    // if (valueEdge.getAttribute("type") == "Correct") {
+                    //     trueCount++;
+                    // } else {
+                    //     falseCount++;
+                    // }
                     let outcomeNode = doc.createElement("Outcome");
-                    outcomeNode.setAttribute("value", specialChars(node.edges[i].value.getAttribute("label")));
+                    outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
+                    outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
+                    resultNode.appendChild(outcomeNode);
+
+                } else if (valueEdge.getAttribute("type") == "Branch") {
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
                     thoughtBranchNode.setAttribute("type", "bool");
-
-                    let questionInfo = getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, node.edges[i]);
-                    outcomeNode = questionInfo[0];
-                    thoughtBranchNode = questionInfo[1];
-
-                    outcomeNode.appendChild(switchCaseNodes(doc, resultBranchNode, editorUi, null));
-
-
-                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, resultBranchNode));
-
-                    outcomeNode.appendChild(thoughtBranchNode);
-
-                    resultNode.appendChild(outcomeNode);
+                    thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
+                    resultNode.appendChild(thoughtBranchNode);
+                    branchCount++;
                 }
             }
         }
     }
 
-    if (node.edges) {
-        for (let i = 0; i < node.edges.length; i++) {
-            if (node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
-                undertermCount++;
-                let outcomeNode = doc.createElement("Outcome");
-                outcomeNode.setAttribute("value", "undetermined");
-                outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, null));
-                resultNode.appendChild(outcomeNode);
-            }
-        }
-    }
+    // if (node.edges) {
+    //     for (let i = 0; i < node.edges.length; i++) {
+    //         valueEdge = node.edges[i].value;
+    //         if (node.edges[i].target != node && (valueEdge == null || typeof valueEdge != "object"
+    //             || !valueEdge.getAttribute("type")
+    //             || (valueEdge.getAttribute("type") != "predeterminingBranch"
+    //                 && valueEdge.getAttribute("type") != "undetermined"))) {
+    //             markOutcome(editorUi.editor.graph, node.edges[i])
+    //             throw new Error(getTextByLocale("typeOutcomePredIsMissing")
+    //                 + "\nУзел с текстом: " + node.value.getAttribute("label"));
+    //         }
+
+    //         if (node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
+    //             let resultNodes = checkCorrectPredeterminingBranch(node.edges[i].target);
+    //             for (let j = 0; j < resultNodes.length; j++) {
+    //                 let resultBranchNode = resultNodes[j];
+    //                 predCount++;
+    //                 let outcomeNode = doc.createElement("Outcome");
+    //                 outcomeNode.setAttribute("value", specialChars(node.edges[i].value.getAttribute("label")));
+    //                 let thoughtBranchNode = doc.createElement("ThoughtBranch");
+    //                 thoughtBranchNode.setAttribute("type", "bool");
+
+    //                 let questionInfo = getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, node.edges[i]);
+    //                 outcomeNode = questionInfo[0];
+    //                 thoughtBranchNode = questionInfo[1];
+
+    //                 outcomeNode.appendChild(switchCaseNodes(doc, resultBranchNode, editorUi, null));
+
+
+    //                 thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, resultBranchNode));
+
+    //                 outcomeNode.appendChild(thoughtBranchNode);
+
+    //                 resultNode.appendChild(outcomeNode);
+    //             }
+    //         }
+    //     }
+    // }
+
+    // if (node.edges) {
+    //     for (let i = 0; i < node.edges.length; i++) {
+    //         if (node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
+    //             undertermCount++;
+    //             let outcomeNode = doc.createElement("Outcome");
+    //             outcomeNode.setAttribute("value", "undetermined");
+    //             outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, null));
+    //             resultNode.appendChild(outcomeNode);
+    //         }
+    //     }
+    // }
     let errorPred = "";
-    if (predCount == 0) {
-        errorPred += getTextByLocale("predOutcomeIsMissing");
-    }
-    if (undertermCount != 1) {
-        errorPred += getTextByLocale("undeterminedOnlyOne");
-    }
-    if (errorPred) {
-        throw new Error(errorPred + "\nУзел с текстом: " + node.value.getAttribute("label"));
-    }
+    // if (predCount == 0) {
+    //     errorPred += getTextByLocale("predOutcomeIsMissing");
+    // }
+    // if (undertermCount != 1) {
+    //     errorPred += getTextByLocale("undeterminedOnlyOne");
+    // }
+    // if (errorPred) {
+    //     throw new Error(errorPred + "\nУзел с текстом: " + node.value.getAttribute("label"));
+    // }
 
     return resultNode;
 }
 
-function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining) {
+function outcomeToXml(doc, parentNode, node, editorUi) {
     let prevValues = new Set();
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
@@ -13247,7 +13300,7 @@ function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining) {
                 resultNode = getQuestionInfoOutcome(resultNode, node.edges[i]);
 
                 resultNode.setAttribute("value", specialChars(valueEdge.getAttribute("value")));
-                resultNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                resultNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                 parentNode.appendChild(resultNode);
             }
         }

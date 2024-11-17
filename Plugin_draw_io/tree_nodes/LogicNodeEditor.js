@@ -33,12 +33,27 @@ var LogicNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         theGraph.refresh(); // update the graph
         win.destroy();
     });
+
+    var btnCreateHYPNode = mxUtils.button('HYP', function () {
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("label", "HYP");
+        cell.value.setAttribute("type", "HYP");
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
     btnCreateANDNode = styleBtn(btnCreateANDNode);
-    btnCreateANDNode.style.minWidth = "50%";
+    btnCreateANDNode.style.minWidth = "32%";
     btnCreateORNode = styleBtn(btnCreateORNode);
-    btnCreateORNode.style.minWidth = "50%";
+    btnCreateORNode.style.minWidth = "32%";
+    btnCreateHYPNode = styleBtn(btnCreateHYPNode);
+    btnCreateHYPNode.style.minWidth = "32%";
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
+    div.appendChild(btnCreateHYPNode);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleLogicNodeEditorWindow"), div, x, y, w, h, true, true);
