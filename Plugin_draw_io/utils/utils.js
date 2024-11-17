@@ -22,6 +22,10 @@ function getType(root) {
         return getType(root.firstExpr);
     } else if (root.secondExpr && root.firstExpr) {
         return SemanticType.ASSIGN;
+    } else if (root.type && root.type == ExprType.IF) {
+        return SemanticType.ASSIGN;
+    } else if (root.type && root.type == ExprType.WITH) {
+        return SemanticType.ASSIGN;
     } else if (root.type && root.type == ExprType.STRING) {
         return SemanticType.STRING;
     } else if (root.type && root.type == ExprType.INT) {

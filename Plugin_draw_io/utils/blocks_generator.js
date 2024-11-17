@@ -64,6 +64,21 @@ Blockly.JavaScript['get_property_value'] = function (block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['if_then_stmt'] = function (block) {
+  var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
+  var value_body = Blockly.JavaScript.valueToCode(block, 'body', Blockly.JavaScript.ORDER_NONE);
+  var code = "if ( " + value_condition + " ) " + value_body;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['with_stmt'] = function (block) {
+  var text_name_var = block.getFieldValue('name_var');
+  var value_expression = Blockly.JavaScript.valueToCode(block, 'expression', Blockly.JavaScript.ORDER_NONE);
+  var value_body = Blockly.JavaScript.valueToCode(block, 'body', Blockly.JavaScript.ORDER_NONE);
+  var code = "with ( " + text_name_var + " = " + value_expression + " ) " + value_body;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.JavaScript['get_relationship_object'] = function (block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
   var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
@@ -83,9 +98,10 @@ Blockly.JavaScript['get_extr_object'] = function (block) {
 
   var text_name_var1 = block.getFieldValue('name_var1');
   var value_extreme_condition = Blockly.JavaScript.valueToCode(block, 'extreme_condition', Blockly.JavaScript.ORDER_NONE);
+  var text_type_var2 = block.getFieldValue('type_var2');
   var text_name_var2 = block.getFieldValue('name_var2');
   var value_general_condition = Blockly.JavaScript.valueToCode(block, 'general_condition', Blockly.JavaScript.ORDER_NONE);
-  var code = "findExtreme " + text_name_var1 + " [ " + value_extreme_condition + " ] " + " where " + text_name_var2 + " { " + value_general_condition + " } ";
+  var code = "findExtreme " + text_name_var1 + " [ " + value_extreme_condition + " ] among " + text_type_var2 + " " + text_name_var2 + " { " + value_general_condition + " } ";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -104,10 +120,27 @@ Blockly.JavaScript['assign_value_to_variable_decision_tree'] = function (block) 
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['add_relationship_to_object'] = function (block) {
+  var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
+  var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
+
+  var code = value_object + " +=> " + value_relationship + " (";
+  let values = [];
+  for (var i = 0; i < block.itemCount_; i++) {
+    let valueCode = Blockly.JavaScript.valueToCode(block, 'object' + i, Blockly.JavaScript.ORDER_NONE);
+    if (valueCode) {
+      values.push(valueCode);
+    }
+  }
+  let valueString = values.join(", ");
+  code += valueString + ")";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.JavaScript['cast_object_to_class'] = function (block) {
   var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_INSTANCEOF);
   var value_class = Blockly.JavaScript.valueToCode(block, 'class', Blockly.JavaScript.ORDER_INSTANCEOF);
-  var code = "(" + value_class + ") " + value_object;
+  var code = value_object + " as " + value_class;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -174,18 +207,18 @@ Blockly.JavaScript['three_digit_comparison'] = function (block) {
 Blockly.JavaScript['quantifier_of_existence'] = function (block) {
   var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
   var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
-  var dropdown_type = block.getFieldValue('type');
+  var text_type_var = block.getFieldValue('type_var');
   var text_name_var = block.getFieldValue('name_var');
-  // TODO: Как тут указать тип переменной??
-  var code = "exist " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " }";
+  var code = "exist " + text_type_var + " " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " }";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['quantifier_of_generality'] = function (block) {
   var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
   var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
+  var text_type_var = block.getFieldValue('type_var');
   var text_name_var = block.getFieldValue('name_var');
-  var code = "forall " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " } ";
+  var code = "forall " + text_type_var + " " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " } ";
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

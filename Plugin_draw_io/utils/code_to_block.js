@@ -60,6 +60,34 @@ function stmtNodeToBlock(stmtNode, workspace) {
         assignment.getInput("new_value").connection.connect(valueBlock.outputConnection);
 
         return assignment;
+    } else if (stmtNode.type == StmtType.ADD_RELATION) {
+        var resBlock = new Blockly.BlockSvg(workspace, "add_relationship_to_object");
+        resBlock.initSvg();
+        resBlock.itemCount_ = 0;
+        resBlock.render();
+
+        relBlock = new Blockly.BlockSvg(workspace, "relationship");
+        relBlock.initSvg();
+        relBlock.render();
+        relBlock.inputList[0].fieldRow[0].setValue(stmtNode.ident);
+        checkTypeBlocks(resBlock, relBlock, "relationship");
+        resBlock.getInput("relationship").connection.connect(relBlock.outputConnection);
+
+        objBlock = printExprNode(stmtNode.firstExpr, workspace);
+        checkTypeBlocks(resBlock, objBlock, "object");
+        resBlock.getInput("object").connection.connect(objBlock.outputConnection);
+
+        var current = stmtNode.secondExpr.objectSeq.first;
+        while (current != null) {
+            resBlock.itemCount_++;
+            resBlock.updateShape_();
+            objOpBlock = printExprNode(current, workspace);
+            checkTypeBlocks(resBlock, objOpBlock, "object" + (resBlock.itemCount_ - 1));
+            resBlock.getInput("object" + (resBlock.itemCount_ - 1)).connection.connect(objOpBlock.outputConnection);
+            current = current.next;
+        }
+
+        return resBlock
     } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY
         && stmtNode.firstExpr.type != ExprType.TREE_VAR) {
         throw new Error(getTextByLocale("invalidAssign"));
@@ -369,7 +397,8 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[1].fieldRow[0].setValue(exprNode.extremeIdent);
-            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.typeIdent);
+            resBlock.inputList[4].fieldRow[0].setValue(exprNode.ident);
 
             extrCondBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, extrCondBlock, "extreme_condition");
@@ -384,7 +413,8 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "quantifier_of_existence");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.typeIdent);
+            resBlock.inputList[4].fieldRow[0].setValue(exprNode.ident);
 
             defBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, defBlock, "definition_area");
@@ -399,7 +429,8 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "quantifier_of_generality");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.typeIdent);
+            resBlock.inputList[4].fieldRow[0].setValue(exprNode.ident);
 
             defBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, defBlock, "definition_area");
@@ -430,6 +461,35 @@ function printExprNode(exprNode, workspace) {
             }
             checkTypeBlocks(resBlock, classBlock, "class");
             resBlock.getInput("class").connection.connect(classBlock.outputConnection);
+            return resBlock
+        case ExprType.IF:
+            var resBlock = new Blockly.BlockSvg(workspace, "if_then_stmt");
+            resBlock.initSvg();
+            resBlock.render();
+
+            condBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, condBlock, "condition");
+            resBlock.getInput("condition").connection.connect(condBlock.outputConnection);
+
+            bodyBlock = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, bodyBlock, "body");
+            resBlock.getInput("body").connection.connect(bodyBlock.outputConnection);
+
+            return resBlock
+        case ExprType.WITH:
+            var resBlock = new Blockly.BlockSvg(workspace, "with_stmt");
+            resBlock.initSvg();
+            resBlock.render();
+            resBlock.inputList[1].fieldRow[0].setValue(exprNode.ident);
+
+            expressionBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, expressionBlock, "expression");
+            resBlock.getInput("expression").connection.connect(expressionBlock.outputConnection);
+
+            bodyBlock = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, bodyBlock, "body");
+            resBlock.getInput("body").connection.connect(bodyBlock.outputConnection);
+
             return resBlock
     }
 }

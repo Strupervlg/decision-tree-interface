@@ -97,6 +97,10 @@ var toolbox = {
                     "kind": "block",
                     "type": "cast_object_to_class"
                 },
+                {
+                    "kind": "block",
+                    "type": "add_relationship_to_object"
+                },
             ]
         },
         {
@@ -165,6 +169,14 @@ var toolbox = {
                 {
                     "kind": "block",
                     "type": "block"
+                },
+                {
+                    "kind": "block",
+                    "type": "if_then_stmt"
+                },
+                {
+                    "kind": "block",
+                    "type": "with_stmt"
                 },
             ]
         },
