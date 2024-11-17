@@ -22,9 +22,9 @@ const RU_TEXT = {
     "startNodeConstructor": "Создать начальный узел",
     "TrueNodeCreate": 'Создать узел "Истина"',
     "FalseNodeCreate": 'Создать узел "Ложь"',
-    "LogicNodeCreate": "Создать логический узел",
-    "PredeterminingFactorsNodeCreate": 'Создать узел "Независимое ветвление"',
-    "UncertaintyNodeCreate": 'Создать узел "Неопределенность"',
+    "LogicNodeCreate": "Создать агрегационный узел",
+    "PredeterminingFactorsNodeCreate": 'Создать узел "Mutex"',
+    "UncertaintyNodeCreate": 'Создать узел "Null"',
     "actionNodeConstructor": "Создать узел действия",
     "cycleNodeConstructor": 'Создать узел "Цикл"',
     "whileNodeConstructor": 'Создать узел "While"',
@@ -41,9 +41,9 @@ const RU_TEXT = {
     "convertStartNode": "Конвертировать в стартовый узел",
     "convertTrueNode": "Конвертировать в узел Истина",
     "convertFalseNode": "Конвертировать в узел Ложь",
-    "convertLogicNode": "Конвертировать в логический узел",
-    "convertPredeterminingFactorsNode": 'Конвертировать в узел "Независимое ветвление"',
-    "convertUncertaintyNode": 'Конвертировать в узел "Неопределенность"',
+    "convertLogicNode": "Конвертировать в агрегационный узел",
+    "convertPredeterminingFactorsNode": 'Конвертировать в узел "Mutex"',
+    "convertUncertaintyNode": 'Конвертировать в узел "Null"',
     "convertActionNode": "Конвертировать в узел действия",
     "convertCycleNode": 'Конвертировать в узел "Цикл"',
     "convertConditionNode": "Конвертировать в вопросительный узел",
@@ -72,10 +72,10 @@ const RU_TEXT = {
     "TitleWhileNodeEditorWindow": 'Редактор узла "Пока"',
     "TitleEditTextInNodeWindow": "Редактор текста в узле",
     "TitleEditValueInOutcomeWindow": "Редактор значений в ветке",
-    "TitleLogicNodeConstructorWindow": "Конструктор логическего узла",
-    "TitleLogicNodeEditorWindow": "Редактор логическего узла",
-    "TitlePredeterminingFactorsNodeConstructorWindow": 'Конструктор узла "Независимое ветвление"',
-    "TitlePredeterminingFactorsNodeEditorWindow": 'Редактор узла "Независимое ветвление"',
+    "TitleLogicNodeConstructorWindow": "Конструктор агрегационного узла",
+    "TitleLogicNodeEditorWindow": "Редактор агрегационного узла",
+    "TitlePredeterminingFactorsNodeConstructorWindow": 'Конструктор узла "Mutex"',
+    "TitlePredeterminingFactorsNodeEditorWindow": 'Редактор узла "Mutex"',
     "TitleEditQuestionInfoInNodeWindow": "Редактор информации для вопросов в узле",
     "TitleEditQuestionInfoInOutcomeWindow": "Редактор информации для вопросов в ветке",
     "TitleStartConstructorWindow": "Конструктор начального узла",
@@ -156,10 +156,10 @@ const RU_TEXT = {
     "bodyOnlyOne": "Ветка тела для узла цикла должна быть одна!\n",
     "trueCycleOnlyOne": "Истинная ветка для узла цикла должна быть одна!\n",
     "falseCycleOnlyOne": "Ложная ветка для узла цикла должна быть одна!\n",
-    "typeOutcomeLogicNodeIsMissing": 'Отсутствует тип у ветки после логического узла',
-    "OutcomeLogicNodeOnlyTwo": "Веток для логического узла должно быть 2 и более!\n",
-    "trueLogicNodeOnlyOne": "Истинная ветка для логического узла должна быть одна!\n",
-    "falseLogicNodeOnlyOne": "Ложная ветка для логического узла должна быть одна!\n",
+    "typeOutcomeLogicNodeIsMissing": 'Отсутствует тип у ветки после агрегационного узла',
+    "OutcomeLogicNodeOnlyTwo": "Веток для агрегационного узла должно быть 2 и более!\n",
+    "trueLogicNodeOnlyOne": "Истинная ветка для агрегационного узла должна быть одна!\n",
+    "falseLogicNodeOnlyOne": "Ложная ветка для агрегационного узла должна быть одна!\n",
     "typeOutcomePredIsMissing": 'Отсутствует тип у ветки после независимого ветвления',
     "predOutcomeIsMissing": "Отсутствует предрешающая ветка для узла независимое ветвление!\n",
     "undeterminedOnlyOne": "Ветка undetermined для узла независимое ветвление должна быть одна!\n",
@@ -194,9 +194,9 @@ const EN_TEXT = {
     "startNodeConstructor": "Create start node",
     "TrueNodeCreate": "Create true node",
     "FalseNodeCreate": "Create false node",
-    "LogicNodeCreate": "Create logic node",
-    "PredeterminingFactorsNodeCreate": "Create predetermining factors node",
-    "UncertaintyNodeCreate": "Create node uncertainty",
+    "LogicNodeCreate": "Create agregation node",
+    "PredeterminingFactorsNodeCreate": "Create Mutex node",
+    "UncertaintyNodeCreate": "Create node Null",
     "actionNodeConstructor": "Action Node Constructor",
     "cycleNodeConstructor": "Cycle Node Constructor",
     "whileNodeConstructor": "While Node Constructor",
@@ -213,9 +213,9 @@ const EN_TEXT = {
     "convertStartNode": "Convert to a Start node",
     "convertTrueNode": "Convert to True Node",
     "convertFalseNode": "Convert to Node False",
-    "convertLogicNode": "Convert to a logical node",
-    "convertPredeterminingFactorsNode": 'Convert to an "Independent Branching" node',
-    "convertUncertaintyNode": 'Convert to node "Uncertainty"',
+    "convertLogicNode": "Convert to a agregation node",
+    "convertPredeterminingFactorsNode": 'Convert to an Mutex node',
+    "convertUncertaintyNode": 'Convert to node "Null"',
     "convertActionNode": "Convert to Action Node",
     "convertCycleNode": 'Convert to a "Cycle" node',
     "convertConditionNode": "Convert node in condition node",
@@ -244,10 +244,10 @@ const EN_TEXT = {
     "TitleWhileNodeEditorWindow": "While node editor",
     "TitleEditTextInNodeWindow": "Edit text in node",
     "TitleEditValueInOutcomeWindow": "Edit value in outcome",
-    "TitleLogicNodeConstructorWindow": "Logic node constructor",
-    "TitleLogicNodeEditorWindow": "Logic node editor",
-    "TitlePredeterminingFactorsNodeConstructorWindow": "Predetermining factors node constructor",
-    "TitlePredeterminingFactorsNodeEditorWindow": "Predetermining factors node editor",
+    "TitleLogicNodeConstructorWindow": "Agregation node constructor",
+    "TitleLogicNodeEditorWindow": "Agregation node editor",
+    "TitlePredeterminingFactorsNodeConstructorWindow": "Mutex node constructor",
+    "TitlePredeterminingFactorsNodeEditorWindow": "Mutex node editor",
     "TitleEditQuestionInfoInNodeWindow": "Edit question info in node",
     "TitleEditQuestionInfoInOutcomeWindow": "Edit question info in outcome",
     "TitleStartConstructorWindow": "Start node constructor",
@@ -328,10 +328,10 @@ const EN_TEXT = {
     "bodyOnlyOne": "The true branch for a cycle node must be one!\n",
     "trueCycleOnlyOne": "There must be only one true branch for the cycle node!\n",
     "falseCycleOnlyOne": "There must be only one false branch for the cycle node!\n",
-    "typeOutcomeLogicNodeIsMissing": 'The branch after the logical node has no type',
-    "OutcomeLogicNodeOnlyTwo": "There must be 2 or more branches for the logical node!\n",
-    "trueLogicNodeOnlyOne": "The true branch for a logical node must be one!\n",
-    "falseLogicNodeOnlyOne": "The false branch for a logical node must be one!\n",
+    "typeOutcomeLogicNodeIsMissing": 'The branch after the agregation node has no type',
+    "OutcomeLogicNodeOnlyTwo": "There must be 2 or more branches for the agregation node!\n",
+    "trueLogicNodeOnlyOne": "The true branch for a agregation node must be one!\n",
+    "falseLogicNodeOnlyOne": "The false branch for a agregation node must be one!\n",
     "typeOutcomePredIsMissing": 'No branch type after an independent branch',
     "predOutcomeIsMissing": "There is no predetermined branch for the independent branch node!\n",
     "undeterminedOnlyOne": "The undetermined branch for an independent branch node must be one!\n",
@@ -1957,6 +1957,34 @@ function stmtNodeToBlock(stmtNode, workspace) {
         assignment.getInput("new_value").connection.connect(valueBlock.outputConnection);
 
         return assignment;
+    } else if (stmtNode.type == StmtType.ADD_RELATION) {
+        var resBlock = new Blockly.BlockSvg(workspace, "add_relationship_to_object");
+        resBlock.initSvg();
+        resBlock.itemCount_ = 0;
+        resBlock.render();
+
+        relBlock = new Blockly.BlockSvg(workspace, "relationship");
+        relBlock.initSvg();
+        relBlock.render();
+        relBlock.inputList[0].fieldRow[0].setValue(stmtNode.ident);
+        checkTypeBlocks(resBlock, relBlock, "relationship");
+        resBlock.getInput("relationship").connection.connect(relBlock.outputConnection);
+
+        objBlock = printExprNode(stmtNode.firstExpr, workspace);
+        checkTypeBlocks(resBlock, objBlock, "object");
+        resBlock.getInput("object").connection.connect(objBlock.outputConnection);
+
+        var current = stmtNode.secondExpr.objectSeq.first;
+        while (current != null) {
+            resBlock.itemCount_++;
+            resBlock.updateShape_();
+            objOpBlock = printExprNode(current, workspace);
+            checkTypeBlocks(resBlock, objOpBlock, "object" + (resBlock.itemCount_ - 1));
+            resBlock.getInput("object" + (resBlock.itemCount_ - 1)).connection.connect(objOpBlock.outputConnection);
+            current = current.next;
+        }
+
+        return resBlock
     } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY
         && stmtNode.firstExpr.type != ExprType.TREE_VAR) {
         throw new Error(getTextByLocale("invalidAssign"));
@@ -2266,7 +2294,8 @@ function printExprNode(exprNode, workspace) {
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[1].fieldRow[0].setValue(exprNode.extremeIdent);
-            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.typeIdent);
+            resBlock.inputList[4].fieldRow[0].setValue(exprNode.ident);
 
             extrCondBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, extrCondBlock, "extreme_condition");
@@ -2281,7 +2310,8 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "quantifier_of_existence");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.typeIdent);
+            resBlock.inputList[4].fieldRow[0].setValue(exprNode.ident);
 
             defBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, defBlock, "definition_area");
@@ -2296,7 +2326,8 @@ function printExprNode(exprNode, workspace) {
             var resBlock = new Blockly.BlockSvg(workspace, "quantifier_of_generality");
             resBlock.initSvg();
             resBlock.render();
-            resBlock.inputList[3].fieldRow[0].setValue(exprNode.ident);
+            resBlock.inputList[3].fieldRow[0].setValue(exprNode.typeIdent);
+            resBlock.inputList[4].fieldRow[0].setValue(exprNode.ident);
 
             defBlock = printExprNode(exprNode.firstOperand, workspace);
             checkTypeBlocks(resBlock, defBlock, "definition_area");
@@ -2328,6 +2359,35 @@ function printExprNode(exprNode, workspace) {
             checkTypeBlocks(resBlock, classBlock, "class");
             resBlock.getInput("class").connection.connect(classBlock.outputConnection);
             return resBlock
+        case ExprType.IF:
+            var resBlock = new Blockly.BlockSvg(workspace, "if_then_stmt");
+            resBlock.initSvg();
+            resBlock.render();
+
+            condBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, condBlock, "condition");
+            resBlock.getInput("condition").connection.connect(condBlock.outputConnection);
+
+            bodyBlock = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, bodyBlock, "body");
+            resBlock.getInput("body").connection.connect(bodyBlock.outputConnection);
+
+            return resBlock
+        case ExprType.WITH:
+            var resBlock = new Blockly.BlockSvg(workspace, "with_stmt");
+            resBlock.initSvg();
+            resBlock.render();
+            resBlock.inputList[1].fieldRow[0].setValue(exprNode.ident);
+
+            expressionBlock = printExprNode(exprNode.firstOperand, workspace);
+            checkTypeBlocks(resBlock, expressionBlock, "expression");
+            resBlock.getInput("expression").connection.connect(expressionBlock.outputConnection);
+
+            bodyBlock = printExprNode(exprNode.secondOperand, workspace);
+            checkTypeBlocks(resBlock, bodyBlock, "body");
+            resBlock.getInput("body").connection.connect(bodyBlock.outputConnection);
+
+            return resBlock
     }
 }
 
@@ -2358,9 +2418,16 @@ function BlockNode(statementSeq) {
     this.id = LASTID++;
 }
 
-function StatementNode(firstExpression, secondExpression) {
+const StmtType = {
+    EXPR: 'expr',
+    ASSIGNMENT: 'assignment',
+    ADD_RELATION: 'add_relation',
+}
+
+function StatementNode(type, firstExpression, secondExpression) {
     this.firstExpr = firstExpression;
     this.secondExpr = secondExpression;
+    this.type = type;
     this.next = null;
     this.id = LASTID++;
 }
@@ -2368,6 +2435,14 @@ function StatementNode(firstExpression, secondExpression) {
 function StatementSeq(first, last) {
     this.first = first;
     this.last = last;
+}
+
+function createAddRelationshipStmtNode(first, relationship, objectSeq) {
+    second = new ExpressionNode();
+    second.type = ExprType.ID;
+    second.ident = relationship;
+    second.objectSeq = objectSeq;
+    return new StatementNode(StmtType.ADD_RELATION, first, second);
 }
 
 function createStmtSeqNode(stmt) {
@@ -2409,6 +2484,8 @@ const ExprType = {
     EXIST: 'exist',
     FORALL: 'forall',
     CAST: 'cast',
+    IF: 'if',
+    WITH: 'with',
 };
 
 function ExpressionNode() {
@@ -2519,19 +2596,38 @@ function createGetExprNode(typeNode, type, id, expression) {
     return newNode;
 }
 
-function createFindExtremeExprNode(extremeVarName, extremeCondition, varName, condition) {
+function createFindExtremeExprNode(extremeVarName, extremeCondition, typeVar, varName, condition) {
     newNode = new ExpressionNode();
     newNode.type = ExprType.FIND_EXTREM;
     newNode.extremeIdent = extremeVarName;
     newNode.firstOperand = extremeCondition;
+    newNode.typeIdent = typeVar;
     newNode.ident = varName;
     newNode.secondOperand = condition;
     return newNode;
 }
 
-function createQuantifierExprNode(typeNode, id, expression1, expression2) {
+function createQuantifierExprNode(typeNode, type, id, expression1, expression2) {
     newNode = new ExpressionNode();
     newNode.type = typeNode;
+    newNode.firstOperand = expression1;
+    newNode.secondOperand = expression2;
+    newNode.typeIdent = type;
+    newNode.ident = id;
+    return newNode;
+}
+
+function createIfExprNode(condition, expression) {
+    newNode = new ExpressionNode();
+    newNode.type = ExprType.IF;
+    newNode.firstOperand = condition;
+    newNode.secondOperand = expression;
+    return newNode;
+}
+
+function createWithExprNode(id, expression1, expression2) {
+    newNode = new ExpressionNode();
+    newNode.type = ExprType.WITH;
     newNode.firstOperand = expression1;
     newNode.secondOperand = expression2;
     newNode.ident = id;
@@ -2630,13 +2726,13 @@ var string;
   }
 */
 var parser = (function () {
-    var o = function (k, v, o, l) { for (o = o || {}, l = k.length; l--; o[k[l]] = v); return o }, $V0 = [1, 6], $V1 = [1, 7], $V2 = [1, 8], $V3 = [1, 9], $V4 = [1, 10], $V5 = [1, 11], $V6 = [1, 12], $V7 = [1, 13], $V8 = [1, 14], $V9 = [1, 15], $Va = [1, 16], $Vb = [1, 17], $Vc = [1, 18], $Vd = [1, 19], $Ve = [1, 21], $Vf = [1, 22], $Vg = [1, 23], $Vh = [1, 24], $Vi = [1, 25], $Vj = [1, 26], $Vk = [1, 27], $Vl = [1, 28], $Vm = [1, 29], $Vn = [1, 30], $Vo = [1, 31], $Vp = [1, 8, 9, 11, 21, 22, 23, 24, 25, 26, 27, 28, 29, 32, 33, 34, 41, 45], $Vq = [1, 8, 9, 11, 23, 24, 25, 26, 27, 28, 29, 32, 33, 34, 41, 45], $Vr = [8, 12, 13, 14, 15, 16, 17, 18, 19, 31, 35, 38, 39, 43, 44], $Vs = [32, 45];
+    var o = function (k, v, o, l) { for (o = o || {}, l = k.length; l--; o[k[l]] = v); return o }, $V0 = [1, 6], $V1 = [1, 14], $V2 = [1, 7], $V3 = [1, 8], $V4 = [1, 9], $V5 = [1, 10], $V6 = [1, 11], $V7 = [1, 12], $V8 = [1, 13], $V9 = [1, 15], $Va = [1, 16], $Vb = [1, 17], $Vc = [1, 18], $Vd = [1, 19], $Ve = [1, 20], $Vf = [1, 21], $Vg = [1, 24], $Vh = [1, 25], $Vi = [1, 26], $Vj = [1, 27], $Vk = [1, 28], $Vl = [1, 29], $Vm = [1, 30], $Vn = [1, 31], $Vo = [1, 32], $Vp = [1, 33], $Vq = [1, 34], $Vr = [1, 35], $Vs = [1, 8, 9, 11, 12, 16, 25, 26, 27, 28, 29, 30, 31, 32, 33, 35, 36, 37, 43, 49], $Vt = [1, 8, 9, 11, 12, 16, 27, 28, 29, 30, 31, 32, 33, 36, 37, 43, 49], $Vu = [1, 8, 9, 11, 12, 16, 27, 30, 31, 36, 37, 43, 49], $Vv = [8, 13, 14, 17, 18, 19, 20, 21, 22, 23, 38, 40, 41, 45, 46, 47, 48], $Vw = [1, 97], $Vx = [16, 49];
     var parser = {
         trace: function trace() { },
         yy: {},
-        symbols_: { "error": 2, "program": 3, "stmt": 4, "block": 5, "{": 6, "stmt_seq": 7, "}": 8, ";": 9, "exp": 10, "=": 11, "ID": 12, "STRING": 13, "INT": 14, "DOUBLE": 15, "TRUE": 16, "FALSE": 17, "TREE_VAR": 18, "VAR": 19, "::": 20, "->": 21, ".": 22, "IS": 23, ">": 24, "<": 25, "==": 26, "!=": 27, ">=": 28, "<=": 29, "COMPARE": 30, "(": 31, ")": 32, "AND": 33, "OR": 34, "NOT": 35, "object_seq": 36, "CLASS": 37, "FIND": 38, "FIND_EXTREM": 39, "[": 40, "]": 41, "WHERE": 42, "EXIST": 43, "FORALL": 44, ",": 45, "$accept": 0, "$end": 1 },
-        terminals_: { 2: "error", 6: "{", 8: "}", 9: ";", 11: "=", 12: "ID", 13: "STRING", 14: "INT", 15: "DOUBLE", 16: "TRUE", 17: "FALSE", 18: "TREE_VAR", 19: "VAR", 20: "::", 21: "->", 22: ".", 23: "IS", 24: ">", 25: "<", 26: "==", 27: "!=", 28: ">=", 29: "<=", 30: "COMPARE", 31: "(", 32: ")", 33: "AND", 34: "OR", 35: "NOT", 37: "CLASS", 38: "FIND", 39: "FIND_EXTREM", 40: "[", 41: "]", 42: "WHERE", 43: "EXIST", 44: "FORALL", 45: "," },
-        productions_: [0, [3, 1], [3, 1], [5, 3], [7, 2], [7, 3], [4, 1], [4, 3], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 6], [10, 3], [10, 4], [10, 3], [10, 3], [10, 2], [10, 6], [10, 5], [10, 6], [10, 10], [10, 8], [10, 8], [36, 1], [36, 3]],
+        symbols_: { "error": 2, "program": 3, "stmt": 4, "block": 5, "{": 6, "stmt_seq": 7, "}": 8, ";": 9, "exp": 10, "=": 11, "+=>": 12, "ID": 13, "(": 14, "object_seq": 15, ")": 16, "STRING": 17, "INT": 18, "DOUBLE": 19, "TRUE": 20, "FALSE": 21, "TREE_VAR": 22, "VAR": 23, "::": 24, "->": 25, ".": 26, "IS": 27, ">": 28, "<": 29, "==": 30, "!=": 31, ">=": 32, "<=": 33, "COMPARE": 34, "AS": 35, "AND": 36, "OR": 37, "NOT": 38, "CLASS": 39, "FIND": 40, "FIND_EXTREM": 41, "[": 42, "]": 43, "AMONG": 44, "EXIST": 45, "FORALL": 46, "IF": 47, "WITH": 48, ",": 49, "$accept": 0, "$end": 1 },
+        terminals_: { 2: "error", 6: "{", 8: "}", 9: ";", 11: "=", 12: "+=>", 13: "ID", 14: "(", 16: ")", 17: "STRING", 18: "INT", 19: "DOUBLE", 20: "TRUE", 21: "FALSE", 22: "TREE_VAR", 23: "VAR", 24: "::", 25: "->", 26: ".", 27: "IS", 28: ">", 29: "<", 30: "==", 31: "!=", 32: ">=", 33: "<=", 34: "COMPARE", 35: "AS", 36: "AND", 37: "OR", 38: "NOT", 39: "CLASS", 40: "FIND", 41: "FIND_EXTREM", 42: "[", 43: "]", 44: "AMONG", 45: "EXIST", 46: "FORALL", 47: "IF", 48: "WITH", 49: "," },
+        productions_: [0, [3, 1], [3, 1], [5, 3], [7, 2], [7, 3], [4, 1], [4, 3], [4, 6], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 1], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 3], [10, 6], [10, 3], [10, 3], [10, 3], [10, 3], [10, 2], [10, 6], [10, 5], [10, 6], [10, 11], [10, 9], [10, 9], [10, 5], [10, 7], [15, 1], [15, 3]],
         performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
             /* this == yyval */
 
@@ -2658,111 +2754,120 @@ var parser = (function () {
                     this.$ = addStmtToStmtSeqNode($$[$0 - 2], $$[$0 - 1]);
                     break;
                 case 6:
-                    this.$ = new StatementNode($$[$0], null);
+                    this.$ = new StatementNode(StmtType.EXPR, $$[$0], null);
                     break;
                 case 7:
-                    this.$ = new StatementNode($$[$0 - 2], $$[$0]);
+                    this.$ = new StatementNode(StmtType.ASSIGNMENT, $$[$0 - 2], $$[$0]);
                     break;
                 case 8:
-                    this.$ = createLiteral(ExprType.ID, $$[$0]);
+                    this.$ = createAddRelationshipStmtNode($$[$0 - 5], $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 9:
-                    this.$ = createLiteral(ExprType.STRING, $$[$0]);
+                    this.$ = createLiteral(ExprType.ID, $$[$0]);
                     break;
                 case 10:
-                    this.$ = createLiteral(ExprType.INT, $$[$0]);
+                    this.$ = createLiteral(ExprType.STRING, $$[$0]);
                     break;
                 case 11:
-                    this.$ = createLiteral(ExprType.DOUBLE, $$[$0]);
+                    this.$ = createLiteral(ExprType.INT, $$[$0]);
                     break;
                 case 12:
-                    this.$ = createLiteral(ExprType.BOOLEAN, true);
+                    this.$ = createLiteral(ExprType.DOUBLE, $$[$0]);
                     break;
                 case 13:
-                    this.$ = createLiteral(ExprType.BOOLEAN, false);
+                    this.$ = createLiteral(ExprType.BOOLEAN, true);
                     break;
                 case 14:
-                    this.$ = createLiteral(ExprType.TREE_VAR, $$[$0]);
+                    this.$ = createLiteral(ExprType.BOOLEAN, false);
                     break;
                 case 15:
-                    this.$ = createLiteral(ExprType.VAR, $$[$0]);
+                    this.$ = createLiteral(ExprType.TREE_VAR, $$[$0]);
                     break;
                 case 16:
-                    this.$ = createEnum($$[$0 - 2], $$[$0]);
+                    this.$ = createLiteral(ExprType.VAR, $$[$0]);
                     break;
                 case 17:
-                    this.$ = createGetObjectByRel($$[$0 - 2], $$[$0]);
+                    this.$ = createEnum($$[$0 - 2], $$[$0]);
                     break;
                 case 18:
-                    this.$ = createBinExprNode(ExprType.PROPERTY, $$[$0 - 2], $$[$0]);
+                    this.$ = createGetObjectByRel($$[$0 - 2], $$[$0]);
                     break;
                 case 19:
-                    this.$ = createBinExprNode(ExprType.IS, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.PROPERTY, $$[$0 - 2], $$[$0]);
                     break;
                 case 20:
-                    this.$ = createBinExprNode(ExprType.GREATER, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.IS, $$[$0 - 2], $$[$0]);
                     break;
                 case 21:
-                    this.$ = createBinExprNode(ExprType.LESS, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.GREATER, $$[$0 - 2], $$[$0]);
                     break;
                 case 22:
-                    this.$ = createBinExprNode(ExprType.EQUAL, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.LESS, $$[$0 - 2], $$[$0]);
                     break;
                 case 23:
-                    this.$ = createBinExprNode(ExprType.NOT_EQUAL, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.EQUAL, $$[$0 - 2], $$[$0]);
                     break;
                 case 24:
-                    this.$ = createBinExprNode(ExprType.GE, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.NOT_EQUAL, $$[$0 - 2], $$[$0]);
                     break;
                 case 25:
-                    this.$ = createBinExprNode(ExprType.LE, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.GE, $$[$0 - 2], $$[$0]);
                     break;
                 case 26:
-                    this.$ = createBinExprNode(ExprType.COMPARE, $$[$0 - 5], $$[$0 - 1]);
+                    this.$ = createBinExprNode(ExprType.LE, $$[$0 - 2], $$[$0]);
                     break;
                 case 27:
-                    this.$ = $$[$0 - 1];
+                    this.$ = createBinExprNode(ExprType.COMPARE, $$[$0 - 5], $$[$0 - 1]);
                     break;
                 case 28:
-                    this.$ = createCastExprNode($$[$0 - 2], $$[$0]);
+                    this.$ = $$[$0 - 1];
                     break;
                 case 29:
-                    this.$ = createBinExprNode(ExprType.AND, $$[$0 - 2], $$[$0]);
+                    this.$ = createCastExprNode($$[$0], $$[$0 - 2]);
                     break;
                 case 30:
-                    this.$ = createBinExprNode(ExprType.OR, $$[$0 - 2], $$[$0]);
+                    this.$ = createBinExprNode(ExprType.AND, $$[$0 - 2], $$[$0]);
                     break;
                 case 31:
-                    this.$ = createUnaryExprNode(ExprType.NOT, $$[$0]);
+                    this.$ = createBinExprNode(ExprType.OR, $$[$0 - 2], $$[$0]);
                     break;
                 case 32:
-                    this.$ = createCheckRelExprNode($$[$0 - 5], $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = createUnaryExprNode(ExprType.NOT, $$[$0]);
                     break;
                 case 33:
-                    this.$ = createUnaryExprNode(ExprType.GET_CLASS, $$[$0 - 4]);
+                    this.$ = createCheckRelExprNode($$[$0 - 5], $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 34:
-                    this.$ = createGetExprNode(ExprType.FIND, $$[$0 - 4], $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = createUnaryExprNode(ExprType.GET_CLASS, $$[$0 - 4]);
                     break;
                 case 35:
-                    this.$ = createFindExtremeExprNode($$[$0 - 8], $$[$0 - 6], $$[$0 - 3], $$[$0 - 1]);
+                    this.$ = createGetExprNode(ExprType.FIND, $$[$0 - 4], $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 36:
-                    this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    this.$ = createFindExtremeExprNode($$[$0 - 9], $$[$0 - 7], $$[$0 - 4], $$[$0 - 3], $$[$0 - 1]);
                     break;
                 case 37:
-                    this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
+                    this.$ = createQuantifierExprNode(ExprType.EXIST, $$[$0 - 7], $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
                     break;
                 case 38:
-                    this.$ = createObjectSeqNode($$[$0]);
+                    this.$ = createQuantifierExprNode(ExprType.FORALL, $$[$0 - 7], $$[$0 - 6], $$[$0 - 4], $$[$0 - 1]);
                     break;
                 case 39:
+                    this.$ = createIfExprNode($$[$0 - 2], $$[$0]);
+                    break;
+                case 40:
+                    this.$ = createWithExprNode($$[$0 - 4], $$[$0 - 2], $$[$0]);
+                    break;
+                case 41:
+                    this.$ = createObjectSeqNode($$[$0]);
+                    break;
+                case 42:
                     this.$ = addObjectToObjectSeqNode($$[$0 - 2], $$[$0]);
                     break;
             }
         },
-        table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2] }, o($V3, [2, 6], { 11: [1, 20], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 4: 33, 7: 32, 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 8], { 20: [1, 34] }), o($Vp, [2, 9]), o($Vp, [2, 10]), o($Vp, [2, 11]), o($Vp, [2, 12]), o($Vp, [2, 13]), o($Vp, [2, 14]), o($Vp, [2, 15]), { 10: 35, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 36, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 37] }, { 12: [1, 38] }, { 12: [1, 39] }, { 12: [1, 40] }, { 10: 41, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 12: [1, 42] }, { 12: [1, 43], 30: [1, 44], 37: [1, 45] }, { 10: 46, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 47, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 48, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 49, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 50, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 51, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 52, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 53, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 54, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 4: 56, 8: [1, 55], 10: 4, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 9: [1, 57] }, { 12: [1, 58] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 59], 33: $Vn, 34: $Vo }, o($Vq, [2, 31], { 21: $Ve, 22: $Vf }), { 12: [1, 60] }, { 40: [1, 61] }, { 40: [1, 62] }, { 40: [1, 63] }, o($V3, [2, 7], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), o($Vp, [2, 17], { 31: [1, 64] }), o($Vp, [2, 18]), { 31: [1, 65] }, { 31: [1, 66] }, o([1, 8, 9, 11, 23, 32, 33, 34, 41, 45], [2, 19], { 21: $Ve, 22: $Vf, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o($Vq, [2, 20], { 21: $Ve, 22: $Vf }), o($Vq, [2, 21], { 21: $Ve, 22: $Vf }), o($Vq, [2, 22], { 21: $Ve, 22: $Vf }), o($Vq, [2, 23], { 21: $Ve, 22: $Vf }), o($Vq, [2, 24], { 21: $Ve, 22: $Vf }), o($Vq, [2, 25], { 21: $Ve, 22: $Vf }), o([1, 8, 9, 11, 32, 33, 34, 41, 45], [2, 29], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm }), o([1, 8, 9, 11, 32, 34, 41, 45], [2, 30], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn }), { 1: [2, 3] }, { 9: [1, 67] }, o($Vr, [2, 4]), o($Vp, [2, 16]), o($Vp, [2, 27], { 10: 68, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }), { 6: [1, 69] }, { 10: 70, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 71, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 72, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 74, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 36: 73, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 75, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 32: [1, 76] }, o($Vr, [2, 5]), o($Vp, [2, 28]), { 10: 77, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 78] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 79] }, { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo, 41: [1, 80] }, { 32: [1, 81], 45: [1, 82] }, o($Vs, [2, 38], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 32: [1, 83], 33: $Vn, 34: $Vo }, o($Vp, [2, 33]), { 8: [1, 84], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 42: [1, 85] }, { 6: [1, 86] }, { 6: [1, 87] }, o($Vp, [2, 32]), { 10: 88, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 26]), o($Vp, [2, 34]), { 12: [1, 89] }, { 10: 90, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, { 10: 91, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vs, [2, 39], { 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }), { 6: [1, 92] }, { 8: [1, 93], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 8: [1, 94], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, { 10: 95, 12: $V0, 13: $V1, 14: $V2, 15: $V3, 16: $V4, 17: $V5, 18: $V6, 19: $V7, 31: $V8, 35: $V9, 38: $Va, 39: $Vb, 43: $Vc, 44: $Vd }, o($Vp, [2, 36]), o($Vp, [2, 37]), { 8: [1, 96], 21: $Ve, 22: $Vf, 23: $Vg, 24: $Vh, 25: $Vi, 26: $Vj, 27: $Vk, 28: $Vl, 29: $Vm, 33: $Vn, 34: $Vo }, o($Vp, [2, 35])],
-        defaultActions: { 2: [2, 1], 3: [2, 2], 55: [2, 3] },
+        table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 10: 4, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2] }, o($V4, [2, 6], { 11: [1, 22], 12: [1, 23], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }), { 4: 37, 7: 36, 10: 4, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, o($Vs, [2, 9], { 24: [1, 38] }), o($Vs, [2, 10]), o($Vs, [2, 11]), o($Vs, [2, 12]), o($Vs, [2, 13]), o($Vs, [2, 14]), o($Vs, [2, 15]), o($Vs, [2, 16]), { 10: 39, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 40, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 13: [1, 41] }, { 13: [1, 42] }, { 13: [1, 43] }, { 13: [1, 44] }, { 14: [1, 45] }, { 14: [1, 46] }, { 10: 47, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 13: [1, 48] }, { 13: [1, 49] }, { 13: [1, 50], 34: [1, 51], 39: [1, 52] }, { 10: 53, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 54, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 55, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 56, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 57, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 58, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 59, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 60, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 61, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 62, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 4: 64, 8: [1, 63], 10: 4, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 9: [1, 65] }, { 13: [1, 66] }, { 16: [1, 67], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }, o($Vt, [2, 32], { 25: $Vg, 26: $Vh, 35: $Vp }), { 13: [1, 68] }, { 42: [1, 69] }, { 13: [1, 70] }, { 13: [1, 71] }, { 10: 72, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 13: [1, 73] }, o($V4, [2, 7], { 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }), { 14: [1, 74] }, o($Vs, [2, 18], { 14: [1, 75] }), o($Vs, [2, 19]), { 14: [1, 76] }, { 14: [1, 77] }, o([1, 8, 9, 11, 12, 16, 27, 36, 37, 43, 49], [2, 20], { 25: $Vg, 26: $Vh, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp }), o($Vt, [2, 21], { 25: $Vg, 26: $Vh, 35: $Vp }), o($Vt, [2, 22], { 25: $Vg, 26: $Vh, 35: $Vp }), o($Vu, [2, 23], { 25: $Vg, 26: $Vh, 28: $Vj, 29: $Vk, 32: $Vn, 33: $Vo, 35: $Vp }), o($Vu, [2, 24], { 25: $Vg, 26: $Vh, 28: $Vj, 29: $Vk, 32: $Vn, 33: $Vo, 35: $Vp }), o($Vt, [2, 25], { 25: $Vg, 26: $Vh, 35: $Vp }), o($Vt, [2, 26], { 25: $Vg, 26: $Vh, 35: $Vp }), o($Vs, [2, 29]), o([1, 8, 9, 11, 12, 16, 36, 37, 43, 49], [2, 30], { 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp }), o([1, 8, 9, 11, 12, 16, 37, 43, 49], [2, 31], { 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq }), { 1: [2, 3] }, { 9: [1, 78] }, o($Vv, [2, 4]), o($Vs, [2, 17]), o($Vs, [2, 28]), { 6: [1, 79] }, { 10: 80, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 42: [1, 81] }, { 42: [1, 82] }, { 16: [1, 83], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }, { 11: [1, 84] }, { 10: 86, 13: $V0, 14: $V1, 15: 85, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 86, 13: $V0, 14: $V1, 15: 87, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 88, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 16: [1, 89] }, o($Vv, [2, 5]), { 10: 90, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr, 43: [1, 91] }, { 10: 92, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 93, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 94, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 95, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 16: [1, 96], 49: $Vw }, o($Vx, [2, 41], { 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }), { 16: [1, 98], 49: $Vw }, { 16: [1, 99], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }, o($Vs, [2, 34]), { 8: [1, 100], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }, { 44: [1, 101] }, { 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr, 43: [1, 102] }, { 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr, 43: [1, 103] }, o($Vs, [2, 39]), { 16: [1, 104], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }, o($V4, [2, 8]), { 10: 105, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, o($Vs, [2, 33]), o($Vs, [2, 27]), o($Vs, [2, 35]), { 13: [1, 106] }, { 6: [1, 107] }, { 6: [1, 108] }, { 10: 109, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, o($Vx, [2, 42], { 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }), { 13: [1, 110] }, { 10: 111, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, { 10: 112, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, o($Vs, [2, 40]), { 6: [1, 113] }, { 8: [1, 114], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }, { 8: [1, 115], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }, { 10: 116, 13: $V0, 14: $V1, 17: $V2, 18: $V3, 19: $V4, 20: $V5, 21: $V6, 22: $V7, 23: $V8, 38: $V9, 40: $Va, 41: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf }, o($Vs, [2, 37]), o($Vs, [2, 38]), { 8: [1, 117], 25: $Vg, 26: $Vh, 27: $Vi, 28: $Vj, 29: $Vk, 30: $Vl, 31: $Vm, 32: $Vn, 33: $Vo, 35: $Vp, 36: $Vq, 37: $Vr }, o($Vs, [2, 36])],
+        defaultActions: { 2: [2, 1], 3: [2, 2], 63: [2, 3] },
         parseError: function parseError(str, hash) {
             if (hash.recoverable) {
                 this.trace(str);
@@ -3238,106 +3343,116 @@ var parser = (function () {
             performAction: function anonymous(yy, yy_, $avoiding_name_collisions, YY_START) {
                 var YYSTATE = YY_START;
                 switch ($avoiding_name_collisions) {
-                    case 0: return 16;
+                    case 0: return 20;
                         break;
-                    case 1: return 17;
+                    case 1: return 21;
                         break;
-                    case 2: return 37;
+                    case 2: return 39;
                         break;
-                    case 3: return 38;
+                    case 3: return 40;
                         break;
-                    case 4: return 39;
+                    case 4: return 41;
                         break;
-                    case 5: return 23;
+                    case 5: return 27;
                         break;
-                    case 6: return 33;
+                    case 6: return 36;
                         break;
-                    case 7: return 34;
+                    case 7: return 37;
                         break;
-                    case 8: return 35;
+                    case 8: return 38;
                         break;
-                    case 9: return 30;
+                    case 9: return 34;
                         break;
-                    case 10: return 43;
+                    case 10: return 45;
                         break;
-                    case 11: return 44;
+                    case 11: return 46;
                         break;
-                    case 12: return 42;
+                    case 12: return 'WHERE';
                         break;
-                    case 13: return 21;
+                    case 13: return 44;
                         break;
-                    case 14: return 6;
+                    case 14: return 47;
                         break;
-                    case 15: return 8;
+                    case 15: return 48;
                         break;
-                    case 16: return 40;
+                    case 16: return 35;
                         break;
-                    case 17: return 41;
+                    case 17: return 25;
                         break;
-                    case 18: return 26;
+                    case 18: return 6;
                         break;
-                    case 19: return 27;
+                    case 19: return 8;
                         break;
-                    case 20: return 28;
+                    case 20: return 42;
                         break;
-                    case 21: return 29;
+                    case 21: return 43;
                         break;
-                    case 22: return 11;
+                    case 22: return 30;
                         break;
                     case 23: return 31;
                         break;
                     case 24: return 32;
                         break;
-                    case 25: return 45;
+                    case 25: return 33;
                         break;
-                    case 26: return 9;
+                    case 26: return 11;
                         break;
-                    case 27: return 24;
+                    case 27: return 14;
                         break;
-                    case 28: return 25;
+                    case 28: return 16;
                         break;
-                    case 29: return 20;
+                    case 29: return 49;
                         break;
-                    case 30: return 18;
+                    case 30: return 9;
                         break;
-                    case 31: return 12;
+                    case 31: return 28;
                         break;
-                    case 32: return 19;
+                    case 32: return 29;
                         break;
-                    case 33: string = ''; this.begin('STRING');
+                    case 33: return 24;
                         break;
-                    case 34: string += yy_.yytext;
+                    case 34: return 12;
                         break;
-                    case 35: string += '\n';
+                    case 35: return 22;
                         break;
-                    case 36: string += '\t';
+                    case 36: return 13;
                         break;
-                    case 37: string += '\\';
+                    case 37: return 23;
                         break;
-                    case 38: throw new Error('Error: invalid escape\n');
+                    case 38: string = ''; this.begin('STRING');
                         break;
-                    case 39: throw new Error('Error: unfinished string.\n');
+                    case 39: string += yy_.yytext;
                         break;
-                    case 40: string += '"';
+                    case 40: string += '\n';
                         break;
-                    case 41: string += '\'';
+                    case 41: string += '\t';
                         break;
-                    case 42: this.begin('INITIAL'); yy_.yytext = string; return 13;
+                    case 42: string += '\\';
                         break;
-                    case 43: this.begin('INITIAL'); throw new Error('Error: expected \".\n');
+                    case 43: throw new Error('Error: invalid escape\n');
                         break;
-                    case 44: return 15;
+                    case 44: throw new Error('Error: unfinished string.\n');
                         break;
-                    case 45: return 14;
+                    case 45: string += '"';
                         break;
-                    case 46: return 22;
+                    case 46: string += '\'';
                         break;
-                    case 47:/* skip whitespace */
+                    case 47: this.begin('INITIAL'); yy_.yytext = string; return 17;
+                        break;
+                    case 48: this.begin('INITIAL'); throw new Error('Error: expected \".\n');
+                        break;
+                    case 49: return 19;
+                        break;
+                    case 50: return 18;
+                        break;
+                    case 51: return 26;
+                        break;
+                    case 52:/* skip whitespace */
                         break;
                 }
             },
-            rules: [/^(?:true\b)/, /^(?:false\b)/, /^(?:getClass\b)/, /^(?:find\b)/, /^(?:findExtreme\b)/, /^(?:is\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:not\b)/, /^(?:compare\b)/, /^(?:exist\b)/, /^(?:forall\b)/, /^(?:where\b)/, /^(?:->)/, /^(?:\{)/, /^(?:\})/, /^(?:\[)/, /^(?:\])/, /^(?:==)/, /^(?:!=)/, /^(?:>=)/, /^(?:<=)/, /^(?:=)/, /^(?:\()/, /^(?:\))/, /^(?:,)/, /^(?:;)/, /^(?:>)/, /^(?:<)/, /^(?:::)/, /^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:")/, /^(?:[^\\\"\n]+)/, /^(?:\\n)/, /^(?:\\t)/, /^(?:\\\\)/, /^(?:\\[^nt\"\'\\])/, /^(?:\n)/, /^(?:\\")/, /^(?:\\')/, /^(?:")/, /^(?:$)/, /^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/, /^(?:[0-9]+)/, /^(?:\.)/, /^(?:\s+)/],
-            conditions: { "STRING": { "rules": [34, 35, 36, 37, 38, 39, 40, 41, 42, 43], "inclusive": false }, "INITIAL": { "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 44, 45, 46, 47], "inclusive": true } }
+            rules: [/^(?:true\b)/, /^(?:false\b)/, /^(?:getClass\b)/, /^(?:find\b)/, /^(?:findExtreme\b)/, /^(?:is\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:not\b)/, /^(?:compare\b)/, /^(?:exist\b)/, /^(?:forall\b)/, /^(?:where\b)/, /^(?:among\b)/, /^(?:if\b)/, /^(?:with\b)/, /^(?:as\b)/, /^(?:->)/, /^(?:\{)/, /^(?:\})/, /^(?:\[)/, /^(?:\])/, /^(?:==)/, /^(?:!=)/, /^(?:>=)/, /^(?:<=)/, /^(?:=)/, /^(?:\()/, /^(?:\))/, /^(?:,)/, /^(?:;)/, /^(?:>)/, /^(?:<)/, /^(?:::)/, /^(?:\+=>)/, /^(?:var:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:\$[a-zA-Z_][A-Za-z0-9_]*)/, /^(?:")/, /^(?:[^\\\"\n]+)/, /^(?:\\n)/, /^(?:\\t)/, /^(?:\\\\)/, /^(?:\\[^nt\"\'\\])/, /^(?:\n)/, /^(?:\\")/, /^(?:\\')/, /^(?:")/, /^(?:$)/, /^(?:([0-9]+\.[0-9]*|[0-9]*\.[0-9]+))/, /^(?:[0-9]+)/, /^(?:\.)/, /^(?:\s+)/],
+            conditions: { "STRING": { "rules": [39, 40, 41, 42, 43, 44, 45, 46, 47, 48], "inclusive": false }, "INITIAL": { "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 49, 50, 51, 52], "inclusive": true } }
         });
         return lexer;
     })();
@@ -9324,6 +9439,10 @@ var toolbox = {
                     "kind": "block",
                     "type": "cast_object_to_class"
                 },
+                {
+                    "kind": "block",
+                    "type": "add_relationship_to_object"
+                },
             ]
         },
         {
@@ -9392,6 +9511,14 @@ var toolbox = {
                 {
                     "kind": "block",
                     "type": "block"
+                },
+                {
+                    "kind": "block",
+                    "type": "if_then_stmt"
+                },
+                {
+                    "kind": "block",
+                    "type": "with_stmt"
                 },
             ]
         },
@@ -9633,10 +9760,30 @@ const xslTxt = `<?xml version="1.0"?>
         </GetByCondition>
     </xsl:template>
 
+    <xsl:template match="block[@type='if_then_stmt']">
+        <IfThen>
+            <xsl:apply-templates select="value[@name='condition']" />
+            <xsl:apply-templates select="value[@name='body']" />
+        </IfThen>
+    </xsl:template>
+
+    <xsl:template match="block[@type='with_stmt']">
+        <With>
+            <xsl:attribute name="varName">
+                <xsl:value-of select="field[@name='name_var']" />
+            </xsl:attribute>
+            <xsl:apply-templates select="value[@name='expression']" />
+            <xsl:apply-templates select="value[@name='body']" />
+        </With>
+    </xsl:template>
+
     <xsl:template match="block[@type='get_extr_object']">
         <GetExtreme>
             <xsl:attribute name="extremeVarName">
                 <xsl:value-of select="field[@name='name_var1']" />
+            </xsl:attribute>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var2']" />
             </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var2']" />
@@ -9659,6 +9806,12 @@ const xslTxt = `<?xml version="1.0"?>
             <xsl:apply-templates select="value[@name='ref_to_object']" />
             <xsl:apply-templates select="value[@name='new_object']" />
         </AssignToDecisionTreeVar>
+    </xsl:template>
+
+    <xsl:template match="block[@type='add_relationship_to_object']">
+        <AddRelationshipLink>
+            <xsl:apply-templates select="value" />
+        </AddRelationshipLink>
     </xsl:template>
 
     <xsl:template match="block[@type='cast_object_to_class']">
@@ -9720,6 +9873,9 @@ const xslTxt = `<?xml version="1.0"?>
 
     <xsl:template match="block[@type='quantifier_of_existence']">
         <ExistenceQuantifier>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var']" />
+            </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>
@@ -9730,6 +9886,9 @@ const xslTxt = `<?xml version="1.0"?>
 
     <xsl:template match="block[@type='quantifier_of_generality']">
         <ForAllQuantifier>
+            <xsl:attribute name="type">
+                <xsl:value-of select="field[@name='type_var']" />
+            </xsl:attribute>
             <xsl:attribute name="varName">
                 <xsl:value-of select="field[@name='name_var']" />
             </xsl:attribute>
@@ -9869,6 +10028,44 @@ Blockly.Blocks['get_property_value'] = {
     }
 };
 
+Blockly.Blocks['if_then_stmt'] = {
+    init: function () {
+        this.appendDummyInput()
+            .appendField("If Then");
+        this.appendValueInput("condition")
+            .setCheck("Boolean")
+            .appendField("condition");
+        this.appendValueInput("body")
+            .setCheck(["Object", "Class", "Relationship", "Property", "Boolean", "String", "Integer", "Double", "Enum", "Statement"])
+            .appendField("body");
+        this.setInputsInline(false);
+        this.setOutput(true, "Statement");
+        this.setColour(240);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['with_stmt'] = {
+    init: function () {
+        this.appendDummyInput()
+            .appendField("With");
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
+        this.appendValueInput("expression")
+            .setCheck("Object")
+            .appendField("expression");
+        this.appendValueInput("body")
+            .setCheck(["Object", "Class", "Relationship", "Property", "Boolean", "String", "Integer", "Double", "Enum", "Statement"])
+            .appendField("body");
+        this.setInputsInline(false);
+        this.setOutput(true, "Statement");
+        this.setColour(240);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['get_relationship_object'] = {
     init: function () {
         this.appendDummyInput()
@@ -9915,6 +10112,8 @@ Blockly.Blocks['get_extr_object'] = {
         this.appendValueInput("extreme_condition")
             .setCheck("Boolean")
             .appendField("extreme condition");
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldTextInput("type2", validator), "type_var2");
         this.appendDummyInput()
             .appendField(new Blockly.FieldTextInput("var2", validator), "name_var2");
         this.appendValueInput("general_condition")
@@ -9963,6 +10162,119 @@ Blockly.Blocks['assign_value_to_variable_decision_tree'] = {
         this.setTooltip("");
         this.setHelpUrl("");
     }
+};
+
+Blockly.Blocks['add_relationship_to_object'] = {
+    init: function () {
+        this.itemCount_ = 2;
+        this.appendDummyInput()
+            .appendField("Add relationship to object");
+        this.appendValueInput("relationship")
+            .setCheck("Relationship")
+            .appendField("relationship");
+        this.appendValueInput("object")
+            .setCheck("Object")
+            .appendField("subject");
+        this.setInputsInline(false);
+        this.setOutput(true, "Statement");
+        this.setMutator(new Blockly.Mutator(['check_relationship_item']));
+        this.setColour(240);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    },
+
+    mutationToDom: function () {
+        const container = Blockly.utils.xml.createElement('mutation');
+        container.setAttribute('items', this.itemCount_);
+        return container;
+    },
+
+    domToMutation: function (xmlElement) {
+        this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+        this.updateShape_();
+    },
+
+    saveExtraState: function () {
+        return {
+            'itemCount': this.itemCount_,
+        };
+    },
+
+    loadExtraState: function (state) {
+        this.itemCount_ = state['itemCount'];
+        this.updateShape_();
+    },
+
+    decompose: function (workspace) {
+        //TODO: сделать рефакторинг
+        const containerBlock = workspace.newBlock('check_relationship_container');
+        containerBlock.initSvg();
+        let connection = containerBlock.getInput('STACK').connection;
+        for (let i = 0; i < this.itemCount_; i++) {
+            const itemBlock = workspace.newBlock('check_relationship_item');
+            itemBlock.initSvg();
+            connection.connect(itemBlock.previousConnection);
+            connection = itemBlock.nextConnection;
+        }
+        return containerBlock;
+    },
+
+    compose: function (containerBlock) {
+        //TODO: сделать рефакторинг
+        let itemBlock = containerBlock.getInputTargetBlock('STACK');
+        // Count number of inputs.
+        const connections = [];
+        while (itemBlock && !itemBlock.isInsertionMarker()) {
+            connections.push(itemBlock.valueConnection_);
+            itemBlock =
+                itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+        }
+        // Disconnect any children that don't belong.
+        for (let i = 0; i < this.itemCount_; i++) {
+            const connection = this.getInput("object" + i).connection.targetConnection;
+            if (connection && connections.indexOf(connection) === -1) {
+                connection.disconnect();
+            }
+        }
+        this.itemCount_ = connections.length;
+        this.updateShape_();
+        // Reconnect any child blocks.
+        for (let i = 0; i < this.itemCount_; i++) {
+            Blockly.Mutator.reconnect(connections[i], this, "object" + i);
+        }
+    },
+
+    saveConnections: function (containerBlock) {
+        //TODO: сделать рефакторинг
+        let itemBlock = containerBlock.getInputTargetBlock('STACK');
+        let i = 0;
+        while (itemBlock) {
+            const input = this.getInput("object" + i);
+            itemBlock.valueConnection_ = input && input.connection.targetConnection;
+            itemBlock =
+                itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+            i++;
+        }
+    },
+
+    updateShape_: function () {
+        //TODO: сделать рефакторинг
+        if (this.itemCount_ && this.getInput('EMPTY')) {
+            this.removeInput('EMPTY');
+        } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
+            this.appendDummyInput("EMPTY").appendField("objects");
+        }
+        // Add new inputs.
+        for (let i = 0; i < this.itemCount_; i++) {
+            if (!this.getInput("object" + i)) {
+                const input = this.appendValueInput("object" + i).setCheck("Object").appendField("object" + i);
+            }
+        }
+        // Remove deleted inputs.
+        for (let i = this.itemCount_; this.getInput("object" + i); i++) {
+            this.removeInput("object" + i);
+        }
+    },
 };
 
 Blockly.Blocks['cast_object_to_class'] = {
@@ -10230,6 +10542,8 @@ Blockly.Blocks['quantifier_of_existence'] = {
             .setCheck("Boolean")
             .appendField("verification condition");
         this.appendDummyInput()
+            .appendField(new Blockly.FieldTextInput("type", validator), "type_var");
+        this.appendDummyInput()
             .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
         this.setInputsInline(false);
         this.setOutput(true, "Boolean");
@@ -10249,6 +10563,8 @@ Blockly.Blocks['quantifier_of_generality'] = {
         this.appendValueInput("verification_condition")
             .setCheck("Boolean")
             .appendField("verification condition");
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldTextInput("type", validator), "type_var");
         this.appendDummyInput()
             .appendField(new Blockly.FieldTextInput("var", validator), "name_var");
         this.setInputsInline(false);
@@ -10489,6 +10805,21 @@ Blockly.JavaScript['get_property_value'] = function (block) {
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['if_then_stmt'] = function (block) {
+    var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_NONE);
+    var value_body = Blockly.JavaScript.valueToCode(block, 'body', Blockly.JavaScript.ORDER_NONE);
+    var code = "if ( " + value_condition + " ) " + value_body;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['with_stmt'] = function (block) {
+    var text_name_var = block.getFieldValue('name_var');
+    var value_expression = Blockly.JavaScript.valueToCode(block, 'expression', Blockly.JavaScript.ORDER_NONE);
+    var value_body = Blockly.JavaScript.valueToCode(block, 'body', Blockly.JavaScript.ORDER_NONE);
+    var code = "with ( " + text_name_var + " = " + value_expression + " ) " + value_body;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.JavaScript['get_relationship_object'] = function (block) {
     var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
     var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
@@ -10508,9 +10839,10 @@ Blockly.JavaScript['get_extr_object'] = function (block) {
 
     var text_name_var1 = block.getFieldValue('name_var1');
     var value_extreme_condition = Blockly.JavaScript.valueToCode(block, 'extreme_condition', Blockly.JavaScript.ORDER_NONE);
+    var text_type_var2 = block.getFieldValue('type_var2');
     var text_name_var2 = block.getFieldValue('name_var2');
     var value_general_condition = Blockly.JavaScript.valueToCode(block, 'general_condition', Blockly.JavaScript.ORDER_NONE);
-    var code = "findExtreme " + text_name_var1 + " [ " + value_extreme_condition + " ] " + " where " + text_name_var2 + " { " + value_general_condition + " } ";
+    var code = "findExtreme " + text_name_var1 + " [ " + value_extreme_condition + " ] among " + text_type_var2 + " " + text_name_var2 + " { " + value_general_condition + " } ";
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -10529,10 +10861,27 @@ Blockly.JavaScript['assign_value_to_variable_decision_tree'] = function (block) 
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['add_relationship_to_object'] = function (block) {
+    var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_NONE);
+    var value_relationship = Blockly.JavaScript.valueToCode(block, 'relationship', Blockly.JavaScript.ORDER_NONE);
+
+    var code = value_object + " +=> " + value_relationship + " (";
+    let values = [];
+    for (var i = 0; i < block.itemCount_; i++) {
+        let valueCode = Blockly.JavaScript.valueToCode(block, 'object' + i, Blockly.JavaScript.ORDER_NONE);
+        if (valueCode) {
+            values.push(valueCode);
+        }
+    }
+    let valueString = values.join(", ");
+    code += valueString + ")";
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.JavaScript['cast_object_to_class'] = function (block) {
     var value_object = Blockly.JavaScript.valueToCode(block, 'object', Blockly.JavaScript.ORDER_INSTANCEOF);
     var value_class = Blockly.JavaScript.valueToCode(block, 'class', Blockly.JavaScript.ORDER_INSTANCEOF);
-    var code = "(" + value_class + ") " + value_object;
+    var code = value_object + " as " + value_class;
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -10599,18 +10948,18 @@ Blockly.JavaScript['three_digit_comparison'] = function (block) {
 Blockly.JavaScript['quantifier_of_existence'] = function (block) {
     var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
     var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
-    var dropdown_type = block.getFieldValue('type');
+    var text_type_var = block.getFieldValue('type_var');
     var text_name_var = block.getFieldValue('name_var');
-    // TODO: Как тут указать тип переменной??
-    var code = "exist " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " }";
+    var code = "exist " + text_type_var + " " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " }";
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['quantifier_of_generality'] = function (block) {
     var value_definition_area = Blockly.JavaScript.valueToCode(block, 'definition_area', Blockly.JavaScript.ORDER_NONE);
     var value_verification_condition = Blockly.JavaScript.valueToCode(block, 'verification_condition', Blockly.JavaScript.ORDER_NONE);
+    var text_type_var = block.getFieldValue('type_var');
     var text_name_var = block.getFieldValue('name_var');
-    var code = "forall " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " } ";
+    var code = "forall " + text_type_var + " " + text_name_var + " [ " + value_definition_area + " ] { " + value_verification_condition + " } ";
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -10682,12 +11031,29 @@ var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
         }
         win.destroy();
     });
+
+    var btnCreateHYPNode = mxUtils.button('HYP', function () {
+        var theGraph = editorUi.editor.graph;
+        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
+            var pos = theGraph.getInsertPoint();
+            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 80), "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontColor=#000000;align=center;editable=0;");
+            newElement.value = "HYP";
+            newElement.vertex = !0;
+            theGraph.setSelectionCell(theGraph.addCell(newElement));
+            theGraph.setAttributeForCell(newElement, 'type', "HYP");
+        }
+        win.destroy();
+    });
+
     btnCreateANDNode = styleBtn(btnCreateANDNode);
-    btnCreateANDNode.style.minWidth = "50%";
+    btnCreateANDNode.style.minWidth = "32%";
     btnCreateORNode = styleBtn(btnCreateORNode);
-    btnCreateORNode.style.minWidth = "50%";
+    btnCreateORNode.style.minWidth = "32%";
+    btnCreateHYPNode = styleBtn(btnCreateHYPNode);
+    btnCreateHYPNode.style.minWidth = "32%";
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
+    div.appendChild(btnCreateHYPNode);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleLogicNodeConstructorWindow"), div, x, y, w, h, true, true);
@@ -10901,7 +11267,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
     divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
-    var operators = ["And", "Or"];
+    var operators = ["And", "Or", "Mutex", "HYP"];
 
     //Экран с текстом
     var text = document.createElement('textarea');
@@ -11900,7 +12266,7 @@ var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     divBlockly.style.height = "100%";
     divBlockly.style.display = "none";
 
-    var operators = ["And", "Or"];
+    var operators = ["And", "Or", "Mutex", "HYP"];
 
     //Экран с текстом
     var text = document.createElement('textarea');
@@ -12679,12 +13045,27 @@ var LogicNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         theGraph.refresh(); // update the graph
         win.destroy();
     });
+
+    var btnCreateHYPNode = mxUtils.button('HYP', function () {
+        var theGraph = editorUi.editor.graph;
+
+        theGraph.getModel().beginUpdate();
+        cell.value.setAttribute("label", "HYP");
+        cell.value.setAttribute("type", "HYP");
+        theGraph.getModel().endUpdate();
+        theGraph.refresh(); // update the graph
+        win.destroy();
+    });
+
     btnCreateANDNode = styleBtn(btnCreateANDNode);
-    btnCreateANDNode.style.minWidth = "50%";
+    btnCreateANDNode.style.minWidth = "32%";
     btnCreateORNode = styleBtn(btnCreateORNode);
-    btnCreateORNode.style.minWidth = "50%";
+    btnCreateORNode.style.minWidth = "32%";
+    btnCreateHYPNode = styleBtn(btnCreateHYPNode);
+    btnCreateHYPNode.style.minWidth = "32%";
     div.appendChild(btnCreateANDNode);
     div.appendChild(btnCreateORNode);
+    div.appendChild(btnCreateHYPNode);
 
     // Настройки окна
     var win = new mxWindow(getTextByLocale("TitleLogicNodeEditorWindow"), div, x, y, w, h, true, true);
@@ -12736,7 +13117,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             });
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if (typeNode.type == "int" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "int" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "int";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
@@ -12753,7 +13134,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.style.width = '100%';
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
-        } else if (typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "bool" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "bool";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
@@ -12762,13 +13143,13 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
-            let optionTrue = new Option("True", "True");
+            let optionTrue = new Option("Correct", "Correct");
             selectValue.options[selectValue.options.length] = optionTrue;
-            let optionFalse = new Option("False", "False");
+            let optionFalse = new Option("Error", "Error");
             selectValue.options[selectValue.options.length] = optionFalse;
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if (typeNode.type == "class" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "class" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "class";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
@@ -12784,7 +13165,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             });
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if (typeNode.type == "double" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "double" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "double";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
@@ -12802,7 +13183,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             numberInt.style.width = '100%';
             labelType.appendChild(numberInt);
             divText.appendChild(labelType);
-        } else if (typeNode.type == "string" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "string" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "string";
             var labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
@@ -12815,7 +13196,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             textValue.placeholder = "value string";
             labelType.appendChild(textValue);
             divText.appendChild(labelType);
-        } else if (typeNode.type == "enum" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "enum" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "enum";
             let labelValue = document.createElement('label');
             labelValue.innerHTML = getTextByLocale("value");
@@ -12836,7 +13217,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             }
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
-        } else if (typeNode.type == "assign" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR") {
+        } else if (typeNode.type == "assign" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             throw new Error(getTextByLocale("AssignInNode"));
         }
     }
@@ -12864,14 +13245,14 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["predeterminingBranch", "undetermined"];
+        let types = ["Branch", "Correct", "Error", "Null"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    } else if (typeof outNode.value == "object" && (outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")) {
+    } else if (typeof outNode.value == "object" && (outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR" || outNode.value.getAttribute('type') == "HYP")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
         labelType.style.fontSize = '20px';
@@ -12879,14 +13260,14 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["Branch", "True", "False"];
+        let types = ["Branch", "Correct", "Error", "Null"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
         });
         labelType.appendChild(selectTypes);
         divText.appendChild(labelType);
-    } else if (typeof outNode.value == "object" && (outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR")) {
+    } else if (typeof outNode.value == "object" && (outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR" || outNode.value.getAttribute('operator') == "HYP")) {
         let labelType = document.createElement('label');
         labelType.innerHTML = getTextByLocale("type");
         labelType.style.fontSize = '20px';
@@ -12894,7 +13275,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         selectTypes = styleSelect(selectTypes);
         selectTypes.id = "type_input";
         selectTypes.style.width = '100%';
-        let types = ["Body", "True", "False"];
+        let types = ["Body", "Correct", "Error", "Null"];
         types.forEach(type => {
             var newOption = new Option(type, type);
             selectTypes.options[selectTypes.options.length] = newOption;
@@ -14271,56 +14652,32 @@ function getVariables(doc, nodeValue) {
     return inputVariablesNode;
 }
 
-function switchCaseNodes(doc, node, editorUi, predeterminingNode) {
+function switchCaseNodes(doc, node, editorUi) {
     let resultNode = null;
     //Узел истина
     if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;") {
-        if (predeterminingNode != null) {
-            if (isNotEqualResultNode(node, predeterminingNode)) {
-                //TODO: возможно тут лучше вызывать функцию создания узла результата
-                resultNode = doc.createElement("BranchResultNode");
-                resultNode.setAttribute("value", "false");
-            } else {
-                //TODO: возможно тут лучше вызывать функцию создания узла результата
-                resultNode = doc.createElement("BranchResultNode");
-                resultNode.setAttribute("value", "true");
-            }
-        } else {
-            resultNode = branchResultNodeToXml(doc, node, true);
-        }
+        resultNode = branchResultNodeToXml(doc, node, true);
     }
     //Узел ложь
     else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;") {
-        if (predeterminingNode != null) {
-            if (isNotEqualResultNode(node, predeterminingNode)) {
-                //TODO: возможно тут лучше вызывать функцию создания узла результата
-                resultNode = doc.createElement("BranchResultNode");
-                resultNode.setAttribute("value", "false");
-            } else {
-                //TODO: возможно тут лучше вызывать функцию создания узла результата
-                resultNode = doc.createElement("BranchResultNode");
-                resultNode.setAttribute("value", "true");
-            }
-        } else {
-            resultNode = branchResultNodeToXml(doc, node, false);
-        }
+        resultNode = branchResultNodeToXml(doc, node, false);
     }
     //Узел вопрос
     else if (node.style == "ellipse;whiteSpace=wrap;html=1;rounded=0;editable=0;") {
-        resultNode = questionNodeToXml(doc, node, false, editorUi, predeterminingNode);
+        resultNode = questionNodeToXml(doc, node, false, editorUi);
     }
     //Узел свитч кейс
     else if (node.style == "rhombus;whiteSpace=wrap;html=1;editable=0;") {
-        resultNode = questionNodeToXml(doc, node, true, editorUi, predeterminingNode);
+        resultNode = questionNodeToXml(doc, node, true, editorUi);
     }
     //Узел действия
     else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;") {
-        resultNode = actionNodeToXml(doc, node, editorUi, predeterminingNode);
+        resultNode = actionNodeToXml(doc, node, editorUi);
     }
     //Узел логическая агрегация
     else if (typeof node.value == "object"
-        && (node.value.getAttribute("type") == "AND" || node.value.getAttribute("type") == "OR")) {
-        resultNode = logicNodeToXml(doc, node, editorUi, predeterminingNode);
+        && (node.value.getAttribute("type") == "AND" || node.value.getAttribute("type") == "OR" || node.value.getAttribute("type") == "HYP")) {
+        resultNode = logicNodeToXml(doc, node, editorUi);
     }
     //Узел предрешающий фактор
     else if (typeof node.value == "object" && node.value.getAttribute("type") == "predetermining") {
@@ -14328,24 +14685,20 @@ function switchCaseNodes(doc, node, editorUi, predeterminingNode) {
     }
     //Узел "пока"
     else if (typeof node.value == "object"
-        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR" || node.value.getAttribute("type") == "HYP")
         && node.value.getAttribute("typeCycle") == "while") {
-        resultNode = whileNodeToXml(doc, node, editorUi, predeterminingNode);
+        resultNode = whileNodeToXml(doc, node, editorUi);
     }
     //Узел цикла
     else if (typeof node.value == "object"
-        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR")
+        && (node.value.getAttribute("operator") == "AND" || node.value.getAttribute("operator") == "OR" || node.value.getAttribute("type") == "HYP")
         && node.value.getAttribute("typeCycle") == null) {
-        resultNode = cycleNodeToXml(doc, node, editorUi, predeterminingNode);
+        resultNode = cycleNodeToXml(doc, node, editorUi);
     }
-    //Узел неопределенность предрешающего фактора
+    //Узел Null
     else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
-        if (predeterminingNode != null) {
-            resultNode = doc.createElement("BranchResultNode");
-            resultNode.setAttribute("value", "false");
-        } else {
-            resultNode = doc.createElement("UndeterminedNode");
-        }
+        resultNode = doc.createElement("BranchResultNode");
+        resultNode.setAttribute("value", "null");
     }
     return resultNode;
 }
@@ -14356,7 +14709,11 @@ function branchResultNodeToXml(doc, node, resultBranch) {
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    resultNode.setAttribute("value", resultBranch)
+    if (resultBranch) {
+        resultNode.setAttribute("value", "correct")
+    } else {
+        resultNode.setAttribute("value", "error")
+    }
 
     if (node.value.getAttribute("expression") != "") {
         let expressionNode = doc.createElement("Expression");
@@ -14370,7 +14727,7 @@ function branchResultNodeToXml(doc, node, resultBranch) {
     return resultNode;
 }
 
-function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining) {
+function questionNodeToXml(doc, node, isSwitch, editorUi) {
     let resultNode = doc.createElement("QuestionNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"))
@@ -14392,12 +14749,12 @@ function questionNodeToXml(doc, node, isSwitch, editorUi, isPredetermining) {
     resultNode.appendChild(expressionNode);
 
     //Следующие ветки
-    resultNode = outcomeToXml(doc, resultNode, node, editorUi, isPredetermining);
+    resultNode = outcomeToXml(doc, resultNode, node, editorUi);
 
     return resultNode;
 }
 
-function actionNodeToXml(doc, node, editorUi, isPredetermining) {
+function actionNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("FindActionNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
@@ -14420,13 +14777,13 @@ function actionNodeToXml(doc, node, editorUi, isPredetermining) {
     resultNode.appendChild(decisionTreeVarDeclNode);
 
     //Следующие ветки
-    resultNode = outcomeToXml(doc, resultNode, node, editorUi, isPredetermining);
+    resultNode = outcomeToXml(doc, resultNode, node, editorUi);
 
     return resultNode;
 }
 
-function whileNodeToXml(doc, node, editorUi, isPredetermining) {
-    let resultNode = doc.createElement("WhileAggregationNode");
+function whileNodeToXml(doc, node, editorUi) {
+    let resultNode = doc.createElement("WhileCycleNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -14457,24 +14814,25 @@ function whileNodeToXml(doc, node, editorUi, isPredetermining) {
                 valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
-                    || (valueEdge.getAttribute("type") != "True"
-                        && valueEdge.getAttribute("type") != "False"
+                    || (valueEdge.getAttribute("type") != "Correct"
+                        && valueEdge.getAttribute("type") != "Error"
+                        && valueEdge.getAttribute("type") != "Null"
                         && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("typeOutcomeCycleIsMissing")
                         + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
-                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
-                    if (valueEdge.getAttribute("type") == "True") {
-                        trueCount++;
-                    } else {
-                        falseCount++;
-                    }
+                if (valueEdge.getAttribute("type") == "Correct" || valueEdge.getAttribute("type") == "Error" || valueEdge.getAttribute("type") == "Null") {
+                    // if (valueEdge.getAttribute("type") == "Correct") {
+                    //     trueCount++;
+                    // } else {
+                    //     falseCount++;
+                    // }
 
                     let outcomeNode = doc.createElement("Outcome");
                     outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
                     outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
-                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(outcomeNode);
 
                 } else if (valueEdge.getAttribute("type") == "Body") {
@@ -14483,7 +14841,7 @@ function whileNodeToXml(doc, node, editorUi, isPredetermining) {
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
-                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(thoughtBranchNode);
 
                     bodyCount++;
@@ -14509,7 +14867,7 @@ function whileNodeToXml(doc, node, editorUi, isPredetermining) {
     return resultNode;
 }
 
-function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
+function cycleNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("CycleAggregationNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
@@ -14541,24 +14899,25 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
                 valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
-                    || (valueEdge.getAttribute("type") != "True"
-                        && valueEdge.getAttribute("type") != "False"
+                    || (valueEdge.getAttribute("type") != "Correct"
+                        && valueEdge.getAttribute("type") != "Error"
+                        && valueEdge.getAttribute("type") != "Null"
                         && valueEdge.getAttribute("type") != "Body")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("typeOutcomeCycleIsMissing")
                         + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
-                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
-                    if (valueEdge.getAttribute("type") == "True") {
-                        trueCount++;
-                    } else {
-                        falseCount++;
-                    }
+                if (valueEdge.getAttribute("type") == "Correct" || valueEdge.getAttribute("type") == "Error" || valueEdge.getAttribute("type") == "Null") {
+                    // if (valueEdge.getAttribute("type") == "Correct") {
+                    //     trueCount++;
+                    // } else {
+                    //     falseCount++;
+                    // }
 
                     let outcomeNode = doc.createElement("Outcome");
                     outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
                     outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
-                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(outcomeNode);
 
                 } else if (valueEdge.getAttribute("type") == "Body") {
@@ -14567,7 +14926,7 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
-                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(thoughtBranchNode);
 
                     bodyCount++;
@@ -14593,8 +14952,8 @@ function cycleNodeToXml(doc, node, editorUi, isPredetermining) {
     return resultNode;
 }
 
-function logicNodeToXml(doc, node, editorUi, isPredetermining) {
-    let resultNode = doc.createElement("LogicAggregationNode");
+function logicNodeToXml(doc, node, editorUi) {
+    let resultNode = doc.createElement("BranchAggregationNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -14610,30 +14969,31 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining) {
                 valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
-                    || (valueEdge.getAttribute("type") != "True"
-                        && valueEdge.getAttribute("type") != "False"
+                    || (valueEdge.getAttribute("type") != "Correct"
+                        && valueEdge.getAttribute("type") != "Error"
+                        && valueEdge.getAttribute("type") != "Null"
                         && valueEdge.getAttribute("type") != "Branch")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing")
                         + "\nУзел с текстом: " + node.value.getAttribute("label"));
                 }
-                if (valueEdge.getAttribute("type") == "True" || valueEdge.getAttribute("type") == "False") {
-                    if (valueEdge.getAttribute("type") == "True") {
-                        trueCount++;
-                    } else {
-                        falseCount++;
-                    }
+                if (valueEdge.getAttribute("type") == "Correct" || valueEdge.getAttribute("type") == "Error" || valueEdge.getAttribute("type") == "Null") {
+                    // if (valueEdge.getAttribute("type") == "Correct") {
+                    //     trueCount++;
+                    // } else {
+                    //     falseCount++;
+                    // }
                     let outcomeNode = doc.createElement("Outcome");
                     outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
                     outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
-                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(outcomeNode);
 
                 } else if (valueEdge.getAttribute("type") == "Branch") {
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
-                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                     resultNode.appendChild(thoughtBranchNode);
                     branchCount++;
                 }
@@ -14658,80 +15018,122 @@ function logicNodeToXml(doc, node, editorUi, isPredetermining) {
 }
 
 function predeterminingNodeToXml(doc, node, editorUi) {
-    let resultNode = doc.createElement("PredeterminingFactorsNode");
+    let resultNode = doc.createElement("BranchAggregationNode");
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
+    resultNode.setAttribute("operator", "MUTEX");
     resultNode = getQuestionInfoNode(resultNode, node, false);
 
     //Следующие ветки
     let predCount = 0;
     let undertermCount = 0;
+    let branchCount = 0;
+    let trueCount = 0;
+    let falseCount = 0;
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
-            valueEdge = node.edges[i].value;
-            if (node.edges[i].target != node && (valueEdge == null || typeof valueEdge != "object"
-                || !valueEdge.getAttribute("type")
-                || (valueEdge.getAttribute("type") != "predeterminingBranch"
-                    && valueEdge.getAttribute("type") != "undetermined"))) {
-                markOutcome(editorUi.editor.graph, node.edges[i])
-                throw new Error(getTextByLocale("typeOutcomePredIsMissing")
-                    + "\nУзел с текстом: " + node.value.getAttribute("label"));
-            }
-
-            if (node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
-                let resultNodes = checkCorrectPredeterminingBranch(node.edges[i].target);
-                for (let j = 0; j < resultNodes.length; j++) {
-                    let resultBranchNode = resultNodes[j];
-                    predCount++;
+            if (node.edges[i].target != node) {
+                valueEdge = node.edges[i].value;
+                if (valueEdge == null || typeof valueEdge != "object"
+                    || !valueEdge.getAttribute("type")
+                    || (valueEdge.getAttribute("type") != "Correct"
+                        && valueEdge.getAttribute("type") != "Error"
+                        && valueEdge.getAttribute("type") != "Null"
+                        && valueEdge.getAttribute("type") != "Branch")) {
+                    markOutcome(editorUi.editor.graph, node.edges[i])
+                    throw new Error(getTextByLocale("typeOutcomeLogicNodeIsMissing")
+                        + "\nУзел с текстом: " + node.value.getAttribute("label"));
+                }
+                if (valueEdge.getAttribute("type") == "Correct" || valueEdge.getAttribute("type") == "Error" || valueEdge.getAttribute("type") == "Null") {
+                    // if (valueEdge.getAttribute("type") == "Correct") {
+                    //     trueCount++;
+                    // } else {
+                    //     falseCount++;
+                    // }
                     let outcomeNode = doc.createElement("Outcome");
-                    outcomeNode.setAttribute("value", specialChars(node.edges[i].value.getAttribute("label")));
+                    outcomeNode.setAttribute("value", specialChars(valueEdge.getAttribute("type")));
+                    outcomeNode = getQuestionInfoOutcome(outcomeNode, node.edges[i]);
+                    outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
+                    resultNode.appendChild(outcomeNode);
+
+                } else if (valueEdge.getAttribute("type") == "Branch") {
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
                     thoughtBranchNode.setAttribute("type", "bool");
-
-                    let questionInfo = getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, node.edges[i]);
-                    outcomeNode = questionInfo[0];
-                    thoughtBranchNode = questionInfo[1];
-
-                    outcomeNode.appendChild(switchCaseNodes(doc, resultBranchNode, editorUi, null));
-
-
-                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, resultBranchNode));
-
-                    outcomeNode.appendChild(thoughtBranchNode);
-
-                    resultNode.appendChild(outcomeNode);
+                    thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
+                    thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
+                    resultNode.appendChild(thoughtBranchNode);
+                    branchCount++;
                 }
             }
         }
     }
 
-    if (node.edges) {
-        for (let i = 0; i < node.edges.length; i++) {
-            if (node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
-                undertermCount++;
-                let outcomeNode = doc.createElement("Outcome");
-                outcomeNode.setAttribute("value", "undetermined");
-                outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, null));
-                resultNode.appendChild(outcomeNode);
-            }
-        }
-    }
+    // if (node.edges) {
+    //     for (let i = 0; i < node.edges.length; i++) {
+    //         valueEdge = node.edges[i].value;
+    //         if (node.edges[i].target != node && (valueEdge == null || typeof valueEdge != "object"
+    //             || !valueEdge.getAttribute("type")
+    //             || (valueEdge.getAttribute("type") != "predeterminingBranch"
+    //                 && valueEdge.getAttribute("type") != "undetermined"))) {
+    //             markOutcome(editorUi.editor.graph, node.edges[i])
+    //             throw new Error(getTextByLocale("typeOutcomePredIsMissing")
+    //                 + "\nУзел с текстом: " + node.value.getAttribute("label"));
+    //         }
+
+    //         if (node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
+    //             let resultNodes = checkCorrectPredeterminingBranch(node.edges[i].target);
+    //             for (let j = 0; j < resultNodes.length; j++) {
+    //                 let resultBranchNode = resultNodes[j];
+    //                 predCount++;
+    //                 let outcomeNode = doc.createElement("Outcome");
+    //                 outcomeNode.setAttribute("value", specialChars(node.edges[i].value.getAttribute("label")));
+    //                 let thoughtBranchNode = doc.createElement("ThoughtBranch");
+    //                 thoughtBranchNode.setAttribute("type", "bool");
+
+    //                 let questionInfo = getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, node.edges[i]);
+    //                 outcomeNode = questionInfo[0];
+    //                 thoughtBranchNode = questionInfo[1];
+
+    //                 outcomeNode.appendChild(switchCaseNodes(doc, resultBranchNode, editorUi, null));
+
+
+    //                 thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, resultBranchNode));
+
+    //                 outcomeNode.appendChild(thoughtBranchNode);
+
+    //                 resultNode.appendChild(outcomeNode);
+    //             }
+    //         }
+    //     }
+    // }
+
+    // if (node.edges) {
+    //     for (let i = 0; i < node.edges.length; i++) {
+    //         if (node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
+    //             undertermCount++;
+    //             let outcomeNode = doc.createElement("Outcome");
+    //             outcomeNode.setAttribute("value", "undetermined");
+    //             outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, null));
+    //             resultNode.appendChild(outcomeNode);
+    //         }
+    //     }
+    // }
     let errorPred = "";
-    if (predCount == 0) {
-        errorPred += getTextByLocale("predOutcomeIsMissing");
-    }
-    if (undertermCount != 1) {
-        errorPred += getTextByLocale("undeterminedOnlyOne");
-    }
-    if (errorPred) {
-        throw new Error(errorPred + "\nУзел с текстом: " + node.value.getAttribute("label"));
-    }
+    // if (predCount == 0) {
+    //     errorPred += getTextByLocale("predOutcomeIsMissing");
+    // }
+    // if (undertermCount != 1) {
+    //     errorPred += getTextByLocale("undeterminedOnlyOne");
+    // }
+    // if (errorPred) {
+    //     throw new Error(errorPred + "\nУзел с текстом: " + node.value.getAttribute("label"));
+    // }
 
     return resultNode;
 }
 
-function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining) {
+function outcomeToXml(doc, parentNode, node, editorUi) {
     let prevValues = new Set();
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
@@ -14789,7 +15191,7 @@ function outcomeToXml(doc, parentNode, node, editorUi, isPredetermining) {
                 resultNode = getQuestionInfoOutcome(resultNode, node.edges[i]);
 
                 resultNode.setAttribute("value", specialChars(valueEdge.getAttribute("value")));
-                resultNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, isPredetermining));
+                resultNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
                 parentNode.appendChild(resultNode);
             }
         }
@@ -14958,6 +15360,10 @@ function getType(root) {
     } else if (!root.secondExpr && root.firstExpr) {
         return getType(root.firstExpr);
     } else if (root.secondExpr && root.firstExpr) {
+        return SemanticType.ASSIGN;
+    } else if (root.type && root.type == ExprType.IF) {
+        return SemanticType.ASSIGN;
+    } else if (root.type && root.type == ExprType.WITH) {
         return SemanticType.ASSIGN;
     } else if (root.type && root.type == ExprType.STRING) {
         return SemanticType.STRING;
