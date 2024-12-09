@@ -203,12 +203,9 @@ Draw.loadPlugin(function (ui) {
 
     // Действие на создание узла неопределеноость предрешающего фактора
     ui.actions.addAction('UncertaintyNodeCreate', function () {
-        var theGraph = ui.editor.graph;
-        if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
-            var pos = theGraph.getInsertPoint();
-            var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
-            newElement.vertex = !0;
-            theGraph.setSelectionCell(theGraph.addCell(newElement));
+        if (!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
+            this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, null, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
+            this.branchResultNodeConstructorWindow.window.setVisible(true);
         }
     });
 
@@ -372,6 +369,11 @@ Draw.loadPlugin(function (ui) {
                 this.branchResultNodeEditorWindow.window.setVisible(true);
             } else if (selectedcell.value != null && typeof selectedcell.value == "object"
                 && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+                && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
+                this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
+                this.branchResultNodeEditorWindow.window.setVisible(true);
+            } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;"
                 && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                 this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                 this.branchResultNodeEditorWindow.window.setVisible(true);

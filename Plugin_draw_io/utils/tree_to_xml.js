@@ -104,8 +104,7 @@ function switchCaseNodes(doc, node, editorUi) {
     }
     //Узел Null
     else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
-        resultNode = doc.createElement("BranchResultNode");
-        resultNode.setAttribute("value", "null");
+        resultNode = branchResultNodeToXml(doc, node, null);
     }
     return resultNode;
 }
@@ -116,7 +115,9 @@ function branchResultNodeToXml(doc, node, resultBranch) {
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    if (resultBranch) {
+    if (resultBranch == null) {
+        resultNode.setAttribute("value", "null")
+    } else if (resultBranch) {
         resultNode.setAttribute("value", "correct")
     } else {
         resultNode.setAttribute("value", "error")

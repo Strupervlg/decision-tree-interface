@@ -20,21 +20,23 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         }
-        
+
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement;
-            if(result) {
+            if (result == null) {
+                newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
+            } else if (result) {
                 newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;");
             } else {
                 newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;");
             }
-            
+
             //TODO: Возможно сделать подсветку в самом узле 
 
             newElement.vertex = !0;
@@ -49,7 +51,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -57,7 +59,7 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('branchResultCreateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -79,15 +81,15 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "branchResultCreateBlocklyDiv";
     nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
-    nestedDiv.style.height = h*0.88+'px';
+    nestedDiv.style.height = h * 0.88 + 'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
-        if(code) {
-            try { 
+        if (code) {
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
@@ -95,12 +97,14 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement;
-            if(result) {
+            if (result == null) {
+                newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
+            } else if (result) {
                 newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;");
             } else {
                 newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;");
             }
-            
+
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
