@@ -13143,9 +13143,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
-            let optionTrue = new Option("Correct", "Correct");
+            let optionTrue = new Option("True", "True");
             selectValue.options[selectValue.options.length] = optionTrue;
-            let optionFalse = new Option("Error", "Error");
+            let optionFalse = new Option("False", "False");
             selectValue.options[selectValue.options.length] = optionFalse;
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
@@ -13421,7 +13421,9 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement;
-            if (result) {
+            if (result == null) {
+                newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
+            } else if (result) {
                 newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;");
             } else {
                 newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;");
@@ -13487,7 +13489,9 @@ var BranchResultNodeConstructorWindow = function (editorUi, result, x, y, w, h) 
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement;
-            if (result) {
+            if (result == null) {
+                newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
+            } else if (result) {
                 newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;editable=0;");
             } else {
                 newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;");
@@ -14697,8 +14701,7 @@ function switchCaseNodes(doc, node, editorUi) {
     }
     //Узел Null
     else if (node.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;") {
-        resultNode = doc.createElement("BranchResultNode");
-        resultNode.setAttribute("value", "null");
+        resultNode = branchResultNodeToXml(doc, node, null);
     }
     return resultNode;
 }
@@ -14709,7 +14712,9 @@ function branchResultNodeToXml(doc, node, resultBranch) {
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
-    if (resultBranch) {
+    if (resultBranch == null) {
+        resultNode.setAttribute("value", "null")
+    } else if (resultBranch) {
         resultNode.setAttribute("value", "correct")
     } else {
         resultNode.setAttribute("value", "error")
@@ -15069,56 +15074,6 @@ function predeterminingNodeToXml(doc, node, editorUi) {
         }
     }
 
-    // if (node.edges) {
-    //     for (let i = 0; i < node.edges.length; i++) {
-    //         valueEdge = node.edges[i].value;
-    //         if (node.edges[i].target != node && (valueEdge == null || typeof valueEdge != "object"
-    //             || !valueEdge.getAttribute("type")
-    //             || (valueEdge.getAttribute("type") != "predeterminingBranch"
-    //                 && valueEdge.getAttribute("type") != "undetermined"))) {
-    //             markOutcome(editorUi.editor.graph, node.edges[i])
-    //             throw new Error(getTextByLocale("typeOutcomePredIsMissing")
-    //                 + "\nУзел с текстом: " + node.value.getAttribute("label"));
-    //         }
-
-    //         if (node.edges[i].target != node && node.edges[i].value.getAttribute("type") == "predeterminingBranch") {
-    //             let resultNodes = checkCorrectPredeterminingBranch(node.edges[i].target);
-    //             for (let j = 0; j < resultNodes.length; j++) {
-    //                 let resultBranchNode = resultNodes[j];
-    //                 predCount++;
-    //                 let outcomeNode = doc.createElement("Outcome");
-    //                 outcomeNode.setAttribute("value", specialChars(node.edges[i].value.getAttribute("label")));
-    //                 let thoughtBranchNode = doc.createElement("ThoughtBranch");
-    //                 thoughtBranchNode.setAttribute("type", "bool");
-
-    //                 let questionInfo = getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, node.edges[i]);
-    //                 outcomeNode = questionInfo[0];
-    //                 thoughtBranchNode = questionInfo[1];
-
-    //                 outcomeNode.appendChild(switchCaseNodes(doc, resultBranchNode, editorUi, null));
-
-
-    //                 thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, resultBranchNode));
-
-    //                 outcomeNode.appendChild(thoughtBranchNode);
-
-    //                 resultNode.appendChild(outcomeNode);
-    //             }
-    //         }
-    //     }
-    // }
-
-    // if (node.edges) {
-    //     for (let i = 0; i < node.edges.length; i++) {
-    //         if (node.edges[i].target != node && node.edges[i] && node.edges[i].value.getAttribute("type") == "undetermined") {
-    //             undertermCount++;
-    //             let outcomeNode = doc.createElement("Outcome");
-    //             outcomeNode.setAttribute("value", "undetermined");
-    //             outcomeNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi, null));
-    //             resultNode.appendChild(outcomeNode);
-    //         }
-    //     }
-    // }
     let errorPred = "";
     // if (predCount == 0) {
     //     errorPred += getTextByLocale("predOutcomeIsMissing");
@@ -15739,12 +15694,9 @@ window.addEventListener("load", function () {
 
         // Действие на создание узла неопределеноость предрешающего фактора
         ui.actions.addAction('UncertaintyNodeCreate', function () {
-            var theGraph = ui.editor.graph;
-            if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
-                var pos = theGraph.getInsertPoint();
-                var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 66, 30), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
-                newElement.vertex = !0;
-                theGraph.setSelectionCell(theGraph.addCell(newElement));
+            if (!this.branchResultNodeConstructorWindow || !this.branchResultNodeConstructorWindow.window.content) {
+                this.branchResultNodeConstructorWindow = new BranchResultNodeConstructorWindow(ui, null, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
+                this.branchResultNodeConstructorWindow.window.setVisible(true);
             }
         });
 
@@ -15908,6 +15860,11 @@ window.addEventListener("load", function () {
                     this.branchResultNodeEditorWindow.window.setVisible(true);
                 } else if (selectedcell.value != null && typeof selectedcell.value == "object"
                     && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;editable=0;"
+                    && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
+                    this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
+                    this.branchResultNodeEditorWindow.window.setVisible(true);
+                } else if (selectedcell.value != null && typeof selectedcell.value == "object"
+                    && selectedcell.style == "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;"
                     && (!this.branchResultNodeEditorWindow || !this.branchResultNodeEditorWindow.window.content)) {
                     this.branchResultNodeEditorWindow = new BranchResultNodeEditorWindow(selectedcell, ui, document.body.offsetLeft + 100, document.body.offsetTop + 100, window.screen.width - 200, window.screen.height - 300);
                     this.branchResultNodeEditorWindow.window.setVisible(true);
