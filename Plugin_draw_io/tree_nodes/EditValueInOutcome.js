@@ -64,9 +64,9 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             selectValue = styleSelect(selectValue);
             selectValue.id = "value_input";
             selectValue.style.width = '100%';
-            let optionTrue = new Option("Correct", "Correct");
+            let optionTrue = new Option("True", "True");
             selectValue.options[selectValue.options.length] = optionTrue;
-            let optionFalse = new Option("Error", "Error");
+            let optionFalse = new Option("False", "False");
             selectValue.options[selectValue.options.length] = optionFalse;
             labelValue.appendChild(selectValue);
             divText.appendChild(labelValue);
