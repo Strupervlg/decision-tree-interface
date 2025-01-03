@@ -21,6 +21,7 @@ among           return 'AMONG';
 if              return 'IF';
 with            return 'WITH';
 as              return 'AS';
+class           return 'CLASS_LITERAL'
 
 
 "->"         return '->';
@@ -41,9 +42,10 @@ as              return 'AS';
 "<"          return '<';
 "::"         return '::';
 "+=>"        return '+=>';
+":"         return ':';
 
 
-var\:[a-zA-Z_][A-Za-z0-9_]*           return 'TREE_VAR';
+obj\:[a-zA-Z_][A-Za-z0-9_]*           return 'OBJ_VAR';
 [a-zA-Z_][A-Za-z0-9_]*               return 'ID'; 
 \$[a-zA-Z_][A-Za-z0-9_]*           return 'VAR';
 
@@ -109,12 +111,13 @@ stmt
 
 exp
     : ID { $$ = createLiteral(ExprType.ID, $1); }
+    | CLASS_LITERAL ":" ID { $$ = createLiteral(ExprType.CLASS, $3); }
     | STRING { $$ = createLiteral(ExprType.STRING, $1); }
     | INT { $$ = createLiteral(ExprType.INT, $1); }
     | DOUBLE { $$ = createLiteral(ExprType.DOUBLE, $1); }
     | TRUE { $$ = createLiteral(ExprType.BOOLEAN, true); }
     | FALSE { $$ = createLiteral(ExprType.BOOLEAN, false); }
-    | TREE_VAR { $$ = createLiteral(ExprType.TREE_VAR, $1); }
+    | OBJ_VAR { $$ = createLiteral(ExprType.OBJ_VAR, $1); }
     | VAR { $$ = createLiteral(ExprType.VAR, $1); }
     | ID "::" ID { $$ = createEnum($1, $3); }
     | exp "->" ID { $$ = createGetObjectByRel($1, $3); }
