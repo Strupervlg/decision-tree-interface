@@ -60,7 +60,8 @@ const ExprType = {
     INT: 'int',
     DOUBLE: 'double',
     BOOLEAN: 'boolean',
-    TREE_VAR: 'tree_var',
+    CLASS: 'class',
+    OBJ_VAR: 'obj_var',
     VAR: 'var',
     ENUM: 'enum',
     GET_BY_RELATIONSHIP: 'get by relationship',
@@ -153,7 +154,9 @@ function createLiteral(typeNode, literal) {
     newNode.type = typeNode;
     if (typeNode == ExprType.ID) {
         newNode.ident = literal;
-    } else if (typeNode == ExprType.TREE_VAR) {
+    } else if (typeNode == ExprType.CLASS) {
+        newNode.ident = literal;
+    } else if (typeNode == ExprType.OBJ_VAR) {
         newNode.ident = literal.substring(4);
     } else if (typeNode == ExprType.VAR) {
         newNode.ident = literal.substring(1);
@@ -251,3 +254,11 @@ function addObjectToObjectSeqNode(seq, expr) {
 var root;
 
 var string;
+
+// Для экспорта
+module.exports = {
+    createBinExprNode, createGetObjectByRel, createUnaryExprNode,
+    createLiteral, createEnum, createCheckRelExprNode, createGetExprNode, createFindExtremeExprNode,
+    createQuantifierExprNode, createObjectSeqNode, addObjectToObjectSeqNode, root, string, ObjectSeq,
+    ProgramNode, StatementNode, ExpressionNode, ExprType
+}

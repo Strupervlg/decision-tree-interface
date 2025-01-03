@@ -25,7 +25,7 @@ function blockNodeToBlock(blockNode) {
 function stmtNodeToBlock(stmtNode) {
     if (stmtNode.secondExpr == null) {
         return printExprNode(stmtNode.firstExpr);
-    } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.TREE_VAR) {
+    } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type == ExprType.ID) {
         var assignment = new Blockly.BlockSvg(workspace, "assign_value_to_variable_decision_tree");
         assignment.initSvg();
         assignment.render();
@@ -89,19 +89,25 @@ function stmtNodeToBlock(stmtNode) {
 
         return resBlock
     } else if (stmtNode.secondExpr != null && stmtNode.firstExpr.type != ExprType.PROPERTY
-        && stmtNode.firstExpr.type != ExprType.TREE_VAR && stmtNode.type != StmtType.ADD_RELATION) {
+        && stmtNode.firstExpr.type != ExprType.ID && stmtNode.type != StmtType.ADD_RELATION) {
         throw new Error('Invalid type in ASSIGN: to the left of "=" is expected TREE VAR or GET PROPERTY');
     }
 }
 
 function printExprNode(exprNode) {
     switch (exprNode.type) {
-        case ExprType.ID:
+        case ExprType.OBJ_VAR:
             var resBlock = new Blockly.BlockSvg(workspace, "object");
             resBlock.initSvg();
             resBlock.render();
             resBlock.inputList[0].fieldRow[0].setValue(exprNode.ident);
             return resBlock
+        case ExprType.CLASS:
+            var classBlock = new Blockly.BlockSvg(workspace, "class");
+            classBlock.initSvg();
+            classBlock.render();
+            classBlock.inputList[0].fieldRow[0].setValue(exprNode.ident);
+            return classBlock
         case ExprType.STRING:
             var resBlock = new Blockly.BlockSvg(workspace, "string");
             resBlock.initSvg();
@@ -126,7 +132,7 @@ function printExprNode(exprNode) {
             resBlock.render();
             resBlock.inputList[0].fieldRow[0].setValue(exprNode.boolean);
             return resBlock
-        case ExprType.TREE_VAR:
+        case ExprType.ID:
             var resBlock = new Blockly.BlockSvg(workspace, "ref_to_decision_tree_var");
             resBlock.initSvg();
             resBlock.render();
@@ -188,7 +194,7 @@ function printExprNode(exprNode) {
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
 
-            if (exprNode.secondOperand.type == ExprType.ID) {
+            if (exprNode.secondOperand.type == ExprType.CLASS) {
                 var classBlock = new Blockly.BlockSvg(workspace, "class");
                 classBlock.initSvg();
                 classBlock.render();
@@ -450,7 +456,7 @@ function printExprNode(exprNode) {
             checkTypeBlocks(resBlock, objBlock, "object");
             resBlock.getInput("object").connection.connect(objBlock.outputConnection);
 
-            if (exprNode.cast.type == ExprType.ID) {
+            if (exprNode.cast.type == ExprType.CLASS) {
                 var classBlock = new Blockly.BlockSvg(workspace, "class");
                 classBlock.initSvg();
                 classBlock.render();

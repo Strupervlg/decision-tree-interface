@@ -1,12 +1,12 @@
 Blockly.JavaScript['object'] = function (block) {
   var text_object_name = block.getFieldValue('object_name');
-  var code = text_object_name;
+  var code = "obj:" + text_object_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['class'] = function (block) {
   var text_class_name = block.getFieldValue('class_name');
-  var code = text_class_name;
+  var code = "class:" + text_class_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -224,7 +224,7 @@ Blockly.JavaScript['quantifier_of_generality'] = function (block) {
 
 Blockly.JavaScript['ref_to_decision_tree_var'] = function (block) {
   var text_var_name = block.getFieldValue('var_name');
-  var code = 'var:' + text_var_name;
+  var code = text_var_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

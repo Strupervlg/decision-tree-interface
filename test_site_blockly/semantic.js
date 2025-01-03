@@ -54,10 +54,11 @@ function getType(root) {
         || root.type == ExprType.GET_BY_RELATIONSHIP
         || root.type == ExprType.FIND
         || root.type == ExprType.FIND_EXTREM
-        || root.type == ExprType.TREE_VAR
+        || root.type == ExprType.OBJ_VAR
         || root.type == ExprType.CAST)) {
         return SemanticType.OBJECT;
-    } else if (root.type && root.type == ExprType.GET_CLASS) {
+    } else if (root.type && (root.type == ExprType.GET_CLASS
+        || root.type == ExprType.CLASS)) {
         return SemanticType.CLASS;
     } else if (root.type && root.type == ExprType.PROPERTY) {
         return SemanticType.PROPERTY_VALUE;
