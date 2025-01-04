@@ -75,6 +75,7 @@ obj\:[a-zA-Z_][A-Za-z0-9_]*           return 'OBJ_VAR';
 
 
 /* operator associations and precedence */
+%nonassoc ')'
 %right '=' '+=>'
 %left 'OR'
 %left 'AND'
@@ -82,8 +83,7 @@ obj\:[a-zA-Z_][A-Za-z0-9_]*           return 'OBJ_VAR';
 %left '==' '!='
 %left '>' '<' '<=' '>='
 %right 'NOT'
-%left '.' '->' '(' 'AS'
-%nonassoc ')'
+%left '.' '->' 'AS'
 
 %start program
 
