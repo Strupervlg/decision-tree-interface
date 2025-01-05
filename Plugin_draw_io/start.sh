@@ -1,0 +1,1 @@
+open -a /Applications/draw.io.app --args --enable-plugins
