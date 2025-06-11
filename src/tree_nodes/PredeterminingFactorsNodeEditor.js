@@ -7,7 +7,7 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
     table.style.width = '100%';
     table.style.height = '100%';
     var tbody = document.createElement('tbody');
-    
+
     var row = document.createElement('tr');
     var tdName = document.createElement('td');
     var name = document.createElement('input');
@@ -25,7 +25,7 @@ var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h
     var btnCreateNode = mxUtils.button(getTextByLocale("Apply"), function () {
         var theGraph = editorUi.editor.graph;
         var strValue = table.rows.item(0).getElementsByTagName("td")
-        .item(0).getElementsByTagName("input").item(0).value;
+            .item(0).getElementsByTagName("input").item(0).value;
 
         theGraph.getModel().beginUpdate();
         cell.value.setAttribute('label', strValue);

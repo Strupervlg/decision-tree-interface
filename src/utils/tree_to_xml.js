@@ -1,3 +1,5 @@
+//Обход в глубину по узлам дерева и формирование xml
+
 var LAST_ID;
 function treeToXml(editorUi) {
     var serializer = new XMLSerializer();

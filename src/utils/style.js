@@ -1,3 +1,4 @@
+//Файл со стилями
 function styleTable(table) {
     table.style.width = '100%';
     table.style.height = '80%';
@@ -49,7 +50,7 @@ function styleTextAreaExp(textarea) {
 }
 
 function styleBlocklyAreaExp(blocklyDiv, w, h) {
-    blocklyDiv.style.width = w+'px';
-    blocklyDiv.style.height = h*0.78+'px';
+    blocklyDiv.style.width = w + 'px';
+    blocklyDiv.style.height = h * 0.78 + 'px';
     return blocklyDiv;
 }

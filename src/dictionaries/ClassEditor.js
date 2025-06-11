@@ -9,7 +9,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
-    
+
     fillDataClass(tbody, cell);
     table.appendChild(tbody);
     div.appendChild(table);
@@ -22,7 +22,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
         for (var i = 0; i < table.rows.length; i++) {
             var expression = table.rows.item(i).getElementsByTagName("td")
                 .item(2).getElementsByTagName("textarea").item(0).value;
-            if(expression) {
+            if (expression) {
                 //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
                 parser.parse(expression)
             }
@@ -66,7 +66,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
         divBlockly.style.width = '850px';
         divBlockly.style.height = '500px';
         mainDivBlockly.appendChild(divBlockly);
-        
+
         var divInput = document.createElement('div');
         divInput.style.width = '850px';
         var codeInput = document.createElement('input');
@@ -81,7 +81,7 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
             codeInput.value = code;
         });
 
-        mainDivBlockly.appendChild(toCodeBtn);  
+        mainDivBlockly.appendChild(toCodeBtn);
 
         this.window2 = new mxWindow('Blockly', mainDivBlockly, (document.body.offsetWidth - 880) / 2, 120, 900, 580, true, true);
         this.window2.destroyOnClose = true;
@@ -113,23 +113,24 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Заполнение данными в окне
 function fillDataClass(tbody, cell) {
     let cellValue = cell.value;
     var cellLabel = cellValue.getAttribute('label');
     cellLabel = cellLabel.replace('<font color="#000000"><b>Classes</b></font><br>', '');
     var values = cellLabel.split('<br>');
-        
+
     values.forEach((element, index) => {
-        var nameClass = element.slice(element.indexOf('<font color="#ff66b3">')+22, element.indexOf('</font>'));
-        element = element.slice(element.indexOf('</font>')+7);
+        var nameClass = element.slice(element.indexOf('<font color="#ff66b3">') + 22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>') + 7);
 
         var classExtend = ""
-        if(element.indexOf('(<font color="#ff66b3">') != -1) {
-            classExtend = element.slice(element.indexOf('(<font color="#ff66b3">')+23, element.indexOf('</font>)'));
-            element = element.slice(element.indexOf('</font>)')+8);
+        if (element.indexOf('(<font color="#ff66b3">') != -1) {
+            classExtend = element.slice(element.indexOf('(<font color="#ff66b3">') + 23, element.indexOf('</font>)'));
+            element = element.slice(element.indexOf('</font>)') + 8);
         }
 
-        var expression = cellValue.getAttribute('expression_'+index)
+        var expression = cellValue.getAttribute('expression_' + index)
 
         var row = addRowClass();
 
@@ -140,8 +141,8 @@ function fillDataClass(tbody, cell) {
 
         row.getElementsByTagName("td").item(2)
             .getElementsByTagName("textarea").item(0).value = expression;
-        
-        if(index != 0) {
+
+        if (index != 0) {
             var tdDelRow = document.createElement('td');
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();

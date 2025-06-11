@@ -20,18 +20,18 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
-        
+
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;editable=0;");
-            
+
             //TODO: Возможно сделать подсветку в самом узле 
 
             newElement.vertex = !0;
@@ -46,7 +46,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -54,7 +54,7 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('switchCaseCreateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -76,26 +76,26 @@ var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "switchCaseCreateBlocklyDiv";
     nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
-    nestedDiv.style.height = h*0.88+'px';
+    nestedDiv.style.height = h * 0.88 + 'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
-        if(!code) {
+        if (!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         } else {
-            try { 
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
-        
+
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 80, 80), "rhombus;whiteSpace=wrap;html=1;editable=0;");
-            
+
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));

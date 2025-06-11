@@ -1,3 +1,4 @@
+//Файл с toolbox (Правая менюшка в окне с Blockly)
 var toolbox = {
     "kind": "categoryToolbox",
     "contents": [

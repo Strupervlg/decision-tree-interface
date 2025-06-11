@@ -65,6 +65,7 @@ var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Заполнение данными в окне
 function fillDataRelationships(tbody, cell, editorUi) {
     let cellValue = cell.value;
     var cellLabel = cellValue.getAttribute('label');
@@ -272,6 +273,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
     });
 }
 
+//Заполнение флагов у отношения
 function fillFlags(row, strBinFlags) {
     let arrayBinFlags = strBinFlags.split('');
 

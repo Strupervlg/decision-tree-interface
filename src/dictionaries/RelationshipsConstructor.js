@@ -72,6 +72,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Добавление строки с новым отношением в конструкторе
 function addRowRelationship(editorUi) {
     var tr1 = document.createElement('tr');
 
@@ -309,6 +310,7 @@ function addRowRelationship(editorUi) {
     return tr1;
 }
 
+//Валидация всех полей при сохранении
 function checkAllInputsRelationship(table) {
     errors = "";
     let arrayNames = [];
@@ -370,6 +372,7 @@ function checkAllInputsRelationship(table) {
     }
 }
 
+//Генерация строкового представления словаря для визуализации
 function generateStrValueForRelationships(table) {
     strValue = '<b><font color="#000000">Relationships between objects</font></b>';
     let listNames = [];
@@ -451,6 +454,7 @@ function generateStrValueForRelationships(table) {
     return [strValue, listNames, binFlags];
 }
 
+//Проверка существования словаря на полотне в draw io
 function checkExistRelationshipsDictionary(graph) {
     var cells = graph.getModel().cells;
     Object.keys(cells).forEach(function (key) {
@@ -461,6 +465,7 @@ function checkExistRelationshipsDictionary(graph) {
     });
 }
 
+//Установка флагов выбранной шкале
 function checkFlags(row, scale) {
     let tdSym = row.getElementsByClassName("symmetry")[0];
     let tdAntiSym = row.getElementsByClassName("antisymmetry")[0];
@@ -510,6 +515,7 @@ function checkFlags(row, scale) {
     }
 }
 
+//Генерация строки на основе установленных флагов
 function getMarkedFlags(row) {
     let sym = row.getElementsByClassName("symmetry")[0].getElementsByTagName("input").item(0).checked;
     let antiSym = row.getElementsByClassName("antisymmetry")[0].getElementsByTagName("input").item(0).checked;;

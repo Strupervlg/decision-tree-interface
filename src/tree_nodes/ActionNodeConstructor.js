@@ -18,30 +18,30 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Create"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
-        if(!nameVarInText.value) {
+        if (!nameVarInText.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInText.value)) {
+        } else if (!checkValidID(nameVarInText.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
-        
+
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;");
-            
+
             //TODO: Возможно сделать подсветку в самом узле 
 
             newElement.vertex = !0;
@@ -59,7 +59,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -67,7 +67,7 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('actionCreateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -113,33 +113,33 @@ var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Create"), function () {
         var code = generateCode(workspace);
-        if(!code) {
+        if (!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         } else {
-            try { 
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
         error = "";
-        if(!nameVarInBlockly.value) {
+        if (!nameVarInBlockly.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInBlockly.value)) {
+        } else if (!checkValidID(nameVarInBlockly.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
-        
+
         var theGraph = editorUi.editor.graph;
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 120, 60), "rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;editable=0;");
-            
+
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));

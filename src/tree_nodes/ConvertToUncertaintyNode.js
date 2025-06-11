@@ -2,7 +2,7 @@
 var ConvertToUncertaintyNode = function (cell, editorUi, x, y, w, h) {
     var theGraph = editorUi.editor.graph;
 
-    if(typeof cell.value == "object") {
+    if (typeof cell.value == "object") {
         var text = cell.value.getAttribute("label");
     } else {
         var text = cell.value;
@@ -11,29 +11,29 @@ var ConvertToUncertaintyNode = function (cell, editorUi, x, y, w, h) {
     if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
         var pos = theGraph.getInsertPoint();
         var newElement = new mxCell("", new mxGeometry(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height), "rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#666666;editable=0;");
-        
+
         newElement.vertex = !0;
         newElement.value = text
         theGraph.setSelectionCell(theGraph.addCell(newElement));
         theGraph.getModel().beginUpdate();
         var edgesNode = cell.edges;
-        if(edgesNode) {
+        if (edgesNode) {
             edgesNode.forEach((element, index) => {
                 var trgt = null;
                 var src = null;
-                if(element.source == cell) {
+                if (element.source == cell) {
                     element.source = newElement;
                     trgt = element.target;
                 } else {
                     element.target = newElement;
                     src = element.source;
                 }
-                if(!newElement.edges) {
+                if (!newElement.edges) {
                     newElement.edges = [element];
                 } else {
                     newElement.edges.push(element);
                 }
-                if(trgt) {
+                if (trgt) {
                     newElement.edges[index].target = trgt;
                 } else {
                     newElement.edges[index].source = src;

@@ -298,6 +298,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     }
 };
 
+//Валидация полей
 function checkAllInputsOutcome(div, outNodeValue) {
     errors = "";
     if (div.getElementsByTagName("input").item(0).value == "" && typeof outNodeValue == "object" && outNodeValue.getAttribute('type') != "START") {

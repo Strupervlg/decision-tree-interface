@@ -1,3 +1,5 @@
+//Файл с локализацией плагина
+
 function getTextByLocale(type) {
     if (mxClient.language == "ru") {
         return RU_TEXT[type];

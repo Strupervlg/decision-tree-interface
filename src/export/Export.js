@@ -1,3 +1,6 @@
+/* 
+  Функции для формирования CSV словарей для скачивания
+*/
 function exportEnums(jsonEnums) {
     var result = "";
     jsonEnums.forEach(enumItem => {
@@ -76,14 +79,18 @@ function exportRelastionships(jsonRelationships) {
     return result;
 }
 
+/** Подготовить xml узла для формирования дерева, которое будет скачаноAdd commentMore actions
+*/
 function codeToXML(workspace, code) {
-    workspace.clear()
-    root = null
-    parser.parse(code)
-    toBlock(root, workspace);
+    workspace.clear();
+    root = null;
+    parser.parse(code); // Распарсить код (глобально) 
+    toBlock(root, workspace); // Перевести код в блоки Blockly
     return blockToXML(workspace);
 }
 
+/** Перевести блоки Blockly в XML для its.Reasoner (для одного узла дерева)Add commentMore actions
+*/
 function blockToXML(workspace) {
     let xmlOutput = Blockly.Xml.workspaceToDom(workspace);
     let xls = loadXML(xslTxt)
@@ -92,7 +99,7 @@ function blockToXML(workspace) {
     let lastXML = d_.transformToFragment(xmlOutput, document);
     var s = new XMLSerializer();
     var strXML = s.serializeToString(lastXML);
-    return strXML.replace(/(?<=>)[\s]+(?=<)/g, '');
+    return strXML.replace(/(?<=>)[\s]+(?=<)/g, ''); // Убрать лишние пробелы между тегами.
 }
 
 function loadXML(string) {
@@ -100,6 +107,9 @@ function loadXML(string) {
     return oParser.parseFromString(string, "application/xml");
 }
 
+/** Правила для преобразования XML Blockly в XML для its.Reasoner (фрашмент tree.xml).Add commentMore actions
+    XSL — см. ru.wikipedia.org/wiki/XSL.
+*/
 const xslTxt = `<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 

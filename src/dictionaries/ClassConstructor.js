@@ -9,7 +9,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
-    
+
     var row = addRowClass();
     tbody.appendChild(row);
     table.appendChild(tbody);
@@ -23,7 +23,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         for (var i = 0; i < table.rows.length; i++) {
             var expression = table.rows.item(i).getElementsByTagName("td")
                 .item(2).getElementsByTagName("textarea").item(0).value;
-            if(expression) {
+            if (expression) {
                 //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
                 parser.parse(expression)
             }
@@ -32,7 +32,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         var theGraph = editorUi.editor.graph;
 
         checkExistClassDictionary(theGraph);
-        
+
         if (theGraph.isEnabled() && !theGraph.isCellLocked(theGraph.getDefaultParent())) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#6666FF;align=center;editable=0;");
@@ -72,10 +72,10 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         var mainDivBlockly = document.createElement('div');
         var divBlockly = document.createElement('div');
         divBlockly.id = 'classCreateBlocklyDiv'
-        divBlockly.style.width = widthBlockly+'px';
-        divBlockly.style.height = heightBlockly*0.83+'px';
+        divBlockly.style.width = widthBlockly + 'px';
+        divBlockly.style.height = heightBlockly * 0.83 + 'px';
         mainDivBlockly.appendChild(divBlockly);
-        
+
         var divInput = document.createElement('div');
         divInput.style.width = '100%';
         var codeInput = document.createElement('input');
@@ -126,6 +126,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Добавление строки с новым классом в конструкторе
 function addRowClass() {
     var tr1 = document.createElement('tr');
     tr1.style.width = '100%';
@@ -156,32 +157,34 @@ function addRowClass() {
     return tr1;
 }
 
+//Валидация всех полей при сохранении
 function checkAllInputsClass(table) {
     errors = "";
     let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
-        .item(0).getElementsByTagName("input").item(0).value;
+            .item(0).getElementsByTagName("input").item(0).value;
         arrayNames.push(checkValue);
         let checkValueExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
-        if(checkValue == "") {
-            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
-        } else if(!checkValidID(checkValue)) {
-            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
+        if (checkValue == "") {
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i + 1));
+        } else if (!checkValidID(checkValue)) {
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i + 1));
         }
-        if(checkValueExtend != "" && !checkValidID(checkValueExtend)) {
-            errors += getTextByLocale("extendClassIsIncorrect").replace("%i", (i+1));
+        if (checkValueExtend != "" && !checkValidID(checkValueExtend)) {
+            errors += getTextByLocale("extendClassIsIncorrect").replace("%i", (i + 1));
         }
     }
-    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+    if (arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
         errors += getTextByLocale("nonUniqueClassName");
     }
-    if(errors != "") {
+    if (errors != "") {
         throw new Error(errors);
     }
 }
 
+//Генерация строкового представления словаря для визуализации
 function generateStrValueForClasses(table) {
     strValue = '<font color="#000000"><b>Classes</b></font>';
 
@@ -190,9 +193,9 @@ function generateStrValueForClasses(table) {
             .item(0).getElementsByTagName("input").item(0).value;
         var classExtend = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
-        
+
         strValue += '<br><font color="#ff66b3">' + nameClass + '</font>';
-        if(classExtend != "") {
+        if (classExtend != "") {
             strValue += ' (<font color="#ff66b3">' + classExtend + '</font>)';
         }
     }
@@ -200,6 +203,7 @@ function generateStrValueForClasses(table) {
     return strValue;
 }
 
+//Проверка существования словаря на полотне в draw io
 function checkExistClassDictionary(graph) {
     var cells = graph.getModel().cells;
     Object.keys(cells).forEach(function (key) {

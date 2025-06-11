@@ -17,7 +17,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     asNextStep.style.height = "100px";
     asNextStep.style.fontSize = "20px";
     asNextStep.style.resize = "vertical";
-    if(cell.value.getAttribute("_asNextStep")) {
+    if (cell.value.getAttribute("_asNextStep")) {
         asNextStep.value = cell.value.getAttribute("_asNextStep");
     }
     var divAsNextStep = document.createElement('div');
@@ -32,13 +32,13 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     question.style.height = "100px";
     question.style.fontSize = "20px";
     question.style.resize = "vertical";
-    if(isLogicAggreg && cell.value.getAttribute("_description")) {
+    if (isLogicAggreg && cell.value.getAttribute("_description")) {
         question.value = cell.value.getAttribute("_description");
-    } else if(!isLogicAggreg && cell.value.getAttribute("_question")) {
+    } else if (!isLogicAggreg && cell.value.getAttribute("_question")) {
         question.value = cell.value.getAttribute("_question");
     }
     var divQuestion = document.createElement('div');
-    if(isLogicAggreg) {
+    if (isLogicAggreg) {
         divQuestion.innerHTML = getTextByLocale("descriptionQuestion");
     } else {
         divQuestion.innerHTML = getTextByLocale("questionQuestion");
@@ -53,7 +53,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     endingCause.style.height = "100px";
     endingCause.style.fontSize = "20px";
     endingCause.style.resize = "vertical";
-    if(cell.value.getAttribute("_endingCause")) {
+    if (cell.value.getAttribute("_endingCause")) {
         endingCause.value = cell.value.getAttribute("_endingCause");
     }
     var divEndingCause = document.createElement('div');
@@ -66,7 +66,7 @@ var EditQuestionInfoInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         graph.getModel().beginUpdate();
         cell.value.setAttribute("_asNextStep", asNextStep.value);
-        if(isLogicAggreg) {
+        if (isLogicAggreg) {
             cell.value.setAttribute("_description", question.value);
         } else {
             cell.value.setAttribute("_question", question.value);

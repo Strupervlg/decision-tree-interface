@@ -1,3 +1,4 @@
+//Получение списка енамов из словаря на полотне
 function getEnums(editorUi) {
 
     var graph = editorUi.editor.graph;
@@ -41,6 +42,7 @@ function getEnums(editorUi) {
     return enums;
 }
 
+//Получение списка классов из словаря на полотне
 function getClasses(editorUi) {
     var graph = editorUi.editor.graph;
     var cells = graph.getModel().cells;
@@ -80,6 +82,7 @@ function getClasses(editorUi) {
     return classes;
 }
 
+//Получение списка свойств из словаря на полотне
 function getProperties(editorUi) {
 
     var graph = editorUi.editor.graph;
@@ -132,6 +135,7 @@ function getProperties(editorUi) {
     return properties;
 }
 
+//Получение списка отношений из словаря на полотне
 function getRelationships(editorUi) {
 
     var graph = editorUi.editor.graph;

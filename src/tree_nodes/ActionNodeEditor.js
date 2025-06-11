@@ -19,27 +19,27 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
         error = "";
-        if(!nameVarInText.value) {
+        if (!nameVarInText.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInText.value)) {
+        } else if (!checkValidID(nameVarInText.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
+        if (typeof (selectClassInText.options[selectClassInText.options.selectedIndex]) == "undefined" || !selectClassInText.options[selectClassInText.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
 
         var typeInText = selectClassInText.options[selectClassInText.options.selectedIndex].value;
-        
+
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
@@ -57,7 +57,7 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -65,7 +65,7 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('actionUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -90,8 +90,8 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         selectClassInText.options[selectClassInText.options.length] = newOption;
     });
     let type = cell.value.getAttribute('typeVar');
-    for(let index = 0; index < selectClassInText.options.length; ++index) {
-        if(selectClassInText.options[index].value == type) {
+    for (let index = 0; index < selectClassInText.options.length; ++index) {
+        if (selectClassInText.options[index].value == type) {
             selectClassInText.options[index].selected = true;
         }
     }
@@ -118,25 +118,25 @@ var ActionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
-        if(!code) {
+        if (!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         } else {
-            try { 
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
         error = "";
-        if(!nameVarInBlockly.value) {
+        if (!nameVarInBlockly.value) {
             error += getTextByLocale("NameVariableIsMissing");
-        } else if(!checkValidID(nameVarInBlockly.value)) {
+        } else if (!checkValidID(nameVarInBlockly.value)) {
             error += getTextByLocale("NameVariableIsIncorrect");
         }
-        if(typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
+        if (typeof (selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex]) == "undefined" || !selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value) {
             error += getTextByLocale("TypeVariableIsMissing");
         }
-        if(error) {
+        if (error) {
             throw new Error(error);
         }
         var typeInBlockly = selectClassInBlockly.options[selectClassInBlockly.options.selectedIndex].value;

@@ -20,11 +20,11 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         }
-        
+
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
@@ -40,7 +40,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -48,7 +48,7 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('branchResultUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -70,15 +70,15 @@ var BranchResultNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "branchResultUpdateBlocklyDiv";
     nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
-    nestedDiv.style.height = h*0.88+'px';
+    nestedDiv.style.height = h * 0.88 + 'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
-        if(code) {
-            try { 
+        if (code) {
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }

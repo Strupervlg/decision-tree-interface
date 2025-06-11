@@ -1,3 +1,4 @@
+//Функции перевода распарсенного кода в блоки Blockly
 function toBlock(rootNode, workspace) {
     if (!rootNode.isBlock && rootNode.stmt != null) {
         stmtNodeToBlock(rootNode.stmt, workspace);

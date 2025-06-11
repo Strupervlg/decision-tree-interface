@@ -1,3 +1,4 @@
+//Список возможных типов
 const SemanticType = {
     OBJECT: 'object',
     CLASS: 'class',
@@ -12,7 +13,7 @@ const SemanticType = {
     BLOCK: 'block',
 };
 
-
+//Функция для определения типа выражения на верхнем уровне
 function getType(root) {
     if (root.isBlock && root.block) {
         return SemanticType.BLOCK;
@@ -69,6 +70,7 @@ function getType(root) {
     }
 }
 
+//Перевод блоков в код
 function generateCode(workspace) {
     if (workspace.getTopBlocks().length > 1) {
         throw new Error(getTextByLocale("moreBlocksInWorkspace"));
@@ -80,6 +82,7 @@ function generateCode(workspace) {
     return code;
 }
 
+//Получение типа узла на основе кода в нем
 function getTypeFromCode(code, editorUi) {
     root = null
     parser.parse(code)
@@ -115,6 +118,7 @@ function getTypeFromCode(code, editorUi) {
     return obj;
 }
 
+//Формирование начального текста на основе выражения в узле
 function getTextFromCode(code, editorUi) {
     if (code == "") {
         return "";
@@ -132,6 +136,7 @@ function getTextFromCode(code, editorUi) {
     return "";
 }
 
+//Получение текста на основе значений в стрелке
 function getTextFromValueInOutcome(value) {
     if (value == "") {
         return "";
@@ -145,12 +150,14 @@ function getTextFromValueInOutcome(value) {
     }
 }
 
+//Функция для проверки цикла в графе
 function CheckCycleInTree(startNode, editorUi) {
     if (hasCycle(startNode, editorUi)) {
         throw new Error(getTextByLocale("hasCycleInTree"));
     }
 }
 
+//Проверка на цикл в графе
 function hasCycle(root, editorUi) {
     const visited = new Set(); // Список посещенных узлов
 
@@ -178,6 +185,7 @@ function hasCycle(root, editorUi) {
     return dfs(root);
 }
 
+//Экранирование специальных символов
 function specialChars(str) {
     return str.replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -186,10 +194,12 @@ function specialChars(str) {
         .replace(/'/g, "&#039;");
 }
 
+//Валидация названий переменных
 function checkValidID(str) {
     return /^[a-zA-Z_][A-Za-z0-9_]*$/.test(str);
 }
 
+//Проверка на уникальность элементов в массиве
 function checkUniqueValues(values) {
     let setUniqueValues = new Set(values);
     let arrayUniqueValues = Array.from(setUniqueValues);

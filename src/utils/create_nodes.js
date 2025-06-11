@@ -1,3 +1,5 @@
+//Вспомогательные функции для парсинга
+
 var LASTID = 0;
 
 function ProgramNode(statement, isBlock) {

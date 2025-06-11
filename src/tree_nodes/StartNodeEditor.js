@@ -9,7 +9,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
-    
+
     fillDataStart(tbody, cell, editorUi);
     table.appendChild(tbody);
     div.appendChild(table);
@@ -63,11 +63,12 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Заполнение данными в окне
 function fillDataStart(tbody, cell, editorUi) {
     let cellValue = cell.value;
     var cellLabel = cellValue.getAttribute('label');
     var values = cellLabel.split('\n');
-        
+
     values.forEach((element, index) => {
         let varWithClass = element.split(" - ");
 
@@ -78,13 +79,13 @@ function fillDataStart(tbody, cell, editorUi) {
 
         var typeSelect = row.getElementsByTagName("td").item(1)
             .getElementsByTagName("select").item(0);
-        for(let index = 0; index < typeSelect.options.length; ++index) {
-            if(typeSelect.options[index].value == varWithClass[1]) {
+        for (let index = 0; index < typeSelect.options.length; ++index) {
+            if (typeSelect.options[index].value == varWithClass[1]) {
                 typeSelect.options[index].selected = true;
             }
         }
-        
-        if(index != 0) {
+
+        if (index != 0) {
             var tdDelRow = document.createElement('td');
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();

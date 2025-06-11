@@ -1,7 +1,7 @@
 // Плагин
 Draw.loadPlugin(function (ui) {
 
-    var graph = ui.editor.graph;
+    var graph = ui.editor.graph; //Полотно Draw io
     var model = graph.getModel();
 
 
@@ -520,6 +520,7 @@ Draw.loadPlugin(function (ui) {
     });
 });
 
+//Создание области для блоков в Blockly, для конвертации кода в блоки, чтобы потом получить xml выражений
 var divForGlobalWS = document.createElement('div');
 divForGlobalWS.id = "globalWS";
 document.body.appendChild(divForGlobalWS);

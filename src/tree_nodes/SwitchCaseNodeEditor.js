@@ -21,13 +21,13 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var btnCreateNodeInText = mxUtils.button(getTextByLocale("Apply"), function () {
 
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             //TODO: Возможно сделать обработку ошибок и выводить свои ошибки
             parser.parse(expression)
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
-        
+
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
@@ -43,7 +43,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка переключение на Blockly
     var btnSwitchToBlockly = mxUtils.button(getTextByLocale("SwitchBlockly"), function () {
         var expression = divText.getElementsByTagName("textarea").item(0).value;
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
         }
         divText.style.display = "none";
@@ -51,7 +51,7 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         nestedDiv.innerHTML = "";
         workspace = Blockly.inject('switchCaseUpdateBlocklyDiv', { toolbox: toolbox });
         workspace.clear();
-        if(expression) {
+        if (expression) {
             parser.parse(expression)
             toBlock(root, workspace);
         }
@@ -73,21 +73,21 @@ var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
     var nestedDiv = document.createElement('div');
     nestedDiv.id = "switchCaseUpdateBlocklyDiv";
     nestedDiv = styleBlocklyAreaExp(nestedDiv, w, h)
-    nestedDiv.style.height = h*0.88+'px';
+    nestedDiv.style.height = h * 0.88 + 'px';
 
     // Кнопка создания узла
     var btnCreateNodeInBlockly = mxUtils.button(getTextByLocale("Apply"), function () {
         var code = generateCode(workspace);
-        if(!code) {
+        if (!code) {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         } else {
-            try { 
+            try {
                 parser.parse(code);
-            } catch(e) {
+            } catch (e) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
-        
+
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();

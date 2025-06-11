@@ -4,10 +4,10 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     var graph = editorUi.editor.graph;
 
     let outNode = cell.source;
-    if(outNode == null) {
+    if (outNode == null) {
         throw new Error(getTextByLocale("sourceNodeIsMissing"));
     }
-    if(!cell.value || typeof cell.value != "object") {
+    if (!cell.value || typeof cell.value != "object") {
         throw new Error(getTextByLocale("ValueInOutcomeIsMissing"));
     }
 
@@ -17,14 +17,14 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     divText.style.height = "450px";
     divText.style.overflow = "scroll";
     let isThoughtBranch = typeof outNode.value == "object"
-    && (outNode.value.getAttribute('type') == "START" 
-    || ((outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")
-    && typeof cell.value == "object" && cell.value.getAttribute("type") == "Branch")
-    || ((outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR") 
-    && typeof cell.value == "object" && cell.value.getAttribute("type") == "Body"));
-    let isPredeterminingBranch = typeof cell.value == "object" 
+        && (outNode.value.getAttribute('type') == "START"
+            || ((outNode.value.getAttribute('type') == "AND" || outNode.value.getAttribute('type') == "OR")
+                && typeof cell.value == "object" && cell.value.getAttribute("type") == "Branch")
+            || ((outNode.value.getAttribute('operator') == "AND" || outNode.value.getAttribute('operator') == "OR")
+                && typeof cell.value == "object" && cell.value.getAttribute("type") == "Body"));
+    let isPredeterminingBranch = typeof cell.value == "object"
         && cell.value.getAttribute('type') == "predeterminingBranch";
-    if(isThoughtBranch && !isPredeterminingBranch) {
+    if (isThoughtBranch && !isPredeterminingBranch) {
         //_description
         var description = document.createElement('textarea');
         description.id = "_description";
@@ -32,7 +32,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         description.style.height = "100px";
         description.style.fontSize = "20px";
         description.style.resize = "vertical";
-        if(cell.value.getAttribute("_description")) {
+        if (cell.value.getAttribute("_description")) {
             description.value = cell.value.getAttribute("_description");
         }
         var divDescription = document.createElement('div');
@@ -48,7 +48,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepQuestion.style.height = "100px";
         nextStepQuestion.style.fontSize = "20px";
         nextStepQuestion.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepQuestion")) {
+        if (cell.value.getAttribute("_nextStepQuestion")) {
             nextStepQuestion.value = cell.value.getAttribute("_nextStepQuestion");
         }
         var divNextStepQuestion = document.createElement('div');
@@ -64,7 +64,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepExplanation.style.height = "100px";
         nextStepExplanation.style.fontSize = "20px";
         nextStepExplanation.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepExplanation")) {
+        if (cell.value.getAttribute("_nextStepExplanation")) {
             nextStepExplanation.value = cell.value.getAttribute("_nextStepExplanation");
         }
         var divNextStepExplanation = document.createElement('div');
@@ -72,7 +72,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         divNextStepExplanation.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanation);
         divText.appendChild(nextStepExplanation);
-    } else if(!isThoughtBranch && isPredeterminingBranch) {
+    } else if (!isThoughtBranch && isPredeterminingBranch) {
         //_text
         var text = document.createElement('textarea');
         text.id = "_text";
@@ -80,7 +80,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         text.style.height = "100px";
         text.style.fontSize = "20px";
         text.style.resize = "vertical";
-        if(cell.value.getAttribute("_text")) {
+        if (cell.value.getAttribute("_text")) {
             text.value = cell.value.getAttribute("_text");
         }
         var divTextO = document.createElement('div');
@@ -96,7 +96,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         explanation.style.height = "100px";
         explanation.style.fontSize = "20px";
         explanation.style.resize = "vertical";
-        if(cell.value.getAttribute("_explanation")) {
+        if (cell.value.getAttribute("_explanation")) {
             explanation.value = cell.value.getAttribute("_explanation");
         }
         var divExplanation = document.createElement('div');
@@ -112,7 +112,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepQuestionOutcome.style.height = "100px";
         nextStepQuestionOutcome.style.fontSize = "20px";
         nextStepQuestionOutcome.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepQuestionOutcome")) {
+        if (cell.value.getAttribute("_nextStepQuestionOutcome")) {
             nextStepQuestionOutcome.value = cell.value.getAttribute("_nextStepQuestionOutcome");
         }
         var divNextStepQuestionOutcome = document.createElement('div');
@@ -128,7 +128,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepBranchResult.style.height = "100px";
         nextStepBranchResult.style.fontSize = "20px";
         nextStepBranchResult.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepBranchResult")) {
+        if (cell.value.getAttribute("_nextStepBranchResult")) {
             nextStepBranchResult.value = cell.value.getAttribute("_nextStepBranchResult");
         }
         var divNextStepBranchResult = document.createElement('div');
@@ -144,7 +144,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepExplanationOutcome.style.height = "100px";
         nextStepExplanationOutcome.style.fontSize = "20px";
         nextStepExplanationOutcome.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepExplanationOutcome")) {
+        if (cell.value.getAttribute("_nextStepExplanationOutcome")) {
             nextStepExplanationOutcome.value = cell.value.getAttribute("_nextStepExplanationOutcome");
         }
         var divNextStepExplanationOutcome = document.createElement('div');
@@ -160,7 +160,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         description.style.height = "100px";
         description.style.fontSize = "20px";
         description.style.resize = "vertical";
-        if(cell.value.getAttribute("_description")) {
+        if (cell.value.getAttribute("_description")) {
             description.value = cell.value.getAttribute("_description");
         }
         var divDescription = document.createElement('div');
@@ -176,7 +176,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepQuestionThoughtBranch.style.height = "100px";
         nextStepQuestionThoughtBranch.style.fontSize = "20px";
         nextStepQuestionThoughtBranch.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepQuestionThoughtBranch")) {
+        if (cell.value.getAttribute("_nextStepQuestionThoughtBranch")) {
             nextStepQuestionThoughtBranch.value = cell.value.getAttribute("_nextStepQuestionThoughtBranch");
         }
         var divNextStepQuestionThoughtBranch = document.createElement('div');
@@ -192,7 +192,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepExplanationThoughtBranch.style.height = "100px";
         nextStepExplanationThoughtBranch.style.fontSize = "20px";
         nextStepExplanationThoughtBranch.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepExplanationThoughtBranch")) {
+        if (cell.value.getAttribute("_nextStepExplanationThoughtBranch")) {
             nextStepExplanationThoughtBranch.value = cell.value.getAttribute("_nextStepExplanationThoughtBranch");
         }
         var divNextStepExplanationThoughtBranch = document.createElement('div');
@@ -200,7 +200,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         divNextStepExplanationThoughtBranch.style.fontSize = "20px";
         divText.appendChild(divNextStepExplanationThoughtBranch);
         divText.appendChild(nextStepExplanationThoughtBranch);
-    } else if(!isThoughtBranch && !isPredeterminingBranch) {
+    } else if (!isThoughtBranch && !isPredeterminingBranch) {
         //_text
         var text = document.createElement('textarea');
         text.id = "_text";
@@ -208,7 +208,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         text.style.height = "100px";
         text.style.fontSize = "20px";
         text.style.resize = "vertical";
-        if(cell.value.getAttribute("_text")) {
+        if (cell.value.getAttribute("_text")) {
             text.value = cell.value.getAttribute("_text");
         }
         var divTextO = document.createElement('div');
@@ -224,7 +224,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         explanation.style.height = "100px";
         explanation.style.fontSize = "20px";
         explanation.style.resize = "vertical";
-        if(cell.value.getAttribute("_explanation")) {
+        if (cell.value.getAttribute("_explanation")) {
             explanation.value = cell.value.getAttribute("_explanation");
         }
         var divExplanation = document.createElement('div');
@@ -240,7 +240,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepQuestion.style.height = "100px";
         nextStepQuestion.style.fontSize = "20px";
         nextStepQuestion.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepQuestion")) {
+        if (cell.value.getAttribute("_nextStepQuestion")) {
             nextStepQuestion.value = cell.value.getAttribute("_nextStepQuestion");
         }
         var divNextStepQuestion = document.createElement('div');
@@ -256,7 +256,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepBranchResult.style.height = "100px";
         nextStepBranchResult.style.fontSize = "20px";
         nextStepBranchResult.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepBranchResult")) {
+        if (cell.value.getAttribute("_nextStepBranchResult")) {
             nextStepBranchResult.value = cell.value.getAttribute("_nextStepBranchResult");
         }
         var divNextStepBranchResult = document.createElement('div');
@@ -272,7 +272,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
         nextStepExplanation.style.height = "100px";
         nextStepExplanation.style.fontSize = "20px";
         nextStepExplanation.style.resize = "vertical";
-        if(cell.value.getAttribute("_nextStepExplanation")) {
+        if (cell.value.getAttribute("_nextStepExplanation")) {
             nextStepExplanation.value = cell.value.getAttribute("_nextStepExplanation");
         }
         var divNextStepExplanation = document.createElement('div');
@@ -285,11 +285,11 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка сохранение узла
     var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         graph.getModel().beginUpdate();
-        if(isThoughtBranch && !isPredeterminingBranch) {
+        if (isThoughtBranch && !isPredeterminingBranch) {
             cell.value.setAttribute("_description", divText.querySelector("#_description").value);
             cell.value.setAttribute("_nextStepQuestion", divText.querySelector("#_nextStepQuestion").value);
             cell.value.setAttribute("_nextStepExplanation", divText.querySelector("#_nextStepExplanation").value);
-        } else if(!isThoughtBranch && isPredeterminingBranch) {
+        } else if (!isThoughtBranch && isPredeterminingBranch) {
             cell.value.setAttribute("_text", divText.querySelector("#_text").value);
             cell.value.setAttribute("_explanation", divText.querySelector("#_explanation").value);
             cell.value.setAttribute("_nextStepBranchResult", divText.querySelector("#_nextStepBranchResult").value);
@@ -299,7 +299,7 @@ var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             cell.value.setAttribute("_description", divText.querySelector("#_description").value);
             cell.value.setAttribute("_nextStepQuestionThoughtBranch", divText.querySelector("#_nextStepQuestionThoughtBranch").value);
             cell.value.setAttribute("_nextStepExplanationThoughtBranch", divText.querySelector("#_nextStepExplanationThoughtBranch").value);
-        } else if(!isThoughtBranch && !isPredeterminingBranch) {
+        } else if (!isThoughtBranch && !isPredeterminingBranch) {
             cell.value.setAttribute("_text", divText.querySelector("#_text").value);
             cell.value.setAttribute("_explanation", divText.querySelector("#_explanation").value);
             cell.value.setAttribute("_nextStepBranchResult", divText.querySelector("#_nextStepBranchResult").value);

@@ -11,7 +11,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     text.style.resize = "none";
     text.style.height = "400px";
     text.style.fontSize = "30px";
-    if(typeof cell.value == "object") {
+    if (typeof cell.value == "object") {
         text.value = cell.value.getAttribute("label");
     } else {
         text.value = cell.value;
@@ -22,7 +22,7 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     var btnSaveTextInNode = mxUtils.button(getTextByLocale("Save"), function () {
         var textInNode = divText.getElementsByTagName("textarea").item(0).value;
         graph.getModel().beginUpdate();
-        if(typeof cell.value == "object") {
+        if (typeof cell.value == "object") {
             cell.value.setAttribute("label", textInNode);
         } else {
             cell.setValue(textInNode);
@@ -35,11 +35,11 @@ var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
     // Кнопка генерации человекочитаемого текста
     var btnGenerateTextInNode = mxUtils.button(getTextByLocale("Generate"), function () {
         let code = "";
-        if(typeof cell.value == "object") {
+        if (typeof cell.value == "object") {
             code = cell.value.getAttribute("expression");
         }
         let textInNode = getTextFromCode(code, editorUi)
-        if(textInNode != "") {
+        if (textInNode != "") {
             text.value = textInNode;
         }
     });

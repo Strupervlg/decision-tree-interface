@@ -9,7 +9,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
-    
+
     var row = addRowStartNode(editorUi);
     tbody.appendChild(row);
     table.appendChild(tbody);
@@ -69,6 +69,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Создание строки с входной переменной
 function addRowStartNode(editorUi) {
     var tr1 = document.createElement('tr');
 
@@ -94,27 +95,29 @@ function addRowStartNode(editorUi) {
     return tr1;
 }
 
+//Валидация полей
 function checkAllInputsStartNode(table) {
     errors = "";
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
-        .item(0).getElementsByTagName("input").item(0).value;
-        if(checkValue == "") {
-            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
-        } else if(!checkValidID(checkValue)) {
-            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
+            .item(0).getElementsByTagName("input").item(0).value;
+        if (checkValue == "") {
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i + 1));
+        } else if (!checkValidID(checkValue)) {
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i + 1));
         }
         var classSelect = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("select").item(0);
-        if(typeof (classSelect.options[classSelect.options.selectedIndex]) == "undefined") {
-            errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
+        if (typeof (classSelect.options[classSelect.options.selectedIndex]) == "undefined") {
+            errors += getTextByLocale("classesIsMissing").replace("%i", (i + 1));
         }
     }
-    if(errors != "") {
+    if (errors != "") {
         throw new Error(errors);
     }
 }
 
+//Генерация строкового представления узла
 function generateStrValueForStartNode(table) {
     strValue = "";
     for (var i = 0; i < table.rows.length; i++) {
@@ -123,7 +126,7 @@ function generateStrValueForStartNode(table) {
         var classSelect = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("select").item(0);
         var classVar = classSelect.options[classSelect.options.selectedIndex].value;
-        
+
         strValue += nameVar + ' - ' + classVar + "\n";
     }
 

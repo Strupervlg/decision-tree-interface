@@ -8,7 +8,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
-    
+
     var row = addRowEnum();
     addComparisonResult(row);
     tbody.appendChild(row);
@@ -18,7 +18,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Кнопка создания блока
     var applyBtn = mxUtils.button(getTextByLocale("Create"), function () {
-        
+
         checkAllInputsEnum(tbody);
 
         var theGraph = editorUi.editor.graph;
@@ -71,6 +71,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Добавление строки с новым енамом в конструкторе
 function addRowEnum() {
     var tr1 = document.createElement('tr');
     var td1 = document.createElement('td');
@@ -112,7 +113,7 @@ function addRowEnum() {
         newTd.appendChild(newInput);
         newTd.appendChild(btnDel);
         evt.target.parentElement.parentElement.insertBefore(newTd, evt.target.parentElement)
-        
+
     });
     btnAdd = styleBtn(btnAdd);
     tdAdd.appendChild(btnAdd);
@@ -139,66 +140,68 @@ function addRowEnum() {
         } else {
             event.currentTarget.parentElement.nextElementSibling.remove();
         }
-      })
-    
+    })
+
     td3.appendChild(span);
     td3.appendChild(checkbox);
     tr1.appendChild(td3);
     return tr1;
 }
 
+//Валидация всех полей при сохранении
 function checkAllInputsEnum(table) {
     errors = "";
     let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
-        .item(0).getElementsByTagName("input").item(0).value;
+            .item(0).getElementsByTagName("input").item(0).value;
         arrayNames.push(checkValue);
-        if(checkValue == "") {
-            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
-        } else if(!checkValidID(checkValue)) {
-            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
+        if (checkValue == "") {
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i + 1));
+        } else if (!checkValidID(checkValue)) {
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i + 1));
         }
 
         let lastIndex = 1;
         let currentInput = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("input").item(0);
         let isErrorValue = false;
-        while(currentInput != null) {
-            if(currentInput.value == "" && !isErrorValue) {
-                errors += getTextByLocale("valueIsMissing").replace("%i", (i+1));
+        while (currentInput != null) {
+            if (currentInput.value == "" && !isErrorValue) {
+                errors += getTextByLocale("valueIsMissing").replace("%i", (i + 1));
                 isErrorValue = true;
-            } else if(!checkValidID(currentInput.value) && !isErrorValue) {
-                errors += getTextByLocale("valueIsIncorrect").replace("%i", (i+1));
+            } else if (!checkValidID(currentInput.value) && !isErrorValue) {
+                errors += getTextByLocale("valueIsIncorrect").replace("%i", (i + 1));
                 isErrorValue = true;
             }
             lastIndex++;
             currentInput = table.rows.item(i).getElementsByTagName("td")
-            .item(lastIndex).getElementsByTagName("input").item(0);
+                .item(lastIndex).getElementsByTagName("input").item(0);
         }
         lastIndex++;
 
         var Islinear = table.rows.item(i).getElementsByTagName("td")
-        .item(lastIndex).getElementsByTagName("input").item(0).checked;
+            .item(lastIndex).getElementsByTagName("input").item(0).checked;
         let checkRdfName;
-        if(Islinear) {
+        if (Islinear) {
             checkRdfName = table.rows.item(i).getElementsByTagName("td")
-                .item(lastIndex+1).getElementsByTagName("input").item(0).value;
+                .item(lastIndex + 1).getElementsByTagName("input").item(0).value;
         }
-        if(Islinear && checkRdfName == "") {
-            errors += getTextByLocale("nameRDFIsMissing").replace("%i", (i+1));
-        } else if(Islinear && !checkValidID(checkRdfName)) {
-            errors += getTextByLocale("nameRDFIsIncorrect").replace("%i", (i+1));
+        if (Islinear && checkRdfName == "") {
+            errors += getTextByLocale("nameRDFIsMissing").replace("%i", (i + 1));
+        } else if (Islinear && !checkValidID(checkRdfName)) {
+            errors += getTextByLocale("nameRDFIsIncorrect").replace("%i", (i + 1));
         }
     }
-    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+    if (arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
         errors += getTextByLocale("nonUniqueEnumName");
     }
-    if(errors != "") {
+    if (errors != "") {
         throw new Error(errors);
     }
 }
 
+//Генерация строкового представления словаря для визуализации
 function generateStrValueForEnums(table) {
     strValue = '<font color="#000000"><b>Enum</b></font>';
 
@@ -208,31 +211,31 @@ function generateStrValueForEnums(table) {
         var valuesEnum = [];
         valuesEnum[0] = table.rows.item(i).getElementsByTagName("td")
             .item(1).getElementsByTagName("input").item(0).value;
-        
+
         let lastIndex = 2;
         let currentInput = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("input").item(0);
-        while(currentInput != null) {
+        while (currentInput != null) {
             valuesEnum.push(currentInput.value);
             lastIndex++;
             currentInput = table.rows.item(i).getElementsByTagName("td")
-            .item(lastIndex).getElementsByTagName("input").item(0);
+                .item(lastIndex).getElementsByTagName("input").item(0);
         }
         lastIndex++;
         var Islinear = table.rows.item(i).getElementsByTagName("td")
-        .item(lastIndex).getElementsByTagName("input").item(0).checked;
-        if(Islinear) {
+            .item(lastIndex).getElementsByTagName("input").item(0).checked;
+        if (Islinear) {
             var nameRDF = table.rows.item(i).getElementsByTagName("td")
-                .item(lastIndex+1).getElementsByTagName("input").item(0).value;
+                .item(lastIndex + 1).getElementsByTagName("input").item(0).value;
         }
-        
+
         strValue += '<br><font color="#ff66b3">' + nameEnum + '</font> values:(<font color="#ff6666">' + valuesEnum[0];
-        for(let i = 1; i < valuesEnum.length; i++) {
+        for (let i = 1; i < valuesEnum.length; i++) {
             strValue += ', ' + valuesEnum[i];
         }
         strValue += '</font>) isLinear: <font color="#123123">'
-        strValue +=  Islinear + '</font>'
-        if(Islinear) {
+        strValue += Islinear + '</font>'
+        if (Islinear) {
             strValue += ' nameRDF: <font color="#fff123">' + nameRDF + '</font>'
         }
     }
@@ -240,6 +243,7 @@ function generateStrValueForEnums(table) {
     return strValue;
 }
 
+//Проверка существования словаря на полотне в draw io
 function checkExistEnumDictionary(graph) {
     var cells = graph.getModel().cells;
     Object.keys(cells).forEach(function (key) {
@@ -250,6 +254,7 @@ function checkExistEnumDictionary(graph) {
     });
 }
 
+//Добавление по умолчанию дефолтного енама
 function addComparisonResult(row) {
     var nameEnum = "comparisonResult";
     var valuesEnum = ["greater", "less", "equal", "undetermined"];
@@ -263,7 +268,7 @@ function addComparisonResult(row) {
 
     let lastIndex = 1;
     valuesEnum.forEach(element => {
-        if(lastIndex != 1) {
+        if (lastIndex != 1) {
             let newTd = document.createElement('td');
             newTd.style.minWidth = "200px";
             let newInput = document.createElement('input');
@@ -283,8 +288,8 @@ function addComparisonResult(row) {
     });
     row.getElementsByTagName("td").item(lastIndex).style.display = "none";
 
-    row.getElementsByTagName("td").item(lastIndex+1)
+    row.getElementsByTagName("td").item(lastIndex + 1)
         .getElementsByTagName("input").item(0).checked = Islinear;
-    row.getElementsByTagName("td").item(lastIndex+1)
+    row.getElementsByTagName("td").item(lastIndex + 1)
         .getElementsByTagName("input").item(0).disabled = true;
 }

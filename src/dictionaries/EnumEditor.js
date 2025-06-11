@@ -8,14 +8,14 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     table = styleTable(table);
     var tbody = document.createElement('tbody');
     tbody.style.height = "100%";
-    
+
     fillDataEnum(tbody, cell);
     table.appendChild(tbody);
     div.appendChild(table);
 
     // Кнопка сохранения блока
     var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
-        
+
         checkAllInputsEnum(tbody);
 
         strValue = generateStrValueForEnums(tbody);
@@ -61,6 +61,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Заполнение данными в окне
 function fillDataEnum(tbody, cell) {
     let cellValue = cell.value;
 
@@ -68,18 +69,18 @@ function fillDataEnum(tbody, cell) {
     var values = cellValue.split('<br>');
 
     values.forEach((element, index) => {
-        var nameEnum = element.slice(element.indexOf('<font color="#ff66b3">')+22, element.indexOf('</font>'));
-                
-        element = element.slice(element.indexOf('</font>')+7);
-        var valuesStr = element.slice(element.indexOf('<font color="#ff6666">')+22, element.indexOf('</font>'));
+        var nameEnum = element.slice(element.indexOf('<font color="#ff66b3">') + 22, element.indexOf('</font>'));
+
+        element = element.slice(element.indexOf('</font>') + 7);
+        var valuesStr = element.slice(element.indexOf('<font color="#ff6666">') + 22, element.indexOf('</font>'));
         var valuesEnum = valuesStr.split(', ');
 
-        element = element.slice(element.indexOf('</font>')+7);
-        var Islinear = element.slice(element.indexOf('<font color="#123123">')+22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>') + 7);
+        var Islinear = element.slice(element.indexOf('<font color="#123123">') + 22, element.indexOf('</font>'));
         var nameRDF = "";
-        if(Islinear == 'true') {
-            element = element.slice(element.indexOf('</font>')+7);
-            nameRDF = element.slice(element.indexOf('<font color="#fff123">')+22, element.indexOf('</font>'));
+        if (Islinear == 'true') {
+            element = element.slice(element.indexOf('</font>') + 7);
+            nameRDF = element.slice(element.indexOf('<font color="#fff123">') + 22, element.indexOf('</font>'));
         }
 
         var row = addRowEnum();
@@ -87,14 +88,14 @@ function fillDataEnum(tbody, cell) {
         row.getElementsByTagName("td").item(0)
             .getElementsByTagName("input").item(0).value = nameEnum;
 
-        if(index == 0) {
+        if (index == 0) {
             row.getElementsByTagName("td").item(0)
                 .getElementsByTagName("input").item(0).disabled = true;
         }
 
         let lastIndex = 1;
         valuesEnum.forEach(element => {
-            if(lastIndex != 1) {
+            if (lastIndex != 1) {
                 let newTd = document.createElement('td');
                 newTd.style.minWidth = "200px";
                 let newInput = document.createElement('input');
@@ -111,14 +112,14 @@ function fillDataEnum(tbody, cell) {
                 btnDel.style.float = 'left';
                 btnDel.style.width = '10%';
                 newTd.appendChild(newInput);
-                if(index != 0) {
+                if (index != 0) {
                     newTd.appendChild(btnDel);
                 }
                 row.insertBefore(newTd, row.getElementsByTagName("td").item(lastIndex));
             }
             row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("input").item(0).value = element;
-            if(index == 0) {
+            if (index == 0) {
                 row.getElementsByTagName("td").item(lastIndex)
                     .getElementsByTagName("input").item(0).disabled = true;
                 row.getElementsByTagName("td").item(lastIndex)
@@ -127,18 +128,18 @@ function fillDataEnum(tbody, cell) {
             }
             lastIndex++;
         });
-        if(index == 0) {
+        if (index == 0) {
             row.getElementsByTagName("td").item(lastIndex).style.display = "none";
         }
         lastIndex++;
 
         row.getElementsByTagName("td").item(lastIndex)
             .getElementsByTagName("input").item(0).checked = Islinear == 'true';
-        if(index == 0) {
+        if (index == 0) {
             row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("input").item(0).disabled = true;
         }
-        if(Islinear == 'true') {
+        if (Islinear == 'true') {
             var tdNameRDF = document.createElement('td');
             tdNameRDF.style.minWidth = "150px";
             var inputNameRDF = document.createElement('input');
@@ -149,11 +150,11 @@ function fillDataEnum(tbody, cell) {
             tdNameRDF.appendChild(inputNameRDF);
             row.insertBefore(tdNameRDF, row.getElementsByTagName("td").item(lastIndex).nextElementSibling);
 
-            row.getElementsByTagName("td").item(lastIndex+1)
+            row.getElementsByTagName("td").item(lastIndex + 1)
                 .getElementsByTagName("input").item(0).value = nameRDF;
         }
 
-        if(index != 0) {
+        if (index != 0) {
             var tdDelRow = document.createElement('td');
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();
@@ -164,5 +165,5 @@ function fillDataEnum(tbody, cell) {
         }
 
         tbody.appendChild(row);
-    });    
+    });
 }

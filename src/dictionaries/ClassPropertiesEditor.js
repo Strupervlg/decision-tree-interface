@@ -61,6 +61,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Заполнение данными в окне
 function fillDataProperties(tbody, cell, editorUi) {
     let cellValue = cell.value;
 
@@ -68,26 +69,26 @@ function fillDataProperties(tbody, cell, editorUi) {
     var values = cellValue.split('<br>');
 
     values.forEach((element, index) => {
-        var nameProperty = element.slice(element.indexOf('<font color="#')+22, element.indexOf('</font>'));
-        element = element.slice(element.indexOf('</font>')+7);
+        var nameProperty = element.slice(element.indexOf('<font color="#') + 22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>') + 7);
 
         classes = [];
-        var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">')+23, element.indexOf('</font>'));
+        var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">') + 23, element.indexOf('</font>'));
         classes = valuesStr.split(', ');
-        element = element.slice(element.indexOf('</font>)')+8);
+        element = element.slice(element.indexOf('</font>)') + 8);
 
-        var type = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
-        element = element.slice(element.indexOf('</font>')+7);
+        var type = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>') + 7);
 
         var range = "";
-        if(type == "Integer" || type == "Double") {
-            range = element.slice(element.indexOf('<font color="#000000">: ')+24, element.indexOf('</font>'));
-            element = element.slice(element.indexOf('</font>')+7);
+        if (type == "Integer" || type == "Double") {
+            range = element.slice(element.indexOf('<font color="#000000">: ') + 24, element.indexOf('</font>'));
+            element = element.slice(element.indexOf('</font>') + 7);
         }
-        element = element.slice(element.indexOf('<font color="#19c3c0">isStatic:</font>')+38);
-                
-        isStatic = element.slice(element.indexOf('<font color="#000000">')+22, element.indexOf('</font>'));
-        element = element.slice(element.indexOf('</font>')+7);
+        element = element.slice(element.indexOf('<font color="#19c3c0">isStatic:</font>') + 38);
+
+        isStatic = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
+        element = element.slice(element.indexOf('</font>') + 7);
 
 
         var row = addRowProperty(editorUi);
@@ -97,14 +98,14 @@ function fillDataProperties(tbody, cell, editorUi) {
 
         var typeSelect = row.getElementsByTagName("td").item(1)
             .getElementsByTagName("select").item(0);
-        for(let index = 0; index < typeSelect.options.length; ++index) {
-            if(typeSelect.options[index].value == type) {
+        for (let index = 0; index < typeSelect.options.length; ++index) {
+            if (typeSelect.options[index].value == type) {
                 typeSelect.options[index].selected = true;
             }
         }
-        
+
         let lastIndex = 2;
-        if(type == "Integer" || type == "Double" || typeSelect.options.selectedIndex == 0) {
+        if (type == "Integer" || type == "Double" || typeSelect.options.selectedIndex == 0) {
             let ranges = range.split("-");
             row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("input").item(0).value = ranges[0];
@@ -119,7 +120,7 @@ function fillDataProperties(tbody, cell, editorUi) {
             .getElementsByTagName("input").item(0).checked = isStatic == 'true';
         lastIndex++;
         classes.forEach((element, index) => {
-            if(index != 0) {
+            if (index != 0) {
                 let newTdClass = document.createElement('td');
                 newTdClass.style.minWidth = "200px";
                 var newSelectClass = document.createElement('select');
@@ -144,15 +145,15 @@ function fillDataProperties(tbody, cell, editorUi) {
             }
             var classSelect = row.getElementsByTagName("td").item(lastIndex)
                 .getElementsByTagName("select").item(0);
-            for(let index = 0; index < classSelect.options.length; ++index) {
-                if(classSelect.options[index].value == element) {
+            for (let index = 0; index < classSelect.options.length; ++index) {
+                if (classSelect.options[index].value == element) {
                     classSelect.options[index].selected = true;
                 }
             }
             lastIndex++;
         });
 
-        if(index != 0) {
+        if (index != 0) {
             var tdDelRow = document.createElement('td');
             var btnDelRow = mxUtils.button(getTextByLocale("Delete"), function (evt) {
                 evt.target.parentElement.parentElement.remove();

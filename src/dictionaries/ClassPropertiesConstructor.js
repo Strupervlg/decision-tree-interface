@@ -27,7 +27,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#00CCCC;align=center;editable=0;");
 
             strValue = generateStrValueForProperties(table);
-            
+
             newElement.value = strValue;
 
             newElement.vertex = !0;
@@ -69,6 +69,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
     this.window.setVisible(true);
 };
 
+//Добавление строки с новым свойством в конструкторе
 function addRowProperty(editorUi) {
     var tr1 = document.createElement('tr');
 
@@ -96,8 +97,8 @@ function addRowProperty(editorUi) {
         selectType.options[selectType.options.length] = newOption;
     });
     selectType.addEventListener('change', (event) => {
-        if(event.currentTarget.value == "Integer" || event.currentTarget.value == "Double") {
-            if(event.currentTarget.parentElement.nextElementSibling.classList != 'range') {
+        if (event.currentTarget.value == "Integer" || event.currentTarget.value == "Double") {
+            if (event.currentTarget.parentElement.nextElementSibling.classList != 'range') {
                 var tdRange = document.createElement('td');
                 tdRange.style.minWidth = "200px";
                 tdRange.classList = 'range';
@@ -108,7 +109,7 @@ function addRowProperty(editorUi) {
                 startInput = styleInput(startInput);
                 startInput.style.width = '45%';
                 tdRange.appendChild(startInput);
-                
+
                 var dash = document.createElement('span');
                 dash.innerText = "-";
                 dash = styleSpan(dash);
@@ -125,11 +126,11 @@ function addRowProperty(editorUi) {
                 event.currentTarget.parentElement.parentElement.insertBefore(tdRange, event.currentTarget.parentElement.nextElementSibling);
             }
         } else {
-            if(event.currentTarget.parentElement.nextElementSibling.classList == 'range') {
+            if (event.currentTarget.parentElement.nextElementSibling.classList == 'range') {
                 event.currentTarget.parentElement.nextElementSibling.remove();
             }
         }
-      });
+    });
     td2.appendChild(selectType);
     var tdRange = document.createElement('td');
     tdRange.style.minWidth = "200px";
@@ -141,7 +142,7 @@ function addRowProperty(editorUi) {
     startInput = styleInput(startInput);
     startInput.style.width = '45%';
     tdRange.appendChild(startInput);
-                
+
     var dash = document.createElement('span');
     dash.innerText = "-";
     dash = styleSpan(dash);
@@ -156,7 +157,7 @@ function addRowProperty(editorUi) {
     tdRange.appendChild(endInput);
     tr1.appendChild(td2);
     tr1.appendChild(tdRange);
-    
+
 
     // Создание checkbox isStatic
     var td3 = document.createElement('td');
@@ -184,7 +185,7 @@ function addRowProperty(editorUi) {
     var tdAddClass = document.createElement('td');
     tdAddClass.style.minWidth = "50px";
     var btnAddClass = mxUtils.button('+', function (evt) {
-        let newTdClass = document.createElement('td'); 
+        let newTdClass = document.createElement('td');
         newTdClass.style.minWidth = "200px";
         var newSelectClass = document.createElement('select');
         newSelectClass = styleSelect(newSelectClass);
@@ -213,17 +214,18 @@ function addRowProperty(editorUi) {
     return tr1;
 }
 
+//Валидация всех полей при сохранении
 function checkAllInputsProperty(table) {
     errors = "";
     let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
-        .item(0).getElementsByTagName("input").item(0).value;
+            .item(0).getElementsByTagName("input").item(0).value;
         arrayNames.push(checkValue);
-        if(checkValue == "") {
-            errors += getTextByLocale("nameIsMissing").replace("%i", (i+1));
-        } else if(!checkValidID(checkValue)) {
-            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i+1));
+        if (checkValue == "") {
+            errors += getTextByLocale("nameIsMissing").replace("%i", (i + 1));
+        } else if (!checkValidID(checkValue)) {
+            errors += getTextByLocale("nameIsIncorrect").replace("%i", (i + 1));
         }
 
         var typeSelect = table.rows.item(i).getElementsByTagName("td")
@@ -231,14 +233,14 @@ function checkAllInputsProperty(table) {
         var type = typeSelect.options[typeSelect.options.selectedIndex].value;
 
         let lastIndex = 2;
-        if(type == "Integer" || type == "Double") {
-            if(table.rows.item(i).getElementsByTagName("td")
+        if (type == "Integer" || type == "Double") {
+            if (table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(0).value == "") {
-                errors += getTextByLocale("startValueIsMissing").replace("%i", (i+1));
+                errors += getTextByLocale("startValueIsMissing").replace("%i", (i + 1));
             }
-            if(table.rows.item(i).getElementsByTagName("td")
+            if (table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(1).value == "") {
-                errors += getTextByLocale("endValueIsMissing").replace("%i", (i+1));
+                errors += getTextByLocale("endValueIsMissing").replace("%i", (i + 1));
             }
             lastIndex++;
         }
@@ -246,9 +248,9 @@ function checkAllInputsProperty(table) {
         lastIndex++;
         let currentSelect = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("select").item(0);
-        while(currentSelect != null) {
-            if(typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
-                errors += getTextByLocale("classesIsMissing").replace("%i", (i+1));
+        while (currentSelect != null) {
+            if (typeof (currentSelect.options[currentSelect.options.selectedIndex]) == "undefined") {
+                errors += getTextByLocale("classesIsMissing").replace("%i", (i + 1));
                 break;
             }
             lastIndex++;
@@ -256,14 +258,15 @@ function checkAllInputsProperty(table) {
                 .item(lastIndex).getElementsByTagName("select").item(0);
         }
     }
-    if(arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
+    if (arrayNames.length != 0 && !checkUniqueValues(arrayNames)) {
         errors += getTextByLocale("nonUniquePropertyName");
     }
-    if(errors != "") {
+    if (errors != "") {
         throw new Error(errors);
     }
 }
 
+//Генерация строкового представления словаря для визуализации
 function generateStrValueForProperties(table) {
     strValue = '<b><font color="#000000">Class and Object properties</font></b>';
 
@@ -276,12 +279,12 @@ function generateStrValueForProperties(table) {
         var type = typeSelect.options[typeSelect.options.selectedIndex].value;
 
         let lastIndex = 2;
-        if(type == "Integer" || type == "Double") {
+        if (type == "Integer" || type == "Double") {
             var startValue = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(0).value;
             var endValue = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("input").item(1).value;
-                lastIndex++;
+            lastIndex++;
         }
 
         var isStatic = table.rows.item(i).getElementsByTagName("td")
@@ -294,38 +297,39 @@ function generateStrValueForProperties(table) {
         lastIndex++;
         let currentSelect = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("select").item(0);
-        while(currentSelect != null) {
+        while (currentSelect != null) {
             classList.push(currentSelect.options[currentSelect.options.selectedIndex].value);
             lastIndex++;
             currentSelect = table.rows.item(i).getElementsByTagName("td")
                 .item(lastIndex).getElementsByTagName("select").item(0);
         }
 
-        if(isStatic) {
-            strValue += '<br><font color="#FF8000">' + property 
-            + '</font>';
+        if (isStatic) {
+            strValue += '<br><font color="#FF8000">' + property
+                + '</font>';
         } else {
-            strValue += '<br><font color="#00CC00">' + property 
-            + '</font>';
+            strValue += '<br><font color="#00CC00">' + property
+                + '</font>';
         }
 
         strValue += ' (<font color="#fc49a4">' + classList[0];
-        for(let i = 1; i < classList.length; i++) {
+        for (let i = 1; i < classList.length; i++) {
             strValue += ', ' + classList[i];
         }
         strValue += '</font>) <font color="#000000">' + type + '</font>';
 
-        if(type == "Integer" || type == "Double") {
+        if (type == "Integer" || type == "Double") {
             strValue += '<font color="#000000">: ' + startValue + '-' + endValue + '</font>';
         }
 
-        strValue += ' <font color="#19c3c0">isStatic:</font> ' 
+        strValue += ' <font color="#19c3c0">isStatic:</font> '
             + '<font color="#000000">' + isStatic + '</font>';
     }
 
     return strValue;
 }
 
+//Проверка существования словаря на полотне в draw io
 function checkExistClassPropertiesDictionary(graph) {
     var cells = graph.getModel().cells;
     Object.keys(cells).forEach(function (key) {
