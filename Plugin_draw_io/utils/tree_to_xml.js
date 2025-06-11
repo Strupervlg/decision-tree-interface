@@ -1,3 +1,4 @@
+var LAST_ID;
 function treeToXml(editorUi) {
     var serializer = new XMLSerializer();
     const resultDoc = document.implementation.createDocument("", "", null);
@@ -5,6 +6,7 @@ function treeToXml(editorUi) {
     var graph = editorUi.editor.graph;
     var cells = graph.getModel().cells;
     let countStartNode = 0;
+    LAST_ID = 0;
     Object.keys(cells).forEach(function (key) {
 
         var node = cells[key];
@@ -35,6 +37,7 @@ function startNodeToXml(doc, startNode, editorUi) {
                 throw new Error(getTextByLocale("typeOutcomeStartNodeIsMissing"));
             }
             let thoughtBranchNode = doc.createElement("ThoughtBranch");
+            thoughtBranchNode.setAttribute("_alias", "startThought");
             thoughtBranchNode.setAttribute("type", startNode.edges[i].value.getAttribute("type"));
             thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, startNode.edges[i]); //TODO: проверить мб присваивать не нужно
             if (startNode.edges[i].target != startNode) {
@@ -111,9 +114,13 @@ function switchCaseNodes(doc, node, editorUi) {
 
 function branchResultNodeToXml(doc, node, resultBranch) {
     let resultNode = doc.createElement("BranchResultNode");
-
+    resultNode.setAttribute("_id", LAST_ID++);
+    if (node.value.getAttribute("skill")) {
+        resultNode.setAttribute("_skill", node.value.getAttribute("skill"));
+    }
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
+        resultNode.setAttribute("_RU_explanation", node.value.getAttribute("label"));
     }
     if (resultBranch == null) {
         resultNode.setAttribute("value", "null")
@@ -137,6 +144,10 @@ function branchResultNodeToXml(doc, node, resultBranch) {
 
 function questionNodeToXml(doc, node, isSwitch, editorUi) {
     let resultNode = doc.createElement("QuestionNode");
+    resultNode.setAttribute("_id", LAST_ID++);
+    if (node.value.getAttribute("skill")) {
+        resultNode.setAttribute("_skill", node.value.getAttribute("skill"));
+    }
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"))
     }
@@ -164,6 +175,10 @@ function questionNodeToXml(doc, node, isSwitch, editorUi) {
 
 function actionNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("FindActionNode");
+    resultNode.setAttribute("_id", LAST_ID++);
+    if (node.value.getAttribute("skill")) {
+        resultNode.setAttribute("_skill", node.value.getAttribute("skill"));
+    }
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -192,6 +207,10 @@ function actionNodeToXml(doc, node, editorUi) {
 
 function whileNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("WhileCycleNode");
+    resultNode.setAttribute("_id", LAST_ID++);
+    if (node.value.getAttribute("skill")) {
+        resultNode.setAttribute("_skill", node.value.getAttribute("skill"));
+    }
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -246,6 +265,7 @@ function whileNodeToXml(doc, node, editorUi) {
                 } else if (valueEdge.getAttribute("type") == "Body") {
 
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("_alias", valueEdge.getAttribute("label"));
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
@@ -277,6 +297,10 @@ function whileNodeToXml(doc, node, editorUi) {
 
 function cycleNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("CycleAggregationNode");
+    resultNode.setAttribute("_id", LAST_ID++);
+    if (node.value.getAttribute("skill")) {
+        resultNode.setAttribute("_skill", node.value.getAttribute("skill"));
+    }
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -331,6 +355,7 @@ function cycleNodeToXml(doc, node, editorUi) {
                 } else if (valueEdge.getAttribute("type") == "Body") {
 
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("_alias", valueEdge.getAttribute("label"));
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode.setAttribute("paramName", specialChars(node.value.getAttribute("nameVar")));
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
@@ -362,6 +387,10 @@ function cycleNodeToXml(doc, node, editorUi) {
 
 function logicNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("BranchAggregationNode");
+    resultNode.setAttribute("_id", LAST_ID++);
+    if (node.value.getAttribute("skill")) {
+        resultNode.setAttribute("_skill", node.value.getAttribute("skill"));
+    }
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -399,6 +428,7 @@ function logicNodeToXml(doc, node, editorUi) {
 
                 } else if (valueEdge.getAttribute("type") == "Branch") {
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("_alias", valueEdge.getAttribute("label"));
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
                     thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
@@ -427,6 +457,10 @@ function logicNodeToXml(doc, node, editorUi) {
 
 function predeterminingNodeToXml(doc, node, editorUi) {
     let resultNode = doc.createElement("BranchAggregationNode");
+    resultNode.setAttribute("_id", LAST_ID++);
+    if (node.value.getAttribute("skill")) {
+        resultNode.setAttribute("_skill", node.value.getAttribute("skill"));
+    }
     if (node.value.getAttribute("label")) {
         resultNode.setAttribute("_alias", node.value.getAttribute("label"));
     }
@@ -467,6 +501,7 @@ function predeterminingNodeToXml(doc, node, editorUi) {
 
                 } else if (valueEdge.getAttribute("type") == "Branch") {
                     let thoughtBranchNode = doc.createElement("ThoughtBranch");
+                    thoughtBranchNode.setAttribute("_alias", valueEdge.getAttribute("label"));
                     thoughtBranchNode.setAttribute("type", "bool");
                     thoughtBranchNode = getQuestionInfoThoughtBranch(thoughtBranchNode, node.edges[i]); //TODO: проверить мб присваивать не нужно
                     thoughtBranchNode.appendChild(switchCaseNodes(doc, node.edges[i].target, editorUi));
@@ -568,32 +603,32 @@ function markOutcome(graph, cell) {
 
 function getQuestionInfoThoughtBranch(thoughtBranchNode, edge) {
     if (edge.value.getAttribute("_description")) {
-        thoughtBranchNode.setAttribute("_description", specialChars(edge.value.getAttribute("_description")));
+        thoughtBranchNode.setAttribute("_RU_description", specialChars(edge.value.getAttribute("_description")));
     }
     if (edge.value.getAttribute("_nextStepQuestion")) {
-        thoughtBranchNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestion")));
+        thoughtBranchNode.setAttribute("_RU_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestion")));
     }
     if (edge.value.getAttribute("_nextStepExplanation")) {
-        thoughtBranchNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanation")));
+        thoughtBranchNode.setAttribute("_RU_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanation")));
     }
     return thoughtBranchNode;
 }
 
 function getQuestionInfoOutcome(resultNode, edge) {
     if (edge.value.getAttribute("_text")) {
-        resultNode.setAttribute("_text", specialChars(edge.value.getAttribute("_text")));
+        resultNode.setAttribute("_RU_text", specialChars(edge.value.getAttribute("_text")));
     }
     if (edge.value.getAttribute("_explanation")) {
-        resultNode.setAttribute("_explanation", specialChars(edge.value.getAttribute("_explanation")));
+        resultNode.setAttribute("_RU_explanation", specialChars(edge.value.getAttribute("_explanation")));
     }
     if (edge.value.getAttribute("_nextStepBranchResult")) {
-        resultNode.setAttribute("_nextStepBranchResult", specialChars(edge.value.getAttribute("_nextStepBranchResult")));
+        resultNode.setAttribute("_RU_nextStepBranchResult", specialChars(edge.value.getAttribute("_nextStepBranchResult")));
     }
     if (edge.value.getAttribute("_nextStepQuestion")) {
-        resultNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestion")));
+        resultNode.setAttribute("_RU_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestion")));
     }
     if (edge.value.getAttribute("_nextStepExplanation")) {
-        resultNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanation")));
+        resultNode.setAttribute("_RU_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanation")));
     }
     return resultNode;
 }
@@ -601,18 +636,18 @@ function getQuestionInfoOutcome(resultNode, edge) {
 function getQuestionInfoNode(resultNode, node, isLogic) {
     if (isLogic) {
         if (node.value.getAttribute("_description")) {
-            resultNode.setAttribute("_description", specialChars(node.value.getAttribute("_description")));
+            resultNode.setAttribute("_RU_description", specialChars(node.value.getAttribute("_description")));
         }
     } else {
         if (node.value.getAttribute("_question")) {
-            resultNode.setAttribute("_question", specialChars(node.value.getAttribute("_question")));
+            resultNode.setAttribute("_RU_question", specialChars(node.value.getAttribute("_question")));
         }
     }
     if (node.value.getAttribute("_asNextStep")) {
-        resultNode.setAttribute("_asNextStep", specialChars(node.value.getAttribute("_asNextStep")));
+        resultNode.setAttribute("_RU_asNextStep", specialChars(node.value.getAttribute("_asNextStep")));
     }
     if (node.value.getAttribute("_endingCause")) {
-        resultNode.setAttribute("_endingCause", specialChars(node.value.getAttribute("_endingCause")));
+        resultNode.setAttribute("_RU_endingCause", specialChars(node.value.getAttribute("_endingCause")));
     }
     return resultNode;
 }
@@ -620,29 +655,29 @@ function getQuestionInfoNode(resultNode, node, isLogic) {
 function getQuestionInfoPredetermining(outcomeNode, thoughtBranchNode, edge) {
 
     if (edge.value.getAttribute("_text")) {
-        outcomeNode.setAttribute("_text", specialChars(edge.value.getAttribute("_text")));
+        outcomeNode.setAttribute("_RU_text", specialChars(edge.value.getAttribute("_text")));
     }
     if (edge.value.getAttribute("_explanation")) {
-        outcomeNode.setAttribute("_explanation", specialChars(edge.value.getAttribute("_explanation")));
+        outcomeNode.setAttribute("_RU_explanation", specialChars(edge.value.getAttribute("_explanation")));
     }
     if (edge.value.getAttribute("_nextStepBranchResult")) {
-        outcomeNode.setAttribute("_nextStepBranchResult", specialChars(edge.value.getAttribute("_nextStepBranchResult")));
+        outcomeNode.setAttribute("_RU_nextStepBranchResult", specialChars(edge.value.getAttribute("_nextStepBranchResult")));
     }
     if (edge.value.getAttribute("_nextStepQuestionOutcome")) {
-        outcomeNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestionOutcome")));
+        outcomeNode.setAttribute("_RU_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestionOutcome")));
     }
     if (edge.value.getAttribute("_nextStepExplanationOutcome")) {
-        outcomeNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanationOutcome")));
+        outcomeNode.setAttribute("_RU_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanationOutcome")));
     }
 
     if (edge.value.getAttribute("_description")) {
-        thoughtBranchNode.setAttribute("_description", specialChars(edge.value.getAttribute("_description")));
+        thoughtBranchNode.setAttribute("_RU_description", specialChars(edge.value.getAttribute("_description")));
     }
     if (edge.value.getAttribute("_nextStepQuestionThoughtBranch")) {
-        thoughtBranchNode.setAttribute("_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestionThoughtBranch")));
+        thoughtBranchNode.setAttribute("_RU_nextStepQuestion", specialChars(edge.value.getAttribute("_nextStepQuestionThoughtBranch")));
     }
     if (edge.value.getAttribute("_nextStepExplanationThoughtBranch")) {
-        thoughtBranchNode.setAttribute("_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanationThoughtBranch")));
+        thoughtBranchNode.setAttribute("_RU_nextStepExplanation", specialChars(edge.value.getAttribute("_nextStepExplanationThoughtBranch")));
     }
 
     return [outcomeNode, thoughtBranchNode];
