@@ -1,5 +1,10 @@
+import { styleTable, styleInput, styleBtn, styleDivBtn, styleSelect, styleSpan } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { checkValidID, checkUniqueValues } from '../utils/utils.js';
+import { getClasses } from './Utils.js';
+
 // Окно коструктора блока с отношениями для классов
-var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
+export var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -73,7 +78,7 @@ var RelationshipsConstructorWindow = function (editorUi, x, y, w, h) {
 };
 
 //Добавление строки с новым отношением в конструкторе
-function addRowRelationship(editorUi) {
+export function addRowRelationship(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
@@ -311,8 +316,8 @@ function addRowRelationship(editorUi) {
 }
 
 //Валидация всех полей при сохранении
-function checkAllInputsRelationship(table) {
-    errors = "";
+export function checkAllInputsRelationship(table) {
+    let errors = "";
     let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
@@ -373,8 +378,8 @@ function checkAllInputsRelationship(table) {
 }
 
 //Генерация строкового представления словаря для визуализации
-function generateStrValueForRelationships(table) {
-    strValue = '<b><font color="#000000">Relationships between objects</font></b>';
+export function generateStrValueForRelationships(table) {
+    let strValue = '<b><font color="#000000">Relationships between objects</font></b>';
     let listNames = [];
     let binFlags = [];
 
@@ -390,7 +395,7 @@ function generateStrValueForRelationships(table) {
         var classSelect = table.rows.item(i).getElementsByTagName("td")
             .item(2).getElementsByTagName("select").item(0);
         classList[0] = classSelect.options[classSelect.options.selectedIndex].value;
-        lastIndex = 3;
+        let lastIndex = 3;
         let currentSelect = table.rows.item(i).getElementsByTagName("td")
             .item(lastIndex).getElementsByTagName("select").item(0);
         while (currentSelect != null) {
@@ -466,7 +471,7 @@ function checkExistRelationshipsDictionary(graph) {
 }
 
 //Установка флагов выбранной шкале
-function checkFlags(row, scale) {
+export function checkFlags(row, scale) {
     let tdSym = row.getElementsByClassName("symmetry")[0];
     let tdAntiSym = row.getElementsByClassName("antisymmetry")[0];
     let tdRelf = row.getElementsByClassName("reflexivity")[0];
@@ -518,11 +523,11 @@ function checkFlags(row, scale) {
 //Генерация строки на основе установленных флагов
 function getMarkedFlags(row) {
     let sym = row.getElementsByClassName("symmetry")[0].getElementsByTagName("input").item(0).checked;
-    let antiSym = row.getElementsByClassName("antisymmetry")[0].getElementsByTagName("input").item(0).checked;;
-    let relf = row.getElementsByClassName("reflexivity")[0].getElementsByTagName("input").item(0).checked;;
-    let AntiRelf = row.getElementsByClassName("antireflexivity")[0].getElementsByTagName("input").item(0).checked;;
-    let trans = row.getElementsByClassName("transitivity")[0].getElementsByTagName("input").item(0).checked;;
-    let antiTrans = row.getElementsByClassName("antitransivity")[0].getElementsByTagName("input").item(0).checked;;
+    let antiSym = row.getElementsByClassName("antisymmetry")[0].getElementsByTagName("input").item(0).checked;
+    let relf = row.getElementsByClassName("reflexivity")[0].getElementsByTagName("input").item(0).checked;
+    let AntiRelf = row.getElementsByClassName("antireflexivity")[0].getElementsByTagName("input").item(0).checked;
+    let trans = row.getElementsByClassName("transitivity")[0].getElementsByTagName("input").item(0).checked;
+    let antiTrans = row.getElementsByClassName("antitransivity")[0].getElementsByTagName("input").item(0).checked;
     return String(Number(sym)) + String(Number(antiSym)) + String(Number(relf)) + String(Number(AntiRelf))
         + String(Number(trans)) + String(Number(antiTrans));
 }

@@ -1,5 +1,9 @@
+import { styleBtn, styleTable, styleDivBtn } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { checkAllInputsStartNode, generateStrValueForStartNode, addRowStartNode } from './StartNodeConstructor.js';
+
 // Окно редактирования начального узла
-var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
+export var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -19,7 +23,7 @@ var StartEditorWindow = function (cell, editorUi, x, y, w, h) {
 
         checkAllInputsStartNode(table);
 
-        strValue = generateStrValueForStartNode(table);
+        let strValue = generateStrValueForStartNode(table);
 
         var theGraph = editorUi.editor.graph;
 

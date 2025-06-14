@@ -1,5 +1,9 @@
+import { styleBtn, styleDivBtn } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { getTextFromCode } from '../utils/utils.js';
+
 // Окно редактирования человекочитаемого текста узлов
-var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
+export var EditTextInNodeWindow = function (cell, editorUi, x, y, w, h) {
 
     var graph = editorUi.editor.graph;
 

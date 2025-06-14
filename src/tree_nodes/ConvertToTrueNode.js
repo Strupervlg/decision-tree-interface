@@ -1,5 +1,5 @@
 // Окно редактирования значений в ветке
-var ConvertToTrueNode = function (cell, editorUi, x, y, w, h) {
+export var ConvertToTrueNode = function (cell, editorUi, x, y, w, h) {
     var theGraph = editorUi.editor.graph;
 
     if (typeof cell.value == "object") {

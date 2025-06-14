@@ -1,5 +1,10 @@
+import { styleTable, styleInput, styleBtn, styleDivBtn, styleSelect, styleSpan } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { checkValidID, checkUniqueValues } from '../utils/utils.js';
+import { getEnums, getClasses } from './Utils.js';
+
 // Окно коструктора блока со свойствами классов
-var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
+export var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -26,7 +31,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
             //TODO Поменять ширину объекта
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#00CCCC;align=center;editable=0;");
 
-            strValue = generateStrValueForProperties(table);
+            let strValue = generateStrValueForProperties(table);
 
             newElement.value = strValue;
 
@@ -70,7 +75,7 @@ var ClassPropertiesConstructorWindow = function (editorUi, x, y, w, h) {
 };
 
 //Добавление строки с новым свойством в конструкторе
-function addRowProperty(editorUi) {
+export function addRowProperty(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
@@ -215,8 +220,8 @@ function addRowProperty(editorUi) {
 }
 
 //Валидация всех полей при сохранении
-function checkAllInputsProperty(table) {
-    errors = "";
+export function checkAllInputsProperty(table) {
+    let errors = "";
     let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
@@ -267,8 +272,8 @@ function checkAllInputsProperty(table) {
 }
 
 //Генерация строкового представления словаря для визуализации
-function generateStrValueForProperties(table) {
-    strValue = '<b><font color="#000000">Class and Object properties</font></b>';
+export function generateStrValueForProperties(table) {
+    let strValue = '<b><font color="#000000">Class and Object properties</font></b>';
 
     for (var i = 0; i < table.rows.length; i++) {
         var property = table.rows.item(i).getElementsByTagName("td")

@@ -1,5 +1,8 @@
+import { styleBtn, styleInput, styleDivBtn } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+
 // Окно редактирования узлов "Предрешающие факторы"
-var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+export var PredeterminingFactorsNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окнаx
     var div = document.createElement('div');

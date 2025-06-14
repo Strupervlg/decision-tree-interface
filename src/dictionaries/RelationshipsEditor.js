@@ -1,5 +1,10 @@
+import { styleTable, styleInput, styleBtn, styleDivBtn, styleSelect } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { getClasses } from './Utils.js';
+import { checkAllInputsRelationship, generateStrValueForRelationships, addRowRelationship, checkFlags } from './RelationshipsConstructor.js'
+
 // Окно редактирования блока с отношениями для классов
-var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
+export var RelationshipsEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -96,7 +101,7 @@ function fillDataRelationships(tbody, cell, editorUi) {
         }
 
         element = element.slice(element.indexOf('classes:</font>') + 15);
-        isBetween = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
+        let isBetween = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
         element = element.slice(element.indexOf('</font>') + 7);
         var type = "";
         if (isBetween == "true") {

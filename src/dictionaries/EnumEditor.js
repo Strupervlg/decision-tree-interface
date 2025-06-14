@@ -1,5 +1,9 @@
+import { styleTable, styleInput, styleBtn, styleDivBtn } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { checkAllInputsEnum, generateStrValueForEnums, addRowEnum } from './EnumConstructor.js';
+
 // Окно редактирования блока с enum
-var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
+export var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -18,7 +22,7 @@ var EnumEditorWindow = function (cell, editorUi, x, y, w, h) {
 
         checkAllInputsEnum(tbody);
 
-        strValue = generateStrValueForEnums(tbody);
+        let strValue = generateStrValueForEnums(tbody);
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();

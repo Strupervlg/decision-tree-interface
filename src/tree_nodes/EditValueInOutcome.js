@@ -1,5 +1,10 @@
+import { styleBtn, styleDivBtn, styleInput, styleSelect } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { getTypeFromCode, getTextFromValueInOutcome } from '../utils/utils.js';
+import { getClasses, getEnums } from '../dictionaries/Utils.js';
+
 // Окно редактирования значений в ветке
-var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
+export var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
     var graph = editorUi.editor.graph;
 
@@ -88,10 +93,10 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             divText.appendChild(labelValue);
         } else if (typeNode.type == "double" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "double";
-            var labelType = document.createElement('label');
+            let labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
             labelType.style.fontSize = '20px';
-            var numberInt = document.createElement('input');
+            let numberInt = document.createElement('input');
             numberInt = styleInput(numberInt);
             numberInt.id = "value_input";
             numberInt.type = "number";
@@ -106,10 +111,10 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
             divText.appendChild(labelType);
         } else if (typeNode.type == "string" && outNode.value.getAttribute('operator') != "AND" && outNode.value.getAttribute('operator') != "OR" && outNode.value.getAttribute('operator') != "HYP") {
             typeValue = "string";
-            var labelType = document.createElement('label');
+            let labelType = document.createElement('label');
             labelType.innerHTML = getTextByLocale("value");
             labelType.style.fontSize = '20px';
-            var textValue = document.createElement('input');
+            let textValue = document.createElement('input');
             textValue = styleInput(textValue);
             textValue.id = "value_input";
             textValue.type = "text";
@@ -257,8 +262,8 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
     var btnDiv = document.createElement('div');
     btnDiv = styleDivBtn(btnDiv);
     btnDiv.style.marginTop = "10px";
-    addClass = styleBtn(btnSaveValueInOutcome);
-    applyBtn = styleBtn(btnGenerateTextInOutcome);
+    let addClass = styleBtn(btnSaveValueInOutcome);
+    let applyBtn = styleBtn(btnGenerateTextInOutcome);
     btnDiv.appendChild(btnSaveValueInOutcome);
     btnDiv.appendChild(btnGenerateTextInOutcome);
     div.appendChild(divText);
@@ -300,7 +305,7 @@ var EditValueInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
 //Валидация полей
 function checkAllInputsOutcome(div, outNodeValue) {
-    errors = "";
+    let errors = "";
     if (div.getElementsByTagName("input").item(0).value == "" && typeof outNodeValue == "object" && outNodeValue.getAttribute('type') != "START") {
         errors += getTextByLocale("HumanReadableTextIsMissing");
     }

@@ -1,5 +1,5 @@
 //Получение списка енамов из словаря на полотне
-function getEnums(editorUi) {
+export function getEnums(editorUi) {
 
     var graph = editorUi.editor.graph;
     var cells = graph.getModel().cells;
@@ -43,7 +43,7 @@ function getEnums(editorUi) {
 }
 
 //Получение списка классов из словаря на полотне
-function getClasses(editorUi) {
+export function getClasses(editorUi) {
     var graph = editorUi.editor.graph;
     var cells = graph.getModel().cells;
 
@@ -83,7 +83,7 @@ function getClasses(editorUi) {
 }
 
 //Получение списка свойств из словаря на полотне
-function getProperties(editorUi) {
+export function getProperties(editorUi) {
 
     var graph = editorUi.editor.graph;
     var cells = graph.getModel().cells;
@@ -102,7 +102,7 @@ function getProperties(editorUi) {
                 var nameProperty = element.slice(element.indexOf('<font color="#') + 22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>') + 7);
 
-                classes = [];
+                let classes = [];
                 var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">') + 23, element.indexOf('</font>'));
                 classes = valuesStr.split(', ');
                 element = element.slice(element.indexOf('</font>)') + 8);
@@ -117,7 +117,7 @@ function getProperties(editorUi) {
                 }
                 element = element.slice(element.indexOf('<font color="#19c3c0">isStatic:</font>') + 38);
 
-                isStatic = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
+                let isStatic = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>') + 7);
 
 
@@ -136,7 +136,7 @@ function getProperties(editorUi) {
 }
 
 //Получение списка отношений из словаря на полотне
-function getRelationships(editorUi) {
+export function getRelationships(editorUi) {
 
     var graph = editorUi.editor.graph;
     var cells = graph.getModel().cells;
@@ -179,7 +179,7 @@ function getRelationships(editorUi) {
                 }
 
                 element = element.slice(element.indexOf('classes:</font>') + 15);
-                isBetween = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
+                let isBetween = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
                 element = element.slice(element.indexOf('</font>') + 7);
                 var type = "";
                 if (isBetween == "true") {

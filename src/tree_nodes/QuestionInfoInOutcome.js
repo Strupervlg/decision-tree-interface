@@ -1,5 +1,8 @@
+import { styleBtn } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+
 // Окно редактирования информации для вопросов в узлах
-var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
+export var EditQuestionInfoInOutcomeWindow = function (cell, editorUi, x, y, w, h) {
 
     var graph = editorUi.editor.graph;
 

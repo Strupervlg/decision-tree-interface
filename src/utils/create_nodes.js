@@ -2,7 +2,7 @@
 
 var LASTID = 0;
 
-function ProgramNode(statement, isBlock) {
+export function ProgramNode(statement, isBlock) {
     this.isBlock = isBlock;
     if (isBlock) {
         this.block = statement;
@@ -14,18 +14,18 @@ function ProgramNode(statement, isBlock) {
     this.id = LASTID++;
 }
 
-function BlockNode(statementSeq) {
+export function BlockNode(statementSeq) {
     this.statementSeq = statementSeq;
     this.id = LASTID++;
 }
 
-const StmtType = {
+export const StmtType = {
     EXPR: 'expr',
     ASSIGNMENT: 'assignment',
     ADD_RELATION: 'add_relation',
 }
 
-function StatementNode(type, firstExpression, secondExpression) {
+export function StatementNode(type, firstExpression, secondExpression) {
     this.firstExpr = firstExpression;
     this.secondExpr = secondExpression;
     this.type = type;
@@ -33,30 +33,30 @@ function StatementNode(type, firstExpression, secondExpression) {
     this.id = LASTID++;
 }
 
-function StatementSeq(first, last) {
+export function StatementSeq(first, last) {
     this.first = first;
     this.last = last;
 }
 
-function createAddRelationshipStmtNode(first, relationship, objectSeq) {
-    second = new ExpressionNode();
+export function createAddRelationshipStmtNode(first, relationship, objectSeq) {
+    let second = new ExpressionNode();
     second.type = ExprType.ID;
     second.ident = relationship;
     second.objectSeq = objectSeq;
     return new StatementNode(StmtType.ADD_RELATION, first, second);
 }
 
-function createStmtSeqNode(stmt) {
+export function createStmtSeqNode(stmt) {
     return new StatementSeq(stmt, stmt);
 }
 
-function addStmtToStmtSeqNode(seqStmt, stmt) {
+export function addStmtToStmtSeqNode(seqStmt, stmt) {
     seqStmt.last.next = stmt;
     seqStmt.last = stmt;
     return seqStmt;
 }
 
-const ExprType = {
+export const ExprType = {
     ID: 'id',
     STRING: 'string',
     INT: 'int',
@@ -90,7 +90,7 @@ const ExprType = {
     WITH: 'with',
 };
 
-function ExpressionNode() {
+export function ExpressionNode() {
     this.id = LASTID++;
     this.type = null;
     this.typeIdent = null;
@@ -113,8 +113,8 @@ function ExpressionNode() {
     this.next = null;
 }
 
-function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
-    newNode = new ExpressionNode();
+export function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
+    let newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = firstExprOperand;
     if (typeNode == ExprType.PROPERTY) {
@@ -126,8 +126,8 @@ function createBinExprNode(typeNode, firstExprOperand, secondExprOperand) {
     return newNode;
 }
 
-function createGetObjectByRel(firstExprOperand, relationship) {
-    newNode = new ExpressionNode();
+export function createGetObjectByRel(firstExprOperand, relationship) {
+    let newNode = new ExpressionNode();
     newNode.type = ExprType.GET_BY_RELATIONSHIP;
     newNode.rel = relationship;
 
@@ -136,23 +136,23 @@ function createGetObjectByRel(firstExprOperand, relationship) {
     return newNode;
 }
 
-function createUnaryExprNode(typeNode, operand) {
-    newNode = new ExpressionNode();
+export function createUnaryExprNode(typeNode, operand) {
+    let newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = operand;
     return newNode;
 }
 
-function createCastExprNode(cast, operand) {
-    newNode = new ExpressionNode();
+export function createCastExprNode(cast, operand) {
+    let newNode = new ExpressionNode();
     newNode.type = ExprType.CAST;
     newNode.firstOperand = operand;
     newNode.cast = cast;
     return newNode;
 }
 
-function createLiteral(typeNode, literal) {
-    newNode = new ExpressionNode();
+export function createLiteral(typeNode, literal) {
+    let newNode = new ExpressionNode();
     newNode.type = typeNode;
     if (typeNode == ExprType.ID) {
         newNode.ident = literal;
@@ -174,16 +174,16 @@ function createLiteral(typeNode, literal) {
     return newNode;
 }
 
-function createEnum(idOwner, idValue) {
-    newNode = new ExpressionNode();
+export function createEnum(idOwner, idValue) {
+    let newNode = new ExpressionNode();
     newNode.type = ExprType.ENUM;
     newNode.ident = idOwner;
     newNode.identValue = idValue;
     return newNode;
 }
 
-function createCheckRelExprNode(expression, relationship, objectSeq) {
-    newNode = new ExpressionNode();
+export function createCheckRelExprNode(expression, relationship, objectSeq) {
+    let newNode = new ExpressionNode();
     newNode.type = ExprType.CHECK_REL;
     newNode.firstOperand = expression;
     newNode.rel = relationship;
@@ -191,8 +191,8 @@ function createCheckRelExprNode(expression, relationship, objectSeq) {
     return newNode;
 }
 
-function createGetExprNode(typeNode, type, id, expression) {
-    newNode = new ExpressionNode();
+export function createGetExprNode(typeNode, type, id, expression) {
+    let newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = expression;
     newNode.typeIdent = type;
@@ -200,8 +200,8 @@ function createGetExprNode(typeNode, type, id, expression) {
     return newNode;
 }
 
-function createFindExtremeExprNode(extremeVarName, extremeCondition, typeVar, varName, condition) {
-    newNode = new ExpressionNode();
+export function createFindExtremeExprNode(extremeVarName, extremeCondition, typeVar, varName, condition) {
+    let newNode = new ExpressionNode();
     newNode.type = ExprType.FIND_EXTREM;
     newNode.extremeIdent = extremeVarName;
     newNode.firstOperand = extremeCondition;
@@ -211,8 +211,8 @@ function createFindExtremeExprNode(extremeVarName, extremeCondition, typeVar, va
     return newNode;
 }
 
-function createQuantifierExprNode(typeNode, type, id, expression1, expression2) {
-    newNode = new ExpressionNode();
+export function createQuantifierExprNode(typeNode, type, id, expression1, expression2) {
+    let newNode = new ExpressionNode();
     newNode.type = typeNode;
     newNode.firstOperand = expression1;
     newNode.secondOperand = expression2;
@@ -221,16 +221,16 @@ function createQuantifierExprNode(typeNode, type, id, expression1, expression2) 
     return newNode;
 }
 
-function createIfExprNode(condition, expression) {
-    newNode = new ExpressionNode();
+export function createIfExprNode(condition, expression) {
+    let newNode = new ExpressionNode();
     newNode.type = ExprType.IF;
     newNode.firstOperand = condition;
     newNode.secondOperand = expression;
     return newNode;
 }
 
-function createWithExprNode(id, expression1, expression2) {
-    newNode = new ExpressionNode();
+export function createWithExprNode(id, expression1, expression2) {
+    let newNode = new ExpressionNode();
     newNode.type = ExprType.WITH;
     newNode.firstOperand = expression1;
     newNode.secondOperand = expression2;
@@ -238,21 +238,21 @@ function createWithExprNode(id, expression1, expression2) {
     return newNode;
 }
 
-function ObjectSeq(first, last) {
+export function ObjectSeq(first, last) {
     this.first = first;
     this.last = last;
 }
 
-function createObjectSeqNode(expr) {
+export function createObjectSeqNode(expr) {
     return new ObjectSeq(expr, expr);
 }
 
-function addObjectToObjectSeqNode(seq, expr) {
+export function addObjectToObjectSeqNode(seq, expr) {
     seq.last.next = expr;
     seq.last = expr;
     return seq;
 }
 
-var root;
+export var root;
 
-var string;
+export var string;

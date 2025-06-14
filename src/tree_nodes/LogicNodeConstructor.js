@@ -1,5 +1,8 @@
+import { styleBtn } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+
 // Окно создание логических узлов
-var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
+export var LogicNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окнаx
     var div = document.createElement('div');

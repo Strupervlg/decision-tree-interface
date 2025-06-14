@@ -1,5 +1,10 @@
+import { styleBtn, styleTable, styleDivBtn, styleInput, styleSelect } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { getClasses } from '../dictionaries/Utils.js';
+import { checkValidID } from '../utils/utils.js';
+
 // Окно коструктора начального узла
-var StartConstructorWindow = function (editorUi, x, y, w, h) {
+export var StartConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -25,7 +30,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 165, 60), "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;editable=0;");
 
-            strValue = generateStrValueForStartNode(table);
+            let strValue = generateStrValueForStartNode(table);
 
             newElement.value = strValue;
 
@@ -70,7 +75,7 @@ var StartConstructorWindow = function (editorUi, x, y, w, h) {
 };
 
 //Создание строки с входной переменной
-function addRowStartNode(editorUi) {
+export function addRowStartNode(editorUi) {
     var tr1 = document.createElement('tr');
 
     var td1 = document.createElement('td');
@@ -96,8 +101,8 @@ function addRowStartNode(editorUi) {
 }
 
 //Валидация полей
-function checkAllInputsStartNode(table) {
-    errors = "";
+export function checkAllInputsStartNode(table) {
+    let errors = "";
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
             .item(0).getElementsByTagName("input").item(0).value;
@@ -118,8 +123,8 @@ function checkAllInputsStartNode(table) {
 }
 
 //Генерация строкового представления узла
-function generateStrValueForStartNode(table) {
-    strValue = "";
+export function generateStrValueForStartNode(table) {
+    let strValue = "";
     for (var i = 0; i < table.rows.length; i++) {
         var nameVar = table.rows.item(i).getElementsByTagName("td")
             .item(0).getElementsByTagName("input").item(0).value;

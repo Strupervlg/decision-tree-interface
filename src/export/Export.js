@@ -1,7 +1,10 @@
+import { parser, root } from '../utils/parser.js';
+import { toBlock } from '../utils/code_to_block.js';
+
 /* 
   Функции для формирования CSV словарей для скачивания
 */
-function exportEnums(jsonEnums) {
+export function exportEnums(jsonEnums) {
     var result = "";
     jsonEnums.forEach(enumItem => {
         result += enumItem.nameEnum + "|" + enumItem.values[0];
@@ -18,7 +21,7 @@ function exportEnums(jsonEnums) {
     return result;
 }
 
-function exportClasses(jsonClasses, workspace) {
+export function exportClasses(jsonClasses, workspace) {
     var result = "";
     jsonClasses.forEach(classItem => {
         result += classItem.name + "|" + classItem.extend + "|";
@@ -30,7 +33,7 @@ function exportClasses(jsonClasses, workspace) {
     return result;
 }
 
-function exportProperties(jsonProperties) {
+export function exportProperties(jsonProperties) {
     var result = "";
     jsonProperties.forEach(propertyItem => {
         result += propertyItem.name + "|";
@@ -61,7 +64,7 @@ function exportProperties(jsonProperties) {
     return result;
 }
 
-function exportRelastionships(jsonRelationships) {
+export function exportRelastionships(jsonRelationships) {
     var result = "";
     jsonRelationships.forEach(relationshipItem => {
         result += relationshipItem.name + "|" + relationshipItem.extend + "|"
@@ -81,9 +84,8 @@ function exportRelastionships(jsonRelationships) {
 
 /** Подготовить xml узла для формирования дерева, которое будет скачаноAdd commentMore actions
 */
-function codeToXML(workspace, code) {
+export function codeToXML(workspace, code) {
     workspace.clear();
-    root = null;
     parser.parse(code); // Распарсить код (глобально) 
     toBlock(root, workspace); // Перевести код в блоки Blockly
     return blockToXML(workspace);

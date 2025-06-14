@@ -1,5 +1,9 @@
+import { styleTable, styleInput, styleBtn, styleDivBtn, styleSpan } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { checkValidID, checkUniqueValues } from '../utils/utils.js';
+
 // Окно коструктора блока с enum
-var EnumConstructorWindow = function (editorUi, x, y, w, h) {
+export var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -29,7 +33,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#6666FF;align=center;editable=0;");
 
-            strValue = generateStrValueForEnums(tbody);
+            let strValue = generateStrValueForEnums(tbody);
 
             newElement.value = strValue;
 
@@ -72,7 +76,7 @@ var EnumConstructorWindow = function (editorUi, x, y, w, h) {
 };
 
 //Добавление строки с новым енамом в конструкторе
-function addRowEnum() {
+export function addRowEnum() {
     var tr1 = document.createElement('tr');
     var td1 = document.createElement('td');
     td1.style.minWidth = "200px";
@@ -149,8 +153,8 @@ function addRowEnum() {
 }
 
 //Валидация всех полей при сохранении
-function checkAllInputsEnum(table) {
-    errors = "";
+export function checkAllInputsEnum(table) {
+    let errors = "";
     let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
@@ -202,8 +206,8 @@ function checkAllInputsEnum(table) {
 }
 
 //Генерация строкового представления словаря для визуализации
-function generateStrValueForEnums(table) {
-    strValue = '<font color="#000000"><b>Enum</b></font>';
+export function generateStrValueForEnums(table) {
+    let strValue = '<font color="#000000"><b>Enum</b></font>';
 
     for (var i = 0; i < table.rows.length; i++) {
         var nameEnum = table.rows.item(i).getElementsByTagName("td")
@@ -259,7 +263,6 @@ function addComparisonResult(row) {
     var nameEnum = "comparisonResult";
     var valuesEnum = ["greater", "less", "equal", "undetermined"];
     var Islinear = false;
-    var nameRDF = "";
 
     row.getElementsByTagName("td").item(0)
         .getElementsByTagName("input").item(0).value = nameEnum;

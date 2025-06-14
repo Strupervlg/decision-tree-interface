@@ -1,5 +1,5 @@
 // Окно редактирования значений в ветке
-var ConvertToStartNode = function (cell, editorUi, x, y, w, h) {
+export var ConvertToStartNode = function (cell, editorUi, x, y, w, h) {
     var theGraph = editorUi.editor.graph;
 
     if (typeof cell.value == "object") {

@@ -1,5 +1,13 @@
+import { styleBtn, styleDivBtn, styleTextAreaExp, styleBlocklyAreaExp, styleInput, styleSelect } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { toolbox } from '../utils/blocks.js';
+import { parser, root } from '../utils/parser.js';
+import { toBlock } from '../utils/code_to_block.js';
+import { generateCode, checkValidID } from '../utils/utils.js';
+import { getClasses } from '../dictionaries/Utils.js';
+
 // Окно редактирования узлов действия
-var WhileNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
+export var WhileNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -28,7 +36,7 @@ var WhileNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
-        error = "";
+        let error = "";
         if (!nameVarInText.value) {
             error += getTextByLocale("NameVariableIsMissing");
         } else if (!checkValidID(nameVarInText.value)) {
@@ -150,7 +158,7 @@ var WhileNodeEditorWindow = function (cell, editorUi, x, y, w, h) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
-        error = "";
+        let error = "";
         if (!nameVarInBlockly.value) {
             error += getTextByLocale("NameVariableIsMissing");
         } else if (!checkValidID(nameVarInBlockly.value)) {

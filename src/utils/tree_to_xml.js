@@ -1,7 +1,12 @@
-//Обход в глубину по узлам дерева и формирование xml
+import { getTextByLocale } from '../utils/locale.js';
+import { specialChars, getTypeFromCode } from '../utils/utils.js';
+import { codeToXML } from '../export/Export.js';
+import { getEnums, getClasses } from '../dictionaries/Utils.js';
+import { globalWS } from '../main.js';
 
+//Обход в глубину по узлам дерева и формирование xml
 var LAST_ID;
-function treeToXml(editorUi) {
+export function treeToXml(editorUi) {
     var serializer = new XMLSerializer();
     const resultDoc = document.implementation.createDocument("", "", null);
 
@@ -240,7 +245,7 @@ function whileNodeToXml(doc, node, editorUi) {
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
             if (node.edges[i].target != node) {
-                valueEdge = node.edges[i].value;
+                let valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
                     || (valueEdge.getAttribute("type") != "Correct"
@@ -330,7 +335,7 @@ function cycleNodeToXml(doc, node, editorUi) {
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
             if (node.edges[i].target != node) {
-                valueEdge = node.edges[i].value;
+                let valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
                     || (valueEdge.getAttribute("type") != "Correct"
@@ -405,7 +410,7 @@ function logicNodeToXml(doc, node, editorUi) {
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
             if (node.edges[i].target != node) {
-                valueEdge = node.edges[i].value;
+                let valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
                     || (valueEdge.getAttribute("type") != "Correct"
@@ -478,7 +483,7 @@ function predeterminingNodeToXml(doc, node, editorUi) {
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
             if (node.edges[i].target != node) {
-                valueEdge = node.edges[i].value;
+                let valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object"
                     || !valueEdge.getAttribute("type")
                     || (valueEdge.getAttribute("type") != "Correct"
@@ -533,7 +538,7 @@ function outcomeToXml(doc, parentNode, node, editorUi) {
     if (node.edges) {
         for (let i = 0; i < node.edges.length; i++) {
             if (node.edges[i].target != node) {
-                valueEdge = node.edges[i].value;
+                let valueEdge = node.edges[i].value;
                 if (valueEdge == null || typeof valueEdge != "object" || !valueEdge.getAttribute("value")) {
                     markOutcome(editorUi.editor.graph, node.edges[i])
                     throw new Error(getTextByLocale("valueInOutcomeIsMissing")
@@ -594,7 +599,7 @@ function outcomeToXml(doc, parentNode, node, editorUi) {
     return parentNode;
 }
 
-function markOutcome(graph, cell) {
+export function markOutcome(graph, cell) {
     graph.getModel().beginUpdate();
     if (!cell.style.includes("strokeColor=#FF0000;")) {
         cell.style += "strokeColor=#FF0000;";

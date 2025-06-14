@@ -1,5 +1,11 @@
+import { styleTable, styleBtn, styleDivBtn } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { toolbox } from '../utils/blocks.js';
+import { parser } from '../utils/parser.js';
+import { checkAllInputsClass, addRowClass, generateStrValueForClasses } from './ClassConstructor.js';
+
 // Окно редактирования блока с классами
-var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
+export var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -28,15 +34,15 @@ var ClassEditorWindow = function (cell, editorUi, x, y, w, h) {
             }
         }
 
-        strValue = generateStrValueForClasses(table);
+        let strValue = generateStrValueForClasses(table);
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
         cell.geometry.height = (table.rows.length + 1) * 17;
         cell.value.setAttribute("label", strValue);
 
-        for (var i = 0; i < table.rows.length; i++) {
-            var expression = table.rows.item(i).getElementsByTagName("td")
+        for (let i = 0; i < table.rows.length; i++) {
+            let expression = table.rows.item(i).getElementsByTagName("td")
                 .item(2).getElementsByTagName("textarea").item(0).value;
             cell.value.setAttribute('expression_' + i, expression);
         }

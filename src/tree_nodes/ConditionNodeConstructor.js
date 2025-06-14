@@ -1,5 +1,12 @@
+import { styleBtn, styleDivBtn, styleTextAreaExp, styleBlocklyAreaExp } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { toolbox } from '../utils/blocks.js';
+import { generateCode } from '../utils/utils.js';
+import { parser, root } from '../utils/parser.js';
+import { toBlock } from '../utils/code_to_block.js';
+
 // Окно коструктора узлов условий
-var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
+export var ConditionNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');

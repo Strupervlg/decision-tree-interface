@@ -1,5 +1,11 @@
+import { styleTable, styleInput, styleBtn, styleDivBtn } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { toolbox } from '../utils/blocks.js';
+import { checkValidID, checkUniqueValues } from '../utils/utils.js';
+import { parser } from '../utils/parser.js';
+
 // Окно коструктора блока с классами
-var ClassConstructorWindow = function (editorUi, x, y, w, h) {
+export var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -37,14 +43,14 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
             var pos = theGraph.getInsertPoint();
             var newElement = new mxCell("", new mxGeometry(pos.x, pos.y, 267, (table.rows.length + 1) * 17), "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#6666FF;align=center;editable=0;");
 
-            strValue = generateStrValueForClasses(table);
+            let strValue = generateStrValueForClasses(table);
 
             newElement.value = strValue;
 
             newElement.vertex = !0;
             theGraph.setSelectionCell(theGraph.addCell(newElement));
-            for (var i = 0; i < table.rows.length; i++) {
-                var expression = table.rows.item(i).getElementsByTagName("td")
+            for (let i = 0; i < table.rows.length; i++) {
+                let expression = table.rows.item(i).getElementsByTagName("td")
                     .item(2).getElementsByTagName("textarea").item(0).value;
                 theGraph.setAttributeForCell(newElement, 'expression_' + i, expression);
             }
@@ -96,12 +102,12 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         btnDivBlockly.appendChild(toCodeBtn);
         mainDivBlockly.appendChild(btnDivBlockly);
 
-        this.window2 = new mxWindow('Blockly', mainDivBlockly, document.body.offsetLeft + 100, document.body.offsetTop + 100, widthBlockly, heightBlockly, true, true);
-        this.window2.destroyOnClose = true;
-        this.window2.setMaximizable(false);
-        this.window2.setResizable(false);
-        this.window2.setClosable(true);
-        this.window2.setVisible(true);
+        var win2 = new mxWindow('Blockly', mainDivBlockly, document.body.offsetLeft + 100, document.body.offsetTop + 100, widthBlockly, heightBlockly, true, true);
+        win2.destroyOnClose = true;
+        win2.setMaximizable(false);
+        win2.setResizable(false);
+        win2.setClosable(true);
+        win2.setVisible(true);
         var workspaceInWindow = Blockly.inject('classCreateBlocklyDiv', { toolbox: toolbox });
     });
 
@@ -127,7 +133,7 @@ var ClassConstructorWindow = function (editorUi, x, y, w, h) {
 };
 
 //Добавление строки с новым классом в конструкторе
-function addRowClass() {
+export function addRowClass() {
     var tr1 = document.createElement('tr');
     tr1.style.width = '100%';
     var td1 = document.createElement('td');
@@ -158,8 +164,8 @@ function addRowClass() {
 }
 
 //Валидация всех полей при сохранении
-function checkAllInputsClass(table) {
-    errors = "";
+export function checkAllInputsClass(table) {
+    let errors = "";
     let arrayNames = [];
     for (var i = 0; i < table.rows.length; i++) {
         let checkValue = table.rows.item(i).getElementsByTagName("td")
@@ -185,8 +191,8 @@ function checkAllInputsClass(table) {
 }
 
 //Генерация строкового представления словаря для визуализации
-function generateStrValueForClasses(table) {
-    strValue = '<font color="#000000"><b>Classes</b></font>';
+export function generateStrValueForClasses(table) {
+    let strValue = '<font color="#000000"><b>Classes</b></font>';
 
     for (var i = 0; i < table.rows.length; i++) {
         var nameClass = table.rows.item(i).getElementsByTagName("td")

@@ -1,5 +1,10 @@
+import { styleTable, styleBtn, styleDivBtn, styleSelect } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { getClasses } from './Utils.js';
+import { checkAllInputsProperty, generateStrValueForProperties, addRowProperty } from './ClassPropertiesConstructor.js'
+
 // Окно редактирования блока со свойствами классов
-var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
+export var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -17,7 +22,7 @@ var ClassPropertiesEditorWindow = function (cell, editorUi, x, y, w, h) {
     var applyBtn = mxUtils.button(getTextByLocale("Apply"), function () {
         checkAllInputsProperty(table);
 
-        strValue = generateStrValueForProperties(table);
+        let strValue = generateStrValueForProperties(table);
         var theGraph = editorUi.editor.graph;
 
         theGraph.getModel().beginUpdate();
@@ -72,7 +77,7 @@ function fillDataProperties(tbody, cell, editorUi) {
         var nameProperty = element.slice(element.indexOf('<font color="#') + 22, element.indexOf('</font>'));
         element = element.slice(element.indexOf('</font>') + 7);
 
-        classes = [];
+        let classes = [];
         var valuesStr = element.slice(element.indexOf('(<font color="#fc49a4">') + 23, element.indexOf('</font>'));
         classes = valuesStr.split(', ');
         element = element.slice(element.indexOf('</font>)') + 8);
@@ -87,7 +92,7 @@ function fillDataProperties(tbody, cell, editorUi) {
         }
         element = element.slice(element.indexOf('<font color="#19c3c0">isStatic:</font>') + 38);
 
-        isStatic = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
+        let isStatic = element.slice(element.indexOf('<font color="#000000">') + 22, element.indexOf('</font>'));
         element = element.slice(element.indexOf('</font>') + 7);
 
 

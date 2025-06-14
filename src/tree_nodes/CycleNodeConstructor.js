@@ -1,5 +1,13 @@
+import { styleBtn, styleDivBtn, styleTextAreaExp, styleBlocklyAreaExp, styleInput, styleSelect } from '../utils/style.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { toolbox } from '../utils/blocks.js';
+import { generateCode, checkValidID } from '../utils/utils.js';
+import { parser, root } from '../utils/parser.js';
+import { toBlock } from '../utils/code_to_block.js';
+import { getClasses } from '../dictionaries/Utils.js';
+
 // Окно коструктора узлов действия
-var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
+export var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
 
     // Верстка окна
     var div = document.createElement('div');
@@ -27,7 +35,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
         } else {
             throw new Error(getTextByLocale("ExpressionIsMissing"));
         }
-        error = "";
+        let error = "";
         if (!nameVarInText.value) {
             error += getTextByLocale("NameVariableIsMissing");
         } else if (!checkValidID(nameVarInText.value)) {
@@ -140,7 +148,7 @@ var CycleNodeConstructorWindow = function (editorUi, x, y, w, h) {
                 throw new Error(getTextByLocale("EmptyConnection"));
             }
         }
-        error = "";
+        let error = "";
         if (!nameVarInBlockly.value) {
             error += getTextByLocale("NameVariableIsMissing");
         } else if (!checkValidID(nameVarInBlockly.value)) {

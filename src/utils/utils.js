@@ -1,3 +1,9 @@
+import { parser, root } from '../utils/parser.js';
+import { getTextByLocale } from '../utils/locale.js';
+import { ExprType } from '../utils/create_nodes.js';
+import { getProperties } from '../dictionaries/Utils.js';
+import { markOutcome } from '../utils/tree_to_xml.js';
+
 //Список возможных типов
 const SemanticType = {
     OBJECT: 'object',
@@ -14,7 +20,7 @@ const SemanticType = {
 };
 
 //Функция для определения типа выражения на верхнем уровне
-function getType(root) {
+export function getType(root) {
     if (root.isBlock && root.block) {
         return SemanticType.BLOCK;
     } else if (!root.isBlock && root.stmt) {
@@ -71,7 +77,7 @@ function getType(root) {
 }
 
 //Перевод блоков в код
-function generateCode(workspace) {
+export function generateCode(workspace) {
     if (workspace.getTopBlocks().length > 1) {
         throw new Error(getTextByLocale("moreBlocksInWorkspace"));
     }
@@ -83,8 +89,8 @@ function generateCode(workspace) {
 }
 
 //Получение типа узла на основе кода в нем
-function getTypeFromCode(code, editorUi) {
-    root = null
+export function getTypeFromCode(code, editorUi) {
+    // root = null
     parser.parse(code)
     let obj = { type: getType(root) };
     if (obj.type == SemanticType.PROPERTY_VALUE) {
@@ -119,7 +125,7 @@ function getTypeFromCode(code, editorUi) {
 }
 
 //Формирование начального текста на основе выражения в узле
-function getTextFromCode(code, editorUi) {
+export function getTextFromCode(code, editorUi) {
     if (code == "") {
         return "";
     }
@@ -137,7 +143,7 @@ function getTextFromCode(code, editorUi) {
 }
 
 //Получение текста на основе значений в стрелке
-function getTextFromValueInOutcome(value) {
+export function getTextFromValueInOutcome(value) {
     if (value == "") {
         return "";
     } else if (value == "True") {
@@ -151,7 +157,7 @@ function getTextFromValueInOutcome(value) {
 }
 
 //Функция для проверки цикла в графе
-function CheckCycleInTree(startNode, editorUi) {
+export function CheckCycleInTree(startNode, editorUi) {
     if (hasCycle(startNode, editorUi)) {
         throw new Error(getTextByLocale("hasCycleInTree"));
     }
@@ -186,7 +192,7 @@ function hasCycle(root, editorUi) {
 }
 
 //Экранирование специальных символов
-function specialChars(str) {
+export function specialChars(str) {
     return str.replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -195,12 +201,12 @@ function specialChars(str) {
 }
 
 //Валидация названий переменных
-function checkValidID(str) {
+export function checkValidID(str) {
     return /^[a-zA-Z_][A-Za-z0-9_]*$/.test(str);
 }
 
 //Проверка на уникальность элементов в массиве
-function checkUniqueValues(values) {
+export function checkUniqueValues(values) {
     let setUniqueValues = new Set(values);
     let arrayUniqueValues = Array.from(setUniqueValues);
     return arrayUniqueValues.length == values.length;
