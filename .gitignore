@@ -1,3 +1,4 @@
 /node_modules
+/parser/node_modules
 /dist/bundle.js
 /dist/bundleChrome.js
