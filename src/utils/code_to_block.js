@@ -506,8 +506,8 @@ function printExprNode(exprNode, workspace) {
 }
 
 function checkTypeBlocks(blockInput, blockOutput, input) {
-    let outputCheck = blockOutput.outputConnection.check_;
-    let inputCheck = blockInput.getInput(input).connection.check_;
+    let outputCheck = blockOutput.outputConnection.getCheck();
+    let inputCheck = blockInput.getInput(input).connection.getCheck();
     if (outputCheck.filter(x => inputCheck.includes(x)).length == 0) {
         throw new Error(getTextByLocale("InvalidType").replace("%type", blockInput.type)
             .replace("%inputCheck", inputCheck).replace("%outputCheck", outputCheck))
