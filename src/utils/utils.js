@@ -3,6 +3,7 @@ import { getTextByLocale } from '../utils/locale.js';
 import { ExprType } from '../utils/create_nodes.js';
 import { getProperties } from '../dictionaries/Utils.js';
 import { markOutcome } from '../utils/tree_to_xml.js';
+import { javascriptGenerator } from 'blockly/javascript';
 
 //Список возможных типов
 const SemanticType = {
@@ -81,7 +82,7 @@ export function generateCode(workspace) {
     if (workspace.getTopBlocks().length > 1) {
         throw new Error(getTextByLocale("moreBlocksInWorkspace"));
     }
-    let code = Blockly.JavaScript.workspaceToCode(workspace);
+    let code = javascriptGenerator.workspaceToCode(workspace);
     if (code.slice(-1) == "\n") {
         code = code.slice(0, -2);
     }

@@ -5,6 +5,7 @@ import { parser, root } from '../utils/parser.js';
 import { toBlock } from '../utils/code_to_block.js';
 import { generateCode, checkValidID } from '../utils/utils.js';
 import { getClasses } from '../dictionaries/Utils.js';
+import * as Blockly from 'blockly/core';
 
 // Окно редактирования узлов действия
 export var WhileNodeEditorWindow = function (cell, editorUi, x, y, w, h) {

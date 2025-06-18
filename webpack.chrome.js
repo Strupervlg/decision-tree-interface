@@ -3,8 +3,8 @@ const path = require('path');
 module.exports = {
 	entry: './src/mainChromePlugin.js', // точка входа
 	output: {
-		filename: 'bundleChrome.js', // имя итогового файла
-		path: path.resolve(__dirname, 'dist'), // путь к папке сборки
+		filename: 'plugin.js', // имя итогового файла
+		path: path.resolve(__dirname, 'chrome_plugin'), // путь к папке сборки
 	},
 	mode: 'production', // или 'development' для отладки
 	resolve: {

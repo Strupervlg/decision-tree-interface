@@ -4,6 +4,7 @@ import { toolbox } from '../utils/blocks.js';
 import { parser, root } from '../utils/parser.js';
 import { toBlock } from '../utils/code_to_block.js';
 import { generateCode } from '../utils/utils.js';
+import * as Blockly from 'blockly/core';
 
 // Окно коструктора узлов условий
 export var SwitchCaseNodeConstructorWindow = function (editorUi, x, y, w, h) {

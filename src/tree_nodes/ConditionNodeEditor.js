@@ -4,6 +4,7 @@ import { toolbox } from '../utils/blocks.js';
 import { generateCode } from '../utils/utils.js';
 import { parser, root } from '../utils/parser.js';
 import { toBlock } from '../utils/code_to_block.js';
+import * as Blockly from 'blockly/core';
 
 // Окно редактирования узлов условий
 export var ConditionNodeEditorWindow = function (cell, editorUi, x, y, w, h) {

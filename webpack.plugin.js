@@ -3,8 +3,8 @@ const path = require('path');
 module.exports = {
 	entry: './src/main.js', // точка входа
 	output: {
-		filename: 'bundle.js', // имя итогового файла
-		path: path.resolve(__dirname, 'dist'), // путь к папке сборки
+		filename: 'plugin.js', // имя итогового файла
+		path: path.resolve(__dirname, 'plugin'), // путь к папке сборки
 	},
 	mode: 'production', // или 'development' для отладки
 	resolve: {

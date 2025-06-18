@@ -5,6 +5,7 @@ import { checkValidID, generateCode } from '../utils/utils.js';
 import { parser, root } from '../utils/parser.js';
 import { toBlock } from '../utils/code_to_block.js';
 import { getClasses } from '../dictionaries/Utils.js';
+import * as Blockly from 'blockly/core';
 
 // Окно коструктора узлов действия
 export var ActionNodeConstructorWindow = function (editorUi, x, y, w, h) {
