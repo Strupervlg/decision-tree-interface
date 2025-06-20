@@ -4,7 +4,7 @@ import { toolbox } from '../utils/blocks.js';
 import { parser, root } from '../utils/parser.js';
 import { toBlock } from '../utils/code_to_block.js';
 import { generateCode } from '../utils/utils.js';
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 
 // Окно редактирования узлов условий
 export var SwitchCaseNodeEditorWindow = function (cell, editorUi, x, y, w, h) {

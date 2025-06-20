@@ -5,7 +5,7 @@ import { generateCode, checkValidID } from '../utils/utils.js';
 import { parser, root } from '../utils/parser.js';
 import { toBlock } from '../utils/code_to_block.js';
 import { getClasses } from '../dictionaries/Utils.js';
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 
 // Окно редактирования узлов действия
 export var CycleNodeEditorWindow = function (cell, editorUi, x, y, w, h) {

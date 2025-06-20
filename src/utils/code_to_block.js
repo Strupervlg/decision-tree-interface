@@ -1,6 +1,6 @@
 import { ExprType, StmtType } from './create_nodes.js';
 import { getTextByLocale } from '../utils/locale.js';
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 
 //Функции перевода распарсенного кода в блоки Blockly
 export function toBlock(rootNode, workspace) {

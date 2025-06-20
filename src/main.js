@@ -43,7 +43,7 @@ import { WhileNodeEditorWindow } from './tree_nodes/WhileNodeEditor.js';
 import { getEnums, getClasses, getProperties, getRelationships } from './dictionaries/Utils.js';
 import { exportEnums, exportClasses, exportProperties, exportRelastionships } from './export/Export.js';
 import { treeToXml } from './utils/tree_to_xml.js';
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 
 // Плагин
 export function loadPlugin() {

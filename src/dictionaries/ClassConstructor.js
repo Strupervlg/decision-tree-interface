@@ -3,8 +3,7 @@ import { getTextByLocale } from '../utils/locale.js';
 import { toolbox } from '../utils/blocks.js';
 import { checkValidID, checkUniqueValues } from '../utils/utils.js';
 import { parser } from '../utils/parser.js';
-import { javascriptGenerator } from 'blockly/javascript';
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 
 // Окно коструктора блока с классами
 export var ClassConstructorWindow = function (editorUi, x, y, w, h) {
@@ -94,7 +93,7 @@ export var ClassConstructorWindow = function (editorUi, x, y, w, h) {
         mainDivBlockly.appendChild(divInput);
 
         var toCodeBtn = mxUtils.button(getTextByLocale("toСode"), function () {
-            let code = javascriptGenerator.workspaceToCode(workspaceInWindow);
+            let code = Blockly.JavaScript.workspaceToCode(workspaceInWindow);
             codeInput.value = code;
         });
         var btnDivBlockly = document.createElement('div');

@@ -1,6 +1,6 @@
 import { parser, root } from '../utils/parser.js';
 import { toBlock } from '../utils/code_to_block.js';
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 
 /* 
   Функции для формирования CSV словарей для скачивания

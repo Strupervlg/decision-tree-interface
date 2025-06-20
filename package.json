@@ -4,7 +4,7 @@
   "description": "Плагин для draw io",
   "main": "./src/main.js",
   "dependencies": {
-    "blockly": "^12.1.0",
+    "blockly": "7.20211209.0",
     "minimatch": "^3.1.2",
     "path-browserify": "^1.0.1"
   },
